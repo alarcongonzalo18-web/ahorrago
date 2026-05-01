@@ -1,0 +1,6 @@
+categoria,subcategoria,nombre,marca,tipo,formato,precio,supermercado,url
+"Lácteos, Huevos y Congelados",Leche,Leche entera 1 L,Colun,entera,1 L,1390,Jumbo,https://www.jumbo.cl/search?ft=Leche%20entera
+"Lácteos, Huevos y Congelados",Leche,Leche sin lactosa 1 L,Colun,sin lactosa,1 L,1490,Jumbo,https://www.jumbo.cl/search?ft=Leche%20sin%20lactosa
+Despensa,Arroz,Arroz grado 1 1 kg,Tucapel,grado 1,1 kg,1590,Jumbo,https://www.jumbo.cl/search?ft=Arroz%20grado%201
+Despensa,Aceite,Aceite maravilla 1 L,Chef,maravilla,1 L,2990,Jumbo,https://www.jumbo.cl/search?ft=Aceite%20maravilla
+"Licores, Bebidas y Aguas",Bebidas,Coca-Cola zero 1.5 L,Coca-Cola,zero,1.5 L,1990,Jumbo,https://www.jumbo.cl/search?ft=Coca-Cola%20zero

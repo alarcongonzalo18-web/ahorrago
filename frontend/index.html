@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AhorraGo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #22c55e;
+        }
+
+        p {
+            color: #aaa;
+        }
+
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px;
+        }
+
+        select {
+            padding: 12px;
+            width: 280px;
+        }
+
+        .buscador {
+            width: 500px;
+            margin: auto;
+            position: relative;
+        }
+
+        .buscador-box {
+            display: flex;
+        }
+
+        #producto {
+            flex: 1;
+            padding: 14px;
+        }
+
+        .btn-buscar {
+            width: 60px;
+            background: #22c55e;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sugerencias {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            background: white;
+            color: black;
+            display: none;
+            border-radius: 8px;
+        }
+
+        .opcion {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .opcion:hover {
+            background: #eee;
+        }
+
+        .cantidad-box {
+            margin-top: 15px;
+        }
+
+        #cantidad {
+            padding: 12px;
+            width: 100px;
+            text-align: center;
+        }
+
+        .botones {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px;
+            background: #22c55e;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .item-lista {
+            background: #222;
+            padding: 12px;
+            margin: 10px auto;
+            border-radius: 10px;
+            max-width: 500px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            background: #222;
+            padding: 15px;
+            white-space: pre-line;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 600px) {
+            .buscador {
+                width: 100%;
+            }
+
+            .filtros {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🛒 AhorraGo</h1>
+<p>Compra mejor, paga menos</p>
+
+<div class="filtros">
+    <select id="categoria" onchange="cargarSubcategorias()">
+        <option value="">Categoría</option>
+    </select>
+
+    <select id="subcategoria">
+        <option value="">Subcategoría</option>
+    </select>
+</div>
+
+<div class="buscador">
+    <div class="buscador-box">
+        <input id="producto" placeholder="Buscar producto...">
+        <button class="btn-buscar" onclick="buscarProductos()">🔍</button>
+    </div>
+
+    <div id="sugerencias" class="sugerencias"></div>
+</div>
+
+<div class="cantidad-box">
+    <input id="cantidad" type="number" value="1" min="1">
+</div>
+
+<div class="botones">
+    <button onclick="agregar()">Agregar</button>
+    <button onclick="comparar()">Comparar</button>
+    <button onclick="limpiar()">Limpiar</button>
+</div>
+
+<h3>Lista:</h3>
+<div id="lista"></div>
+
+<div id="resultado"></div>
+
+<script>
+const API_HOST = window.location.hostname || "localhost";
+const API = `http://${API_HOST}:8000`;
+
+let productos = [];
+
+function formatearFormato(formato) {
+    if (!formato) return "";
+
+    let texto = formato.toLowerCase();
+    let numero = parseFloat(texto);
+
+    if (isNaN(numero)) return formato;
+
+    if (texto.includes("cc") || texto.includes("ml")) {
+        if (numero >= 1000) return (numero / 1000) + " L";
+        return numero + " ml";
+    }
+
+    if (texto.includes("l")) return numero + " L";
+
+    return formato;
+}
+
+function obtenerLitros(formato) {
+    if (!formato) return null;
+
+    let texto = formato.toLowerCase().replace(",", ".").trim();
+    let numero = parseFloat(texto);
+
+    if (isNaN(numero)) return null;
+
+    if (texto.includes("ml")) {
+        return numero / 1000;
+    }
+
+    if (texto.includes("l")) {
+        return numero;
+    }
+
+    return null;
+}
+
+function formatearPrecio(valor) {
+    if (!valor) return "";
+    return "$" + parseInt(valor).toLocaleString("es-CL");
+}
+
+function calcularPrecioPorLitro(precio, formato) {
+    const litros = obtenerLitros(formato);
+
+    if (!precio || !litros) return "";
+
+    const precioLitro = precio / litros;
+
+    return "$" + parseInt(precioLitro).toLocaleString("es-CL") + " / L";
+}
+
+window.onload = cargarCategorias;
+
+async function cargarCategorias() {
+    const res = await fetch(API + "/categorias");
+    const data = await res.json();
+
+    const select = document.getElementById("categoria");
+
+    data.forEach(cat => {
+        select.innerHTML += `<option value="${cat.id}">${cat.nombre}</option>`;
+    });
+}
+
+async function cargarSubcategorias() {
+    const id = document.getElementById("categoria").value;
+    const sub = document.getElementById("subcategoria");
+
+    sub.innerHTML = `<option value="">Subcategoría</option>`;
+
+    if (!id) return;
+
+    const res = await fetch(`${API}/subcategorias/${id}`);
+    const data = await res.json();
+
+    data.forEach(s => {
+        sub.innerHTML += `<option value="${s.id}">${s.nombre}</option>`;
+    });
+}
+
+async function buscarProductos() {
+    const texto = document.getElementById("producto").value.trim();
+    const contenedor = document.getElementById("sugerencias");
+
+    if (texto.length < 2) {
+        alert("Escribe al menos 2 letras");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API}/productos/buscar/${texto}`);
+        const data = await res.json();
+
+        contenedor.innerHTML = "";
+
+        data.forEach(item => {
+            const formato = formatearFormato(item.formato);
+            const precio = formatearPrecio(item.precio_menor);
+            const precioLitro = calcularPrecioPorLitro(item.precio_menor, item.formato);
+
+            contenedor.innerHTML += `
+                <div class="opcion" onclick="seleccionar('${item.nombre}')">
+                    <strong>${item.nombre}</strong>
+                    <span>${item.marca} | ${item.tipo} | ${formato}</span><br>
+                    <span>Desde: ${precio} ${precioLitro ? " | " + precioLitro : ""}</span>
+                </div>
+            `;
+        });
+
+        contenedor.style.display = "block";
+
+    } catch (e) {
+        alert("Error conectando con API");
+    }
+}
+
+function seleccionar(nombre) {
+    document.getElementById("producto").value = nombre;
+    document.getElementById("sugerencias").style.display = "none";
+}
+
+function agregar() {
+    const nombre = document.getElementById("producto").value;
+    const cantidad = parseInt(document.getElementById("cantidad").value);
+
+    if (!nombre) {
+        alert("Ingresa producto");
+        return;
+    }
+
+    productos.push({ nombre, cantidad });
+
+    document.getElementById("lista").innerHTML += `
+        <div class="item-lista">
+            <strong>${nombre}</strong>
+            <span>${cantidad}</span>
+        </div>
+    `;
+}
+
+async function comparar() {
+    const res = await fetch(API + "/comparar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productos })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("resultado").innerText = data.mensaje;
+}
+
+function limpiar() {
+    productos = [];
+    document.getElementById("lista").innerHTML = "";
+    document.getElementById("resultado").innerText = "";
+}
+</script>
+
+</body>
+</html>
