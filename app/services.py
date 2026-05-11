@@ -130,7 +130,7 @@ def comparar_lista(db: Session, lista_productos):
         base = {
             "Líder": "https://www.lider.cl/supermercado/search?query=",
             "Unimarc": "https://www.unimarc.cl/search?q=",
-            "Jumbo": "https://www.jumbo.cl/search?ft="
+            "Jumbo": "https://www.jumbo.cl/busqueda?ft="
         }
 
         # limpiar texto

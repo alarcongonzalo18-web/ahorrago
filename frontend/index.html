@@ -1,346 +1,1768 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AhorraGo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AhorraGo</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #111;
-            color: white;
-            text-align: center;
-            padding: 40px;
-        }
+<style>
+:root {
+    --page: #E8F0F2;
+    --panel: #FBFCFC;
+    --ink: #202A2C;
+    --muted: #60717A;
+    --line: #CBD8DD;
+    --brand: #243436;
+    --brand-soft: rgba(111, 157, 180, 0.18);
+    --action: #9A4D35;
+    --action-dark: #763626;
+    --success: #2F7D66;
+    --success-soft: rgba(47, 125, 102, 0.14);
+    --soft: #DDE8EB;
+    --green: var(--brand);
+    --green-soft: var(--brand-soft);
+    --logo-shadow: #243436;
+    --stone: #6F9DB4;
+    --autumn: var(--action);
+    --shadow: 0 16px 34px rgba(36, 52, 54, 0.12);
+}
 
-        h1 {
-            color: #22c55e;
-        }
+body.dark {
+    --ink: #f8fafc;
+    --muted: #b8c2d1;
+    --line: rgba(248, 250, 252, 0.16);
+    --panel: #172026;
+    --page: #10181c;
+    --soft: #1f2b31;
+    --brand: #E8F0F2;
+    --brand-soft: rgba(111, 157, 180, 0.2);
+    --logo-shadow: #F8FAFC;
+    --stone: #9BC4D6;
+    --action: #C96D4D;
+    --action-dark: #9A4D35;
+    --success: #62C799;
+    --success-soft: rgba(34, 197, 94, 0.16);
+    --green: #62C799;
+    --green-soft: rgba(34, 197, 94, 0.16);
+    --shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+}
 
-        p {
-            color: #aaa;
-        }
+* { box-sizing: border-box; }
 
-        .filtros {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px;
-        }
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(180deg, rgba(111,157,180,0.2), rgba(255,255,255,0) 340px),
+        var(--page);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        select {
-            padding: 12px;
-            width: 280px;
-        }
+.app-shell { max-width: 1440px; }
 
-        .buscador {
-            width: 500px;
-            margin: auto;
-            position: relative;
-        }
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 8px 22px;
+}
 
-        .buscador-box {
-            display: flex;
-        }
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 230px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    text-align: left;
+}
 
-        #producto {
-            flex: 1;
-            padding: 14px;
-        }
+.brand:hover .brand-title,
+.brand:focus-visible .brand-title {
+    color: var(--action-dark);
+}
 
-        .btn-buscar {
-            width: 60px;
-            background: #22c55e;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
+.brand-icon {
+    display: grid;
+    position: relative;
+    width: 54px;
+    height: 54px;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--logo-shadow);
+    color: white;
+    box-shadow: 0 10px 24px rgba(36, 52, 54, 0.22);
+}
 
-        .sugerencias {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            right: 0;
-            background: white;
-            color: black;
-            display: none;
-            border-radius: 8px;
-        }
+.cart-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    display: none;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border: 2px solid var(--page);
+    border-radius: 999px;
+    background: var(--action);
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 20px;
+    text-align: center;
+}
 
-        .opcion {
-            padding: 10px;
-            cursor: pointer;
-        }
+.cart-badge.show { display: block; }
 
-        .opcion:hover {
-            background: #eee;
-        }
+body.dark .brand-icon {
+    background: #243436;
+    color: #E8F0F2;
+}
 
-        .cantidad-box {
-            margin-top: 15px;
-        }
+.brand-title {
+    margin: 0;
+    color: var(--logo-shadow);
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+}
 
-        #cantidad {
-            padding: 12px;
-            width: 100px;
-            text-align: center;
-        }
+.brand-title span { color: var(--stone); }
 
-        .botones {
-            margin-top: 15px;
-        }
+.brand-subtitle {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
 
-        button {
-            padding: 12px;
-            background: #22c55e;
-            border: none;
-            color: white;
-            cursor: pointer;
-            margin: 5px;
-        }
+.nav-tabs-app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    flex: 1;
+    color: var(--muted);
+    font-weight: 700;
+}
 
-        .item-lista {
-            background: #222;
-            padding: 12px;
-            margin: 10px auto;
-            border-radius: 10px;
-            max-width: 500px;
-            display: flex;
-            justify-content: space-between;
-        }
+.mobile-nav-select { display: none; }
 
-        #resultado {
-            margin-top: 20px;
-            background: #222;
-            padding: 15px;
-            white-space: pre-line;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+.nav-tabs-app button {
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: inherit;
+    padding: 11px 0;
+    font-weight: 800;
+}
 
-        @media (max-width: 600px) {
-            .buscador {
-                width: 100%;
-            }
+.nav-tabs-app button.active {
+    color: var(--brand);
+    border-bottom-color: var(--brand);
+}
 
-            .filtros {
-                flex-direction: column;
-            }
+.top-actions { display: flex; gap: 12px; }
 
-            select {
-                width: 100%;
-            }
-        }
-    </style>
+.icon-btn {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--ink);
+}
+
+.fallback-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15em;
+    height: 1.15em;
+    font-style: normal;
+    line-height: 1;
+}
+
+.view { display: none; }
+.view.active { display: block; }
+
+.hero-search {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px;
+    gap: 14px;
+    max-width: 920px;
+    margin: 0 auto 22px;
+}
+
+.search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 64px;
+    padding: 0 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.search-input-wrap input {
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: 18px;
+}
+
+.clear-btn {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+}
+
+.btn-go {
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--action), var(--action-dark));
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 10px 22px rgba(154, 77, 53, 0.22);
+}
+
+.btn-outline-go {
+    border: 1px solid var(--brand);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--brand);
+    font-weight: 900;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin: 14px 0 28px;
+}
+
+.summary-card,
+.panel-card,
+.product-card,
+.utility-card {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.summary-card {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 16px;
+    align-items: center;
+    min-height: 118px;
+    padding: 22px;
+    border-radius: 12px;
+}
+
+.summary-card:first-child { background: linear-gradient(135deg, var(--success-soft), var(--panel)); }
+
+.summary-icon {
+    display: grid;
+    width: 52px;
+    height: 52px;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+}
+
+.summary-label,
+.summary-foot,
+.text-muted-app { color: var(--muted); }
+
+.summary-value {
+    margin-top: 4px;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 310px;
+    gap: 28px;
+}
+
+.section-title {
+    margin: 0 0 18px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.filters {
+    display: grid;
+    align-content: start;
+    gap: 22px;
+}
+
+.mobile-filter-toggle { display: none; }
+
+.filter-head,
+.results-head,
+.total-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.link-clear {
+    border: 0;
+    background: none;
+    color: var(--brand);
+    font-weight: 700;
+}
+
+.filter-block label { margin-bottom: 10px; font-weight: 800; }
+
+.filter-range {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.form-select,
+.form-control,
+.form-check-input {
+    border-color: var(--line);
+    background-color: var(--panel);
+    color: var(--ink);
+}
+
+.form-select { min-height: 48px; border-radius: 9px; }
+.form-check-input:checked { background-color: var(--brand); border-color: var(--brand); }
+
+.alert-box {
+    padding: 18px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(249,115,22,0.1), var(--panel));
+}
+
+.view-toggle {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 10px;
+    background: var(--soft);
+}
+
+.view-toggle button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.view-toggle .active {
+    background: var(--panel);
+    color: var(--brand);
+    box-shadow: 0 3px 12px rgba(16, 24, 40, 0.08);
+}
+
+.results-list { display: grid; gap: 18px; }
+
+.results-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.results-table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+}
+
+.results-table th {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.results-table tr:last-child td { border-bottom: 0; }
+
+.table-product {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.table-product img {
+    width: 48px;
+    height: 58px;
+    object-fit: contain;
+}
+
+.table-product-name {
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.product-card {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: stretch;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(15,118,110,0.06), rgba(255,255,255,0));
+}
+
+.product-image-box {
+    display: grid;
+    width: 100%;
+    min-height: 188px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--soft);
+}
+
+.product-image {
+    max-width: 150px;
+    max-height: 164px;
+    object-fit: contain;
+}
+
+.product-name {
+    margin: 0 0 10px;
+    color: var(--logo-shadow);
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.24;
+}
+
+.product-meta {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.product-actions {
+    display: grid;
+    gap: 10px;
+}
+
+.details-btn.primary {
+    border-color: var(--action);
+    background: var(--action);
+    color: white;
+}
+
+.details-btn.primary.added,
+.details-btn.primary:disabled {
+    border-color: var(--success);
+    background: var(--success);
+    color: white;
+    cursor: default;
+    opacity: 1;
+}
+
+.details-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.prices-table {
+    display: grid;
+    align-content: start;
+    border-left: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.34);
+}
+
+body.dark .prices-table {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+body.dark .product-info {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.prices-header,
+.price-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) 110px 130px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+}
+
+.prices-header {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.price-row { border-top: 1px solid var(--line); }
+.store-name { color: var(--ink); font-weight: 900; }
+
+.best-pill {
+    display: inline-flex;
+    margin-left: 8px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--success-soft);
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.offer-pill {
+    display: inline-flex;
+    margin-left: 8px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--action-dark);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.price-value { font-weight: 900; }
+.price-value.best { color: var(--green); }
+
+.original-price {
+    color: var(--muted);
+    font-size: 13px;
+    text-decoration: line-through;
+}
+
+.reference-price {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.buy-btn {
+    display: inline-flex;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid var(--action);
+    border-radius: 8px;
+    color: var(--action-dark);
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.buy-btn:hover { background: var(--action); color: white; }
+
+.side-panel {
+    display: grid;
+    align-content: start;
+    gap: 22px;
+}
+
+.panel-card {
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.optimal-list {
+    display: grid;
+    gap: 15px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+
+.market-total-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.market-total-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.market-total-name {
+    font-weight: 900;
+}
+
+.market-total-price {
+    color: var(--ink);
+    font-weight: 900;
+}
+
+.market-total-row.best .market-total-price,
+.market-total-row.best .market-total-name {
+    color: var(--success);
+}
+
+.optimal-item,
+.saved-item,
+.history-item,
+.alert-item {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.optimal-item img,
+.saved-item img,
+.history-item img,
+.alert-item img {
+    width: 42px;
+    height: 54px;
+    object-fit: contain;
+}
+
+.optimal-name,
+.saved-name {
+    overflow: hidden;
+    font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.optimal-meta,
+.saved-meta,
+.market-total-meta {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.optimal-price,
+.total-value {
+    color: var(--success);
+    font-weight: 900;
+}
+
+.total-value { font-size: 26px; }
+
+.history-chart {
+    height: 92px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background:
+        linear-gradient(135deg, transparent 48%, rgba(22,163,74,0.18) 48% 52%, transparent 52%),
+        var(--soft);
+}
+
+.reason-list { display: grid; gap: 18px; }
+.reason-item { display: grid; grid-template-columns: 28px 1fr; gap: 12px; }
+
+.empty-state {
+    padding: 42px 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    color: var(--muted);
+    text-align: center;
+}
+
+.utility-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.utility-card {
+    padding: 22px;
+    border-radius: 14px;
+}
+
+.utility-card button { min-height: 42px; }
+
+.list-stack { display: grid; gap: 14px; }
+
+.toast-app {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 20;
+    display: none;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--panel);
+    box-shadow: var(--shadow);
+    font-weight: 800;
+}
+
+.toast-app.show { display: block; }
+
+@media (max-width: 1180px) {
+    .content-grid { grid-template-columns: 220px minmax(0, 1fr); }
+    .side-panel { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .utility-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+    .topbar,
+    .summary-grid,
+    .content-grid,
+    .side-panel,
+    .product-card,
+    .utility-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        padding-top: 22px;
+    }
+
+    .brand { min-width: 0; }
+    .brand-icon { width: 48px; height: 48px; border-radius: 14px; }
+    .brand-title { font-size: 30px; }
+    .brand-subtitle { font-size: 13px; }
+
+    .nav-tabs-app { display: none; }
+    .mobile-nav-select {
+        display: block;
+        grid-column: 1 / -1;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        color: var(--ink);
+        padding: 0 12px;
+        font-weight: 900;
+    }
+
+    .top-actions {
+        justify-content: end;
+    }
+
+    .icon-btn { width: 42px; height: 42px; }
+    .hero-search { grid-template-columns: 1fr; }
+    .summary-card { min-height: 96px; padding: 18px; }
+    .summary-value { font-size: 24px; }
+    .prices-table { border-left: 0; border-top: 1px solid var(--line); }
+
+    .mobile-filter-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 48px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        color: var(--ink);
+        font-weight: 900;
+    }
+
+    .filters.mobile-collapsed > :not(.mobile-filter-toggle) {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .prices-header,
+    .price-row,
+    .product-info {
+        grid-template-columns: 1fr;
+    }
+
+    .prices-header { display: none; }
+}
+</style>
 </head>
 
 <body>
+<main class="container app-shell">
+    <header class="topbar">
+        <button class="brand" type="button" onclick="volverInicio()" aria-label="Volver al inicio">
+            <div class="brand-icon">
+                <i data-lucide="shopping-cart"></i>
+                <span id="carritoContador" class="cart-badge">0</span>
+            </div>
+            <div>
+                <h1 class="brand-title">Ahorra<span>Go</span></h1>
+                <p class="brand-subtitle">Compara precios, ahorra siempre</p>
+            </div>
+        </button>
 
-<h1>🛒 AhorraGo</h1>
-<p>Compra mejor, paga menos</p>
+        <nav class="nav-tabs-app">
+            <button class="active" type="button" data-view="inicio" onclick="cambiarVista('inicio')">Inicio</button>
+            <button type="button" data-view="categorias" onclick="cambiarVista('categorias')">Categorías</button>
+            <button type="button" data-view="historial" onclick="cambiarVista('historial')">Historial</button>
+            <button type="button" data-view="listas" onclick="cambiarVista('listas')">Listas</button>
+            <button type="button" data-view="alertas" onclick="cambiarVista('alertas')">Alertas</button>
+        </nav>
 
-<div class="filtros">
-    <select id="categoria" onchange="cargarSubcategorias()">
-        <option value="">Categoría</option>
-    </select>
+        <select id="mobileNav" class="mobile-nav-select" aria-label="Navegación">
+            <option value="inicio">Inicio</option>
+            <option value="categorias">Categorías</option>
+            <option value="historial">Historial</option>
+            <option value="listas">Listas</option>
+            <option value="alertas">Alertas</option>
+        </select>
 
-    <select id="subcategoria">
-        <option value="">Subcategoría</option>
-    </select>
-</div>
+        <div class="top-actions">
+            <button id="themeToggle" class="icon-btn" type="button" aria-label="Modo nocturno"><i data-lucide="moon"></i></button>
+            <button class="icon-btn" type="button" aria-label="Perfil" onclick="mostrarToast('Perfil local listo')"><i data-lucide="user"></i></button>
+        </div>
+    </header>
 
-<div class="buscador">
-    <div class="buscador-box">
-        <input id="producto" placeholder="Buscar producto...">
-        <button class="btn-buscar" onclick="buscarProductos()">🔍</button>
-    </div>
+    <section id="view-inicio" class="view active">
+        <section class="hero-search">
+            <div class="search-input-wrap">
+                <i data-lucide="search"></i>
+                <input id="busqueda" type="text" placeholder="Buscar producto...">
+                <button class="clear-btn" type="button" onclick="limpiarBusqueda()" aria-label="Limpiar búsqueda">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <button onclick="buscar()" class="btn-go">Buscar</button>
+        </section>
 
-    <div id="sugerencias" class="sugerencias"></div>
-</div>
+        <section class="summary-grid">
+            <article class="summary-card">
+                <div class="summary-icon"><i data-lucide="badge-dollar-sign"></i></div>
+                <div>
+                    <div class="summary-label">Tu ahorro estimado</div>
+                    <div id="ahorroEstimado" class="summary-value">$0</div>
+                    <div class="summary-foot">con la compra óptima</div>
+                </div>
+            </article>
+            <article class="summary-card">
+                <div class="summary-icon"><i data-lucide="trophy"></i></div>
+                <div>
+                    <div class="summary-label">Mejor supermercado</div>
+                    <div id="mejorSupermercado" class="summary-value">-</div>
+                    <div id="mejorSupermercadoDetalle" class="summary-foot">sin resultados</div>
+                </div>
+            </article>
+            <article class="summary-card">
+                <div class="summary-icon"><i data-lucide="shopping-bag"></i></div>
+                <div>
+                    <div class="summary-label">Productos encontrados</div>
+                    <div id="productosEncontrados" class="summary-value">0</div>
+                    <div class="summary-foot">comparables</div>
+                </div>
+            </article>
+        </section>
 
-<div class="cantidad-box">
-    <input id="cantidad" type="number" value="1" min="1">
-</div>
+        <section class="content-grid">
+            <aside id="filtersPanel" class="filters mobile-collapsed">
+                <button id="filtersToggle" class="mobile-filter-toggle" type="button" onclick="toggleFiltrosMovil()">
+                    <span><i data-lucide="sliders-horizontal"></i> Filtros</span>
+                    <i data-lucide="chevron-down"></i>
+                </button>
+                <div class="filter-head">
+                    <h2 class="section-title">Filtros</h2>
+                    <button class="link-clear" type="button" onclick="limpiarFiltros()">Limpiar</button>
+                </div>
 
-<div class="botones">
-    <button onclick="agregar()">Agregar</button>
-    <button onclick="comparar()">Comparar</button>
-    <button onclick="limpiar()">Limpiar</button>
-</div>
+                <div class="filter-block">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" class="form-select">
+                        <option value="">Todas</option>
+                        <option value="leche">Lácteos y huevos</option>
+                        <option value="huevo">Huevos</option>
+                        <option value="yogurt">Yogurt</option>
+                        <option value="queso">Quesos</option>
+                        <option value="arroz">Despensa</option>
+                        <option value="cafe">Café</option>
+                        <option value="azucar">Azúcar</option>
+                        <option value="fideo">Fideos</option>
+                        <option value="bebida">Bebidas</option>
+                        <option value="pan">Panadería</option>
+                        <option value="detergente">Limpieza</option>
+                        <option value="papel higienico">Papel higiénico</option>
+                    </select>
+                </div>
 
-<h3>Lista:</h3>
-<div id="lista"></div>
+                <div class="filter-block">
+                    <label for="formato">Formato</label>
+                    <select id="formato" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="1 L">1 L</option>
+                        <option value="1 kg">1 kg</option>
+                        <option value="200 ml">200 ml</option>
+                        <option value="3 L">3 L</option>
+                    </select>
+                </div>
 
-<div id="resultado"></div>
+                <div class="filter-block">
+                    <label>Precio</label>
+                    <div class="filter-range">
+                        <input id="precioMin" class="form-control" type="number" min="0" placeholder="Mín.">
+                        <input id="precioMax" class="form-control" type="number" min="0" placeholder="Máx.">
+                    </div>
+                </div>
+
+                <div class="filter-block">
+                    <label>Disponibilidad</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="soloOfertas">
+                        <label class="form-check-label" for="soloOfertas">Solo ofertas</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="soloConLink">
+                        <label class="form-check-label" for="soloConLink">Con link de compra</label>
+                    </div>
+                </div>
+
+                <div class="filter-block">
+                    <label>Supermercado</label>
+                    <div class="form-check">
+                        <input class="form-check-input market-filter" type="checkbox" value="Líder" id="lider" checked>
+                        <label class="form-check-label" for="lider">Líder</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input market-filter" type="checkbox" value="Jumbo" id="jumbo" checked>
+                        <label class="form-check-label" for="jumbo">Jumbo</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input market-filter" type="checkbox" value="Unimarc" id="unimarc" checked>
+                        <label class="form-check-label" for="unimarc">Unimarc</label>
+                    </div>
+                </div>
+
+                <div class="filter-block">
+                    <label>Ordenar por</label>
+                    <div class="form-check">
+                        <input class="form-check-input" name="orden" type="radio" value="relevancia" id="relevancia" checked>
+                        <label class="form-check-label" for="relevancia">Relevancia</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="orden" type="radio" value="menor" id="menor">
+                        <label class="form-check-label" for="menor">Menor precio</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="orden" type="radio" value="ahorro" id="ahorro">
+                        <label class="form-check-label" for="ahorro">Mayor ahorro</label>
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    <h3 class="section-title"><i data-lucide="bell"></i> Activa alertas</h3>
+                    <p class="text-muted-app mb-3">Te avisamos cuando baje el precio.</p>
+                    <button class="btn-go w-100 py-2" onclick="crearAlertaDesdeBusqueda()">Crear alerta</button>
+                </div>
+            </aside>
+
+            <section>
+                <div class="results-head">
+                    <div class="fw-bold"><span id="contadorTexto">0 resultados</span></div>
+                    <div class="view-toggle">
+                        <button id="viewCardsBtn" class="active" type="button" onclick="cambiarModoResultados('cards')"><i data-lucide="layout-grid"></i> Tarjetas</button>
+                        <button id="viewTableBtn" type="button" onclick="cambiarModoResultados('table')"><i data-lucide="table-2"></i> Tabla</button>
+                    </div>
+                </div>
+                <div id="resultados" class="results-list"></div>
+            </section>
+
+            <aside class="side-panel">
+                <article class="panel-card">
+                    <h2 class="panel-title"><i data-lucide="shopping-cart"></i> Compra óptima</h2>
+                    <p class="text-muted-app">Agrega productos y calculamos el mejor precio</p>
+                    <div id="compraOptima" class="optimal-list"></div>
+                    <div class="total-line mt-3">
+                        <span>Total óptimo</span>
+                        <strong id="totalOptimo" class="total-value">$0</strong>
+                    </div>
+                    <div id="totalesSupermercado" class="market-total-list"></div>
+                    <button class="btn-go w-100 py-3 mt-3" onclick="guardarListaOptima()">Guardar lista</button>
+                    <button class="btn-outline-go w-100 py-2 mt-2" onclick="limpiarCarrito()">Vaciar compra</button>
+                </article>
+
+                <article class="panel-card">
+                    <h2 class="panel-title"><i data-lucide="clock"></i> Historial reciente</h2>
+                    <div class="history-chart"></div>
+                    <p class="mt-3 mb-0 fw-bold">Precio más bajo detectado</p>
+                    <p id="historialTexto" class="text-muted-app mb-0">Busca un producto para comenzar</p>
+                </article>
+
+                <article class="panel-card">
+                    <h2 class="panel-title">¿Por qué usar AhorraGo?</h2>
+                    <div class="reason-list">
+                        <div class="reason-item"><i data-lucide="shield-check"></i><div><strong>Comparamos por ti</strong><br><span class="text-muted-app">Ahorra tiempo y dinero</span></div></div>
+                        <div class="reason-item"><i data-lucide="calendar-check"></i><div><strong>Datos actualizados</strong><br><span class="text-muted-app">Precios reales del día</span></div></div>
+                        <div class="reason-item"><i data-lucide="lightbulb"></i><div><strong>Compra inteligente</strong><br><span class="text-muted-app">Elige siempre la mejor opción</span></div></div>
+                    </div>
+                </article>
+            </aside>
+        </section>
+    </section>
+
+    <section id="view-categorias" class="view">
+        <h2 class="mb-3 fw-bold">Categorías</h2>
+        <div class="utility-grid">
+            <article class="utility-card"><h3>Leche</h3><p class="text-muted-app">Productos lácteos comparables.</p><button class="btn-go w-100" onclick="buscarCategoria('leche')">Ver leche</button></article>
+            <article class="utility-card"><h3>Huevos</h3><p class="text-muted-app">Formatos y bandejas comparables.</p><button class="btn-go w-100" onclick="buscarCategoria('huevo')">Ver huevos</button></article>
+            <article class="utility-card"><h3>Yogurt</h3><p class="text-muted-app">Bebibles, batidos y packs.</p><button class="btn-go w-100" onclick="buscarCategoria('yogurt')">Ver yogurt</button></article>
+            <article class="utility-card"><h3>Quesos</h3><p class="text-muted-app">Laminados, trozos y rallados.</p><button class="btn-go w-100" onclick="buscarCategoria('queso')">Ver quesos</button></article>
+            <article class="utility-card"><h3>Arroz</h3><p class="text-muted-app">Despensa básica para comparar.</p><button class="btn-go w-100" onclick="buscarCategoria('arroz')">Ver arroz</button></article>
+            <article class="utility-card"><h3>Aceite</h3><p class="text-muted-app">Formatos y marcas del día.</p><button class="btn-go w-100" onclick="buscarCategoria('aceite')">Ver aceite</button></article>
+            <article class="utility-card"><h3>Café</h3><p class="text-muted-app">Instantáneo, molido y cápsulas.</p><button class="btn-go w-100" onclick="buscarCategoria('cafe')">Ver café</button></article>
+            <article class="utility-card"><h3>Azúcar</h3><p class="text-muted-app">Blanca, rubia y formatos familiares.</p><button class="btn-go w-100" onclick="buscarCategoria('azucar')">Ver azúcar</button></article>
+            <article class="utility-card"><h3>Fideos</h3><p class="text-muted-app">Pastas y formatos de despensa.</p><button class="btn-go w-100" onclick="buscarCategoria('fideo')">Ver fideos</button></article>
+            <article class="utility-card"><h3>Bebidas</h3><p class="text-muted-app">Gaseosas y packs.</p><button class="btn-go w-100" onclick="buscarCategoria('bebida')">Ver bebidas</button></article>
+            <article class="utility-card"><h3>Pan</h3><p class="text-muted-app">Panadería y pan envasado.</p><button class="btn-go w-100" onclick="buscarCategoria('pan')">Ver pan</button></article>
+            <article class="utility-card"><h3>Detergentes</h3><p class="text-muted-app">Limpieza y ahorro por formato.</p><button class="btn-go w-100" onclick="buscarCategoria('detergente')">Ver detergentes</button></article>
+            <article class="utility-card"><h3>Papel higiénico</h3><p class="text-muted-app">Rollos, hojas y packs familiares.</p><button class="btn-go w-100" onclick="buscarCategoria('papel higienico')">Ver papel</button></article>
+        </div>
+    </section>
+
+    <section id="view-historial" class="view">
+        <div class="results-head mb-3">
+            <h2 class="fw-bold mb-0">Historial</h2>
+            <button class="btn-outline-go px-3" onclick="limpiarHistorial()">Limpiar historial</button>
+        </div>
+        <div id="historialLista" class="list-stack"></div>
+    </section>
+
+    <section id="view-listas" class="view">
+        <div class="results-head mb-3">
+            <h2 class="fw-bold mb-0">Listas guardadas</h2>
+            <button class="btn-outline-go px-3" onclick="limpiarListas()">Limpiar listas</button>
+        </div>
+        <div id="listasGuardadas" class="list-stack"></div>
+    </section>
+
+    <section id="view-alertas" class="view">
+        <div class="results-head mb-3">
+            <h2 class="fw-bold mb-0">Alertas</h2>
+            <button class="btn-outline-go px-3" onclick="limpiarAlertas()">Limpiar alertas</button>
+        </div>
+        <article class="utility-card mb-3">
+            <div class="row g-3">
+                <div class="col-md-6"><input id="alertaTexto" class="form-control" placeholder="Producto o búsqueda"></div>
+                <div class="col-md-4"><input id="alertaPrecio" class="form-control" type="number" placeholder="Precio objetivo"></div>
+                <div class="col-md-2"><button class="btn-go w-100 h-100" onclick="crearAlertaManual()">Crear</button></div>
+            </div>
+        </article>
+        <div id="alertasLista" class="list-stack"></div>
+    </section>
+</main>
+
+<div id="toast" class="toast-app"></div>
 
 <script>
 const API_HOST = window.location.hostname || "localhost";
-const API = `http://${API_HOST}:8000`;
+const API = `http://${API_HOST}:8001`;
+let productosActuales = [];
+let productosVisibles = [];
+let modoResultados = "cards";
 
-let productos = [];
+const iconosFallback = {
+    "shopping-cart": "cart",
+    "moon": "moon",
+    "sun": "sun",
+    "user": "user",
+    "search": "search",
+    "x": "x",
+    "badge-dollar-sign": "$",
+    "trophy": "*",
+    "shopping-bag": "bag",
+    "bell": "!",
+    "layout-grid": "grid",
+    "table-2": "table",
+    "clock": "time",
+    "shield-check": "ok",
+    "calendar-check": "cal",
+    "lightbulb": "idea",
+    "list-plus": "+",
+    "package": "box"
+};
 
-function formatearFormato(formato) {
-    if (!formato) return "";
+const store = {
+    get(key, fallback) {
+        return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+    },
+    set(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+};
 
-    let texto = formato.toLowerCase();
-    let numero = parseFloat(texto);
+let carritoCompra = store.get("ahorrago-carrito", []);
 
-    if (isNaN(numero)) return formato;
-
-    if (texto.includes("cc") || texto.includes("ml")) {
-        if (numero >= 1000) return (numero / 1000) + " L";
-        return numero + " ml";
+function renderIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+        window.lucide.createIcons();
+        return;
     }
 
-    if (texto.includes("l")) return numero + " L";
-
-    return formato;
-}
-
-function obtenerLitros(formato) {
-    if (!formato) return null;
-
-    let texto = formato.toLowerCase().replace(",", ".").trim();
-    let numero = parseFloat(texto);
-
-    if (isNaN(numero)) return null;
-
-    if (texto.includes("ml")) {
-        return numero / 1000;
-    }
-
-    if (texto.includes("l")) {
-        return numero;
-    }
-
-    return null;
-}
-
-function formatearPrecio(valor) {
-    if (!valor) return "";
-    return "$" + parseInt(valor).toLocaleString("es-CL");
-}
-
-function calcularPrecioPorLitro(precio, formato) {
-    const litros = obtenerLitros(formato);
-
-    if (!precio || !litros) return "";
-
-    const precioLitro = precio / litros;
-
-    return "$" + parseInt(precioLitro).toLocaleString("es-CL") + " / L";
-}
-
-window.onload = cargarCategorias;
-
-async function cargarCategorias() {
-    const res = await fetch(API + "/categorias");
-    const data = await res.json();
-
-    const select = document.getElementById("categoria");
-
-    data.forEach(cat => {
-        select.innerHTML += `<option value="${cat.id}">${cat.nombre}</option>`;
+    document.querySelectorAll("i[data-lucide]").forEach(icon => {
+        const name = icon.getAttribute("data-lucide");
+        icon.textContent = iconosFallback[name] || ".";
+        icon.classList.add("fallback-icon");
     });
 }
 
-async function cargarSubcategorias() {
-    const id = document.getElementById("categoria").value;
-    const sub = document.getElementById("subcategoria");
-
-    sub.innerHTML = `<option value="">Subcategoría</option>`;
-
-    if (!id) return;
-
-    const res = await fetch(`${API}/subcategorias/${id}`);
-    const data = await res.json();
-
-    data.forEach(s => {
-        sub.innerHTML += `<option value="${s.id}">${s.nombre}</option>`;
+function cambiarVista(nombre) {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    document.getElementById(`view-${nombre}`).classList.add("active");
+    document.querySelectorAll(".nav-tabs-app button").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === nombre);
     });
+    document.getElementById("mobileNav").value = nombre;
+
+    if (nombre === "historial") renderHistorial();
+    if (nombre === "listas") renderListas();
+    if (nombre === "alertas") renderAlertas();
+    renderIcons();
 }
 
-async function buscarProductos() {
-    const texto = document.getElementById("producto").value.trim();
-    const contenedor = document.getElementById("sugerencias");
+function volverInicio() {
+    cambiarVista("inicio");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function cambiarModoResultados(modo) {
+    modoResultados = modo;
+    document.getElementById("viewCardsBtn").classList.toggle("active", modo === "cards");
+    document.getElementById("viewTableBtn").classList.toggle("active", modo === "table");
+    renderizar();
+}
+
+function toggleFiltrosMovil() {
+    const panel = document.getElementById("filtersPanel");
+    const estaColapsado = panel.classList.toggle("mobile-collapsed");
+    const icono = document.querySelector("#filtersToggle > i");
+
+    if (icono) icono.setAttribute("data-lucide", estaColapsado ? "chevron-down" : "chevron-up");
+    renderIcons();
+}
+
+async function buscar() {
+    const texto = document.getElementById("busqueda").value.trim();
+    const contenedor = document.getElementById("resultados");
+    cambiarVista("inicio");
 
     if (texto.length < 2) {
-        alert("Escribe al menos 2 letras");
+        contenedor.innerHTML = "<div class='empty-state'>Escribe al menos 2 letras para buscar.</div>";
+        actualizarDashboard(carritoCompra, 0);
         return;
     }
 
-    try {
-        const res = await fetch(`${API}/productos/buscar/${texto}`);
-        const data = await res.json();
+    guardarHistorial(texto);
+    contenedor.innerHTML = "<div class='empty-state'>Buscando mejores precios...</div>";
 
-        contenedor.innerHTML = "";
+    const res = await fetch(`${API}/productos/buscar/${encodeURIComponent(texto)}`);
+    productosActuales = await res.json();
+    renderizar();
+}
 
-        data.forEach(item => {
-            const formato = formatearFormato(item.formato);
-            const precio = formatearPrecio(item.precio_menor);
-            const precioLitro = calcularPrecioPorLitro(item.precio_menor, item.formato);
+function renderizar() {
+    const productos = aplicarFiltros(productosActuales);
+    productosVisibles = productos;
+    const contenedor = document.getElementById("resultados");
+    const texto = document.getElementById("busqueda").value.trim();
 
-            contenedor.innerHTML += `
-                <div class="opcion" onclick="seleccionar('${item.nombre}')">
-                    <strong>${item.nombre}</strong>
-                    <span>${item.marca} | ${item.tipo} | ${formato}</span><br>
-                    <span>Desde: ${precio} ${precioLitro ? " | " + precioLitro : ""}</span>
+    if (!productos.length) {
+        contenedor.innerHTML = "<div class='empty-state'>No encontramos productos comparables con esos filtros.</div>";
+        document.getElementById("contadorTexto").textContent = "0 resultados";
+        actualizarDashboard(carritoCompra, 0);
+        return;
+    }
+
+    contenedor.innerHTML = modoResultados === "table"
+        ? renderTablaProductos(productos)
+        : productos.map(renderProducto).join("");
+    document.getElementById("contadorTexto").textContent = `${productos.length} resultados para "${texto}"`;
+    actualizarDashboard(carritoCompra, productos.length);
+    renderCompraOptima();
+    renderIcons();
+}
+
+function aplicarFiltros(productos) {
+    const categoria = normalizarTexto(document.getElementById("categoria").value);
+    const formato = document.getElementById("formato").value.toLowerCase();
+    const precioMin = Number(document.getElementById("precioMin").value || 0);
+    const precioMax = Number(document.getElementById("precioMax").value || 0);
+    const soloOfertas = document.getElementById("soloOfertas").checked;
+    const soloConLink = document.getElementById("soloConLink").checked;
+    const mercados = new Set([...document.querySelectorAll(".market-filter:checked")].map(input => input.value));
+    const orden = document.querySelector("input[name='orden']:checked").value;
+
+    let filtrados = productos
+        .filter(producto => !categoria || normalizarTexto(producto.nombre).includes(categoria))
+        .filter(producto => !formato || String(producto.formato || "").toLowerCase() === formato)
+        .map(producto => ({ ...producto, precios: producto.precios.filter(precio => mercados.has(precio.supermercado)) }))
+        .map(producto => ({
+            ...producto,
+            precios: producto.precios.filter(precio => {
+                const cumpleMin = !precioMin || precio.precio >= precioMin;
+                const cumpleMax = !precioMax || precio.precio <= precioMax;
+                const cumpleOferta = !soloOfertas || precio.tiene_descuento;
+                const cumpleLink = !soloConLink || Boolean(precio.url);
+                return cumpleMin && cumpleMax && cumpleOferta && cumpleLink;
+            })
+        }))
+        .filter(producto => producto.precios.length > 0);
+
+    if (orden === "menor") filtrados.sort((a, b) => precioMinimo(a) - precioMinimo(b));
+    if (orden === "ahorro") filtrados.sort((a, b) => ahorroProducto(b) - ahorroProducto(a));
+
+    return filtrados;
+}
+
+function renderProducto(producto) {
+    const min = precioMinimo(producto);
+    const estaAgregado = carritoCompra.some(item => item.id === producto.id);
+
+    return `
+        <article class="product-card">
+            <div class="product-info">
+                <div class="product-image-box">${renderImagenProducto(producto)}</div>
+                <div>
+                    <h3 class="product-name">${escapeHtml(producto.nombre)}</h3>
+                    <div class="product-meta">
+                        <div>${escapeHtml(producto.formato || "Sin formato")}</div>
+                        <div>${escapeHtml(producto.tipo || "Producto")}</div>
+                    </div>
+                    <div class="product-actions">
+                        <button
+                            class="details-btn primary ${estaAgregado ? "added" : ""}"
+                            type="button"
+                            data-add-product="${producto.id}"
+                            onclick="agregarACompra(${producto.id})"
+                            ${estaAgregado ? "disabled" : ""}
+                        >
+                            <i data-lucide="${estaAgregado ? "check" : "shopping-cart"}"></i>
+                            <span>${estaAgregado ? "Agregado" : "Agregar"}</span>
+                        </button>
+                        <button class="details-btn" type="button" onclick="guardarProducto(${producto.id})"><i data-lucide="list-plus"></i> Guardar</button>
+                        <button class="details-btn" type="button" onclick="crearAlertaProducto(${producto.id})"><i data-lucide="bell"></i> Alerta</button>
+                    </div>
                 </div>
-            `;
-        });
-
-        contenedor.style.display = "block";
-
-    } catch (e) {
-        alert("Error conectando con API");
-    }
+            </div>
+            <div class="prices-table">
+                <div class="prices-header"><span>Supermercado</span><span>Precio</span><span></span></div>
+                ${producto.precios.map(precio => renderPrecio(precio, min)).join("")}
+            </div>
+        </article>
+    `;
 }
 
-function seleccionar(nombre) {
-    document.getElementById("producto").value = nombre;
-    document.getElementById("sugerencias").style.display = "none";
-}
+function renderPrecio(precio, min) {
+    const esMejor = precio.precio === min;
+    const tieneDescuento = precio.tiene_descuento && precio.precio_oferta;
+    const precioActual = tieneDescuento ? precio.precio_oferta : precio.precio;
 
-function agregar() {
-    const nombre = document.getElementById("producto").value;
-    const cantidad = parseInt(document.getElementById("cantidad").value);
-
-    if (!nombre) {
-        alert("Ingresa producto");
-        return;
-    }
-
-    productos.push({ nombre, cantidad });
-
-    document.getElementById("lista").innerHTML += `
-        <div class="item-lista">
-            <strong>${nombre}</strong>
-            <span>${cantidad}</span>
+    return `
+        <div class="price-row">
+            <div>
+                <span class="store-name">${escapeHtml(precio.supermercado)}</span>
+                ${esMejor ? "<span class='best-pill'>Más barato</span>" : ""}
+                ${tieneDescuento ? `<span class="offer-pill">Oferta -${precio.descuento}%</span>` : ""}
+            </div>
+            <div>
+                ${tieneDescuento ? `<div class="original-price">${formatearPrecio(precio.precio_normal)}</div>` : ""}
+                <div class="price-value ${esMejor ? "best" : ""}">${formatearPrecio(precioActual)}</div>
+                ${precio.precio_referencia ? `<div class="reference-price">${escapeHtml(precio.precio_referencia)}</div>` : ""}
+            </div>
+            ${precio.url ? `<a class="buy-btn" href="${escapeHtml(precio.url)}" target="_blank" rel="noopener">Ver producto</a>` : "<span class='text-muted-app'>Sin link</span>"}
         </div>
     `;
 }
 
-async function comparar() {
-    const res = await fetch(API + "/comparar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productos })
+function renderImagenProducto(producto) {
+    if (producto.imagen_url) {
+        return `<img class="product-image" src="${escapeHtml(producto.imagen_url)}" alt="${escapeHtml(producto.nombre)}" loading="lazy">`;
+    }
+    return "<i data-lucide='package' class='text-muted-app'></i>";
+}
+
+function actualizarDashboard(productosCompra = carritoCompra, productosEncontrados = productosVisibles.length) {
+    const optimos = productosCompra.map(producto => ({
+        producto,
+        mejor: producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0])
+    })).filter(item => item.mejor);
+
+    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio, 0);
+    const totalCaro = productosCompra.reduce((total, producto) => total + Math.max(...producto.precios.map(precio => precio.precio)), 0);
+    const ahorro = Math.max(0, totalCaro - totalOptimo);
+    const conteoMercados = {};
+
+    optimos.forEach(item => {
+        conteoMercados[item.mejor.supermercado] = (conteoMercados[item.mejor.supermercado] || 0) + 1;
     });
 
-    const data = await res.json();
+    const mejorSuper = Object.entries(conteoMercados).sort((a, b) => b[1] - a[1])[0];
 
-    document.getElementById("resultado").innerText = data.mensaje;
+    document.getElementById("ahorroEstimado").textContent = formatearPrecio(ahorro);
+    document.getElementById("productosEncontrados").textContent = productosEncontrados;
+    document.getElementById("mejorSupermercado").textContent = mejorSuper ? mejorSuper[0] : "-";
+    document.getElementById("mejorSupermercadoDetalle").textContent = mejorSuper ? `en ${mejorSuper[1]} de ${productosCompra.length} agregados` : "agrega productos";
+    document.getElementById("historialTexto").textContent = optimos[0] ? `${optimos[0].producto.nombre}: ${formatearPrecio(optimos[0].mejor.precio)}` : "Busca un producto para comenzar";
 }
 
-function limpiar() {
-    productos = [];
-    document.getElementById("lista").innerHTML = "";
-    document.getElementById("resultado").innerText = "";
+function normalizarTexto(valor) {
+    return String(valor || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
 }
+
+function renderTablaProductos(productos) {
+    return `
+        <div class="results-table-wrap">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Mejor precio</th>
+                        <th>Supermercado</th>
+                        <th>Ahorro</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productos.map(renderFilaTabla).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderFilaTabla(producto) {
+    const mejor = producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0]);
+    const ahorro = ahorroProducto(producto);
+    const estaAgregado = carritoCompra.some(item => item.id === producto.id);
+
+    return `
+        <tr>
+            <td>
+                <div class="table-product">
+                    ${producto.imagen_url ? `<img src="${escapeHtml(producto.imagen_url)}" alt="${escapeHtml(producto.nombre)}" loading="lazy">` : "<i data-lucide='package'></i>"}
+                    <div>
+                        <div class="table-product-name">${escapeHtml(producto.nombre)}</div>
+                        <div class="text-muted-app">${escapeHtml(producto.formato || "Sin formato")}</div>
+                    </div>
+                </div>
+            </td>
+            <td><strong class="price-value best">${formatearPrecio(mejor.precio)}</strong></td>
+            <td>${escapeHtml(mejor.supermercado)}</td>
+            <td>${formatearPrecio(ahorro)}</td>
+            <td>
+                <button
+                    class="details-btn primary ${estaAgregado ? "added" : ""}"
+                    type="button"
+                    data-add-product="${producto.id}"
+                    onclick="agregarACompra(${producto.id})"
+                    ${estaAgregado ? "disabled" : ""}
+                >
+                    <i data-lucide="${estaAgregado ? "check" : "shopping-cart"}"></i>
+                    <span>${estaAgregado ? "Agregado" : "Agregar"}</span>
+                </button>
+            </td>
+        </tr>
+    `;
+}
+
+function guardarProducto(id) {
+    const producto = productosVisibles.find(item => item.id === id);
+    if (!producto) return;
+    const lista = store.get("ahorrago-listas", []);
+    if (!lista.some(item => item.id === producto.id)) {
+        lista.unshift(producto);
+        store.set("ahorrago-listas", lista.slice(0, 40));
+    }
+    mostrarToast("Producto guardado en listas");
+}
+
+function agregarACompra(id) {
+    const producto = productosVisibles.find(item => item.id === id);
+    if (!producto) return;
+
+    if (!carritoCompra.some(item => item.id === producto.id)) {
+        carritoCompra.push(producto);
+        store.set("ahorrago-carrito", carritoCompra);
+    }
+
+    renderCompraOptima();
+    actualizarDashboard(carritoCompra);
+    actualizarEstadoCarrito();
+    mostrarToast("Producto agregado a la compra");
+}
+
+function quitarDeCompra(id) {
+    carritoCompra = carritoCompra.filter(producto => producto.id !== id);
+    store.set("ahorrago-carrito", carritoCompra);
+    renderCompraOptima();
+    actualizarDashboard(carritoCompra);
+    actualizarEstadoCarrito();
+}
+
+function limpiarCarrito() {
+    carritoCompra = [];
+    store.set("ahorrago-carrito", carritoCompra);
+    renderCompraOptima();
+    actualizarDashboard(carritoCompra);
+    actualizarEstadoCarrito();
+    mostrarToast("Compra vaciada");
+}
+
+function renderCompraOptima() {
+    const optimos = carritoCompra.map(producto => ({
+        producto,
+        mejor: producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0])
+    })).filter(item => item.mejor);
+    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio, 0);
+
+    document.getElementById("totalOptimo").textContent = formatearPrecio(totalOptimo);
+    document.getElementById("compraOptima").innerHTML = optimos.map(item => `
+        <div class="optimal-item">
+            ${item.producto.imagen_url ? `<img src="${escapeHtml(item.producto.imagen_url)}" alt="${escapeHtml(item.producto.nombre)}">` : "<i data-lucide='package'></i>"}
+            <div>
+                <div class="optimal-name">${escapeHtml(item.producto.nombre)}</div>
+                <div class="optimal-meta">${escapeHtml(item.producto.formato || "")}<br>${escapeHtml(item.mejor.supermercado)}</div>
+            </div>
+            <div>
+                <div class="optimal-price">${formatearPrecio(item.mejor.precio)}</div>
+                <button class="link-clear p-0" type="button" onclick="quitarDeCompra(${item.producto.id})">Quitar</button>
+            </div>
+        </div>
+    `).join("") || "<p class='text-muted-app mb-0'>Agrega productos desde los resultados.</p>";
+    renderTotalesSupermercado(carritoCompra);
+    renderIcons();
+}
+
+function actualizarEstadoCarrito() {
+    const contador = document.getElementById("carritoContador");
+    contador.textContent = carritoCompra.length;
+    contador.classList.toggle("show", carritoCompra.length > 0);
+
+    document.querySelectorAll("[data-add-product]").forEach(button => {
+        const id = Number(button.dataset.addProduct);
+        const agregado = carritoCompra.some(producto => producto.id === id);
+        const icono = button.querySelector("i");
+        const texto = button.querySelector("span");
+
+        button.disabled = agregado;
+        button.classList.toggle("added", agregado);
+        if (icono) icono.setAttribute("data-lucide", agregado ? "check" : "shopping-cart");
+        if (texto) texto.textContent = agregado ? "Agregado" : "Agregar";
+    });
+
+    renderIcons();
+}
+
+function calcularTotalesSupermercado(productos) {
+    const mercados = ["Líder", "Jumbo", "Unimarc"];
+
+    return mercados.map(mercado => {
+        const precios = productos
+            .map(producto => producto.precios.find(precio => precio.supermercado === mercado))
+            .filter(Boolean);
+
+        return {
+            mercado,
+            completos: precios.length === productos.length,
+            cantidad: precios.length,
+            total: precios.reduce((suma, precio) => suma + Number(precio.precio || 0), 0)
+        };
+    }).filter(item => item.cantidad > 0);
+}
+
+function renderTotalesSupermercado(productos) {
+    const contenedor = document.getElementById("totalesSupermercado");
+
+    if (!productos.length) {
+        contenedor.innerHTML = "";
+        return;
+    }
+
+    const totales = calcularTotalesSupermercado(productos)
+        .filter(item => item.completos)
+        .sort((a, b) => a.total - b.total);
+
+    if (!totales.length) {
+        contenedor.innerHTML = "<p class='text-muted-app mb-0'>No hay un supermercado con toda la lista.</p>";
+        return;
+    }
+
+    const mejorTotal = totales[0].total;
+    contenedor.innerHTML = `
+        <div class="market-total-meta">Comprar todo en un supermercado</div>
+        ${totales.map(item => `
+            <div class="market-total-row ${item.total === mejorTotal ? "best" : ""}">
+                <div>
+                    <div class="market-total-name">${escapeHtml(item.mercado)}</div>
+                    <div class="market-total-meta">${item.total === mejorTotal ? "Mejor total único" : `${formatearPrecio(item.total - mejorTotal)} sobre el mejor`}</div>
+                </div>
+                <div class="market-total-price">${formatearPrecio(item.total)}</div>
+            </div>
+        `).join("")}
+    `;
+}
+
+function guardarListaOptima() {
+    const lista = store.get("ahorrago-listas", []);
+    const nuevos = carritoCompra.filter(producto => !lista.some(item => item.id === producto.id));
+
+    if (!nuevos.length) {
+        mostrarToast("Agrega productos antes de guardar");
+        return;
+    }
+
+    store.set("ahorrago-listas", [...nuevos, ...lista].slice(0, 60));
+    mostrarToast("Compra óptima guardada");
+}
+
+function renderListas() {
+    const lista = store.get("ahorrago-listas", []);
+    document.getElementById("listasGuardadas").innerHTML = lista.length ? lista.map(producto => `
+        <article class="utility-card saved-item">
+            ${producto.imagen_url ? `<img src="${escapeHtml(producto.imagen_url)}" alt="${escapeHtml(producto.nombre)}">` : "<i data-lucide='package'></i>"}
+            <div><div class="saved-name">${escapeHtml(producto.nombre)}</div><div class="saved-meta">${escapeHtml(producto.formato || "")}</div></div>
+            <button class="btn-outline-go px-3" onclick="buscarProductoGuardado('${escapeAttribute(producto.nombre)}')">Buscar</button>
+        </article>
+    `).join("") : "<div class='empty-state'>Aún no tienes productos guardados.</div>";
+}
+
+function guardarHistorial(texto) {
+    const historial = store.get("ahorrago-historial", []).filter(item => item.texto !== texto);
+    historial.unshift({ texto, fecha: new Date().toLocaleString("es-CL") });
+    store.set("ahorrago-historial", historial.slice(0, 20));
+}
+
+function renderHistorial() {
+    const historial = store.get("ahorrago-historial", []);
+    document.getElementById("historialLista").innerHTML = historial.length ? historial.map(item => `
+        <article class="utility-card history-item">
+            <i data-lucide="search"></i>
+            <div><strong>${escapeHtml(item.texto)}</strong><br><span class="text-muted-app">${escapeHtml(item.fecha)}</span></div>
+            <button class="btn-outline-go px-3" onclick="buscarDesdeTexto('${escapeAttribute(item.texto)}')">Repetir</button>
+        </article>
+    `).join("") : "<div class='empty-state'>Tu historial aparecerá después de buscar.</div>";
+}
+
+function crearAlertaProducto(id) {
+    const producto = productosVisibles.find(item => item.id === id);
+    if (!producto) return;
+    const objetivo = Math.floor(precioMinimo(producto) * 0.95);
+    guardarAlerta(producto.nombre, objetivo);
+}
+
+function crearAlertaDesdeBusqueda() {
+    const texto = document.getElementById("busqueda").value.trim();
+    if (!texto) return;
+    guardarAlerta(texto, "");
+}
+
+function crearAlertaManual() {
+    const texto = document.getElementById("alertaTexto").value.trim();
+    const precio = document.getElementById("alertaPrecio").value;
+    if (!texto) return mostrarToast("Escribe un producto para la alerta");
+    guardarAlerta(texto, precio);
+    document.getElementById("alertaTexto").value = "";
+    document.getElementById("alertaPrecio").value = "";
+}
+
+function guardarAlerta(texto, precio) {
+    const alertas = store.get("ahorrago-alertas", []);
+    alertas.unshift({ texto, precio, fecha: new Date().toLocaleDateString("es-CL") });
+    store.set("ahorrago-alertas", alertas.slice(0, 30));
+    mostrarToast("Alerta creada");
+    renderAlertas();
+}
+
+function renderAlertas() {
+    const alertas = store.get("ahorrago-alertas", []);
+    document.getElementById("alertasLista").innerHTML = alertas.length ? alertas.map(alerta => `
+        <article class="utility-card alert-item">
+            <i data-lucide="bell"></i>
+            <div><strong>${escapeHtml(alerta.texto)}</strong><br><span class="text-muted-app">Objetivo: ${alerta.precio ? formatearPrecio(alerta.precio) : "cualquier baja"} · ${escapeHtml(alerta.fecha)}</span></div>
+            <button class="btn-outline-go px-3" onclick="buscarDesdeTexto('${escapeAttribute(alerta.texto)}')">Buscar</button>
+        </article>
+    `).join("") : "<div class='empty-state'>Crea alertas para seguir precios importantes.</div>";
+}
+
+function buscarCategoria(texto) {
+    document.getElementById("busqueda").value = texto;
+    document.getElementById("categoria").value = texto === "aceite" ? "" : texto;
+    buscar();
+}
+
+function buscarDesdeTexto(texto) {
+    document.getElementById("busqueda").value = texto;
+    buscar();
+}
+
+function buscarProductoGuardado(texto) {
+    document.getElementById("busqueda").value = texto.split(" ").slice(0, 4).join(" ");
+    buscar();
+}
+
+function limpiarBusqueda() {
+    document.getElementById("busqueda").value = "";
+    document.getElementById("resultados").innerHTML = "";
+    document.getElementById("contadorTexto").textContent = "0 resultados";
+    actualizarDashboard(carritoCompra, 0);
+    renderCompraOptima();
+    actualizarEstadoCarrito();
+}
+
+function limpiarFiltros() {
+    document.getElementById("categoria").value = "";
+    document.getElementById("formato").value = "";
+    document.getElementById("precioMin").value = "";
+    document.getElementById("precioMax").value = "";
+    document.getElementById("soloOfertas").checked = false;
+    document.getElementById("soloConLink").checked = false;
+    document.querySelectorAll(".market-filter").forEach(input => input.checked = true);
+    document.getElementById("relevancia").checked = true;
+    document.getElementById("filtersPanel").classList.add("mobile-collapsed");
+    renderizar();
+}
+
+function limpiarHistorial() {
+    store.set("ahorrago-historial", []);
+    renderHistorial();
+}
+
+function limpiarListas() {
+    store.set("ahorrago-listas", []);
+    renderListas();
+}
+
+function limpiarAlertas() {
+    store.set("ahorrago-alertas", []);
+    renderAlertas();
+}
+
+function precioMinimo(producto) {
+    return Math.min(...producto.precios.map(precio => precio.precio));
+}
+
+function ahorroProducto(producto) {
+    const precios = producto.precios.map(precio => precio.precio);
+    return Math.max(...precios) - Math.min(...precios);
+}
+
+function formatearPrecio(valor) {
+    return "$" + parseInt(valor || 0).toLocaleString("es-CL");
+}
+
+function mostrarToast(texto) {
+    const toast = document.getElementById("toast");
+    toast.textContent = texto;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function escapeHtml(valor) {
+    return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(valor) {
+    return String(valor ?? "")
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'")
+        .replaceAll('"', "&quot;")
+        .replaceAll("<", "")
+        .replaceAll(">", "");
+}
+
+document.querySelectorAll(".nav-tabs-app button").forEach(button => {
+    button.addEventListener("click", () => cambiarVista(button.dataset.view));
+});
+
+document.getElementById("mobileNav").addEventListener("change", event => {
+    cambiarVista(event.target.value);
+});
+
+document.getElementById("themeToggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    store.set("ahorrago-dark", document.body.classList.contains("dark"));
+    document.getElementById("themeToggle").innerHTML = document.body.classList.contains("dark")
+        ? "<i data-lucide='sun'></i>"
+        : "<i data-lucide='moon'></i>";
+    renderIcons();
+});
+
+document.getElementById("busqueda").addEventListener("keydown", event => {
+    if (event.key === "Enter") buscar();
+});
+
+document.querySelectorAll("select, .form-check-input").forEach(input => {
+    input.addEventListener("change", renderizar);
+});
+
+document.querySelectorAll("#precioMin, #precioMax").forEach(input => {
+    input.addEventListener("input", renderizar);
+});
+
+window.addEventListener("load", () => {
+    if (store.get("ahorrago-dark", false)) {
+        document.body.classList.add("dark");
+        document.getElementById("themeToggle").innerHTML = "<i data-lucide='sun'></i>";
+    }
+    renderIcons();
+    renderCompraOptima();
+    actualizarDashboard(carritoCompra, 0);
+    actualizarEstadoCarrito();
+    document.getElementById("resultados").innerHTML = "<div class='empty-state'>Busca un producto para comenzar.</div>";
+    document.getElementById("contadorTexto").textContent = "0 resultados";
+});
 </script>
-
 </body>
 </html>

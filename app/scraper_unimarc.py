@@ -2,7 +2,7 @@ import csv
 import re
 import time
 from pathlib import Path
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urljoin
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -14,10 +14,18 @@ OUTPUT = Path("data/unimarc_real.csv")
 
 CATEGORIAS = [
     ("Lácteos, Huevos y Congelados", "Leche", "leche", 5),
+    ("Lacteos, Huevos y Congelados", "Huevos", "huevos", 3),
+    ("Lacteos, Huevos y Congelados", "Yogurt", "yogurt", 4),
+    ("Lacteos, Huevos y Congelados", "Quesos", "queso", 4),
     ("Despensa", "Arroz", "arroz", 3),
     ("Despensa", "Aceite", "aceite", 3),
+    ("Despensa", "Cafe", "cafe", 4),
+    ("Despensa", "Azucar", "azucar", 3),
+    ("Despensa", "Fideos", "fideos", 4),
     ("Bebidas", "Bebidas", "bebida", 5),
+    ("Panaderia", "Pan", "pan", 4),
     ("Limpieza", "Detergentes", "detergente", 3),
+    ("Limpieza", "Papel higienico", "papel higienico", 3),
 ]
 
 
@@ -31,6 +39,33 @@ def crear_driver():
 def limpiar_precio(texto):
     match = re.search(r"\$[\d.]+", texto)
     return match.group(0) if match else ""
+
+
+def extraer_precios(texto):
+    valores = [
+        int(valor.replace(".", ""))
+        for valor in re.findall(r"\$\s*([\d.]+)", texto or "")
+    ]
+    valores = [valor for valor in valores if valor > 0]
+
+    if not valores:
+        return "", ""
+
+    precio_actual = min(valores)
+    precio_normal = max(valores)
+
+    if precio_normal > precio_actual:
+        return precio_normal, precio_actual
+
+    return precio_actual, ""
+
+
+def extraer_precio_referencia(texto):
+    for linea in (texto or "").splitlines():
+        if "/" in linea and "$" in linea:
+            return linea.strip()
+
+    return ""
 
 
 def obtener_tarjeta(driver, nombre_elemento):
@@ -54,12 +89,26 @@ def extraer_producto(driver, nombre_elemento):
 
     nombre = nombre_elemento.text.strip()
     texto = tarjeta.text.strip()
-    precio = limpiar_precio(texto)
+    precio_normal, precio_oferta = extraer_precios(texto)
+    precio = precio_oferta or precio_normal or limpiar_precio(texto)
 
     try:
         link = tarjeta.find_element(By.CSS_SELECTOR, "a[href*='/product/']").get_attribute("href")
     except Exception:
         link = ""
+
+    try:
+        imagen_elemento = tarjeta.find_element(By.CSS_SELECTOR, "img")
+        imagen = (
+            imagen_elemento.get_attribute("src") or
+            imagen_elemento.get_attribute("data-src") or
+            imagen_elemento.get_attribute("data-nimg")
+        )
+        if not imagen:
+            srcset = imagen_elemento.get_attribute("srcset") or ""
+            imagen = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+    except Exception:
+        imagen = ""
 
     if not nombre or not precio:
         return None
@@ -67,7 +116,12 @@ def extraer_producto(driver, nombre_elemento):
     return {
         "nombre": nombre,
         "precio": precio,
-        "url": link
+        "precio_normal": precio_normal,
+        "precio_oferta": precio_oferta,
+        "precio_referencia": extraer_precio_referencia(texto),
+        "promocion": "Oferta" if precio_oferta else "",
+        "url": link,
+        "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
     }
 
 
@@ -82,6 +136,11 @@ def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
         time.sleep(5)
 
         nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
+        if not nombres and page == 1:
+            time.sleep(4)
+            driver.refresh()
+            time.sleep(5)
+            nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
 
         if not nombres:
             print(f"{url} -> 0 productos")
@@ -110,7 +169,18 @@ def guardar_productos(productos):
     with open(OUTPUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["categoria", "subcategoria", "nombre", "precio", "url"]
+            fieldnames=[
+                "categoria",
+                "subcategoria",
+                "nombre",
+                "precio",
+                "precio_normal",
+                "precio_oferta",
+                "precio_referencia",
+                "promocion",
+                "url",
+                "imagen_url",
+            ]
         )
         writer.writeheader()
         writer.writerows(productos)

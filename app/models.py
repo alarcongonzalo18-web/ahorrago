@@ -54,8 +54,10 @@ class Precio(Base):
 
     precio_normal = Column(Float)
     precio_oferta = Column(Float, nullable=True)
+    precio_referencia = Column(String, nullable=True)
     promocion = Column(String, nullable=True)
     url_producto = Column(String, nullable=True)
+    imagen_url = Column(String, nullable=True)
 
     producto = relationship("Producto")
     supermercado = relationship("Supermercado")

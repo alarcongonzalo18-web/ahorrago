@@ -95,7 +95,7 @@ def convertir():
         for fila in lector:
             nombre = fila["nombre"]
             precio = limpiar_precio(fila["precio"])
-            url = fila.get("url") or "https://www.jumbo.cl/search?ft=" + nombre.replace(" ", "%20")
+            url = fila.get("url") or "https://www.jumbo.cl/busqueda?ft=" + nombre.replace(" ", "%20")
 
             writer.writerow({
                 "categoria": fila.get("categoria") or "Lácteos, Huevos y Congelados",

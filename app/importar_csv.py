@@ -90,6 +90,35 @@ def asegurar_columna_producto_base():
         conn.execute(text("ALTER TABLE productos ADD COLUMN producto_base VARCHAR"))
 
 
+def asegurar_columna_imagen_url():
+    columnas = [columna["name"] for columna in inspect(engine).get_columns("precios")]
+
+    if "imagen_url" in columnas:
+        return
+
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE precios ADD COLUMN imagen_url VARCHAR"))
+
+
+def asegurar_columna_precio_referencia():
+    columnas = [columna["name"] for columna in inspect(engine).get_columns("precios")]
+
+    if "precio_referencia" in columnas:
+        return
+
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE precios ADD COLUMN precio_referencia VARCHAR"))
+
+
+def limpiar_numero(valor):
+    texto = str(valor or "").strip()
+    if not texto:
+        return None
+
+    numeros = re.sub(r"[^0-9]", "", texto)
+    return float(numeros) if numeros else None
+
+
 def obtener_o_crear_supermercado(nombre):
     item = db.query(Supermercado).filter(Supermercado.nombre == nombre).first()
     if item:
@@ -159,6 +188,8 @@ def obtener_o_crear_producto(nombre, categoria_id, subcategoria_id, marca, tipo,
 def importar_productos():
     asegurar_columna_url_producto()
     asegurar_columna_producto_base()
+    asegurar_columna_imagen_url()
+    asegurar_columna_precio_referencia()
 
     if not CSV_PATH.exists():
         print("No se encontro el archivo:", CSV_PATH)
@@ -192,7 +223,11 @@ def importar_productos():
             )
             db.commit()
 
-            precio = float(fila["precio"])
+            precio_normal = limpiar_numero(fila.get("precio_normal")) or limpiar_numero(fila.get("precio")) or 0
+            precio_oferta = limpiar_numero(fila.get("precio_oferta"))
+
+            if precio_oferta and precio_oferta >= precio_normal:
+                precio_oferta = None
 
             precio_existente = db.query(Precio).filter(
                 Precio.producto_id == producto.id,
@@ -200,14 +235,22 @@ def importar_productos():
             ).first()
 
             if precio_existente:
-                precio_existente.precio_normal = precio
+                precio_existente.precio_normal = precio_normal
+                precio_existente.precio_oferta = precio_oferta
+                precio_existente.precio_referencia = fila.get("precio_referencia")
+                precio_existente.promocion = fila.get("promocion")
                 precio_existente.url_producto = fila.get("url")
+                precio_existente.imagen_url = fila.get("imagen_url")
             else:
                 nuevo_precio = Precio(
                     producto_id=producto.id,
                     supermercado_id=supermercado.id,
-                    precio_normal=precio,
-                    url_producto=fila.get("url")
+                    precio_normal=precio_normal,
+                    precio_oferta=precio_oferta,
+                    precio_referencia=fila.get("precio_referencia"),
+                    promocion=fila.get("promocion"),
+                    url_producto=fila.get("url"),
+                    imagen_url=fila.get("imagen_url")
                 )
                 db.add(nuevo_precio)
 
