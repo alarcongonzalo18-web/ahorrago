@@ -192,6 +192,75 @@ body.dark .brand-icon {
 .view { display: none; }
 .view.active { display: block; }
 
+.home-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: end;
+    margin: 4px 0 18px;
+}
+
+.home-kicker {
+    margin: 0 0 6px;
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.home-title {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.08;
+}
+
+.home-subtitle {
+    max-width: 680px;
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.action-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 8px 13px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--ink);
+    font-weight: 900;
+    box-shadow: 0 8px 20px rgba(18, 33, 38, 0.06);
+}
+
+.action-chip.primary {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: white;
+}
+
+.action-chip:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+}
+
+.action-chip.primary:hover {
+    color: white;
+    filter: brightness(1.05);
+}
+
 .hero-search {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 120px;
@@ -805,6 +874,47 @@ body.dark .product-info {
     color: var(--ink);
 }
 
+.start-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+    text-align: left;
+}
+
+.start-action {
+    display: grid;
+    gap: 10px;
+    min-height: 156px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--ink);
+}
+
+.start-action i {
+    color: var(--brand);
+}
+
+.start-action h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.start-action p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.start-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-self: end;
+}
+
 .suggestion-chips {
     display: flex;
     flex-wrap: wrap;
@@ -1132,6 +1242,7 @@ body.dark .brand-icon {
 
 body.dark .icon-btn,
 body.dark .search-input-wrap,
+body.dark .action-chip,
 body.dark .summary-card,
 body.dark .panel-card,
 body.dark .product-card,
@@ -1140,6 +1251,7 @@ body.dark .category-card,
 body.dark .subcategory-panel,
 body.dark .results-context,
 body.dark .empty-state,
+body.dark .start-action,
 body.dark .results-table-wrap {
     background: var(--panel);
     border-color: var(--line);
@@ -1274,6 +1386,18 @@ body.dark .buy-btn:hover {
     max-width: 980px;
     grid-template-columns: minmax(0, 1fr) 132px;
     margin-bottom: 20px;
+}
+
+.home-intro {
+    margin-top: 2px;
+}
+
+.home-title {
+    font-size: 32px;
+}
+
+.home-subtitle {
+    font-size: 15px;
 }
 
 .search-input-wrap {
@@ -1604,6 +1728,7 @@ body.dark .buy-btn:hover {
 
 @media (max-width: 860px) {
     .topbar,
+    .home-intro,
     .summary-grid,
     .content-grid,
     .side-panel,
@@ -1642,6 +1767,19 @@ body.dark .buy-btn:hover {
     }
 
     .icon-btn { width: 42px; height: 42px; }
+    .home-intro {
+        align-items: start;
+        margin-top: 0;
+    }
+    .home-title { font-size: 28px; }
+    .home-subtitle { font-size: 14px; }
+    .home-actions {
+        justify-content: stretch;
+    }
+    .action-chip {
+        flex: 1 1 145px;
+        min-height: 44px;
+    }
     .hero-search { grid-template-columns: 1fr; }
     .summary-card { min-height: 96px; padding: 18px; }
     .summary-value { font-size: 24px; }
@@ -1673,6 +1811,10 @@ body.dark .buy-btn:hover {
     .filters.mobile-collapsed > :not(.mobile-filter-toggle) {
         display: none;
     }
+
+    .start-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 560px) {
@@ -1683,6 +1825,36 @@ body.dark .buy-btn:hover {
     }
 
     .prices-header { display: none; }
+
+    .home-title { font-size: 25px; }
+    .search-input-wrap {
+        min-height: 54px;
+        padding: 0 14px;
+    }
+    .search-input-wrap input {
+        font-size: 16px;
+    }
+    .hero-search .btn-go {
+        min-height: 50px;
+    }
+    .action-chip {
+        flex-basis: 100%;
+    }
+    .summary-grid {
+        gap: 10px;
+    }
+    .summary-card {
+        grid-template-columns: 42px 1fr;
+        gap: 12px;
+    }
+    .summary-icon {
+        width: 42px;
+        height: 42px;
+    }
+    .start-action {
+        min-height: 140px;
+        padding: 16px;
+    }
 }
 </style>
 </head>
@@ -1724,6 +1896,19 @@ body.dark .buy-btn:hover {
     </header>
 
     <section id="view-inicio" class="view active">
+        <section class="home-intro">
+            <div>
+                <p class="home-kicker">Comparador inteligente</p>
+                <h2 class="home-title">Busca, compara y arma tu compra óptima</h2>
+                <p class="home-subtitle">Precios actualizados de Líder, Jumbo y Unimarc en un solo lugar.</p>
+            </div>
+            <div class="home-actions" aria-label="Acciones principales">
+                <button class="action-chip primary" type="button" onclick="enfocarBusqueda()"><i data-lucide="search"></i> Buscar producto</button>
+                <button class="action-chip" type="button" onclick="cambiarVista('categorias')"><i data-lucide="layout-grid"></i> Categorías</button>
+                <button class="action-chip" type="button" onclick="enfocarCompraOptima()"><i data-lucide="shopping-cart"></i> Compra óptima</button>
+            </div>
+        </section>
+
         <section class="hero-search">
             <div class="search-input-wrap">
                 <i data-lucide="search"></i>
@@ -1883,7 +2068,7 @@ body.dark .buy-btn:hover {
             </section>
 
             <aside class="side-panel">
-                <article class="panel-card">
+                <article id="compraPanel" class="panel-card">
                     <h2 class="panel-title"><i data-lucide="shopping-cart"></i> Compra óptima</h2>
                     <p class="text-muted-app">Agrega productos y calculamos el mejor precio</p>
                     <div id="compraOptima" class="optimal-list"></div>
@@ -2206,6 +2391,19 @@ function toggleFiltrosMovil() {
     renderIcons();
 }
 
+function enfocarBusqueda() {
+    cambiarVista("inicio");
+    const input = document.getElementById("busqueda");
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => input.focus(), 220);
+}
+
+function enfocarCompraOptima() {
+    cambiarVista("inicio");
+    const panel = document.getElementById("compraPanel");
+    if (panel) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 async function buscar() {
     const texto = document.getElementById("busqueda").value.trim();
     const contenedor = document.getElementById("resultados");
@@ -2287,9 +2485,29 @@ function renderEstadoVacioResultados() {
 function renderEstadoInicial() {
     return `
         <div class="empty-state">
-            <strong>Busca un producto para comparar precios.</strong>
-            <div class="mt-2">Empieza con un producto de compra frecuente.</div>
-            ${renderSugerenciasBusqueda()}
+            <strong>Elige cómo quieres empezar.</strong>
+            <div class="start-grid">
+                <article class="start-action">
+                    <i data-lucide="search"></i>
+                    <div>
+                        <h3>Comparar un producto</h3>
+                        <p>Parte con algo frecuente y revisa el precio por supermercado.</p>
+                    </div>
+                    ${renderSugerenciasBusqueda()}
+                </article>
+                <article class="start-action">
+                    <i data-lucide="shopping-cart"></i>
+                    <div>
+                        <h3>Armar una compra</h3>
+                        <p>Agrega productos desde los resultados y calcula el total óptimo.</p>
+                    </div>
+                    <div class="start-action-row">
+                        <button class="suggestion-chip" type="button" onclick="buscarDesdeTexto('leche')">Leche</button>
+                        <button class="suggestion-chip" type="button" onclick="buscarDesdeTexto('detergente')">Detergente</button>
+                        <button class="suggestion-chip" type="button" onclick="cambiarVista('categorias')">Ver categorías</button>
+                    </div>
+                </article>
+            </div>
         </div>
     `;
 }
@@ -3050,6 +3268,7 @@ function limpiarBusqueda() {
     productosActuales = [];
     productosVisibles = [];
     document.getElementById("resultados").innerHTML = renderEstadoInicial();
+    renderIcons();
     document.getElementById("contadorTexto").textContent = "0 resultados";
     actualizarContextoResultados(0);
     actualizarDashboard(carritoCompra, 0);
@@ -3224,6 +3443,7 @@ window.addEventListener("load", () => {
     actualizarEstadoCarrito();
     actualizarContextoResultados(0);
     document.getElementById("resultados").innerHTML = renderEstadoInicial();
+    renderIcons();
     document.getElementById("contadorTexto").textContent = "0 resultados";
 });
 </script>
