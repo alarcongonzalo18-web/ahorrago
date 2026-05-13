@@ -7,6 +7,7 @@ from urllib.parse import quote_plus, urljoin
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import StaleElementReferenceException
 
 
 BASE = "https://www.unimarc.cl/search"
@@ -41,7 +42,25 @@ def limpiar_precio(texto):
     return match.group(0) if match else ""
 
 
+def quitar_precios_referencia(texto):
+    texto = texto or ""
+    texto = re.sub(
+        r"\(\s*\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+\s*\)",
+        "",
+        texto,
+        flags=re.IGNORECASE,
+    )
+    texto = re.sub(
+        r"\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+",
+        "",
+        texto,
+        flags=re.IGNORECASE,
+    )
+    return texto
+
+
 def extraer_precios(texto):
+    texto = quitar_precios_referencia(texto)
     valores = [
         int(valor.replace(".", ""))
         for valor in re.findall(r"\$\s*([\d.]+)", texto or "")
@@ -61,6 +80,14 @@ def extraer_precios(texto):
 
 
 def extraer_precio_referencia(texto):
+    match = re.search(
+        r"\$?\s*([\d.]+)\s*(?:/|x)\s*([A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+)",
+        texto or "",
+        flags=re.IGNORECASE,
+    )
+    if match:
+        return f"${match.group(1)} / {match.group(2)}"
+
     for linea in (texto or "").splitlines():
         if "/" in linea and "$" in linea:
             return linea.strip()
@@ -82,47 +109,68 @@ def obtener_tarjeta(driver, nombre_elemento):
 
 
 def extraer_producto(driver, nombre_elemento):
-    tarjeta = obtener_tarjeta(driver, nombre_elemento)
+    try:
+        tarjeta = obtener_tarjeta(driver, nombre_elemento)
 
-    if not tarjeta:
+        if not tarjeta:
+            return None
+
+        nombre = nombre_elemento.text.strip()
+        texto = tarjeta.text.strip()
+        precio_normal, precio_oferta = extraer_precios(texto)
+        precio = precio_oferta or precio_normal or limpiar_precio(texto)
+
+        try:
+            link = tarjeta.find_element(By.CSS_SELECTOR, "a[href*='/product/']").get_attribute("href")
+        except Exception:
+            link = ""
+
+        try:
+            imagen_elemento = tarjeta.find_element(By.CSS_SELECTOR, "img")
+            imagen = (
+                imagen_elemento.get_attribute("src") or
+                imagen_elemento.get_attribute("data-src") or
+                imagen_elemento.get_attribute("data-nimg")
+            )
+            if not imagen:
+                srcset = imagen_elemento.get_attribute("srcset") or ""
+                imagen = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+        except Exception:
+            imagen = ""
+
+        if not nombre or not precio:
+            return None
+
+        return {
+            "nombre": nombre,
+            "precio": precio,
+            "precio_normal": precio_normal,
+            "precio_oferta": precio_oferta,
+            "precio_referencia": extraer_precio_referencia(texto),
+            "promocion": "Oferta" if precio_oferta else "",
+            "url": link,
+            "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
+        }
+    except StaleElementReferenceException:
         return None
 
-    nombre = nombre_elemento.text.strip()
-    texto = tarjeta.text.strip()
-    precio_normal, precio_oferta = extraer_precios(texto)
-    precio = precio_oferta or precio_normal or limpiar_precio(texto)
 
-    try:
-        link = tarjeta.find_element(By.CSS_SELECTOR, "a[href*='/product/']").get_attribute("href")
-    except Exception:
-        link = ""
+def extraer_producto_por_indice(driver, indice, intentos=3):
+    for intento in range(intentos):
+        try:
+            nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
+            if indice >= len(nombres):
+                return None
 
-    try:
-        imagen_elemento = tarjeta.find_element(By.CSS_SELECTOR, "img")
-        imagen = (
-            imagen_elemento.get_attribute("src") or
-            imagen_elemento.get_attribute("data-src") or
-            imagen_elemento.get_attribute("data-nimg")
-        )
-        if not imagen:
-            srcset = imagen_elemento.get_attribute("srcset") or ""
-            imagen = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
-    except Exception:
-        imagen = ""
+            producto = extraer_producto(driver, nombres[indice])
+            if producto:
+                return producto
+        except StaleElementReferenceException:
+            pass
 
-    if not nombre or not precio:
-        return None
+        time.sleep(0.6 + intento * 0.4)
 
-    return {
-        "nombre": nombre,
-        "precio": precio,
-        "precio_normal": precio_normal,
-        "precio_oferta": precio_oferta,
-        "precio_referencia": extraer_precio_referencia(texto),
-        "promocion": "Oferta" if precio_oferta else "",
-        "url": link,
-        "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
-    }
+    return None
 
 
 def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
@@ -147,8 +195,9 @@ def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
             break
 
         encontrados_pagina = 0
-        for nombre_elemento in nombres:
-            producto = extraer_producto(driver, nombre_elemento)
+        total_nombres = len(nombres)
+        for indice in range(total_nombres):
+            producto = extraer_producto_por_indice(driver, indice)
 
             if not producto:
                 continue

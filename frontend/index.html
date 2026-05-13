@@ -321,6 +321,63 @@ body.dark .brand-icon {
     gap: 16px;
 }
 
+.results-context {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow: 0 10px 22px rgba(36, 52, 54, 0.08);
+}
+
+.results-context.show {
+    display: flex;
+}
+
+.context-path {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.context-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--ink);
+    font-weight: 900;
+}
+
+.context-pill button {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.46);
+    color: inherit;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.context-pill button:hover {
+    background: var(--brand);
+    color: white;
+}
+
 .link-clear {
     border: 0;
     background: none;
@@ -705,6 +762,36 @@ body.dark .product-info {
 .reason-list { display: grid; gap: 18px; }
 .reason-item { display: grid; grid-template-columns: 28px 1fr; gap: 12px; }
 
+.data-status {
+    display: grid;
+    gap: 12px;
+}
+
+.data-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+}
+
+.data-status-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.data-status-label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.data-status-value {
+    font-weight: 900;
+    text-align: right;
+}
+
 .empty-state {
     padding: 42px 18px;
     border: 1px solid var(--line);
@@ -712,6 +799,35 @@ body.dark .product-info {
     background: var(--panel);
     color: var(--muted);
     text-align: center;
+}
+
+.empty-state strong {
+    color: var(--ink);
+}
+
+.suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.suggestion-chip {
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 850;
+}
+
+.suggestion-chip:hover {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: white;
 }
 
 .utility-grid {
@@ -726,6 +842,215 @@ body.dark .product-info {
 }
 
 .utility-card button { min-height: 42px; }
+
+.categories-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: end;
+    margin-bottom: 22px;
+}
+
+.categories-kicker {
+    margin: 0 0 8px;
+    color: var(--action-dark);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.categories-title {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 900;
+}
+
+.categories-copy {
+    max-width: 620px;
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.category-card {
+    display: grid;
+    gap: 16px;
+    cursor: pointer;
+    min-height: 220px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background:
+        linear-gradient(145deg, rgba(111, 157, 180, 0.1), transparent 44%),
+        var(--panel);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.category-card:hover,
+.category-card:focus-visible,
+.category-card.active {
+    transform: translateY(-2px);
+    border-color: rgba(154, 77, 53, 0.42);
+    box-shadow: 0 20px 42px rgba(36, 52, 54, 0.16);
+}
+
+.category-card.active {
+    outline: 3px solid rgba(154, 77, 53, 0.14);
+}
+
+.category-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.category-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--brand-soft);
+    color: var(--action-dark);
+}
+
+.category-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.category-count {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.category-card h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.category-card p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.category-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-self: end;
+}
+
+.category-chip,
+.subcategory-chip {
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.46);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+}
+
+body.dark .category-chip,
+body.dark .subcategory-chip {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.category-chip:hover,
+.category-chip:focus-visible {
+    border-color: var(--action);
+    color: var(--action-dark);
+}
+
+.category-open {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--action-dark);
+    font: inherit;
+    font-weight: 900;
+    text-align: left;
+}
+
+.category-open:hover {
+    color: var(--action);
+}
+
+.subcategory-panel {
+    display: none;
+    margin: 22px 0 0;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.subcategory-panel.show {
+    display: block;
+}
+
+.subcategory-head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.subcategory-head h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.subcategory-head p {
+    margin: 5px 0 0;
+    color: var(--muted);
+}
+
+.subcategory-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subcategory-chip {
+    min-height: 40px;
+    background: var(--panel);
+}
+
+.subcategory-chip:hover {
+    border-color: var(--action);
+    color: var(--action-dark);
+}
 
 .list-stack { display: grid; gap: 14px; }
 
@@ -745,10 +1070,536 @@ body.dark .product-info {
 
 .toast-app.show { display: block; }
 
+/* Capa visual profesional - reversible desde backups/index_antes_redisenio_*.html */
+:root {
+    --page: #F5F7FA;
+    --panel: #FFFFFF;
+    --ink: #17242B;
+    --muted: #64727E;
+    --line: #DDE5EA;
+    --brand: #1F6F78;
+    --brand-soft: rgba(31, 111, 120, 0.1);
+    --action: #2E8B7C;
+    --action-dark: #23695F;
+    --success: #2E8B7C;
+    --success-soft: rgba(46, 139, 124, 0.14);
+    --soft: #EEF3F5;
+    --green: #2E8B7C;
+    --green-soft: rgba(46, 139, 124, 0.14);
+    --logo-shadow: #17242B;
+    --stone: #7AA7B0;
+    --shadow: 0 14px 34px rgba(23, 36, 43, 0.08);
+}
+
+body.dark {
+    --page: #0E161A;
+    --panel: #152126;
+    --ink: #F4F8FA;
+    --muted: #A8B6BE;
+    --line: rgba(226, 237, 241, 0.14);
+    --brand: #7FC7C0;
+    --brand-soft: rgba(127, 199, 192, 0.14);
+    --action: #4CB6A7;
+    --action-dark: #7FC7C0;
+    --success: #7FC7C0;
+    --success-soft: rgba(127, 199, 192, 0.14);
+    --soft: #1D2B31;
+    --green: #7FC7C0;
+    --green-soft: rgba(127, 199, 192, 0.14);
+    --logo-shadow: #F4F8FA;
+    --stone: #7FC7C0;
+    --shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+}
+
+body {
+    background:
+        linear-gradient(180deg, rgba(122, 167, 176, 0.18), rgba(255, 255, 255, 0) 280px),
+        var(--page);
+    font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+body.dark {
+    background:
+        linear-gradient(180deg, rgba(76, 182, 167, 0.12), rgba(14, 22, 26, 0) 280px),
+        var(--page);
+}
+
+body.dark .brand-icon {
+    background: linear-gradient(135deg, #1F6F78, #4CB6A7);
+    color: #F4F8FA;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+}
+
+body.dark .icon-btn,
+body.dark .search-input-wrap,
+body.dark .summary-card,
+body.dark .panel-card,
+body.dark .product-card,
+body.dark .utility-card,
+body.dark .category-card,
+body.dark .subcategory-panel,
+body.dark .results-context,
+body.dark .empty-state,
+body.dark .results-table-wrap {
+    background: var(--panel);
+    border-color: var(--line);
+}
+
+body.dark .product-info {
+    background: linear-gradient(180deg, rgba(127, 199, 192, 0.08), rgba(21, 33, 38, 0));
+}
+
+body.dark .product-image-box,
+body.dark .history-chart,
+body.dark .view-toggle {
+    background: var(--soft);
+}
+
+body.dark .prices-table {
+    background: #111C21;
+}
+
+body.dark .category-chip,
+body.dark .subcategory-chip,
+body.dark .details-btn {
+    background: #18262C;
+    border-color: var(--line);
+}
+
+body.dark .form-select,
+body.dark .form-control {
+    background-color: #152126;
+    border-color: var(--line);
+    color: var(--ink);
+}
+
+body.dark .form-select:disabled,
+body.dark .form-control:disabled {
+    background-color: #1D2B31;
+    border-color: rgba(226, 237, 241, 0.12);
+    color: #7D8D96;
+    opacity: 1;
+}
+
+body.dark .form-select option {
+    background-color: #152126;
+    color: var(--ink);
+}
+
+body.dark .form-control::placeholder {
+    color: #7D8D96;
+}
+
+body.dark .reason-list {
+    gap: 14px;
+}
+
+body.dark .reason-item {
+    color: var(--ink);
+}
+
+body.dark .view-toggle .active {
+    background: #223238;
+}
+
+body.dark .btn-go {
+    background: linear-gradient(180deg, #4CB6A7, #2F8278);
+    color: #061214;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+}
+
+body.dark .buy-btn {
+    color: var(--brand);
+    border-color: var(--brand);
+}
+
+body.dark .buy-btn:hover {
+    background: var(--brand);
+    color: #061214;
+}
+
+.app-shell {
+    max-width: 1320px;
+}
+
+.topbar {
+    padding: 22px 4px 18px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1F6F78, #2E8B7C);
+    box-shadow: 0 12px 26px rgba(31, 111, 120, 0.18);
+}
+
+.brand-title {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+}
+
+.brand-title span,
+.nav-tabs-app button.active {
+    color: var(--brand);
+}
+
+.nav-tabs-app {
+    gap: 28px;
+    font-size: 15px;
+}
+
+.nav-tabs-app button {
+    font-weight: 750;
+}
+
+.nav-tabs-app button.active {
+    border-bottom-color: var(--brand);
+}
+
+.icon-btn,
+.search-input-wrap,
+.summary-card,
+.panel-card,
+.product-card,
+.utility-card,
+.category-card,
+.subcategory-panel,
+.results-context {
+    border-color: var(--line);
+    box-shadow: 0 10px 28px rgba(18, 33, 38, 0.07);
+}
+
+.hero-search {
+    max-width: 980px;
+    grid-template-columns: minmax(0, 1fr) 132px;
+    margin-bottom: 20px;
+}
+
+.search-input-wrap {
+    min-height: 58px;
+    border-radius: 12px;
+    box-shadow: 0 16px 36px rgba(18, 33, 38, 0.08);
+}
+
+.search-input-wrap input {
+    font-size: 17px;
+}
+
+.btn-go {
+    min-height: 46px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #2E8B7C, #23695F);
+    box-shadow: 0 12px 24px rgba(31, 111, 120, 0.18);
+    font-weight: 850;
+}
+
+.btn-go:hover {
+    background: linear-gradient(180deg, #349B8A, #1F6F78);
+}
+
+.btn-outline-go {
+    border-color: var(--brand);
+    color: var(--brand);
+}
+
+.summary-grid {
+    gap: 16px;
+    margin: 10px 0 22px;
+}
+
+.summary-card {
+    min-height: 96px;
+    padding: 18px;
+    border-radius: 12px;
+}
+
+.summary-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.summary-label,
+.summary-foot {
+    font-size: 14px;
+}
+
+.summary-value {
+    font-size: 24px;
+}
+
+.content-grid {
+    grid-template-columns: 230px minmax(0, 1fr) 286px;
+    gap: 18px;
+    align-items: start;
+}
+
+.filters,
+.side-panel {
+    position: sticky;
+    top: 14px;
+}
+
+.filters {
+    gap: 17px;
+    padding-right: 4px;
+}
+
+.alert-box {
+    background: linear-gradient(135deg, var(--brand-soft), var(--panel));
+}
+
+.filter-head {
+    margin-bottom: 2px;
+}
+
+.section-title {
+    font-size: 16px;
+}
+
+.filter-block label {
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.form-select,
+.form-control {
+    min-height: 42px;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.form-check-label {
+    font-size: 14px;
+}
+
+.alert-box {
+    padding: 15px;
+    background: var(--brand-soft);
+}
+
+.results-head {
+    margin-bottom: 12px;
+}
+
+.view-toggle {
+    padding: 4px;
+    border-radius: 9px;
+}
+
+.view-toggle button {
+    padding: 7px 10px;
+    font-size: 14px;
+}
+
+.results-list {
+    gap: 14px;
+}
+
+.product-card {
+    grid-template-columns: 248px minmax(0, 1fr);
+    border-radius: 12px;
+}
+
+.product-info {
+    gap: 14px;
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(31, 111, 120, 0.055), rgba(255, 255, 255, 0));
+}
+
+.product-image-box {
+    min-height: 150px;
+    border-radius: 10px;
+    background: #F4F8F7;
+}
+
+.product-image {
+    max-width: 124px;
+    max-height: 132px;
+}
+
+.product-name {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-bottom: 8px;
+    color: var(--ink);
+    font-size: 20px;
+    line-height: 1.22;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.product-meta {
+    gap: 5px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.product-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.details-btn {
+    min-height: 36px;
+    padding: 0 9px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.prices-table {
+    background: #FFFFFF;
+}
+
+.prices-header,
+.price-row {
+    grid-template-columns: minmax(120px, 1fr) 108px 108px;
+    gap: 10px;
+    padding: 12px 16px;
+}
+
+.prices-header {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.store-name {
+    font-weight: 850;
+}
+
+.best-pill,
+.offer-pill {
+    margin-left: 0;
+    margin-top: 5px;
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.price-value {
+    font-size: 17px;
+}
+
+.reference-price {
+    margin-top: 2px;
+}
+
+.buy-btn {
+    min-height: 34px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--brand);
+    font-size: 13px;
+}
+
+.buy-btn:hover {
+    background: var(--brand);
+}
+
+.panel-card {
+    padding: 17px;
+    border-radius: 12px;
+}
+
+.panel-title {
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.side-panel {
+    gap: 14px;
+}
+
+.side-panel .panel-card:nth-of-type(n+2) {
+    padding: 15px;
+}
+
+.side-panel .panel-card:nth-of-type(n+3) {
+    opacity: 0.9;
+}
+
+.history-chart {
+    display: none;
+}
+
+.optimal-list {
+    gap: 12px;
+    padding: 13px 0;
+}
+
+.optimal-item {
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+}
+
+.optimal-item img {
+    width: 34px;
+    height: 44px;
+}
+
+.total-value {
+    font-size: 24px;
+}
+
+.categories-hero {
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.categories-title {
+    font-size: 32px;
+}
+
+.category-grid {
+    gap: 14px;
+}
+
+.category-card {
+    min-height: 178px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 10px 26px rgba(18, 33, 38, 0.07);
+}
+
+.category-card:hover,
+.category-card:focus-visible,
+.category-card.active {
+    border-color: rgba(31, 111, 120, 0.34);
+    box-shadow: 0 18px 38px rgba(18, 33, 38, 0.12);
+}
+
+.category-card.active {
+    outline-color: rgba(31, 111, 120, 0.14);
+}
+
+.category-icon {
+    color: var(--brand);
+}
+
+.category-card h3 {
+    font-size: 22px;
+}
+
+.category-chip,
+.subcategory-chip {
+    min-height: 31px;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.category-open,
+.subcategory-chip:hover {
+    color: var(--brand);
+}
+
 @media (max-width: 1180px) {
     .content-grid { grid-template-columns: 220px minmax(0, 1fr); }
     .side-panel { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .utility-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 860px) {
@@ -795,6 +1646,16 @@ body.dark .product-info {
     .summary-card { min-height: 96px; padding: 18px; }
     .summary-value { font-size: 24px; }
     .prices-table { border-left: 0; border-top: 1px solid var(--line); }
+    .categories-hero,
+    .category-grid,
+    .subcategory-head {
+        grid-template-columns: 1fr;
+    }
+    .categories-hero,
+    .subcategory-head {
+        display: grid;
+    }
+    .categories-title { font-size: 30px; }
 
     .mobile-filter-toggle {
         display: flex;
@@ -871,7 +1732,7 @@ body.dark .product-info {
                     <i data-lucide="x"></i>
                 </button>
             </div>
-            <button onclick="buscar()" class="btn-go">Buscar</button>
+            <button onclick="buscarManual()" class="btn-go">Buscar</button>
         </section>
 
         <section class="summary-grid">
@@ -924,10 +1785,18 @@ body.dark .product-info {
                         <option value="cafe">Café</option>
                         <option value="azucar">Azúcar</option>
                         <option value="fideo">Fideos</option>
+                        <option value="aceite">Aceite</option>
                         <option value="bebida">Bebidas</option>
                         <option value="pan">Panadería</option>
                         <option value="detergente">Limpieza</option>
                         <option value="papel higienico">Papel higiénico</option>
+                    </select>
+                </div>
+
+                <div class="filter-block">
+                    <label for="subcategoria">Subcategoría</label>
+                    <select id="subcategoria" class="form-select" disabled>
+                        <option value="">Todas</option>
                     </select>
                 </div>
 
@@ -1009,6 +1878,7 @@ body.dark .product-info {
                         <button id="viewTableBtn" type="button" onclick="cambiarModoResultados('table')"><i data-lucide="table-2"></i> Tabla</button>
                     </div>
                 </div>
+                <div id="resultsContext" class="results-context"></div>
                 <div id="resultados" class="results-list"></div>
             </section>
 
@@ -1034,6 +1904,13 @@ body.dark .product-info {
                 </article>
 
                 <article class="panel-card">
+                    <h2 class="panel-title"><i data-lucide="database"></i> Estado de datos</h2>
+                    <div id="estadoDatos" class="data-status">
+                        <div class="text-muted-app">Cargando estado...</div>
+                    </div>
+                </article>
+
+                <article class="panel-card">
                     <h2 class="panel-title">¿Por qué usar AhorraGo?</h2>
                     <div class="reason-list">
                         <div class="reason-item"><i data-lucide="shield-check"></i><div><strong>Comparamos por ti</strong><br><span class="text-muted-app">Ahorra tiempo y dinero</span></div></div>
@@ -1046,22 +1923,16 @@ body.dark .product-info {
     </section>
 
     <section id="view-categorias" class="view">
-        <h2 class="mb-3 fw-bold">Categorías</h2>
-        <div class="utility-grid">
-            <article class="utility-card"><h3>Leche</h3><p class="text-muted-app">Productos lácteos comparables.</p><button class="btn-go w-100" onclick="buscarCategoria('leche')">Ver leche</button></article>
-            <article class="utility-card"><h3>Huevos</h3><p class="text-muted-app">Formatos y bandejas comparables.</p><button class="btn-go w-100" onclick="buscarCategoria('huevo')">Ver huevos</button></article>
-            <article class="utility-card"><h3>Yogurt</h3><p class="text-muted-app">Bebibles, batidos y packs.</p><button class="btn-go w-100" onclick="buscarCategoria('yogurt')">Ver yogurt</button></article>
-            <article class="utility-card"><h3>Quesos</h3><p class="text-muted-app">Laminados, trozos y rallados.</p><button class="btn-go w-100" onclick="buscarCategoria('queso')">Ver quesos</button></article>
-            <article class="utility-card"><h3>Arroz</h3><p class="text-muted-app">Despensa básica para comparar.</p><button class="btn-go w-100" onclick="buscarCategoria('arroz')">Ver arroz</button></article>
-            <article class="utility-card"><h3>Aceite</h3><p class="text-muted-app">Formatos y marcas del día.</p><button class="btn-go w-100" onclick="buscarCategoria('aceite')">Ver aceite</button></article>
-            <article class="utility-card"><h3>Café</h3><p class="text-muted-app">Instantáneo, molido y cápsulas.</p><button class="btn-go w-100" onclick="buscarCategoria('cafe')">Ver café</button></article>
-            <article class="utility-card"><h3>Azúcar</h3><p class="text-muted-app">Blanca, rubia y formatos familiares.</p><button class="btn-go w-100" onclick="buscarCategoria('azucar')">Ver azúcar</button></article>
-            <article class="utility-card"><h3>Fideos</h3><p class="text-muted-app">Pastas y formatos de despensa.</p><button class="btn-go w-100" onclick="buscarCategoria('fideo')">Ver fideos</button></article>
-            <article class="utility-card"><h3>Bebidas</h3><p class="text-muted-app">Gaseosas y packs.</p><button class="btn-go w-100" onclick="buscarCategoria('bebida')">Ver bebidas</button></article>
-            <article class="utility-card"><h3>Pan</h3><p class="text-muted-app">Panadería y pan envasado.</p><button class="btn-go w-100" onclick="buscarCategoria('pan')">Ver pan</button></article>
-            <article class="utility-card"><h3>Detergentes</h3><p class="text-muted-app">Limpieza y ahorro por formato.</p><button class="btn-go w-100" onclick="buscarCategoria('detergente')">Ver detergentes</button></article>
-            <article class="utility-card"><h3>Papel higiénico</h3><p class="text-muted-app">Rollos, hojas y packs familiares.</p><button class="btn-go w-100" onclick="buscarCategoria('papel higienico')">Ver papel</button></article>
+        <div class="categories-hero">
+            <div>
+                <p class="categories-kicker">Explorar</p>
+                <h2 class="categories-title">Categorías</h2>
+                <p class="categories-copy">Elige una categoría para ver sus subcategorías y comparar productos más rápido.</p>
+            </div>
+            <button class="btn-outline-go px-3" type="button" onclick="volverInicio()">Volver al inicio</button>
         </div>
+        <div id="categoryGrid" class="category-grid"></div>
+        <div id="subcategoryPanel" class="subcategory-panel"></div>
     </section>
 
     <section id="view-historial" class="view">
@@ -1104,6 +1975,134 @@ const API = `http://${API_HOST}:8001`;
 let productosActuales = [];
 let productosVisibles = [];
 let modoResultados = "cards";
+let productosCategoriaCache = {};
+
+const subcategoriasPorCategoria = {
+    "leche": [
+        { valor: "sin-lactosa", nombre: "Sin lactosa", claves: ["sin lactosa", "s/lactosa", "sin-lactosa", "deslactosada", "deslactosado"] },
+        { valor: "entera", nombre: "Entera", claves: ["entera"] },
+        { valor: "descremada", nombre: "Descremada", claves: ["descremada", "0%", "light"] },
+        { valor: "semidescremada", nombre: "Semidescremada", claves: ["semidescremada", "semi descremada"] },
+        { valor: "proteina", nombre: "Proteína", claves: ["proteina", "proteinas", "protein", "high protein"] },
+        { valor: "soya", nombre: "Soya", claves: ["soya", "soja"] },
+        { valor: "chocolate", nombre: "Chocolate", claves: ["chocolate", "chocolatada"] },
+        { valor: "polvo", nombre: "En polvo", claves: ["polvo"] },
+        { valor: "cultivada", nombre: "Cultivada", claves: ["cultivada"] },
+        { valor: "saborizada", nombre: "Saborizada", claves: ["frutilla", "vainilla", "capuccino", "cappuccino", "platano", "plátano"] },
+        { valor: "condensada", nombre: "Condensada", claves: ["condensada"] },
+        { valor: "evaporada", nombre: "Evaporada", claves: ["evaporada"] }
+    ],
+    "huevo": [
+        { valor: "color", nombre: "Color", claves: ["color", "rojo", "rubio"] },
+        { valor: "blanco", nombre: "Blanco", claves: ["blanco"] },
+        { valor: "docena", nombre: "Docena", claves: ["12 un", "12 unidades", "docena"] },
+        { valor: "bandeja", nombre: "Bandeja", claves: ["bandeja", "30 un", "18 un"] }
+    ],
+    "yogurt": [
+        { valor: "batido", nombre: "Batido", claves: ["batido"] },
+        { valor: "griego", nombre: "Griego", claves: ["griego"] },
+        { valor: "sin-lactosa", nombre: "Sin lactosa", claves: ["sin lactosa", "s/lactosa"] },
+        { valor: "proteina", nombre: "Proteína", claves: ["proteina", "protein"] },
+        { valor: "pack", nombre: "Pack", claves: ["pack", "6 un", "12 un"] }
+    ],
+    "queso": [
+        { valor: "laminado", nombre: "Laminado", claves: ["laminado", "laminas", "láminas"] },
+        { valor: "rallado", nombre: "Rallado", claves: ["rallado"] },
+        { valor: "crema", nombre: "Crema", claves: ["crema"] },
+        { valor: "mantecoso", nombre: "Mantecoso", claves: ["mantecoso"] },
+        { valor: "gauda", nombre: "Gauda", claves: ["gauda", "gouda"] }
+    ],
+    "arroz": [
+        { valor: "grado-1", nombre: "Grado 1", claves: ["grado 1", "g1"] },
+        { valor: "grado-2", nombre: "Grado 2", claves: ["grado 2", "g2"] },
+        { valor: "grano-largo", nombre: "Grano largo", claves: ["grano largo"] },
+        { valor: "integral", nombre: "Integral", claves: ["integral"] },
+        { valor: "preparado", nombre: "Preparado", claves: ["preparado", "risotto", "paella"] },
+        { valor: "basmati", nombre: "Basmati", claves: ["basmati"] },
+        { valor: "pregraneado", nombre: "Pregraneado", claves: ["pregraneado"] },
+        { valor: "parboil", nombre: "Parboil", claves: ["parboil", "parbolizado"] }
+    ],
+    "cafe": [
+        { valor: "instantaneo", nombre: "Instantáneo", claves: ["instantaneo", "instantáneo"] },
+        { valor: "grano", nombre: "Grano", claves: ["grano"] },
+        { valor: "molido", nombre: "Molido", claves: ["molido"] },
+        { valor: "capsulas", nombre: "Cápsulas", claves: ["capsula", "cápsula"] }
+    ],
+    "azucar": [
+        { valor: "blanca", nombre: "Blanca", claves: ["blanca"] },
+        { valor: "rubia", nombre: "Rubia", claves: ["rubia"] },
+        { valor: "flor", nombre: "Flor", claves: ["flor"] },
+        { valor: "endulzante", nombre: "Endulzante", claves: ["endulzante", "sucralosa", "stevia"] }
+    ],
+    "fideo": [
+        { valor: "spaghetti", nombre: "Spaghetti", claves: ["spaghetti", "espagueti"] },
+        { valor: "tallarin", nombre: "Tallarín", claves: ["tallarin", "tallarín"] },
+        { valor: "corbata", nombre: "Corbata", claves: ["corbata"] },
+        { valor: "integral", nombre: "Integral", claves: ["integral"] }
+    ],
+    "aceite": [
+        { valor: "maravilla", nombre: "Maravilla", claves: ["maravilla"] },
+        { valor: "oliva", nombre: "Oliva", claves: ["oliva", "olivado", "extra virgen"] },
+        { valor: "canola", nombre: "Canola", claves: ["canola"] },
+        { valor: "vegetal", nombre: "Vegetal", claves: ["vegetal"] },
+        { valor: "maiz", nombre: "Maíz", claves: ["maiz", "maíz"] },
+        { valor: "coco", nombre: "Coco", claves: ["coco"] },
+        { valor: "freir", nombre: "Para freír", claves: ["freir", "freír", "fritura"] },
+        { valor: "aerosol", nombre: "Aerosol", claves: ["aerosol", "spray"] }
+    ],
+    "bebida": [
+        { valor: "cola", nombre: "Cola", claves: ["cola", "coca", "pepsi"] },
+        { valor: "light-zero", nombre: "Light / Zero", claves: ["light", "zero", "sin azucar", "sin azúcar"] },
+        { valor: "agua", nombre: "Agua", claves: ["agua"] },
+        { valor: "jugo", nombre: "Jugo", claves: ["jugo", "nectar", "néctar"] },
+        { valor: "energetica", nombre: "Energética", claves: ["energetica", "energética", "energy"] }
+    ],
+    "pan": [
+        { valor: "molde", nombre: "Molde", claves: ["molde"] },
+        { valor: "hamburguesa", nombre: "Hamburguesa", claves: ["hamburguesa"] },
+        { valor: "hotdog", nombre: "Hot dog", claves: ["hot dog", "completo"] },
+        { valor: "integral", nombre: "Integral", claves: ["integral"] }
+    ],
+    "detergente": [
+        { valor: "liquido", nombre: "Líquido", claves: ["liquido", "líquido"] },
+        { valor: "polvo", nombre: "Polvo", claves: ["polvo"] },
+        { valor: "capsulas", nombre: "Cápsulas", claves: ["capsula", "cápsula", "pods"] },
+        { valor: "suavizante", nombre: "Suavizante", claves: ["suavizante"] }
+    ],
+    "papel higienico": [
+        { valor: "una-hoja", nombre: "Una hoja", claves: ["una hoja", "1 hoja"] },
+        { valor: "doble-hoja", nombre: "Doble hoja", claves: ["doble hoja"] },
+        { valor: "triple-hoja", nombre: "Triple hoja", claves: ["triple hoja"] },
+        { valor: "humedo", nombre: "Húmedo", claves: ["humedo", "húmedo"] },
+        { valor: "pack", nombre: "Pack", claves: ["pack", "12 rollos", "24 rollos", "30 rollos"] }
+    ]
+};
+
+const categoriasVista = [
+    { valor: "leche", nombre: "Leche", descripcion: "Productos lácteos comparables.", icono: "milk" },
+    { valor: "huevo", nombre: "Huevos", descripcion: "Formatos y bandejas comparables.", icono: "egg" },
+    { valor: "yogurt", nombre: "Yogurt", descripcion: "Bebibles, batidos y packs.", icono: "cup-soda" },
+    { valor: "queso", nombre: "Quesos", descripcion: "Laminados, trozos y rallados.", icono: "circle-dot" },
+    { valor: "arroz", nombre: "Arroz", descripcion: "Despensa básica para comparar.", icono: "wheat" },
+    { valor: "aceite", nombre: "Aceite", descripcion: "Formatos y marcas del día.", icono: "droplet" },
+    { valor: "cafe", nombre: "Café", descripcion: "Instantáneo, molido y cápsulas.", icono: "coffee" },
+    { valor: "azucar", nombre: "Azúcar", descripcion: "Blanca, rubia y formatos familiares.", icono: "package" },
+    { valor: "fideo", nombre: "Fideos", descripcion: "Pastas y formatos de despensa.", icono: "utensils" },
+    { valor: "bebida", nombre: "Bebidas", descripcion: "Gaseosas, jugos, aguas y packs.", icono: "bottle-wine" },
+    { valor: "pan", nombre: "Pan", descripcion: "Panadería y pan envasado.", icono: "croissant" },
+    { valor: "detergente", nombre: "Detergentes", descripcion: "Limpieza y ahorro por formato.", icono: "sparkles" },
+    { valor: "papel higienico", nombre: "Papel higiénico", descripcion: "Rollos, hojas y packs familiares.", icono: "scroll" }
+];
+
+const exclusionesPorCategoria = {
+    "leche": ["postre", "flan", "galleta", "chocolate relleno", "sucedaneo", "sucedáneo", "tres leches"],
+    "arroz": ["galleta", "galletas", "bebida vegetal", "postre", "fideo", "pasta de arroz", "arroz con leche"],
+    "yogurt": ["galleta", "helado", "salsa", "chocolate", "cereal", "hermetico", "hermético"],
+    "queso": ["sucedaneo", "sucedáneo"],
+    "bebida": ["bebida vegetal"],
+    "pan": ["pan rallado"],
+    "papel higienico": ["toalla de papel"]
+};
 
 const iconosFallback = {
     "shopping-cart": "cart",
@@ -1123,7 +2122,26 @@ const iconosFallback = {
     "calendar-check": "cal",
     "lightbulb": "idea",
     "list-plus": "+",
-    "package": "box"
+    "package": "box",
+    "sliders-horizontal": "filters",
+    "chevron-down": "v",
+    "chevron-up": "^",
+    "check": "ok",
+    "milk": "milk",
+    "egg": "egg",
+    "cup-soda": "cup",
+    "circle-dot": "o",
+    "wheat": "grain",
+    "droplet": "drop",
+    "coffee": "cafe",
+    "utensils": "food",
+    "bottle-wine": "drink",
+    "croissant": "pan",
+    "sparkles": "*",
+    "scroll": "roll",
+    "arrow-right": ">",
+    "database": "data",
+    "refresh-cw": "sync"
 };
 
 const store = {
@@ -1161,11 +2179,14 @@ function cambiarVista(nombre) {
     if (nombre === "historial") renderHistorial();
     if (nombre === "listas") renderListas();
     if (nombre === "alertas") renderAlertas();
+    if (nombre === "categorias") renderCategorias();
     renderIcons();
 }
 
 function volverInicio() {
     cambiarVista("inicio");
+    limpiarFiltros(false);
+    limpiarBusqueda();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -1199,9 +2220,17 @@ async function buscar() {
     guardarHistorial(texto);
     contenedor.innerHTML = "<div class='empty-state'>Buscando mejores precios...</div>";
 
-    const res = await fetch(`${API}/productos/buscar/${encodeURIComponent(texto)}`);
-    productosActuales = await res.json();
+    productosActuales = productosCategoriaCache[texto] || await obtenerProductosCategoria(texto);
+    sugerirCategoriaDesdeBusqueda(texto);
+    actualizarSubcategorias(true);
     renderizar();
+}
+
+function buscarManual() {
+    document.getElementById("categoria").value = "";
+    productosActuales = [];
+    actualizarSubcategorias();
+    buscar();
 }
 
 function renderizar() {
@@ -1209,9 +2238,10 @@ function renderizar() {
     productosVisibles = productos;
     const contenedor = document.getElementById("resultados");
     const texto = document.getElementById("busqueda").value.trim();
+    actualizarContextoResultados(productos.length);
 
     if (!productos.length) {
-        contenedor.innerHTML = "<div class='empty-state'>No encontramos productos comparables con esos filtros.</div>";
+        contenedor.innerHTML = renderEstadoVacioResultados();
         document.getElementById("contadorTexto").textContent = "0 resultados";
         actualizarDashboard(carritoCompra, 0);
         return;
@@ -1220,14 +2250,64 @@ function renderizar() {
     contenedor.innerHTML = modoResultados === "table"
         ? renderTablaProductos(productos)
         : productos.map(renderProducto).join("");
-    document.getElementById("contadorTexto").textContent = `${productos.length} resultados para "${texto}"`;
+    document.getElementById("contadorTexto").textContent = textoContadorResultados(productos.length, texto);
     actualizarDashboard(carritoCompra, productos.length);
     renderCompraOptima();
     renderIcons();
 }
 
+function renderEstadoVacioResultados() {
+    const categoriaValor = document.getElementById("categoria").value;
+    const subcategoriaValor = document.getElementById("subcategoria").value;
+    const categoria = obtenerCategoriaVista(categoriaValor);
+    const subcategoria = obtenerSubcategoriaVista(categoriaValor, subcategoriaValor);
+
+    if (subcategoria && categoria) {
+        return `
+            <div class="empty-state">
+                <strong>No encontramos productos en ${escapeHtml(subcategoria.nombre)}.</strong>
+                <div class="mt-2">Puedes revisar toda la categoría o limpiar los filtros activos.</div>
+                <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
+                    <button class="btn-go px-4" type="button" onclick="buscarCategoria('${escapeAttribute(categoria.valor)}')">Ver ${escapeHtml(categoria.nombre)}</button>
+                    <button class="btn-outline-go px-4" type="button" onclick="limpiarFiltros()">Limpiar filtros</button>
+                </div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="empty-state">
+            <strong>No encontramos productos comparables.</strong>
+            <div class="mt-2">Prueba con una búsqueda más general o revisa una categoría frecuente.</div>
+            ${renderSugerenciasBusqueda()}
+        </div>
+    `;
+}
+
+function renderEstadoInicial() {
+    return `
+        <div class="empty-state">
+            <strong>Busca un producto para comparar precios.</strong>
+            <div class="mt-2">Empieza con un producto de compra frecuente.</div>
+            ${renderSugerenciasBusqueda()}
+        </div>
+    `;
+}
+
+function renderSugerenciasBusqueda() {
+    const sugerencias = ["leche", "arroz", "aceite", "detergente", "papel higiénico", "yogurt"];
+    return `
+        <div class="suggestion-chips">
+            ${sugerencias.map(texto => `
+                <button class="suggestion-chip" type="button" onclick="buscarDesdeTexto('${escapeAttribute(texto)}')">${escapeHtml(texto)}</button>
+            `).join("")}
+        </div>
+    `;
+}
+
 function aplicarFiltros(productos) {
     const categoria = normalizarTexto(document.getElementById("categoria").value);
+    const subcategoria = document.getElementById("subcategoria").value;
     const formato = document.getElementById("formato").value.toLowerCase();
     const precioMin = Number(document.getElementById("precioMin").value || 0);
     const precioMax = Number(document.getElementById("precioMax").value || 0);
@@ -1237,7 +2317,8 @@ function aplicarFiltros(productos) {
     const orden = document.querySelector("input[name='orden']:checked").value;
 
     let filtrados = productos
-        .filter(producto => !categoria || normalizarTexto(producto.nombre).includes(categoria))
+        .filter(producto => !categoria || productoPerteneceACategoria(producto, categoria))
+        .filter(producto => !subcategoria || productoPerteneceASubcategoria(producto, categoria, subcategoria))
         .filter(producto => !formato || String(producto.formato || "").toLowerCase() === formato)
         .map(producto => ({ ...producto, precios: producto.precios.filter(precio => mercados.has(precio.supermercado)) }))
         .map(producto => ({
@@ -1354,6 +2435,261 @@ function normalizarTexto(valor) {
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
+}
+
+function textoProducto(producto) {
+    return normalizarTexto([
+        producto.nombre,
+        producto.marca,
+        producto.tipo,
+        producto.formato,
+        producto.producto_base
+    ].filter(Boolean).join(" "));
+}
+
+function clavesCategoria(categoria) {
+    const claves = {
+        "leche": ["leche", "lactosa", "lacteo", "lácteo"],
+        "huevo": ["huevo"],
+        "yogurt": ["yogurt", "yoghurt"],
+        "queso": ["queso"],
+        "arroz": ["arroz"],
+        "cafe": ["cafe", "café"],
+        "azucar": ["azucar", "azúcar", "endulzante"],
+        "fideo": ["fideo", "pasta", "spaghetti", "tallarin", "tallarín"],
+        "aceite": ["aceite"],
+        "bebida": ["bebida", "gaseosa", "jugo", "nectar", "néctar", "agua"],
+        "pan": ["pan", "hallulla", "marraqueta"],
+        "detergente": ["detergente", "lavado", "suavizante"],
+        "papel higienico": ["papel higienico", "papel higiénico", "confort"]
+    };
+    return claves[categoria] || [categoria];
+}
+
+function productoPerteneceACategoria(producto, categoria) {
+    const texto = textoProducto(producto);
+    const excluido = (exclusionesPorCategoria[categoria] || []).some(clave => texto.includes(normalizarTexto(clave)));
+    if (excluido) return false;
+    return clavesCategoria(categoria).some(clave => texto.includes(normalizarTexto(clave)));
+}
+
+function productoPerteneceASubcategoria(producto, categoria, subcategoria) {
+    const reglas = subcategoriasPorCategoria[categoria] || [];
+    const regla = reglas.find(item => item.valor === subcategoria);
+    if (!regla) return true;
+    const texto = textoProducto(producto);
+    return regla.claves.some(clave => texto.includes(normalizarTexto(clave)));
+}
+
+async function obtenerProductosCategoria(categoria) {
+    if (productosCategoriaCache[categoria]) return productosCategoriaCache[categoria];
+    const res = await fetch(`${API}/productos/buscar/${encodeURIComponent(categoria)}`);
+    const productos = await res.json();
+    productosCategoriaCache[categoria] = productos;
+    return productos;
+}
+
+function subcategoriasConProductos(categoria, productos) {
+    return (subcategoriasPorCategoria[categoria] || []).filter(subcategoria =>
+        productos.some(producto => productoPerteneceASubcategoria(producto, categoria, subcategoria.valor))
+    );
+}
+
+function actualizarSubcategorias(mantenerSeleccion = false) {
+    const categoria = document.getElementById("categoria").value;
+    const select = document.getElementById("subcategoria");
+    const valorActual = select.value;
+    const opcionesBase = subcategoriasPorCategoria[categoria] || [];
+    const opciones = productosActuales.length
+        ? subcategoriasConProductos(categoria, productosActuales)
+        : opcionesBase;
+
+    select.innerHTML = `<option value="">Todas</option>${opciones.map(opcion => `
+        <option value="${escapeAttribute(opcion.valor)}">${escapeHtml(opcion.nombre)}</option>
+    `).join("")}`;
+    select.disabled = opciones.length === 0;
+
+    if (mantenerSeleccion && opciones.some(opcion => opcion.valor === valorActual)) {
+        select.value = valorActual;
+    } else {
+        select.value = "";
+    }
+}
+
+function sugerirCategoriaDesdeBusqueda(texto) {
+    const categoriaSelect = document.getElementById("categoria");
+    if (categoriaSelect.value) return;
+
+    const textoNormalizado = normalizarTexto(texto);
+    const categoria = Object.keys(subcategoriasPorCategoria).find(item =>
+        clavesCategoria(item).some(clave => textoNormalizado.includes(normalizarTexto(clave)))
+    );
+
+    if (categoria) {
+        categoriaSelect.value = categoria;
+        actualizarSubcategorias();
+    }
+}
+
+function obtenerCategoriaVista(valor) {
+    return categoriasVista.find(categoria => categoria.valor === valor);
+}
+
+function obtenerSubcategoriaVista(categoriaValor, subcategoriaValor) {
+    return (subcategoriasPorCategoria[categoriaValor] || []).find(subcategoria => subcategoria.valor === subcategoriaValor);
+}
+
+function textoContadorResultados(cantidad, texto) {
+    const categoriaValor = document.getElementById("categoria").value;
+    const subcategoriaValor = document.getElementById("subcategoria").value;
+    const subcategoria = obtenerSubcategoriaVista(categoriaValor, subcategoriaValor);
+    const categoria = obtenerCategoriaVista(categoriaValor);
+
+    if (subcategoria) return `${cantidad} resultados en ${subcategoria.nombre}`;
+    if (categoria) return `${cantidad} resultados en ${categoria.nombre}`;
+    return `${cantidad} resultados para "${texto}"`;
+}
+
+function actualizarContextoResultados(cantidad = productosVisibles.length) {
+    const contenedor = document.getElementById("resultsContext");
+    if (!contenedor) return;
+    const chips = obtenerChipsFiltros();
+
+    if (!chips.length) {
+        contenedor.classList.remove("show");
+        contenedor.innerHTML = "";
+        return;
+    }
+
+    contenedor.classList.add("show");
+    contenedor.innerHTML = `
+        <div>
+            <div class="context-path">
+                ${chips.map(chip => `
+                    <span class="context-pill">
+                        ${escapeHtml(chip.texto)}
+                        <button type="button" aria-label="Quitar ${escapeAttribute(chip.texto)}" onclick="${chip.accion}">×</button>
+                    </span>
+                `).join("")}
+            </div>
+            <div class="text-muted-app mt-1">${cantidad} productos comparables con el filtro actual</div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap justify-content-end">
+            <button class="btn-outline-go px-3" type="button" onclick="limpiarFiltros()">Limpiar filtros</button>
+        </div>
+    `;
+}
+
+function obtenerChipsFiltros() {
+    const chips = [];
+    const categoriaValor = document.getElementById("categoria").value;
+    const subcategoriaValor = document.getElementById("subcategoria").value;
+    const formato = document.getElementById("formato").value;
+    const precioMin = document.getElementById("precioMin").value;
+    const precioMax = document.getElementById("precioMax").value;
+    const soloOfertas = document.getElementById("soloOfertas").checked;
+    const soloConLink = document.getElementById("soloConLink").checked;
+    const mercadosSeleccionados = [...document.querySelectorAll(".market-filter:checked")].map(input => input.value);
+    const orden = document.querySelector("input[name='orden']:checked").value;
+    const categoria = obtenerCategoriaVista(categoriaValor);
+    const subcategoria = obtenerSubcategoriaVista(categoriaValor, subcategoriaValor);
+
+    if (categoria) chips.push({ texto: categoria.nombre, accion: "quitarFiltro('categoria')" });
+    if (subcategoria) chips.push({ texto: subcategoria.nombre, accion: "quitarFiltro('subcategoria')" });
+    if (formato) chips.push({ texto: `Formato ${formato}`, accion: "quitarFiltro('formato')" });
+    if (precioMin) chips.push({ texto: `Desde ${formatearPrecio(precioMin)}`, accion: "quitarFiltro('precioMin')" });
+    if (precioMax) chips.push({ texto: `Hasta ${formatearPrecio(precioMax)}`, accion: "quitarFiltro('precioMax')" });
+    if (soloOfertas) chips.push({ texto: "Solo ofertas", accion: "quitarFiltro('soloOfertas')" });
+    if (soloConLink) chips.push({ texto: "Con link", accion: "quitarFiltro('soloConLink')" });
+
+    if (mercadosSeleccionados.length && mercadosSeleccionados.length < 3) {
+        mercadosSeleccionados.forEach(mercado => {
+            chips.push({ texto: mercado, accion: `quitarMercado('${escapeAttribute(mercado)}')` });
+        });
+    }
+
+    if (orden !== "relevancia") {
+        chips.push({
+            texto: orden === "menor" ? "Menor precio" : "Mayor ahorro",
+            accion: "quitarFiltro('orden')"
+        });
+    }
+
+    return chips;
+}
+
+function renderCategorias(categoriaActiva = "") {
+    const grid = document.getElementById("categoryGrid");
+    if (!grid) return;
+
+    grid.innerHTML = categoriasVista.map(categoria => {
+        const subcategorias = subcategoriasPorCategoria[categoria.valor] || [];
+        const chips = subcategorias.slice(0, 4).map(item =>
+            `<button class="category-chip" type="button" onclick="buscarSubcategoria('${escapeAttribute(categoria.valor)}', '${escapeAttribute(item.valor)}')">${escapeHtml(item.nombre)}</button>`
+        ).join("");
+
+        return `
+            <article class="category-card ${categoria.valor === categoriaActiva ? "active" : ""}">
+                <div class="category-top">
+                    <span class="category-icon"><i data-lucide="${escapeAttribute(categoria.icono)}"></i></span>
+                    <span class="category-count">Explorar</span>
+                </div>
+                <div>
+                    <h3>${escapeHtml(categoria.nombre)}</h3>
+                    <p>${escapeHtml(categoria.descripcion)}</p>
+                </div>
+                <div class="category-chip-row">${chips}</div>
+                <button class="category-open" type="button" onclick="seleccionarCategoria('${escapeAttribute(categoria.valor)}')">
+                    <span>Ver subcategorías</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </article>
+        `;
+    }).join("");
+
+    renderIcons();
+}
+
+async function seleccionarCategoria(categoriaValor) {
+    const categoria = categoriasVista.find(item => item.valor === categoriaValor);
+    if (!categoria) return;
+
+    renderCategorias(categoriaValor);
+    document.getElementById("categoria").value = categoriaValor;
+    actualizarSubcategorias();
+
+    const panel = document.getElementById("subcategoryPanel");
+    panel.classList.add("show");
+    panel.innerHTML = `
+        <div class="subcategory-head">
+            <div>
+                <h3>${escapeHtml(categoria.nombre)}</h3>
+                <p>Buscando subcategorías con productos comparables...</p>
+            </div>
+        </div>
+    `;
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    const productos = await obtenerProductosCategoria(categoriaValor);
+    const subcategorias = subcategoriasConProductos(categoriaValor, productos);
+
+    panel.innerHTML = `
+        <div class="subcategory-head">
+            <div>
+                <h3>${escapeHtml(categoria.nombre)}</h3>
+                <p>${productos.length} productos comparables. Elige una subcategoría disponible o compara toda la categoría.</p>
+            </div>
+            <button class="btn-go px-4" type="button" onclick="buscarCategoria('${escapeAttribute(categoriaValor)}')">Comparar todo</button>
+        </div>
+        <div class="subcategory-actions">
+            ${subcategorias.length ? subcategorias.map(subcategoria => `
+                <button class="subcategory-chip" type="button" onclick="buscarSubcategoria('${escapeAttribute(categoriaValor)}', '${escapeAttribute(subcategoria.valor)}')">
+                    ${escapeHtml(subcategoria.nombre)}
+                </button>
+            `).join("") : "<div class='empty-state w-100'>No hay subcategorías con productos comparables por ahora.</div>"}
+        </div>
+    `;
+    renderIcons();
 }
 
 function renderTablaProductos(productos) {
@@ -1633,31 +2969,97 @@ function renderAlertas() {
 
 function buscarCategoria(texto) {
     document.getElementById("busqueda").value = texto;
-    document.getElementById("categoria").value = texto === "aceite" ? "" : texto;
-    buscar();
+    document.getElementById("categoria").value = texto;
+    cambiarVista("inicio");
+    document.getElementById("resultados").innerHTML = "<div class='empty-state'>Buscando productos de la categoría...</div>";
+    obtenerProductosCategoria(texto).then(productos => {
+        productosActuales = productos;
+        actualizarSubcategorias(true);
+        renderizar();
+    });
+}
+
+async function buscarSubcategoria(categoria, subcategoria) {
+    document.getElementById("busqueda").value = categoria;
+    document.getElementById("categoria").value = categoria;
+    cambiarVista("inicio");
+    document.getElementById("resultados").innerHTML = "<div class='empty-state'>Buscando productos de la subcategoría...</div>";
+    productosActuales = await obtenerProductosCategoria(categoria);
+    actualizarSubcategorias();
+    asegurarOpcionSubcategoria(categoria, subcategoria);
+    document.getElementById("subcategoria").value = subcategoria;
+
+    const tieneProductos = productosActuales.some(producto => productoPerteneceASubcategoria(producto, categoria, subcategoria));
+    if (!tieneProductos) {
+        document.getElementById("subcategoria").value = "";
+        mostrarToast("Esa subcategoría aún no tiene productos comparables");
+    }
+
+    renderizar();
+}
+
+function asegurarOpcionSubcategoria(categoria, subcategoria) {
+    const select = document.getElementById("subcategoria");
+    if ([...select.options].some(option => option.value === subcategoria)) return;
+
+    const opcion = obtenerSubcategoriaVista(categoria, subcategoria);
+    if (!opcion) return;
+
+    select.insertAdjacentHTML("beforeend", `<option value="${escapeAttribute(opcion.valor)}">${escapeHtml(opcion.nombre)}</option>`);
+    select.disabled = false;
+}
+
+function quitarSubcategoria() {
+    document.getElementById("subcategoria").value = "";
+    renderizar();
+}
+
+function quitarFiltro(filtro) {
+    if (filtro === "categoria") {
+        document.getElementById("categoria").value = "";
+        actualizarSubcategorias();
+    }
+    if (filtro === "subcategoria") document.getElementById("subcategoria").value = "";
+    if (filtro === "formato") document.getElementById("formato").value = "";
+    if (filtro === "precioMin") document.getElementById("precioMin").value = "";
+    if (filtro === "precioMax") document.getElementById("precioMax").value = "";
+    if (filtro === "soloOfertas") document.getElementById("soloOfertas").checked = false;
+    if (filtro === "soloConLink") document.getElementById("soloConLink").checked = false;
+    if (filtro === "orden") document.getElementById("relevancia").checked = true;
+    renderizar();
+}
+
+function quitarMercado(mercado) {
+    const input = [...document.querySelectorAll(".market-filter")].find(item => item.value === mercado);
+    if (input) input.checked = false;
+    renderizar();
 }
 
 function buscarDesdeTexto(texto) {
     document.getElementById("busqueda").value = texto;
-    buscar();
+    buscarManual();
 }
 
 function buscarProductoGuardado(texto) {
     document.getElementById("busqueda").value = texto.split(" ").slice(0, 4).join(" ");
-    buscar();
+    buscarManual();
 }
 
 function limpiarBusqueda() {
     document.getElementById("busqueda").value = "";
-    document.getElementById("resultados").innerHTML = "";
+    productosActuales = [];
+    productosVisibles = [];
+    document.getElementById("resultados").innerHTML = renderEstadoInicial();
     document.getElementById("contadorTexto").textContent = "0 resultados";
+    actualizarContextoResultados(0);
     actualizarDashboard(carritoCompra, 0);
     renderCompraOptima();
     actualizarEstadoCarrito();
 }
 
-function limpiarFiltros() {
+function limpiarFiltros(render = true) {
     document.getElementById("categoria").value = "";
+    actualizarSubcategorias();
     document.getElementById("formato").value = "";
     document.getElementById("precioMin").value = "";
     document.getElementById("precioMax").value = "";
@@ -1666,7 +3068,8 @@ function limpiarFiltros() {
     document.querySelectorAll(".market-filter").forEach(input => input.checked = true);
     document.getElementById("relevancia").checked = true;
     document.getElementById("filtersPanel").classList.add("mobile-collapsed");
-    renderizar();
+    actualizarContextoResultados(0);
+    if (render) renderizar();
 }
 
 function limpiarHistorial() {
@@ -1695,6 +3098,50 @@ function ahorroProducto(producto) {
 
 function formatearPrecio(valor) {
     return "$" + parseInt(valor || 0).toLocaleString("es-CL");
+}
+
+function formatearFecha(valor) {
+    if (!valor) return "-";
+    return new Date(valor).toLocaleString("es-CL", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+async function cargarEstadoDatos() {
+    const contenedor = document.getElementById("estadoDatos");
+    if (!contenedor) return;
+
+    try {
+        const res = await fetch(`${API}/estado-datos`);
+        const estado = await res.json();
+        const supermercados = Object.entries(estado.supermercados || {})
+            .map(([nombre, cantidad]) => `${escapeHtml(nombre)}: ${Number(cantidad).toLocaleString("es-CL")}`)
+            .join("<br>");
+
+        contenedor.innerHTML = `
+            <div class="data-status-row">
+                <span class="data-status-label">Última base</span>
+                <span class="data-status-value">${formatearFecha(estado.base_actualizada)}</span>
+            </div>
+            <div class="data-status-row">
+                <span class="data-status-label">Productos</span>
+                <span class="data-status-value">${Number(estado.productos || 0).toLocaleString("es-CL")}</span>
+            </div>
+            <div class="data-status-row">
+                <span class="data-status-label">Precios</span>
+                <span class="data-status-value">${Number(estado.precios || 0).toLocaleString("es-CL")}</span>
+            </div>
+            <div class="data-status-row">
+                <span class="data-status-label">Supermercados</span>
+                <span class="data-status-value">${supermercados || "-"}</span>
+            </div>
+        `;
+    } catch (error) {
+        contenedor.innerHTML = "<div class='text-muted-app'>No se pudo cargar el estado.</div>";
+    }
 }
 
 function mostrarToast(texto) {
@@ -1740,11 +3187,23 @@ document.getElementById("themeToggle").addEventListener("click", () => {
 });
 
 document.getElementById("busqueda").addEventListener("keydown", event => {
-    if (event.key === "Enter") buscar();
+    if (event.key === "Enter") buscarManual();
 });
 
-document.querySelectorAll("select, .form-check-input").forEach(input => {
-    input.addEventListener("change", renderizar);
+document.getElementById("busqueda").addEventListener("input", () => {
+    if (document.getElementById("categoria").value) {
+        document.getElementById("categoria").value = "";
+        productosActuales = [];
+        actualizarSubcategorias();
+        actualizarContextoResultados(0);
+    }
+});
+
+document.querySelectorAll("#view-inicio select, #view-inicio .form-check-input").forEach(input => {
+    input.addEventListener("change", () => {
+        if (input.id === "categoria") actualizarSubcategorias();
+        renderizar();
+    });
 });
 
 document.querySelectorAll("#precioMin, #precioMax").forEach(input => {
@@ -1757,10 +3216,14 @@ window.addEventListener("load", () => {
         document.getElementById("themeToggle").innerHTML = "<i data-lucide='sun'></i>";
     }
     renderIcons();
+    renderCategorias();
     renderCompraOptima();
+    cargarEstadoDatos();
+    actualizarSubcategorias();
     actualizarDashboard(carritoCompra, 0);
     actualizarEstadoCarrito();
-    document.getElementById("resultados").innerHTML = "<div class='empty-state'>Busca un producto para comenzar.</div>";
+    actualizarContextoResultados(0);
+    document.getElementById("resultados").innerHTML = renderEstadoInicial();
     document.getElementById("contadorTexto").textContent = "0 resultados";
 });
 </script>

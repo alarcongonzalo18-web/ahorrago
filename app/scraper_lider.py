@@ -1,7 +1,10 @@
 import base64
 import csv
+import http.client
 import json
 import re
+import time
+import urllib.error
 import urllib.request
 from html import unescape
 from pathlib import Path
@@ -27,7 +30,7 @@ CATEGORIAS = [
 ]
 
 
-def descargar_html(url):
+def descargar_html(url, intentos=4):
     request = urllib.request.Request(
         url,
         headers={
@@ -39,8 +42,26 @@ def descargar_html(url):
         }
     )
 
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", errors="replace")
+    ultimo_error = None
+    for intento in range(1, intentos + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=45) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except (
+            TimeoutError,
+            ConnectionError,
+            http.client.HTTPException,
+            urllib.error.URLError,
+        ) as exc:
+            ultimo_error = exc
+            if intento == intentos:
+                break
+
+            espera = 2 * intento
+            print(f"Descarga fallida ({intento}/{intentos}) para {url}: {exc}. Reintentando en {espera}s...")
+            time.sleep(espera)
+
+    raise RuntimeError(f"No se pudo descargar {url} tras {intentos} intentos: {ultimo_error}")
 
 
 def extraer_json_ld(html):

@@ -2,8 +2,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+import json
 import unicodedata
 import re
+from fastapi import Response
 from .database import Base, engine, SessionLocal
 from . import models, schemas, services
 
@@ -244,6 +248,41 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     }
 
 
+@app.get("/estado-datos")
+def estado_datos(db: Session = Depends(get_db)):
+    root = Path(__file__).resolve().parents[1]
+    db_path = root / "supercheck.db"
+    csv_path = root / "data" / "productos_supermercados.csv"
+    logs_path = root / "logs"
+    por_supermercado = defaultdict(int)
+
+    precios = db.query(models.Precio).join(models.Supermercado).all()
+    for precio in precios:
+        por_supermercado[precio.supermercado.nombre] += 1
+
+    ultimo_log = None
+    if logs_path.exists():
+        logs = sorted(logs_path.glob("actualizacion_productos_*.log"), key=lambda item: item.stat().st_mtime, reverse=True)
+        if logs:
+            ultimo_log = {
+                "archivo": logs[0].name,
+                "fecha": datetime.fromtimestamp(logs[0].stat().st_mtime).isoformat(timespec="seconds"),
+            }
+
+    estado = {
+        "productos": db.query(models.Producto).count(),
+        "precios": len(precios),
+        "supermercados": dict(sorted(por_supermercado.items())),
+        "base_actualizada": datetime.fromtimestamp(db_path.stat().st_mtime).isoformat(timespec="seconds") if db_path.exists() else None,
+        "csv_actualizado": datetime.fromtimestamp(csv_path.stat().st_mtime).isoformat(timespec="seconds") if csv_path.exists() else None,
+        "ultimo_log": ultimo_log,
+    }
+    return Response(
+        content=json.dumps(estado, ensure_ascii=True),
+        media_type="application/json",
+    )
+
+
 def es_url_generica(url):
     if not url:
         return True
@@ -417,6 +456,32 @@ def detectar_familia(texto):
     return ""
 
 
+def detectar_familia_busqueda(texto):
+    texto = normalizar_texto(texto)
+
+    familias = {
+        "papel_higienico": ["papel higienico", "confort"],
+        "detergente": ["detergente"],
+        "aceite": ["aceite"],
+        "cafe": ["cafe"],
+        "azucar": ["azucar"],
+        "arroz": ["arroz"],
+        "fideos": ["fideo", "fideos", "pasta"],
+        "queso": ["queso"],
+        "yogurt": ["yogurt", "yoghurt", "yogur"],
+        "huevos": ["huevo", "huevos"],
+        "pan": ["pan"],
+        "bebida": ["bebida", "bebidas", "gaseosa", "gaseosas"],
+        "leche": ["leche"],
+    }
+
+    for familia, claves in familias.items():
+        if any(clave in texto for clave in claves):
+            return familia
+
+    return ""
+
+
 def detectar_atributos(texto):
     atributos = [
         "sin lactosa",
@@ -516,6 +581,20 @@ def detectar_calificadores(texto):
     ]
 
 
+def detectar_metros_papel(texto):
+    texto = normalizar_texto(texto)
+
+    if detectar_familia(texto) != "papel_higienico":
+        return ""
+
+    match = re.search(r"(\d+(?:\.\d+)?)\s*(?:m|metros)\b", texto)
+    if not match:
+        return ""
+
+    numero = match.group(1).rstrip("0").rstrip(".")
+    return f"{numero}m"
+
+
 def tokens_firma(producto, texto, marca):
     tokens_excluir = set(tokens_utiles(
         marca,
@@ -545,6 +624,7 @@ def clave_comparable(producto):
         detectar_familia(texto),
         marca,
         normalizar_formato(producto.formato),
+        detectar_metros_papel(texto),
         ",".join(detectar_atributos(texto)),
         ",".join(detectar_calificadores(texto)),
     ]
@@ -597,6 +677,11 @@ def candidato_compatible(producto, candidato):
         for token in tokens_utiles(producto.formato):
             if token not in texto_candidato:
                 return False
+
+    metros_papel = detectar_metros_papel(texto_producto)
+    metros_papel_candidato = detectar_metros_papel(texto_candidato)
+    if metros_papel and metros_papel_candidato and metros_papel != metros_papel_candidato:
+        return False
 
     calificadores_producto = set(detectar_calificadores(texto_producto))
     calificadores_candidato = set(detectar_calificadores(texto_candidato))
@@ -725,10 +810,15 @@ def obtener_url_especifica(db, producto, precio):
 @app.get("/productos/buscar/{texto}")
 def buscar_productos(texto: str, db: Session = Depends(get_db)):
     palabras = tokens_utiles(texto)
+    familia_buscada = detectar_familia_busqueda(texto)
     productos = [
         producto
         for producto in db.query(models.Producto).all()
         if all(palabra in normalizar_texto(producto.nombre) for palabra in palabras)
+        and (
+            not familia_buscada or
+            detectar_familia(normalizar_texto(producto.nombre)) == familia_buscada
+        )
         and not ("azucar" in palabras and "sin azucar" in normalizar_texto(producto.nombre))
     ]
 

@@ -165,7 +165,25 @@ def obtener_imagen_producto(item):
     return ""
 
 
+def quitar_precios_referencia(texto):
+    texto = texto or ""
+    texto = re.sub(
+        r"\(\s*\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+\s*\)",
+        "",
+        texto,
+        flags=re.IGNORECASE,
+    )
+    texto = re.sub(
+        r"\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+",
+        "",
+        texto,
+        flags=re.IGNORECASE,
+    )
+    return texto
+
+
 def extraer_precios_desde_texto(texto, precio_respaldo):
+    texto = quitar_precios_referencia(texto)
     valores = [
         int(valor.replace(".", ""))
         for valor in re.findall(r"\$\s*([\d.]+)", texto or "")
@@ -186,6 +204,14 @@ def extraer_precios_desde_texto(texto, precio_respaldo):
 
 
 def extraer_precio_referencia(texto):
+    match = re.search(
+        r"\$?\s*([\d.]+)\s*(?:/|x)\s*([A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+)",
+        texto or "",
+        flags=re.IGNORECASE,
+    )
+    if match:
+        return f"${match.group(1)} / {match.group(2)}"
+
     for linea in (texto or "").splitlines():
         if "/" in linea and "$" in linea:
             return linea.strip()
