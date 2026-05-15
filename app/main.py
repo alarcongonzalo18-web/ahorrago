@@ -1,6 +1,6 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -46,7 +46,6 @@ MARCAS_CONOCIDAS = [
     "Copacabana",
     "San Ignacio",
     "Hydroshock",
-    "Copacabana",
     "Monterrey",
     "Cruzeiro",
     "Pahuilmo",
@@ -151,7 +150,12 @@ TOKENS_GENERICOS = {
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -407,7 +411,7 @@ def detectar_familia(texto):
     if "detergente" in texto:
         return "detergente"
 
-    if "papel higienico" in texto or "papel higienico" in texto:
+    if "papel higienico" in texto or "papel toilet" in texto:
         return "papel_higienico"
 
     if "aceite" in texto:
@@ -807,26 +811,52 @@ def obtener_url_especifica(db, producto, precio):
 
 
 
+def _url_especifica_cached(producto, precio, urls_por_base, producto_por_id):
+    if es_url_producto_especifica(precio.url_producto):
+        return precio.url_producto
+    if not producto.producto_base:
+        return None
+    for precio_candidato in urls_por_base.get((precio.supermercado_id, producto.producto_base), []):
+        candidato = producto_por_id.get(precio_candidato.producto_id)
+        if candidato and candidato_compatible(producto, candidato):
+            return precio_candidato.url_producto
+    return None
+
+
 @app.get("/productos/buscar/{texto}")
 def buscar_productos(texto: str, db: Session = Depends(get_db)):
     palabras = tokens_utiles(texto)
     familia_buscada = detectar_familia_busqueda(texto)
+
+    # 2 queries en lugar de O(N) queries
+    todos_productos = db.query(models.Producto).all()
+    todos_precios = db.query(models.Precio).options(
+        joinedload(models.Precio.supermercado)
+    ).all()
+
+    producto_por_id = {p.id: p for p in todos_productos}
+    precios_por_producto = defaultdict(list)
+    urls_por_base = defaultdict(list)
+
+    for precio in todos_precios:
+        precios_por_producto[precio.producto_id].append(precio)
+        if es_url_producto_especifica(precio.url_producto):
+            prod = producto_por_id.get(precio.producto_id)
+            if prod and prod.producto_base:
+                urls_por_base[(precio.supermercado_id, prod.producto_base)].append(precio)
+
     productos = [
-        producto
-        for producto in db.query(models.Producto).all()
-        if all(palabra in normalizar_texto(producto.nombre) for palabra in palabras)
-        and (
-            not familia_buscada or
-            detectar_familia(normalizar_texto(producto.nombre)) == familia_buscada
-        )
-        and not ("azucar" in palabras and "sin azucar" in normalizar_texto(producto.nombre))
+        p for p in todos_productos
+        if all(palabra in normalizar_texto(p.nombre) for palabra in palabras)
+        and (not familia_buscada or detectar_familia(normalizar_texto(p.nombre)) == familia_buscada)
+        and not ("azucar" in palabras and "sin azucar" in normalizar_texto(p.nombre))
     ]
 
     resultado = []
     grupos_vistos = set()
     grupos_por_clave = defaultdict(list)
 
-    for candidato in db.query(models.Producto).all():
+    for candidato in todos_productos:
         grupos_por_clave[clave_comparable(candidato)].append(candidato)
 
     for producto in productos:
@@ -838,18 +868,13 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
         grupos_vistos.add(grupo_id)
 
         equivalentes = grupos_por_clave[grupo_id] or [producto]
-
         mejor_por_supermercado = {}
 
         for equivalente in equivalentes:
             if not candidato_compatible(producto, equivalente):
                 continue
 
-            precios = db.query(models.Precio).filter(
-                models.Precio.producto_id == equivalente.id
-            ).all()
-
-            for precio in precios:
+            for precio in precios_por_producto[equivalente.id]:
                 if not precio_valido_para_comparar(equivalente, precio):
                     continue
 
@@ -876,7 +901,7 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
                     "descuento": int(round((1 - precio.precio_oferta / precio.precio_normal) * 100)) if tiene_descuento else 0,
                     "promocion": precio.promocion,
                     "precio_referencia": precio.precio_referencia or calcular_precio_referencia(valor, equivalente.formato),
-                    "url": obtener_url_especifica(db, equivalente, precio),
+                    "url": _url_especifica_cached(equivalente, precio, urls_por_base, producto_por_id),
                     "imagen_url": precio.imagen_url,
                     "nombre": equivalente.nombre
                 }
@@ -886,12 +911,7 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
             key=lambda item: item["precio"]
         )
 
-        supermercados_presentes = {
-            item["supermercado"]
-            for item in lista_precios
-        }
-
-        if not SUPERMERCADOS_REQUERIDOS.issubset(supermercados_presentes):
+        if not lista_precios:
             continue
 
         imagen_url = next(

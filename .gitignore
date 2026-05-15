@@ -4,3 +4,5 @@ __pycache__/
 *.log
 backups/
 supercheck.db
+.claude/
+actualizacion_productos.lock

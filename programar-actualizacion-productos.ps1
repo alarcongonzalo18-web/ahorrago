@@ -9,9 +9,10 @@ if (-not (Test-Path $Bat)) {
 
 $Action = New-ScheduledTaskAction -Execute $Bat -WorkingDirectory $Root
 $Triggers = @(
-    New-ScheduledTaskTrigger -Daily -At 07:00
-    New-ScheduledTaskTrigger -Daily -At 14:00
-    New-ScheduledTaskTrigger -Daily -At 21:00
+    New-ScheduledTaskTrigger -Daily -At 06:00
+    New-ScheduledTaskTrigger -Daily -At 12:00
+    New-ScheduledTaskTrigger -Daily -At 18:00
+    New-ScheduledTaskTrigger -Daily -At 00:00
 )
 $Settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries `
@@ -25,9 +26,10 @@ Register-ScheduledTask `
     -Action $Action `
     -Trigger $Triggers `
     -Settings $Settings `
-    -Description "Actualiza productos AhorraGo 3 veces al día con backup, logs y validación." `
+    -Description "Actualiza productos AhorraGo 4 veces al dia: 06:00, 12:00, 18:00, 00:00." `
     -Force | Out-Null
 
-Write-Host "Tarea programada creada: $TaskName"
-Write-Host "Horarios: 07:00, 14:00, 21:00"
+Write-Host "Tarea programada ACTIVADA: $TaskName"
+Write-Host "Horarios: 06:00, 12:00, 18:00, 00:00"
+Write-Host "Para desactivar: .\pausar-actualizacion-productos.ps1"
 Write-Host "Para probar ahora: .\actualizar-productos.bat"

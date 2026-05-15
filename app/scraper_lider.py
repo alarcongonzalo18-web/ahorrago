@@ -14,19 +14,69 @@ from urllib.parse import urljoin
 OUTPUT = Path("data/lider_real.csv")
 
 CATEGORIAS = [
-    ("Lacteos, Huevos y Congelados", "Leche", "https://super.lider.cl/v/leches"),
-    ("Lacteos, Huevos y Congelados", "Huevos", "https://super.lider.cl/v/huevos"),
-    ("Lacteos, Huevos y Congelados", "Yogurt", "https://super.lider.cl/v/yogurt"),
-    ("Lacteos, Huevos y Congelados", "Quesos", "https://super.lider.cl/v/quesos"),
-    ("Despensa", "Arroz", "https://super.lider.cl/v/arroz"),
-    ("Despensa", "Aceite", "https://super.lider.cl/v/aceites"),
-    ("Despensa", "Cafe", "https://super.lider.cl/v/cafe"),
-    ("Despensa", "Azucar", "https://super.lider.cl/v/azucar"),
-    ("Despensa", "Fideos", "https://super.lider.cl/v/fideos"),
-    ("Bebidas", "Bebidas", "https://super.lider.cl/v/bebidas"),
-    ("Panaderia", "Pan", "https://super.lider.cl/v/pan"),
-    ("Limpieza", "Detergentes", "https://super.lider.cl/v/detergentes"),
-    ("Limpieza", "Papel higienico", "https://super.lider.cl/v/papel-higienico"),
+    # Lácteos y refrigerados
+    ("Lacteos, Huevos y Congelados", "Leche",           "https://super.lider.cl/v/leches"),
+    ("Lacteos, Huevos y Congelados", "Huevos",          "https://super.lider.cl/v/huevos"),
+    ("Lacteos, Huevos y Congelados", "Yogurt",          "https://super.lider.cl/v/yogurt"),
+    ("Lacteos, Huevos y Congelados", "Quesos",          "https://super.lider.cl/v/quesos"),
+    ("Lacteos, Huevos y Congelados", "Mantequilla",     "https://super.lider.cl/v/mantequilla"),
+    ("Lacteos, Huevos y Congelados", "Crema",           "https://super.lider.cl/v/crema"),
+    # Frutas y verduras
+    ("Frutas y Verduras",            "Frutas",          "https://super.lider.cl/v/frutas"),
+    ("Frutas y Verduras",            "Verduras",        "https://super.lider.cl/v/verduras"),
+    # Carnes y pescados
+    ("Carnes y Pescados",            "Carnes",          "https://super.lider.cl/v/carnes"),
+    ("Carnes y Pescados",            "Aves",            "https://super.lider.cl/v/aves"),
+    ("Carnes y Pescados",            "Cecinas",         "https://super.lider.cl/v/cecinas"),
+    ("Carnes y Pescados",            "Pescados",        "https://super.lider.cl/v/pescados"),
+    ("Carnes y Pescados",            "Mariscos",        "https://super.lider.cl/v/mariscos"),
+    # Congelados
+    ("Congelados",                   "Congelados",      "https://super.lider.cl/v/congelados"),
+    # Despensa
+    ("Despensa", "Arroz",            "https://super.lider.cl/v/arroz"),
+    ("Despensa", "Aceite",           "https://super.lider.cl/v/aceites"),
+    ("Despensa", "Cafe",             "https://super.lider.cl/v/cafe"),
+    ("Despensa", "Azucar",           "https://super.lider.cl/v/azucar"),
+    ("Despensa", "Fideos",           "https://super.lider.cl/v/fideos"),
+    ("Despensa", "Conservas",        "https://super.lider.cl/v/conservas"),
+    ("Despensa", "Salsas",           "https://super.lider.cl/v/salsas"),
+    ("Despensa", "Condimentos",      "https://super.lider.cl/v/condimentos"),
+    ("Despensa", "Legumbres",        "https://super.lider.cl/v/legumbres"),
+    # Desayuno y snacks
+    ("Desayuno y Snacks",            "Cereales",        "https://super.lider.cl/v/cereales"),
+    ("Desayuno y Snacks",            "Galletas",        "https://super.lider.cl/v/galletas"),
+    ("Desayuno y Snacks",            "Chocolates",      "https://super.lider.cl/v/chocolates"),
+    ("Desayuno y Snacks",            "Snacks",          "https://super.lider.cl/v/snacks"),
+    ("Desayuno y Snacks",            "Mermeladas",      "https://super.lider.cl/v/mermeladas"),
+    # Bebidas
+    ("Bebidas",                      "Bebidas",         "https://super.lider.cl/v/bebidas"),
+    ("Bebidas",                      "Jugos",           "https://super.lider.cl/v/jugos"),
+    ("Bebidas",                      "Aguas",           "https://super.lider.cl/v/aguas"),
+    ("Bebidas",                      "Cervezas",        "https://super.lider.cl/v/cervezas"),
+    ("Bebidas",                      "Vinos",           "https://super.lider.cl/v/vinos"),
+    ("Bebidas",                      "Bebidas Energeticas", "https://super.lider.cl/v/bebidas-energeticas"),
+    # Panadería
+    ("Panaderia",                    "Pan",             "https://super.lider.cl/v/pan"),
+    # Limpieza del hogar
+    ("Limpieza",                     "Detergentes",     "https://super.lider.cl/v/detergentes"),
+    ("Limpieza",                     "Papel higienico", "https://super.lider.cl/v/papel-higienico"),
+    ("Limpieza",                     "Limpiadores",     "https://super.lider.cl/v/limpiadores"),
+    ("Limpieza",                     "Lavavajillas",    "https://super.lider.cl/v/lavavajillas"),
+    ("Limpieza",                     "Suavizantes",     "https://super.lider.cl/v/suavizantes"),
+    ("Limpieza",                     "Blanqueadores",   "https://super.lider.cl/v/blanqueadores"),
+    # Higiene personal
+    ("Higiene Personal",             "Shampoo",         "https://super.lider.cl/v/shampoo"),
+    ("Higiene Personal",             "Acondicionador",  "https://super.lider.cl/v/acondicionador"),
+    ("Higiene Personal",             "Jabon",           "https://super.lider.cl/v/jabones"),
+    ("Higiene Personal",             "Desodorantes",    "https://super.lider.cl/v/desodorantes"),
+    ("Higiene Personal",             "Cuidado Bucal",   "https://super.lider.cl/v/cuidado-bucal"),
+    ("Higiene Personal",             "Cuidado Facial",  "https://super.lider.cl/v/cuidado-facial"),
+    # Bebé
+    ("Bebe",                         "Panales",         "https://super.lider.cl/v/panales"),
+    ("Bebe",                         "Alimentos Bebe",  "https://super.lider.cl/v/alimentos-bebe"),
+    # Mascotas
+    ("Mascotas",                     "Alimento Perros", "https://super.lider.cl/v/alimento-para-perros"),
+    ("Mascotas",                     "Alimento Gatos",  "https://super.lider.cl/v/alimento-para-gatos"),
 ]
 
 
@@ -213,19 +263,22 @@ def main():
     vistos = set()
 
     for categoria, subcategoria, url in CATEGORIAS:
-        for producto in extraer_productos(categoria, subcategoria, url):
-            key = (
-                producto["categoria"],
-                producto["subcategoria"],
-                producto["nombre"],
-                producto["precio"],
-                producto["url"]
-            )
-            if key in vistos:
-                continue
+        try:
+            for producto in extraer_productos(categoria, subcategoria, url):
+                key = (
+                    producto["categoria"],
+                    producto["subcategoria"],
+                    producto["nombre"],
+                    producto["precio"],
+                    producto["url"]
+                )
+                if key in vistos:
+                    continue
 
-            vistos.add(key)
-            productos.append(producto)
+                vistos.add(key)
+                productos.append(producto)
+        except Exception as e:
+            print(f"Error en {subcategoria} ({url}): {e}. Continuando...")
 
     guardar_productos(productos)
     print(f"{len(productos)} productos Lider guardados")

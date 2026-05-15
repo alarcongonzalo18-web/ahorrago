@@ -2,6 +2,17 @@ from sqlalchemy.orm import Session
 from .models import Producto, Precio
 
 
+def _valor_precio(precio):
+    if (
+        precio.precio_oferta and
+        precio.precio_normal and
+        precio.precio_oferta < 500 and
+        precio.precio_normal > precio.precio_oferta * 2
+    ):
+        return precio.precio_normal
+    return precio.precio_oferta if precio.precio_oferta else precio.precio_normal
+
+
 def buscar_producto(db: Session, nombre: str):
     nombre = nombre.lower().strip()
 
@@ -50,7 +61,7 @@ def comparar_lista(db: Session, lista_productos):
             ).all()
 
             for precio in precios:
-                valor = precio.precio_oferta if precio.precio_oferta else precio.precio_normal
+                valor = _valor_precio(precio)
                 supermercado = precio.supermercado.nombre
 
                 mejor_actual = mejor_por_supermercado.get(supermercado)

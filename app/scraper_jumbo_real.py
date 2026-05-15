@@ -14,71 +14,69 @@ BASE_URL = "https://www.jumbo.cl"
 OUTPUT = Path("data/jumbo_real.csv")
 
 CATEGORIAS = [
-    {
-        "categoria": "Lácteos, Huevos y Congelados",
-        "subcategoria": "Leche",
-        "path": "/lacteos-huevos-y-congelados/leches"
-    },
-    {
-        "categoria": "Lacteos, Huevos y Congelados",
-        "subcategoria": "Huevos",
-        "path": "/busqueda?ft=huevos"
-    },
-    {
-        "categoria": "Lacteos, Huevos y Congelados",
-        "subcategoria": "Yogurt",
-        "path": "/busqueda?ft=yogurt"
-    },
-    {
-        "categoria": "Lacteos, Huevos y Congelados",
-        "subcategoria": "Quesos",
-        "path": "/busqueda?ft=queso"
-    },
-    {
-        "categoria": "Despensa",
-        "subcategoria": "Arroz y Legumbres",
-        "path": "/despensa/arroz-quinoa-cuscus"
-    },
-    {
-        "categoria": "Despensa",
-        "subcategoria": "Aceites",
-        "path": "/despensa/aceites-sal-y-condimentos/aceite"
-    },
-    {
-        "categoria": "Despensa",
-        "subcategoria": "Cafe",
-        "path": "/busqueda?ft=cafe"
-    },
-    {
-        "categoria": "Despensa",
-        "subcategoria": "Azucar",
-        "path": "/busqueda?ft=azucar"
-    },
-    {
-        "categoria": "Despensa",
-        "subcategoria": "Fideos",
-        "path": "/busqueda?ft=fideos"
-    },
-    {
-        "categoria": "Licores, Bebidas y Aguas",
-        "subcategoria": "Bebidas",
-        "path": "/licores-bebidas-y-aguas/bebidas-gaseosas"
-    },
-    {
-        "categoria": "Panaderia",
-        "subcategoria": "Pan",
-        "path": "/busqueda?ft=pan"
-    },
-    {
-        "categoria": "Limpieza",
-        "subcategoria": "Detergentes",
-        "path": "/busqueda?ft=detergentes"
-    },
-    {
-        "categoria": "Limpieza",
-        "subcategoria": "Papel higienico",
-        "path": "/busqueda?ft=papel%20higienico"
-    },
+    # Lácteos y refrigerados
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Leche",           "path": "/lacteos-huevos-y-congelados/leches"},
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Huevos",          "path": "/busqueda?ft=huevos"},
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Yogurt",          "path": "/busqueda?ft=yogurt"},
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Quesos",          "path": "/busqueda?ft=queso"},
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Mantequilla",     "path": "/busqueda?ft=mantequilla"},
+    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Crema",           "path": "/busqueda?ft=crema"},
+    # Frutas y verduras
+    {"categoria": "Frutas y Verduras",            "subcategoria": "Frutas",          "path": "/frutas-y-verduras/frutas"},
+    {"categoria": "Frutas y Verduras",            "subcategoria": "Verduras",        "path": "/frutas-y-verduras/verduras"},
+    # Carnes y pescados
+    {"categoria": "Carnes y Pescados",            "subcategoria": "Carnes",          "path": "/carnes-y-aves/carnes"},
+    {"categoria": "Carnes y Pescados",            "subcategoria": "Aves",            "path": "/carnes-y-aves/pollo"},
+    {"categoria": "Carnes y Pescados",            "subcategoria": "Cecinas",         "path": "/cecinas-y-fiambres"},
+    {"categoria": "Carnes y Pescados",            "subcategoria": "Pescados",        "path": "/busqueda?ft=pescado"},
+    {"categoria": "Carnes y Pescados",            "subcategoria": "Mariscos",        "path": "/busqueda?ft=mariscos"},
+    # Congelados
+    {"categoria": "Congelados",                   "subcategoria": "Congelados",      "path": "/lacteos-huevos-y-congelados/congelados"},
+    # Despensa
+    {"categoria": "Despensa", "subcategoria": "Arroz y Legumbres", "path": "/despensa/arroz-quinoa-cuscus"},
+    {"categoria": "Despensa", "subcategoria": "Aceites",           "path": "/despensa/aceites-sal-y-condimentos/aceite"},
+    {"categoria": "Despensa", "subcategoria": "Cafe",              "path": "/busqueda?ft=cafe"},
+    {"categoria": "Despensa", "subcategoria": "Azucar",            "path": "/busqueda?ft=azucar"},
+    {"categoria": "Despensa", "subcategoria": "Fideos",            "path": "/busqueda?ft=fideos"},
+    {"categoria": "Despensa", "subcategoria": "Conservas",         "path": "/despensa/conservas"},
+    {"categoria": "Despensa", "subcategoria": "Salsas",            "path": "/busqueda?ft=salsa"},
+    {"categoria": "Despensa", "subcategoria": "Condimentos",       "path": "/despensa/aceites-sal-y-condimentos"},
+    {"categoria": "Despensa", "subcategoria": "Legumbres",         "path": "/busqueda?ft=legumbres"},
+    # Desayuno y snacks
+    {"categoria": "Desayuno y Snacks", "subcategoria": "Cereales",    "path": "/desayuno-y-cereales/cereales"},
+    {"categoria": "Desayuno y Snacks", "subcategoria": "Galletas",    "path": "/busqueda?ft=galletas"},
+    {"categoria": "Desayuno y Snacks", "subcategoria": "Chocolates",  "path": "/busqueda?ft=chocolate"},
+    {"categoria": "Desayuno y Snacks", "subcategoria": "Snacks",      "path": "/busqueda?ft=snack"},
+    {"categoria": "Desayuno y Snacks", "subcategoria": "Mermeladas",  "path": "/busqueda?ft=mermelada"},
+    # Bebidas
+    {"categoria": "Bebidas", "subcategoria": "Bebidas",            "path": "/licores-bebidas-y-aguas/bebidas-gaseosas"},
+    {"categoria": "Bebidas", "subcategoria": "Jugos",              "path": "/licores-bebidas-y-aguas/jugos-y-nectares"},
+    {"categoria": "Bebidas", "subcategoria": "Aguas",              "path": "/licores-bebidas-y-aguas/aguas"},
+    {"categoria": "Bebidas", "subcategoria": "Cervezas",           "path": "/licores-bebidas-y-aguas/cervezas"},
+    {"categoria": "Bebidas", "subcategoria": "Vinos",              "path": "/licores-bebidas-y-aguas/vinos"},
+    {"categoria": "Bebidas", "subcategoria": "Bebidas Energeticas","path": "/busqueda?ft=bebida+energetica"},
+    # Panadería
+    {"categoria": "Panaderia", "subcategoria": "Pan",              "path": "/busqueda?ft=pan"},
+    # Limpieza del hogar
+    {"categoria": "Limpieza", "subcategoria": "Detergentes",       "path": "/busqueda?ft=detergentes"},
+    {"categoria": "Limpieza", "subcategoria": "Papel higienico",   "path": "/busqueda?ft=papel%20higienico"},
+    {"categoria": "Limpieza", "subcategoria": "Limpiadores",       "path": "/busqueda?ft=limpiador"},
+    {"categoria": "Limpieza", "subcategoria": "Lavavajillas",      "path": "/busqueda?ft=lavavajillas"},
+    {"categoria": "Limpieza", "subcategoria": "Suavizantes",       "path": "/busqueda?ft=suavizante"},
+    {"categoria": "Limpieza", "subcategoria": "Blanqueadores",     "path": "/busqueda?ft=blanqueador"},
+    # Higiene personal
+    {"categoria": "Higiene Personal", "subcategoria": "Shampoo",       "path": "/busqueda?ft=shampoo"},
+    {"categoria": "Higiene Personal", "subcategoria": "Acondicionador","path": "/busqueda?ft=acondicionador"},
+    {"categoria": "Higiene Personal", "subcategoria": "Jabon",         "path": "/busqueda?ft=jabon"},
+    {"categoria": "Higiene Personal", "subcategoria": "Desodorantes",  "path": "/busqueda?ft=desodorante"},
+    {"categoria": "Higiene Personal", "subcategoria": "Cuidado Bucal", "path": "/busqueda?ft=pasta+dental"},
+    {"categoria": "Higiene Personal", "subcategoria": "Cuidado Facial","path": "/busqueda?ft=crema+facial"},
+    # Bebé
+    {"categoria": "Bebe", "subcategoria": "Panales",               "path": "/busqueda?ft=panales"},
+    {"categoria": "Bebe", "subcategoria": "Alimentos Bebe",        "path": "/busqueda?ft=alimento+bebe"},
+    # Mascotas
+    {"categoria": "Mascotas", "subcategoria": "Alimento Perros",   "path": "/busqueda?ft=alimento+perro"},
+    {"categoria": "Mascotas", "subcategoria": "Alimento Gatos",    "path": "/busqueda?ft=alimento+gato"},
 ]
 
 
@@ -290,23 +288,26 @@ def main():
             subcategoria = bloque["subcategoria"]
             url_categoria = urljoin(BASE_URL, bloque["path"])
 
-            driver.get(url_categoria)
-            time.sleep(5)
-            urls_paginas = detectar_urls_paginas(driver)
+            try:
+                driver.get(url_categoria)
+                time.sleep(5)
+                urls_paginas = detectar_urls_paginas(driver)
 
-            print(f"{subcategoria}: {len(urls_paginas)} paginas")
+                print(f"{subcategoria}: {len(urls_paginas)} paginas")
 
-            for pagina_url in urls_paginas:
-                driver.get(pagina_url)
-                time.sleep(4)
-                recolectar_productos(
-                    driver,
-                    productos,
-                    vistos,
-                    categoria,
-                    subcategoria
-                )
-                print(f"{pagina_url} -> {len(productos)} acumulados")
+                for pagina_url in urls_paginas:
+                    driver.get(pagina_url)
+                    time.sleep(4)
+                    recolectar_productos(
+                        driver,
+                        productos,
+                        vistos,
+                        categoria,
+                        subcategoria
+                    )
+                    print(f"{pagina_url} -> {len(productos)} acumulados")
+            except Exception as e:
+                print(f"Error en {subcategoria} ({url_categoria}): {e}. Continuando...")
     finally:
         driver.quit()
 

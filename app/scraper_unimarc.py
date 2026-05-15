@@ -14,19 +14,69 @@ BASE = "https://www.unimarc.cl/search"
 OUTPUT = Path("data/unimarc_real.csv")
 
 CATEGORIAS = [
-    ("Lácteos, Huevos y Congelados", "Leche", "leche", 5),
-    ("Lacteos, Huevos y Congelados", "Huevos", "huevos", 3),
-    ("Lacteos, Huevos y Congelados", "Yogurt", "yogurt", 4),
-    ("Lacteos, Huevos y Congelados", "Quesos", "queso", 4),
-    ("Despensa", "Arroz", "arroz", 3),
-    ("Despensa", "Aceite", "aceite", 3),
-    ("Despensa", "Cafe", "cafe", 4),
-    ("Despensa", "Azucar", "azucar", 3),
-    ("Despensa", "Fideos", "fideos", 4),
-    ("Bebidas", "Bebidas", "bebida", 5),
-    ("Panaderia", "Pan", "pan", 4),
-    ("Limpieza", "Detergentes", "detergente", 3),
-    ("Limpieza", "Papel higienico", "papel higienico", 3),
+    # Lácteos y refrigerados
+    ("Lacteos, Huevos y Congelados", "Leche",           "leche"),
+    ("Lacteos, Huevos y Congelados", "Huevos",          "huevos"),
+    ("Lacteos, Huevos y Congelados", "Yogurt",          "yogurt"),
+    ("Lacteos, Huevos y Congelados", "Quesos",          "queso"),
+    ("Lacteos, Huevos y Congelados", "Mantequilla",     "mantequilla"),
+    ("Lacteos, Huevos y Congelados", "Crema",           "crema"),
+    # Frutas y verduras
+    ("Frutas y Verduras",            "Frutas",          "fruta"),
+    ("Frutas y Verduras",            "Verduras",        "verdura"),
+    # Carnes y pescados
+    ("Carnes y Pescados",            "Carnes",          "carne"),
+    ("Carnes y Pescados",            "Aves",            "pollo"),
+    ("Carnes y Pescados",            "Cecinas",         "cecinas"),
+    ("Carnes y Pescados",            "Pescados",        "pescado"),
+    ("Carnes y Pescados",            "Mariscos",        "mariscos"),
+    # Congelados
+    ("Congelados",                   "Congelados",      "congelado"),
+    # Despensa
+    ("Despensa", "Arroz",            "arroz"),
+    ("Despensa", "Aceite",           "aceite"),
+    ("Despensa", "Cafe",             "cafe"),
+    ("Despensa", "Azucar",           "azucar"),
+    ("Despensa", "Fideos",           "fideos"),
+    ("Despensa", "Conservas",        "conservas"),
+    ("Despensa", "Salsas",           "salsa"),
+    ("Despensa", "Condimentos",      "condimento"),
+    ("Despensa", "Legumbres",        "legumbres"),
+    # Desayuno y snacks
+    ("Desayuno y Snacks", "Cereales",   "cereal"),
+    ("Desayuno y Snacks", "Galletas",   "galleta"),
+    ("Desayuno y Snacks", "Chocolates", "chocolate"),
+    ("Desayuno y Snacks", "Snacks",     "snack"),
+    ("Desayuno y Snacks", "Mermeladas", "mermelada"),
+    # Bebidas
+    ("Bebidas", "Bebidas",             "bebida"),
+    ("Bebidas", "Jugos",               "jugo"),
+    ("Bebidas", "Aguas",               "agua mineral"),
+    ("Bebidas", "Cervezas",            "cerveza"),
+    ("Bebidas", "Vinos",               "vino"),
+    ("Bebidas", "Bebidas Energeticas", "bebida energetica"),
+    # Panadería
+    ("Panaderia", "Pan",               "pan"),
+    # Limpieza del hogar
+    ("Limpieza", "Detergentes",        "detergente"),
+    ("Limpieza", "Papel higienico",    "papel higienico"),
+    ("Limpieza", "Limpiadores",        "limpiador"),
+    ("Limpieza", "Lavavajillas",       "lavavajillas"),
+    ("Limpieza", "Suavizantes",        "suavizante"),
+    ("Limpieza", "Blanqueadores",      "blanqueador"),
+    # Higiene personal
+    ("Higiene Personal", "Shampoo",       "shampoo"),
+    ("Higiene Personal", "Acondicionador","acondicionador"),
+    ("Higiene Personal", "Jabon",         "jabon"),
+    ("Higiene Personal", "Desodorantes",  "desodorante"),
+    ("Higiene Personal", "Cuidado Bucal", "pasta dental"),
+    ("Higiene Personal", "Cuidado Facial","crema facial"),
+    # Bebé
+    ("Bebe", "Panales",                "panales"),
+    ("Bebe", "Alimentos Bebe",         "alimento bebe"),
+    # Mascotas
+    ("Mascotas", "Alimento Perros",    "alimento perro"),
+    ("Mascotas", "Alimento Gatos",     "alimento gato"),
 ]
 
 
@@ -173,12 +223,15 @@ def extraer_producto_por_indice(driver, indice, intentos=3):
     return None
 
 
-def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
+def scrape_categoria(driver, categoria, subcategoria, termino):
     productos = []
 
     print(f"Scrapeando Unimarc {subcategoria}...")
 
-    for page in range(1, max_paginas + 1):
+    page = 1
+    paginas_vacias_consecutivas = 0
+
+    while True:
         url = f"{BASE}?q={quote_plus(termino)}&page={page}"
         driver.get(url)
         time.sleep(5)
@@ -191,12 +244,17 @@ def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
             nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
 
         if not nombres:
+            paginas_vacias_consecutivas += 1
             print(f"{url} -> 0 productos")
-            break
+            if paginas_vacias_consecutivas >= 2:
+                break
+            page += 1
+            continue
 
+        paginas_vacias_consecutivas = 0
         encontrados_pagina = 0
-        total_nombres = len(nombres)
-        for indice in range(total_nombres):
+
+        for indice in range(len(nombres)):
             producto = extraer_producto_por_indice(driver, indice)
 
             if not producto:
@@ -208,6 +266,11 @@ def scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
             encontrados_pagina += 1
 
         print(f"{url} -> {encontrados_pagina} productos")
+
+        if encontrados_pagina == 0:
+            break
+
+        page += 1
 
     return productos
 
@@ -241,21 +304,24 @@ def main():
     vistos = set()
 
     try:
-        for categoria, subcategoria, termino, max_paginas in CATEGORIAS:
-            for producto in scrape_categoria(driver, categoria, subcategoria, termino, max_paginas):
-                key = (
-                    producto["categoria"],
-                    producto["subcategoria"],
-                    producto["nombre"],
-                    producto["precio"],
-                    producto["url"]
-                )
+        for categoria, subcategoria, termino in CATEGORIAS:
+            try:
+                for producto in scrape_categoria(driver, categoria, subcategoria, termino):
+                    key = (
+                        producto["categoria"],
+                        producto["subcategoria"],
+                        producto["nombre"],
+                        producto["precio"],
+                        producto["url"]
+                    )
 
-                if key in vistos:
-                    continue
+                    if key in vistos:
+                        continue
 
-                vistos.add(key)
-                productos.append(producto)
+                    vistos.add(key)
+                    productos.append(producto)
+            except Exception as e:
+                print(f"Error en {subcategoria}: {e}. Continuando...")
     finally:
         driver.quit()
 
