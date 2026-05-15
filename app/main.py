@@ -828,35 +828,47 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
     palabras = tokens_utiles(texto)
     familia_buscada = detectar_familia_busqueda(texto)
 
-    # 2 queries en lugar de O(N) queries
-    todos_productos = db.query(models.Producto).all()
-    todos_precios = db.query(models.Precio).options(
-        joinedload(models.Precio.supermercado)
-    ).all()
+    # Filtrar en la BD usando los índices (en vez de cargar los 23k productos)
+    condiciones = [models.Producto.nombre.ilike(f"%{p}%") for p in palabras]
+    productos = db.query(models.Producto).filter(*condiciones).all()
+    if familia_buscada:
+        productos = [p for p in productos
+                     if detectar_familia(normalizar_texto(p.nombre)) == familia_buscada]
+    if "azucar" in palabras:
+        productos = [p for p in productos
+                     if "sin azucar" not in normalizar_texto(p.nombre)]
 
-    producto_por_id = {p.id: p for p in todos_productos}
+    # Cargar equivalentes vía producto_base (ya indexado) para el agrupamiento cross-supermercado
+    bases = {p.producto_base for p in productos if p.producto_base}
+    if bases:
+        equivalentes = db.query(models.Producto).filter(
+            models.Producto.producto_base.in_(bases)
+        ).all()
+    else:
+        equivalentes = []
+    todos_relevantes = {p.id: p for p in [*productos, *equivalentes]}
+    producto_por_id = todos_relevantes
+
+    # Cargar precios solo para los productos relevantes
+    ids_relevantes = list(todos_relevantes.keys())
+    todos_precios = db.query(models.Precio).filter(
+        models.Precio.producto_id.in_(ids_relevantes)
+    ).options(joinedload(models.Precio.supermercado)).all()
+
     precios_por_producto = defaultdict(list)
     urls_por_base = defaultdict(list)
-
     for precio in todos_precios:
         precios_por_producto[precio.producto_id].append(precio)
         if es_url_producto_especifica(precio.url_producto):
-            prod = producto_por_id.get(precio.producto_id)
+            prod = todos_relevantes.get(precio.producto_id)
             if prod and prod.producto_base:
                 urls_por_base[(precio.supermercado_id, prod.producto_base)].append(precio)
-
-    productos = [
-        p for p in todos_productos
-        if all(palabra in normalizar_texto(p.nombre) for palabra in palabras)
-        and (not familia_buscada or detectar_familia(normalizar_texto(p.nombre)) == familia_buscada)
-        and not ("azucar" in palabras and "sin azucar" in normalizar_texto(p.nombre))
-    ]
 
     resultado = []
     grupos_vistos = set()
     grupos_por_clave = defaultdict(list)
 
-    for candidato in todos_productos:
+    for candidato in todos_relevantes.values():
         grupos_por_clave[clave_comparable(candidato)].append(candidato)
 
     for producto in productos:

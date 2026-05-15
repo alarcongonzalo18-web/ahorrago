@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session
+from collections import defaultdict
+from sqlalchemy.orm import Session, joinedload
 from .models import Producto, Precio
 
 
@@ -55,12 +56,16 @@ def comparar_lista(db: Session, lista_productos):
         productos_equivalentes = buscar_productos_equivalentes(db, producto)
         mejor_por_supermercado = {}
 
-        for producto_equivalente in productos_equivalentes:
-            precios = db.query(Precio).filter(
-                Precio.producto_id == producto_equivalente.id
-            ).all()
+        ids = [p.id for p in productos_equivalentes]
+        precios_all = db.query(Precio).filter(
+            Precio.producto_id.in_(ids)
+        ).options(joinedload(Precio.supermercado)).all()
+        precios_por_id = defaultdict(list)
+        for p in precios_all:
+            precios_por_id[p.producto_id].append(p)
 
-            for precio in precios:
+        for producto_equivalente in productos_equivalentes:
+            for precio in precios_por_id[producto_equivalente.id]:
                 valor = _valor_precio(precio)
                 supermercado = precio.supermercado.nombre
 
