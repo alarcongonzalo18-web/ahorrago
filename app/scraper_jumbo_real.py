@@ -1,318 +1,279 @@
 import csv
-import math
-import re
+import json
 import time
+import http.client
+import urllib.error
+import urllib.request
 from pathlib import Path
-from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-
+from urllib.parse import urlencode, quote
 
 BASE_URL = "https://www.jumbo.cl"
+API_URL = "https://ac.cnstrc.com/search/{query}"
+API_KEY = "key_JopvNXKS61kwGkBe"
 OUTPUT = Path("data/jumbo_real.csv")
+PAGE_SIZE = 100
 
 CATEGORIAS = [
     # Lácteos y refrigerados
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Leche",           "path": "/lacteos-huevos-y-congelados/leches"},
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Huevos",          "path": "/busqueda?ft=huevos"},
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Yogurt",          "path": "/busqueda?ft=yogurt"},
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Quesos",          "path": "/busqueda?ft=queso"},
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Mantequilla",     "path": "/busqueda?ft=mantequilla"},
-    {"categoria": "Lacteos, Huevos y Congelados", "subcategoria": "Crema",           "path": "/busqueda?ft=crema"},
+    ("Lacteos, Huevos y Congelados", "Leche",           "leche"),
+    ("Lacteos, Huevos y Congelados", "Huevos",          "huevos"),
+    ("Lacteos, Huevos y Congelados", "Yogurt",          "yogurt"),
+    ("Lacteos, Huevos y Congelados", "Quesos",          "queso"),
+    ("Lacteos, Huevos y Congelados", "Mantequilla",     "mantequilla"),
+    ("Lacteos, Huevos y Congelados", "Crema",           "crema"),
     # Frutas y verduras
-    {"categoria": "Frutas y Verduras",            "subcategoria": "Frutas",          "path": "/frutas-y-verduras/frutas"},
-    {"categoria": "Frutas y Verduras",            "subcategoria": "Verduras",        "path": "/frutas-y-verduras/verduras"},
+    ("Frutas y Verduras",            "Frutas",          "fruta"),
+    ("Frutas y Verduras",            "Verduras",        "verdura"),
     # Carnes y pescados
-    {"categoria": "Carnes y Pescados",            "subcategoria": "Carnes",          "path": "/carnes-y-aves/carnes"},
-    {"categoria": "Carnes y Pescados",            "subcategoria": "Aves",            "path": "/carnes-y-aves/pollo"},
-    {"categoria": "Carnes y Pescados",            "subcategoria": "Cecinas",         "path": "/cecinas-y-fiambres"},
-    {"categoria": "Carnes y Pescados",            "subcategoria": "Pescados",        "path": "/busqueda?ft=pescado"},
-    {"categoria": "Carnes y Pescados",            "subcategoria": "Mariscos",        "path": "/busqueda?ft=mariscos"},
+    ("Carnes y Pescados",            "Carnes",          "carne"),
+    ("Carnes y Pescados",            "Aves",            "pollo"),
+    ("Carnes y Pescados",            "Cecinas",         "cecinas"),
+    ("Carnes y Pescados",            "Pescados",        "pescado"),
+    ("Carnes y Pescados",            "Mariscos",        "mariscos"),
     # Congelados
-    {"categoria": "Congelados",                   "subcategoria": "Congelados",      "path": "/lacteos-huevos-y-congelados/congelados"},
+    ("Congelados",                   "Congelados",      "congelado"),
     # Despensa
-    {"categoria": "Despensa", "subcategoria": "Arroz y Legumbres", "path": "/despensa/arroz-quinoa-cuscus"},
-    {"categoria": "Despensa", "subcategoria": "Aceites",           "path": "/despensa/aceites-sal-y-condimentos/aceite"},
-    {"categoria": "Despensa", "subcategoria": "Cafe",              "path": "/busqueda?ft=cafe"},
-    {"categoria": "Despensa", "subcategoria": "Azucar",            "path": "/busqueda?ft=azucar"},
-    {"categoria": "Despensa", "subcategoria": "Fideos",            "path": "/busqueda?ft=fideos"},
-    {"categoria": "Despensa", "subcategoria": "Conservas",         "path": "/despensa/conservas"},
-    {"categoria": "Despensa", "subcategoria": "Salsas",            "path": "/busqueda?ft=salsa"},
-    {"categoria": "Despensa", "subcategoria": "Condimentos",       "path": "/despensa/aceites-sal-y-condimentos"},
-    {"categoria": "Despensa", "subcategoria": "Legumbres",         "path": "/busqueda?ft=legumbres"},
+    ("Despensa", "Arroz y Legumbres", "arroz"),
+    ("Despensa", "Aceites",           "aceite"),
+    ("Despensa", "Cafe",              "cafe"),
+    ("Despensa", "Azucar",            "azucar"),
+    ("Despensa", "Fideos",            "fideos"),
+    ("Despensa", "Conservas",         "conservas"),
+    ("Despensa", "Salsas",            "salsa"),
+    ("Despensa", "Condimentos",       "condimento"),
+    ("Despensa", "Legumbres",         "legumbres"),
     # Desayuno y snacks
-    {"categoria": "Desayuno y Snacks", "subcategoria": "Cereales",    "path": "/desayuno-y-cereales/cereales"},
-    {"categoria": "Desayuno y Snacks", "subcategoria": "Galletas",    "path": "/busqueda?ft=galletas"},
-    {"categoria": "Desayuno y Snacks", "subcategoria": "Chocolates",  "path": "/busqueda?ft=chocolate"},
-    {"categoria": "Desayuno y Snacks", "subcategoria": "Snacks",      "path": "/busqueda?ft=snack"},
-    {"categoria": "Desayuno y Snacks", "subcategoria": "Mermeladas",  "path": "/busqueda?ft=mermelada"},
+    ("Desayuno y Snacks", "Cereales",    "cereal"),
+    ("Desayuno y Snacks", "Galletas",    "galleta"),
+    ("Desayuno y Snacks", "Chocolates",  "chocolate"),
+    ("Desayuno y Snacks", "Snacks",      "snack"),
+    ("Desayuno y Snacks", "Mermeladas",  "mermelada"),
     # Bebidas
-    {"categoria": "Bebidas", "subcategoria": "Bebidas",            "path": "/licores-bebidas-y-aguas/bebidas-gaseosas"},
-    {"categoria": "Bebidas", "subcategoria": "Jugos",              "path": "/licores-bebidas-y-aguas/jugos-y-nectares"},
-    {"categoria": "Bebidas", "subcategoria": "Aguas",              "path": "/licores-bebidas-y-aguas/aguas"},
-    {"categoria": "Bebidas", "subcategoria": "Cervezas",           "path": "/licores-bebidas-y-aguas/cervezas"},
-    {"categoria": "Bebidas", "subcategoria": "Vinos",              "path": "/licores-bebidas-y-aguas/vinos"},
-    {"categoria": "Bebidas", "subcategoria": "Bebidas Energeticas","path": "/busqueda?ft=bebida+energetica"},
+    ("Bebidas", "Bebidas",             "bebida gaseosa"),
+    ("Bebidas", "Jugos",               "jugo"),
+    ("Bebidas", "Aguas",               "agua mineral"),
+    ("Bebidas", "Cervezas",            "cerveza"),
+    ("Bebidas", "Vinos",               "vino"),
+    ("Bebidas", "Bebidas Energeticas", "bebida energetica"),
     # Panadería
-    {"categoria": "Panaderia", "subcategoria": "Pan",              "path": "/busqueda?ft=pan"},
+    ("Panaderia", "Pan",               "pan"),
     # Limpieza del hogar
-    {"categoria": "Limpieza", "subcategoria": "Detergentes",       "path": "/busqueda?ft=detergentes"},
-    {"categoria": "Limpieza", "subcategoria": "Papel higienico",   "path": "/busqueda?ft=papel%20higienico"},
-    {"categoria": "Limpieza", "subcategoria": "Limpiadores",       "path": "/busqueda?ft=limpiador"},
-    {"categoria": "Limpieza", "subcategoria": "Lavavajillas",      "path": "/busqueda?ft=lavavajillas"},
-    {"categoria": "Limpieza", "subcategoria": "Suavizantes",       "path": "/busqueda?ft=suavizante"},
-    {"categoria": "Limpieza", "subcategoria": "Blanqueadores",     "path": "/busqueda?ft=blanqueador"},
+    ("Limpieza", "Detergentes",        "detergente"),
+    ("Limpieza", "Papel higienico",    "papel higienico"),
+    ("Limpieza", "Limpiadores",        "limpiador"),
+    ("Limpieza", "Lavavajillas",       "lavavajillas"),
+    ("Limpieza", "Suavizantes",        "suavizante"),
+    ("Limpieza", "Blanqueadores",      "blanqueador"),
     # Higiene personal
-    {"categoria": "Higiene Personal", "subcategoria": "Shampoo",       "path": "/busqueda?ft=shampoo"},
-    {"categoria": "Higiene Personal", "subcategoria": "Acondicionador","path": "/busqueda?ft=acondicionador"},
-    {"categoria": "Higiene Personal", "subcategoria": "Jabon",         "path": "/busqueda?ft=jabon"},
-    {"categoria": "Higiene Personal", "subcategoria": "Desodorantes",  "path": "/busqueda?ft=desodorante"},
-    {"categoria": "Higiene Personal", "subcategoria": "Cuidado Bucal", "path": "/busqueda?ft=pasta+dental"},
-    {"categoria": "Higiene Personal", "subcategoria": "Cuidado Facial","path": "/busqueda?ft=crema+facial"},
+    ("Higiene Personal", "Shampoo",        "shampoo"),
+    ("Higiene Personal", "Acondicionador", "acondicionador"),
+    ("Higiene Personal", "Jabon",          "jabon"),
+    ("Higiene Personal", "Desodorantes",   "desodorante"),
+    ("Higiene Personal", "Cuidado Bucal",  "pasta dental"),
+    ("Higiene Personal", "Cuidado Facial", "crema facial"),
     # Bebé
-    {"categoria": "Bebe", "subcategoria": "Panales",               "path": "/busqueda?ft=panales"},
-    {"categoria": "Bebe", "subcategoria": "Alimentos Bebe",        "path": "/busqueda?ft=alimento+bebe"},
+    ("Bebe", "Panales",                "panales"),
+    ("Bebe", "Alimentos Bebe",         "alimento bebe"),
     # Mascotas
-    {"categoria": "Mascotas", "subcategoria": "Alimento Perros",   "path": "/busqueda?ft=alimento+perro"},
-    {"categoria": "Mascotas", "subcategoria": "Alimento Gatos",    "path": "/busqueda?ft=alimento+gato"},
+    ("Mascotas", "Alimento Perros",    "alimento perro"),
+    ("Mascotas", "Alimento Gatos",     "alimento gato"),
 ]
 
-
-def crear_driver():
-    options = Options()
-    options.add_argument("--headless=new")
-    options.add_argument("--window-size=1366,768")
-    return webdriver.Chrome(options=options)
-
-
-def url_con_pagina(url, pagina):
-    partes = urlsplit(url)
-    query = dict(parse_qsl(partes.query))
-    query["page"] = str(pagina)
-    return urlunsplit((
-        partes.scheme,
-        partes.netloc,
-        partes.path,
-        urlencode(query),
-        partes.fragment
-    ))
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json",
+    "Referer": "https://www.jumbo.cl/",
+}
 
 
-def numero_pagina(url):
-    match = re.search(r"page=(\d+)", url)
-    return int(match.group(1)) if match else 1
+def construir_url(termino, pagina):
+    params = urlencode({
+        "key": API_KEY,
+        "num_results_per_page": PAGE_SIZE,
+        "page": pagina,
+    })
+    return API_URL.format(query=quote(termino)) + "?" + params
 
 
-def detectar_urls_paginas(driver):
-    urls = []
-
-    for link in driver.find_elements(By.CSS_SELECTOR, ".select-page-dropdown-content a[href*='page=']"):
-        href = link.get_attribute("href")
-        if href:
-            urls.append(href)
-
-    if urls:
-        return sorted(set(urls), key=numero_pagina)
-
-    texto_pagina = driver.find_element(By.TAG_NAME, "body").text
-    match = re.search(r"P.gina\s+1\s+de\s+(\d+)", texto_pagina)
-
-    if match:
-        total_paginas = int(match.group(1))
-        return [url_con_pagina(driver.current_url, pagina) for pagina in range(1, total_paginas + 1)]
-
-    match = re.search(r"(\d+)\s+productos", texto_pagina)
-
-    if not match:
-        return [driver.current_url]
-
-    total_productos = int(match.group(1))
-    total_paginas = max(1, math.ceil(total_productos / 40))
-    return [url_con_pagina(driver.current_url, pagina) for pagina in range(1, total_paginas + 1)]
-
-
-def obtener_url_producto(item):
-    try:
-        link = item.find_element(By.CSS_SELECTOR, "a[href*='/p']")
-        href = link.get_attribute("href")
-        return urljoin(BASE_URL, href) if href else ""
-    except Exception:
-        return ""
-
-
-def obtener_imagen_producto(item):
-    try:
-        imagen = item.find_element(By.CSS_SELECTOR, "img")
-        src = (
-            imagen.get_attribute("src") or
-            imagen.get_attribute("data-src") or
-            imagen.get_attribute("data-lazy-src")
-        )
-        if src:
-            return urljoin(BASE_URL, src)
-
-        srcset = imagen.get_attribute("srcset") or ""
-        if srcset:
-            primera = srcset.split(",")[0].strip().split(" ")[0]
-            return urljoin(BASE_URL, primera)
-    except Exception:
-        return ""
-
-    return ""
-
-
-def quitar_precios_referencia(texto):
-    texto = texto or ""
-    texto = re.sub(
-        r"\(\s*\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+\s*\)",
-        "",
-        texto,
-        flags=re.IGNORECASE,
-    )
-    texto = re.sub(
-        r"\$?\s*[\d.]+\s*(?:/|x)\s*[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+",
-        "",
-        texto,
-        flags=re.IGNORECASE,
-    )
-    return texto
-
-
-def extraer_precios_desde_texto(texto, precio_respaldo):
-    texto = quitar_precios_referencia(texto)
-    valores = [
-        int(valor.replace(".", ""))
-        for valor in re.findall(r"\$\s*([\d.]+)", texto or "")
-    ]
-    valores = [valor for valor in valores if valor > 0]
-
-    if not valores:
-        precio = int(float(precio_respaldo))
-        return precio, ""
-
-    precio_actual = min(valores)
-    precio_normal = max(valores)
-
-    if precio_normal > precio_actual:
-        return precio_normal, precio_actual
-
-    return precio_actual, ""
-
-
-def extraer_precio_referencia(texto):
-    match = re.search(
-        r"\$?\s*([\d.]+)\s*(?:/|x)\s*([A-Za-zÁÉÍÓÚáéíóúñÑ0-9.]+)",
-        texto or "",
-        flags=re.IGNORECASE,
-    )
-    if match:
-        return f"${match.group(1)} / {match.group(2)}"
-
-    for linea in (texto or "").splitlines():
-        if "/" in linea and "$" in linea:
-            return linea.strip()
-
-    return ""
-
-
-def recolectar_productos(driver, productos, vistos, categoria, subcategoria):
-    items = driver.find_elements(By.CSS_SELECTOR, ".shelf-content [data-cnstrc-item-name][data-cnstrc-item-price]")
-
-    for item in items:
+def descargar(url, intentos=4):
+    req = urllib.request.Request(url, headers=HEADERS)
+    ultimo_error = None
+    for intento in range(1, intentos + 1):
         try:
-            nombre = item.get_attribute("data-cnstrc-item-name")
-            precio = item.get_attribute("data-cnstrc-item-price")
-            url = obtener_url_producto(item)
-            imagen = obtener_imagen_producto(item)
-            texto = item.text
-            precio_normal, precio_oferta = extraer_precios_desde_texto(texto, precio)
-            precio_referencia = extraer_precio_referencia(texto)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.URLError, http.client.HTTPException, TimeoutError) as exc:
+            ultimo_error = exc
+            if intento < intentos:
+                time.sleep(2 * intento)
+    raise RuntimeError(f"Error descargando {url}: {ultimo_error}")
 
-            if not nombre or not precio:
+
+def _parsear_sku(sku_raw):
+    try:
+        if not sku_raw:
+            return {}
+        sku = json.loads(sku_raw[0])
+        sku_id = list(sku.keys())[0]
+        return sku[sku_id]
+    except Exception:
+        return {}
+
+
+def _precio_referencia(precio, sku_info):
+    unidad = sku_info.get("measurement_unit_un", "")
+    multiplicador = sku_info.get("unit_multiplier_un", 1)
+    if not unidad or unidad == "un" or not precio or not multiplicador:
+        return ""
+    try:
+        valor = int(precio / float(multiplicador))
+        return f"${valor:,} / {unidad}".replace(",", ".")
+    except Exception:
+        return ""
+
+
+def extraer_producto(resultado, categoria, subcategoria):
+    nombre = (resultado.get("value") or "").strip()
+    if not nombre:
+        return None
+
+    d = resultado.get("data", {})
+    precio_raw = d.get("price")
+    if not precio_raw:
+        return None
+
+    try:
+        precio_actual = int(float(precio_raw))
+    except (ValueError, TypeError):
+        return None
+
+    url = d.get("url") or d.get("DetailUrl") or ""
+    if url and not url.startswith("http"):
+        url = BASE_URL + url
+
+    imagenes = d.get("images", [])
+    imagen = imagenes[0] if imagenes else ""
+
+    sku_info = _parsear_sku(d.get("SkuData", []))
+    promos = sku_info.get("promotions", [])
+
+    precio_normal = precio_actual
+    precio_oferta = ""
+    promocion = ""
+
+    if promos:
+        promo = promos[0]
+        precio_original = promo.get("price_from") or promo.get("original_price")
+        if precio_original:
+            try:
+                precio_original_int = int(float(precio_original))
+                if precio_original_int > precio_actual:
+                    precio_normal = precio_original_int
+                    precio_oferta = precio_actual
+                    promocion = promo.get("name") or "Oferta"
+            except (ValueError, TypeError):
+                pass
+
+    precio_ref = _precio_referencia(precio_actual, sku_info)
+
+    return {
+        "categoria":        categoria,
+        "subcategoria":     subcategoria,
+        "nombre":           nombre,
+        "precio":           precio_oferta if precio_oferta else precio_normal,
+        "precio_normal":    precio_normal,
+        "precio_oferta":    precio_oferta,
+        "precio_referencia": precio_ref,
+        "promocion":        promocion,
+        "url":              url,
+        "imagen_url":       imagen,
+    }
+
+
+def scrape_categoria(categoria, subcategoria, termino):
+    productos = []
+    vistos = set()
+    pagina = 1
+    total = None
+
+    print(f"Scrapeando Jumbo (API) {subcategoria}...")
+
+    while True:
+        url = construir_url(termino, pagina)
+        try:
+            data = descargar(url)
+        except RuntimeError as e:
+            print(f"  Error: {e}")
+            break
+
+        response = data.get("response", {})
+        if total is None:
+            total = response.get("total_num_results")
+
+        resultados = response.get("results", [])
+        if not resultados:
+            break
+
+        for r in resultados:
+            producto = extraer_producto(r, categoria, subcategoria)
+            if not producto:
                 continue
-
-            key = (categoria, subcategoria, nombre, precio, url)
+            key = (producto["nombre"], producto["precio"], producto["url"])
             if key in vistos:
                 continue
-
             vistos.add(key)
-            productos.append({
-                "categoria": categoria,
-                "subcategoria": subcategoria,
-                "nombre": nombre,
-                "precio": precio_oferta or precio_normal,
-                "precio_normal": precio_normal,
-                "precio_oferta": precio_oferta,
-                "precio_referencia": precio_referencia,
-                "promocion": "Oferta" if precio_oferta else "",
-                "url": url,
-                "imagen_url": imagen
-            })
-        except Exception:
-            continue
+            productos.append(producto)
+
+        obtenidos = (pagina - 1) * PAGE_SIZE + len(resultados)
+        print(f"  pagina {pagina} -> {len(productos)} productos" + (f" / {total} totales" if total else ""))
+
+        if total and obtenidos >= total:
+            break
+        if len(resultados) < PAGE_SIZE:
+            break
+
+        pagina += 1
+        time.sleep(0.3)
+
+    return productos
 
 
-def guardar_productos(productos):
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-
-    with open(OUTPUT, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=[
-                "categoria",
-                "subcategoria",
-                "nombre",
-                "precio",
-                "precio_normal",
-                "precio_oferta",
-                "precio_referencia",
-                "promocion",
-                "url",
-                "imagen_url",
-            ]
-        )
+def guardar_productos(productos, path=OUTPUT):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = [
+        "categoria", "subcategoria", "nombre", "precio",
+        "precio_normal", "precio_oferta", "precio_referencia",
+        "promocion", "url", "imagen_url",
+    ]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(productos)
 
 
-def main():
-    driver = crear_driver()
-    productos = []
-    vistos = set()
+def main(categorias=None):
+    todos = []
+    vistos_global = set()
+    cats = categorias or CATEGORIAS
 
-    try:
-        for bloque in CATEGORIAS:
-            categoria = bloque["categoria"]
-            subcategoria = bloque["subcategoria"]
-            url_categoria = urljoin(BASE_URL, bloque["path"])
+    for categoria, subcategoria, termino in cats:
+        try:
+            for prod in scrape_categoria(categoria, subcategoria, termino):
+                key = (prod["nombre"], prod["precio"], prod["url"])
+                if key in vistos_global:
+                    continue
+                vistos_global.add(key)
+                todos.append(prod)
+        except Exception as e:
+            print(f"Error en {subcategoria}: {e}. Continuando...")
 
-            try:
-                driver.get(url_categoria)
-                time.sleep(5)
-                urls_paginas = detectar_urls_paginas(driver)
-
-                print(f"{subcategoria}: {len(urls_paginas)} paginas")
-
-                for pagina_url in urls_paginas:
-                    driver.get(pagina_url)
-                    time.sleep(4)
-                    recolectar_productos(
-                        driver,
-                        productos,
-                        vistos,
-                        categoria,
-                        subcategoria
-                    )
-                    print(f"{pagina_url} -> {len(productos)} acumulados")
-            except Exception as e:
-                print(f"Error en {subcategoria} ({url_categoria}): {e}. Continuando...")
-    finally:
-        driver.quit()
-
-    guardar_productos(productos)
-    print(f"{len(productos)} productos guardados")
+    guardar_productos(todos)
+    print(f"\n{len(todos)} productos Jumbo guardados en {OUTPUT}")
+    return todos
 
 
 if __name__ == "__main__":
