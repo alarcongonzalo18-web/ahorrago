@@ -31,7 +31,7 @@ class Producto(Base):
     __tablename__ = "productos"
 
     id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String, nullable=False)
+    nombre = Column(String, nullable=False, index=True)
 
     categoria_id = Column(Integer, ForeignKey("categorias.id"))
     subcategoria_id = Column(Integer, ForeignKey("subcategorias.id"))
@@ -49,8 +49,8 @@ class Precio(Base):
     __tablename__ = "precios"
 
     id = Column(Integer, primary_key=True, index=True)
-    producto_id = Column(Integer, ForeignKey("productos.id"))
-    supermercado_id = Column(Integer, ForeignKey("supermercados.id"))
+    producto_id = Column(Integer, ForeignKey("productos.id"), index=True)
+    supermercado_id = Column(Integer, ForeignKey("supermercados.id"), index=True)
 
     precio_normal = Column(Float)
     precio_oferta = Column(Float, nullable=True)
