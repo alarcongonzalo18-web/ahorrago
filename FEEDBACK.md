@@ -28,3 +28,20 @@
 - "Mejor supermercado" se calcula correctamente
 - Búsqueda devuelve resultados (24 comparables para "yogurt")
 - Vista de comparación entre 3 supermercados es clara
+
+## Búsquedas reales del primer beta tester
+Capturadas en los logs de uvicorn (IP 192.168.100.69)
+
+### Lo que buscó:
+- Categorías típicas: leche, yogurt, queso
+- Marcas reconocidas: Trencito (×2), Chocolate, Coca-Cola
+
+### Patrones identificados:
+- **El usuario buscó por MARCA**, no solo por categoría genérica
+- **"Trencito" se buscó 2 veces** → posiblemente los primeros resultados no fueron satisfactorios
+- **La app maneja correctamente nombres con espacios** (Coca cola → %20)
+
+### Implicaciones para próximas iteraciones:
+- Considerar autocomplete con marcas populares
+- Investigar resultados de "Trencito" — ¿la búsqueda no agrupa bien las galletas Trencito?
+- Confirmar que tildes y caracteres especiales se manejen bien
