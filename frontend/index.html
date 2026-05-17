@@ -2954,16 +2954,19 @@ function renderFilaTabla(producto) {
             <td>${escapeHtml(mejor.supermercado)}</td>
             <td>${formatearPrecio(ahorro)}</td>
             <td>
-                <button
-                    class="details-btn primary ${estaAgregado ? "added" : ""}"
-                    type="button"
-                    data-add-product="${producto.id}"
-                    onclick="agregarACompra(${producto.id})"
-                    ${estaAgregado ? "disabled" : ""}
-                >
-                    <i data-lucide="${estaAgregado ? "check" : "shopping-cart"}"></i>
-                    <span>${estaAgregado ? "Agregado" : "Agregar"}</span>
-                </button>
+                <div style="display:flex; flex-direction:column; gap:6px">
+                    <button
+                        class="details-btn primary ${estaAgregado ? "added" : ""}"
+                        type="button"
+                        data-add-product="${producto.id}"
+                        onclick="agregarACompra(${producto.id})"
+                        ${estaAgregado ? "disabled" : ""}
+                    >
+                        <i data-lucide="${estaAgregado ? "check" : "shopping-cart"}"></i>
+                        <span>${estaAgregado ? "Agregado" : "Agregar"}</span>
+                    </button>
+                    ${mejor.url ? `<a class="buy-btn" href="${escapeHtml(mejor.url)}" target="_blank" rel="noopener"><i data-lucide="external-link"></i> Ver</a>` : ""}
+                </div>
             </td>
         </tr>
     `;
