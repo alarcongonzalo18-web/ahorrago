@@ -1727,6 +1727,34 @@ body.dark .buy-btn:hover {
     .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.qty-btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--ink);
+    flex-shrink: 0;
+}
+
+.qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.qty-num {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
 @media (max-width: 1024px) {
     .topbar,
     .home-intro,
@@ -2340,7 +2368,9 @@ const store = {
     }
 };
 
-let carritoCompra = store.get("ahorrago-carrito", []);
+let carritoCompra = store.get("ahorrago-carrito", []).map(item =>
+    item.cantidad !== undefined ? item : { ...item, cantidad: 1 }
+);
 
 function renderIcons() {
     if (window.lucide && typeof window.lucide.createIcons === "function") {
@@ -2633,8 +2663,8 @@ function actualizarDashboard(productosCompra = carritoCompra, productosEncontrad
         mejor: producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0])
     })).filter(item => item.mejor);
 
-    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio, 0);
-    const totalCaro = productosCompra.reduce((total, producto) => total + Math.max(...producto.precios.map(precio => precio.precio)), 0);
+    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio * (item.producto.cantidad || 1), 0);
+    const totalCaro = productosCompra.reduce((total, producto) => total + Math.max(...producto.precios.map(precio => precio.precio)) * (producto.cantidad || 1), 0);
     const ahorro = Math.max(0, totalCaro - totalOptimo);
     const conteoMercados = {};
 
@@ -2987,15 +3017,32 @@ function agregarACompra(id) {
     const producto = productosVisibles.find(item => item.id === id);
     if (!producto) return;
 
-    if (!carritoCompra.some(item => item.id === producto.id)) {
-        carritoCompra.push(producto);
-        store.set("ahorrago-carrito", carritoCompra);
+    const existente = carritoCompra.find(item => item.id === producto.id);
+    if (existente) {
+        if (existente.cantidad < 99) existente.cantidad++;
+    } else {
+        carritoCompra.push({ ...producto, cantidad: 1 });
     }
-
+    store.set("ahorrago-carrito", carritoCompra);
     renderCompraOptima();
     actualizarDashboard(carritoCompra);
     actualizarEstadoCarrito();
     mostrarToast("Producto agregado a la compra");
+}
+
+function cambiarCantidad(id, delta) {
+    const item = carritoCompra.find(p => p.id === id);
+    if (!item) return;
+    const nueva = item.cantidad + delta;
+    if (nueva <= 0) {
+        quitarDeCompra(id);
+        return;
+    }
+    item.cantidad = Math.min(nueva, 99);
+    store.set("ahorrago-carrito", carritoCompra);
+    renderCompraOptima();
+    actualizarDashboard(carritoCompra);
+    actualizarEstadoCarrito();
 }
 
 function quitarDeCompra(id) {
@@ -3020,7 +3067,7 @@ function renderCompraOptima() {
         producto,
         mejor: producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0])
     })).filter(item => item.mejor);
-    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio, 0);
+    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio * item.producto.cantidad, 0);
 
     document.getElementById("totalOptimo").textContent = formatearPrecio(totalOptimo);
     document.getElementById("compraOptima").innerHTML = optimos.map(item => `
@@ -3031,8 +3078,21 @@ function renderCompraOptima() {
                 <div class="optimal-meta">${escapeHtml(item.producto.formato || "")}<br>${escapeHtml(item.mejor.supermercado)}</div>
             </div>
             <div>
-                <div class="optimal-price">${formatearPrecio(item.mejor.precio)}</div>
-                <button class="link-clear p-0" type="button" onclick="quitarDeCompra(${item.producto.id})">Quitar</button>
+                <div class="optimal-price">${formatearPrecio(item.mejor.precio * item.producto.cantidad)}</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" type="button"
+                        onclick="cambiarCantidad(${item.producto.id}, -1)"
+                        aria-label="${item.producto.cantidad === 1 ? "Quitar producto" : "Reducir cantidad"}">
+                        ${item.producto.cantidad === 1 ? "<i data-lucide='trash-2'></i>" : "<i data-lucide='minus'></i>"}
+                    </button>
+                    <span class="qty-num">${item.producto.cantidad}</span>
+                    <button class="qty-btn" type="button"
+                        onclick="cambiarCantidad(${item.producto.id}, 1)"
+                        aria-label="Aumentar cantidad"
+                        ${item.producto.cantidad >= 99 ? "disabled" : ""}>
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
             </div>
         </div>
     `).join("") || "<p class='text-muted-app mb-0'>Agrega productos desde los resultados.</p>";
@@ -3064,15 +3124,16 @@ function calcularTotalesSupermercado(productos) {
     const mercados = ["Líder", "Jumbo", "Unimarc"];
 
     return mercados.map(mercado => {
-        const precios = productos
-            .map(producto => producto.precios.find(precio => precio.supermercado === mercado))
-            .filter(Boolean);
+        const items = productos.map(producto => ({
+            precio: producto.precios.find(p => p.supermercado === mercado),
+            cantidad: producto.cantidad || 1
+        })).filter(item => item.precio);
 
         return {
             mercado,
-            completos: precios.length === productos.length,
-            cantidad: precios.length,
-            total: precios.reduce((suma, precio) => suma + Number(precio.precio || 0), 0)
+            completos: items.length === productos.length,
+            cantidad: items.length,
+            total: items.reduce((suma, item) => suma + Number(item.precio.precio || 0) * item.cantidad, 0)
         };
     }).filter(item => item.cantidad > 0);
 }
