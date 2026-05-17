@@ -2418,6 +2418,7 @@ async function buscar() {
 
     guardarHistorial(texto);
     contenedor.innerHTML = "<div class='empty-state'>Buscando mejores precios...</div>";
+    contenedor.scrollIntoView({ behavior: "smooth", block: "start" });
 
     productosActuales = productosCategoriaCache[texto] || await obtenerProductosCategoria(texto);
     sugerirCategoriaDesdeBusqueda(texto);
