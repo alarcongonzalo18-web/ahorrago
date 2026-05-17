@@ -1727,7 +1727,7 @@ body.dark .buy-btn:hover {
     .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
     .topbar,
     .home-intro,
     .summary-grid,
@@ -1769,10 +1769,10 @@ body.dark .buy-btn:hover {
     }
 
     .icon-btn { width: 36px; height: 36px; }
-    .home-intro {
-        align-items: start;
-        margin-top: 0;
-    }
+    .home-intro { display: none; }
+    .summary-grid { display: none; }
+    .panel-card:has(#estadoDatos),
+    .panel-card:has(.reason-list) { display: none; }
     .home-title { font-size: 28px; }
     .home-subtitle { font-size: 14px; }
     .home-actions {
