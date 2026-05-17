@@ -939,3 +939,147 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
         })
 
     return resultado
+
+
+def calcular_resumen_compra(db, items):
+    ids = [item.producto_id for item in items]
+
+    productos = db.query(models.Producto).filter(
+        models.Producto.id.in_(ids)
+    ).all()
+    producto_por_id = {p.id: p for p in productos}
+
+    precios_todos = db.query(models.Precio).filter(
+        models.Precio.producto_id.in_(ids)
+    ).options(joinedload(models.Precio.supermercado)).all()
+
+    precios_por_producto = defaultdict(list)
+    for precio in precios_todos:
+        producto = producto_por_id.get(precio.producto_id)
+        if producto and precio_valido_para_comparar(producto, precio):
+            precios_por_producto[precio.producto_id].append(precio)
+
+    mejor_precio_por_super = {}
+    todos_supers = set()
+    for pid, precios_list in precios_por_producto.items():
+        producto = producto_por_id[pid]
+        for p in precios_list:
+            sname = p.supermercado.nombre
+            todos_supers.add(sname)
+            val = valor_precio_producto(producto, p)
+            key = (pid, sname)
+            if key not in mejor_precio_por_super or val < mejor_precio_por_super[key]:
+                mejor_precio_por_super[key] = val
+
+    total_optimo = 0
+    distribucion = defaultdict(lambda: {"cantidad": 0, "subtotal": 0})
+    productos_sin_comparacion = []
+
+    for item in items:
+        pid = item.producto_id
+        cantidad = item.cantidad
+        producto = producto_por_id.get(pid)
+
+        if not producto:
+            productos_sin_comparacion.append({"id": pid, "nombre": "Producto no encontrado"})
+            continue
+
+        precios_prod = precios_por_producto.get(pid, [])
+        if not precios_prod:
+            productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
+            continue
+
+        supers_disponibles = {p.supermercado.nombre for p in precios_prod}
+        if len(supers_disponibles) == 1:
+            productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
+
+        mejor = min(precios_prod, key=lambda p: valor_precio_producto(producto_por_id[p.producto_id], p))
+        valor = valor_precio_producto(producto, mejor)
+        subtotal = valor * cantidad
+
+        total_optimo += subtotal
+        sname = mejor.supermercado.nombre
+        distribucion[sname]["cantidad"] += cantidad
+        distribucion[sname]["subtotal"] += subtotal
+
+    if total_optimo == 0:
+        return {
+            "total_optimo": 0, "ahorro": 0, "porcentaje": 0,
+            "mejor_super_unico": None, "total_mejor_super_unico": None,
+            "distribucion": {}, "tiendas_optimas": 0,
+            "productos_sin_comparacion": productos_sin_comparacion,
+            "recomendacion": "sin_datos",
+            "mensaje": "No encontramos precios para estos productos",
+        }
+
+    ids_con_precios = set(precios_por_producto.keys())
+    totales_super_completo = {}
+    for sname in todos_supers:
+        total = 0
+        completo = True
+        for item in items:
+            if item.producto_id not in ids_con_precios:
+                continue
+            key = (item.producto_id, sname)
+            if key not in mejor_precio_por_super:
+                completo = False
+                break
+            total += mejor_precio_por_super[key] * item.cantidad
+        if completo:
+            totales_super_completo[sname] = total
+
+    if totales_super_completo:
+        mejor_super, total_mejor_super = min(totales_super_completo.items(), key=lambda x: x[1])
+        ahorro = total_mejor_super - total_optimo
+    else:
+        cobertura = {}
+        totales_parciales = {}
+        for sname in todos_supers:
+            cobertura[sname] = sum(
+                1 for item in items if (item.producto_id, sname) in mejor_precio_por_super
+            )
+            totales_parciales[sname] = sum(
+                mejor_precio_por_super[(item.producto_id, sname)] * item.cantidad
+                for item in items if (item.producto_id, sname) in mejor_precio_por_super
+            )
+        max_coverage = max(cobertura.values())
+        supers_con_max = [s for s, c in cobertura.items() if c == max_coverage]
+        mejor_super = min(supers_con_max, key=lambda s: totales_parciales[s])
+        total_mejor_super = None
+        ahorro = 0
+
+    tiendas_optimas = len(distribucion)
+
+    if total_mejor_super is None:
+        recomendacion = "una_tienda"
+        mensaje = f"No encontramos todos los productos en una sola tienda. {mejor_super} tiene la mayor cobertura."
+    elif ahorro < 1000 or tiendas_optimas == 1:
+        recomendacion = "una_tienda"
+        mensaje = f"Te conviene comprar todo en {mejor_super}"
+    elif ahorro < 7000:
+        recomendacion = "ahorro_bajo"
+        mensaje = f"Por ${ahorro:,.0f} de diferencia, conviene comprar todo en {mejor_super}".replace(",", ".")
+    elif ahorro < 15000:
+        recomendacion = "dividir_compra"
+        mensaje = f"Te conviene dividir en {tiendas_optimas} supermercados"
+    else:
+        recomendacion = "dividir_fuerte"
+        mensaje = f"Vale la pena dividir: ahorras ${ahorro:,.0f}".replace(",", ".")
+
+    return {
+        "total_optimo": total_optimo,
+        "ahorro": ahorro,
+        "porcentaje": round(ahorro / total_mejor_super, 4) if total_mejor_super else 0,
+        "mejor_super_unico": mejor_super,
+        "total_mejor_super_unico": total_mejor_super,
+        "distribucion": dict(distribucion),
+        "tiendas_optimas": tiendas_optimas,
+        "productos_sin_comparacion": productos_sin_comparacion,
+        "recomendacion": recomendacion,
+        "mensaje": mensaje,
+    }
+
+
+@app.post("/productos/resumen-compra")
+def resumen_compra(request: schemas.ResumenCompraRequest, db: Session = Depends(get_db)):
+    return calcular_resumen_compra(db, request.items)
