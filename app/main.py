@@ -150,12 +150,7 @@ TOKENS_GENERICOS = {
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+):(5500|3000)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -826,6 +821,8 @@ def _url_especifica_cached(producto, precio, urls_por_base, producto_por_id):
 @app.get("/productos/buscar/{texto}")
 def buscar_productos(texto: str, db: Session = Depends(get_db)):
     palabras = tokens_utiles(texto)
+    if not palabras:
+        return []
     familia_buscada = detectar_familia_busqueda(texto)
 
     # Filtrar en la BD usando los índices (en vez de cargar los 23k productos)
