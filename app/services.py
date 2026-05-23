@@ -3,7 +3,12 @@ from sqlalchemy.orm import Session, joinedload
 from .models import Producto, Precio
 
 
-def _valor_precio(precio):
+def _es_papel_higienico(nombre):
+    texto = nombre.lower()
+    return "papel higienico" in texto or "papel toilet" in texto or "confort" in texto
+
+
+def _valor_precio(producto, precio):
     if (
         precio.precio_oferta and
         precio.precio_normal and
@@ -11,6 +16,16 @@ def _valor_precio(precio):
         precio.precio_normal > precio.precio_oferta * 2
     ):
         return precio.precio_normal
+
+    if (
+        _es_papel_higienico(producto.nombre) and
+        precio.precio_oferta and
+        precio.precio_normal and
+        precio.precio_oferta < 500 and
+        precio.precio_normal >= 500
+    ):
+        return precio.precio_normal
+
     return precio.precio_oferta if precio.precio_oferta else precio.precio_normal
 
 
@@ -66,7 +81,7 @@ def comparar_lista(db: Session, lista_productos):
 
         for producto_equivalente in productos_equivalentes:
             for precio in precios_por_id[producto_equivalente.id]:
-                valor = _valor_precio(precio)
+                valor = _valor_precio(producto_equivalente, precio)
                 supermercado = precio.supermercado.nombre
 
                 mejor_actual = mejor_por_supermercado.get(supermercado)

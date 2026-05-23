@@ -13,8 +13,6 @@ Base.metadata.create_all(bind=engine)
 
 CSV_PATH = Path("data/productos_supermercados.csv")
 
-db = SessionLocal()
-
 
 def generar_producto_base(nombre, marca, tipo, formato):
     def normalizar_texto(valor):
@@ -119,7 +117,7 @@ def limpiar_numero(valor):
     return float(numeros) if numeros else None
 
 
-def obtener_o_crear_supermercado(nombre):
+def obtener_o_crear_supermercado(db, nombre):
     item = db.query(Supermercado).filter(Supermercado.nombre == nombre).first()
     if item:
         return item
@@ -131,7 +129,7 @@ def obtener_o_crear_supermercado(nombre):
     return item
 
 
-def obtener_o_crear_categoria(nombre):
+def obtener_o_crear_categoria(db, nombre):
     item = db.query(Categoria).filter(Categoria.nombre == nombre).first()
     if item:
         return item
@@ -143,7 +141,7 @@ def obtener_o_crear_categoria(nombre):
     return item
 
 
-def obtener_o_crear_subcategoria(nombre, categoria_id):
+def obtener_o_crear_subcategoria(db, nombre, categoria_id):
     item = db.query(Subcategoria).filter(
         Subcategoria.nombre == nombre,
         Subcategoria.categoria_id == categoria_id
@@ -159,7 +157,7 @@ def obtener_o_crear_subcategoria(nombre, categoria_id):
     return item
 
 
-def obtener_o_crear_producto(nombre, categoria_id, subcategoria_id, marca, tipo, formato):
+def obtener_o_crear_producto(db, nombre, categoria_id, subcategoria_id, marca, tipo, formato):
     item = db.query(Producto).filter(Producto.nombre == nombre).first()
     if item:
         item.categoria_id = categoria_id
@@ -195,72 +193,75 @@ def importar_productos():
         print("No se encontro el archivo:", CSV_PATH)
         return
 
-    with open(CSV_PATH, newline="", encoding="utf-8-sig") as archivo:
-        lector = csv.DictReader(archivo)
+    db = SessionLocal()
+    try:
+        with open(CSV_PATH, newline="", encoding="utf-8-sig") as archivo:
+            lector = csv.DictReader(archivo)
 
-        for fila in lector:
-            supermercado = obtener_o_crear_supermercado(fila["supermercado"].strip())
-            categoria = obtener_o_crear_categoria(fila["categoria"].strip())
-            subcategoria = obtener_o_crear_subcategoria(
-                fila["subcategoria"].strip(),
-                categoria.id
-            )
-
-            producto = obtener_o_crear_producto(
-                nombre=fila["nombre"].strip(),
-                categoria_id=categoria.id,
-                subcategoria_id=subcategoria.id,
-                marca=fila["marca"].strip(),
-                tipo=fila["tipo"].strip(),
-                formato=fila["formato"].strip()
-            )
-            producto_base_csv = (fila.get("producto_base") or "").strip()
-            producto.producto_base = producto_base_csv or generar_producto_base(
-                fila["nombre"],
-                fila["marca"],
-                fila["tipo"],
-                fila["formato"]
-            )
-            db.commit()
-
-            precio_normal = limpiar_numero(fila.get("precio_normal")) or limpiar_numero(fila.get("precio")) or 0
-            precio_oferta = limpiar_numero(fila.get("precio_oferta"))
-
-            if precio_oferta and precio_oferta >= precio_normal:
-                precio_oferta = None
-
-            precio_existente = db.query(Precio).filter(
-                Precio.producto_id == producto.id,
-                Precio.supermercado_id == supermercado.id
-            ).first()
-
-            if precio_existente:
-                precio_existente.precio_normal = precio_normal
-                precio_existente.precio_oferta = precio_oferta
-                precio_existente.precio_referencia = fila.get("precio_referencia")
-                precio_existente.promocion = fila.get("promocion")
-                precio_existente.url_producto = fila.get("url")
-                precio_existente.imagen_url = fila.get("imagen_url")
-            else:
-                nuevo_precio = Precio(
-                    producto_id=producto.id,
-                    supermercado_id=supermercado.id,
-                    precio_normal=precio_normal,
-                    precio_oferta=precio_oferta,
-                    precio_referencia=fila.get("precio_referencia"),
-                    promocion=fila.get("promocion"),
-                    url_producto=fila.get("url"),
-                    imagen_url=fila.get("imagen_url")
+            for fila in lector:
+                supermercado = obtener_o_crear_supermercado(db, fila["supermercado"].strip())
+                categoria = obtener_o_crear_categoria(db, fila["categoria"].strip())
+                subcategoria = obtener_o_crear_subcategoria(
+                    db,
+                    fila["subcategoria"].strip(),
+                    categoria.id
                 )
-                db.add(nuevo_precio)
 
-            db.commit()
+                producto = obtener_o_crear_producto(
+                    db,
+                    nombre=fila["nombre"].strip(),
+                    categoria_id=categoria.id,
+                    subcategoria_id=subcategoria.id,
+                    marca=fila["marca"].strip(),
+                    tipo=fila["tipo"].strip(),
+                    formato=fila["formato"].strip()
+                )
+                producto_base_csv = (fila.get("producto_base") or "").strip()
+                producto.producto_base = producto_base_csv or generar_producto_base(
+                    fila["nombre"],
+                    fila["marca"],
+                    fila["tipo"],
+                    fila["formato"]
+                )
+                db.commit()
 
-    print("Productos importados correctamente.")
+                precio_normal = limpiar_numero(fila.get("precio_normal")) or limpiar_numero(fila.get("precio")) or 0
+                precio_oferta = limpiar_numero(fila.get("precio_oferta"))
+
+                if precio_oferta and precio_oferta >= precio_normal:
+                    precio_oferta = None
+
+                precio_existente = db.query(Precio).filter(
+                    Precio.producto_id == producto.id,
+                    Precio.supermercado_id == supermercado.id
+                ).first()
+
+                if precio_existente:
+                    precio_existente.precio_normal = precio_normal
+                    precio_existente.precio_oferta = precio_oferta
+                    precio_existente.precio_referencia = fila.get("precio_referencia")
+                    precio_existente.promocion = fila.get("promocion")
+                    precio_existente.url_producto = fila.get("url")
+                    precio_existente.imagen_url = fila.get("imagen_url")
+                else:
+                    nuevo_precio = Precio(
+                        producto_id=producto.id,
+                        supermercado_id=supermercado.id,
+                        precio_normal=precio_normal,
+                        precio_oferta=precio_oferta,
+                        precio_referencia=fila.get("precio_referencia"),
+                        promocion=fila.get("promocion"),
+                        url_producto=fila.get("url"),
+                        imagen_url=fila.get("imagen_url")
+                    )
+                    db.add(nuevo_precio)
+
+                db.commit()
+
+        print("Productos importados correctamente.")
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
-    try:
-        importar_productos()
-    finally:
-        db.close()
+    importar_productos()

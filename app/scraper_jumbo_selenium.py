@@ -189,7 +189,7 @@ def extraer_precios_desde_texto(texto, precio_respaldo):
     valores = [valor for valor in valores if valor > 0]
 
     if not valores:
-        precio = int(float(precio_respaldo))
+        precio = round(float(precio_respaldo))
         return precio, ""
 
     precio_actual = min(valores)

@@ -172,7 +172,7 @@ def inicio():
 
 @app.get("/buscar/{texto}")
 def buscar(texto: str, db: Session = Depends(get_db)):
-    return services.buscar_opciones_producto(db, texto)
+    return services.buscar_opciones_producto(db, texto[:100])
 
 
 @app.post("/comparar")
@@ -820,6 +820,7 @@ def _url_especifica_cached(producto, precio, urls_por_base, producto_por_id):
 
 @app.get("/productos/buscar/{texto}")
 def buscar_productos(texto: str, db: Session = Depends(get_db)):
+    texto = texto[:100]
     palabras = tokens_utiles(texto)
     if not palabras:
         return []

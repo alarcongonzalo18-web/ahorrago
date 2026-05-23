@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import time
 import http.client
 import urllib.error
@@ -9,7 +10,7 @@ from urllib.parse import urlencode, quote
 
 BASE_URL = "https://www.jumbo.cl"
 API_URL = "https://ac.cnstrc.com/search/{query}"
-API_KEY = "key_JopvNXKS61kwGkBe"
+API_KEY = os.environ.get("JUMBO_API_KEY", "key_JopvNXKS61kwGkBe")
 OUTPUT = Path("data/jumbo_real.csv")
 PAGE_SIZE = 100
 
@@ -147,7 +148,7 @@ def extraer_producto(resultado, categoria, subcategoria):
         return None
 
     try:
-        precio_actual = int(float(precio_raw))
+        precio_actual = round(float(precio_raw))
     except (ValueError, TypeError):
         return None
 
