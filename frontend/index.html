@@ -2734,7 +2734,7 @@ function productoPerteneceASubcategoria(producto, categoria, subcategoria) {
 
 async function obtenerProductosCategoria(categoria) {
     if (productosCategoriaCache[categoria]) return productosCategoriaCache[categoria];
-    const res = await fetch(`${API}/productos/buscar/${encodeURIComponent(categoria)}`);
+    const res = await fetch(`${API}/productos/buscar/${encodeURIComponent(categoria)}?limit=50&offset=0`);
     const productos = await res.json();
     productosCategoriaCache[categoria] = productos;
     return productos;

@@ -1,0 +1,156 @@
+[
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Leche Soprole Entera 1 L",
+    "marca": "Soprole",
+    "formato": "1 L",
+    "producto_base": "leche_soprole_entera_1l"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Leche Soprole Entera 1000 ml",
+    "marca": "Soprole",
+    "formato": "1000 ml",
+    "producto_base": "leche_soprole_entera_1l"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Bebida Coca-Cola Original 1.5 L",
+    "marca": "Coca-Cola",
+    "formato": "1.5 L",
+    "producto_base": "bebida_coca_cola_original_1_5l"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Bebida Coca Cola Original 1500 ml",
+    "marca": "Coca Cola",
+    "formato": "1500 ml",
+    "producto_base": "bebida_coca_cola_original_1_5l"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Arroz Tucapel Grado 1 1 kg",
+    "marca": "Tucapel",
+    "formato": "1 kg",
+    "producto_base": "arroz_tucapel_grado_1_1kg"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Arroz Tucapel Grado 1 1000 g",
+    "marca": "Tucapel",
+    "formato": "1000 g",
+    "producto_base": "arroz_tucapel_grado_1_1kg"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Pack 6 Bebida Coca-Cola Sin Azucar 350 ml",
+    "marca": "Coca-Cola",
+    "formato": "pack 6",
+    "producto_base": "bebida_coca_cola_sin_azucar_350ml_6un"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Bebida Coca Cola Sin Azucar 350 ml x6",
+    "marca": "Coca Cola",
+    "formato": "x6",
+    "producto_base": "bebida_coca_cola_sin_azucar_350ml_6un"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Yogurt Soprole Frutilla 1 kg",
+    "marca": "Soprole",
+    "formato": "1 kg",
+    "producto_base": "yogurt_soprole_frutilla_1kg"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Yogurt Soprole Vainilla 1 kg",
+    "marca": "Soprole",
+    "formato": "1 kg",
+    "producto_base": "yogurt_soprole_vainilla_1kg"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Detergente Liquido Omo 3 L",
+    "marca": "Omo",
+    "formato": "3 L",
+    "producto_base": "detergente_omo_liquido_3000ml"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Detergente Líquido Omo 3000 ml",
+    "marca": "Omo",
+    "formato": "3000 ml",
+    "producto_base": "detergente_omo_liquido_3000ml"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Papel Higiénico Elite 12 rollos",
+    "marca": "Elite",
+    "formato": "12 rollos",
+    "producto_base": "papel_higienico_elite_12un"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Papel Higienico Elite Pack 12",
+    "marca": "Elite",
+    "formato": "pack 12",
+    "producto_base": "papel_higienico_elite_12un"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Café Nescafé Tradición 170 g",
+    "marca": "Nescafe",
+    "formato": "170 g",
+    "producto_base": "cafe_nescafe_tradicion_170g"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Cafe Nescafe Tradicion 0.17 kg",
+    "marca": "Nescafe",
+    "formato": "0.17 kg",
+    "producto_base": "cafe_nescafe_tradicion_170g"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Aceite Natura Maravilla 1 L",
+    "marca": "Natura",
+    "formato": "1 L",
+    "producto_base": "aceite_natura_maravilla_1000ml"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Aceite Natura Maravilla 1000 ml",
+    "marca": "Natura",
+    "formato": "1000 ml",
+    "producto_base": "aceite_natura_maravilla_1000ml"
+  },
+  {
+    "supermercado": "Unimarc",
+    "nombre": "Alimento Perro Master Dog 15 kg",
+    "marca": "Master Dog",
+    "formato": "15 kg",
+    "producto_base": "alimento_perro_master_dog_15000g"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Alimento para Perro Master Dog 15000 g",
+    "marca": "Master Dog",
+    "formato": "15000 g",
+    "producto_base": "alimento_perro_master_dog_15000g"
+  },
+  {
+    "supermercado": "Lider",
+    "nombre": "Aceite Natura Maravilla 250 ml",
+    "marca": "Natura",
+    "formato": "250 ml",
+    "producto_base": "aceite_natura_maravilla_250ml"
+  },
+  {
+    "supermercado": "Jumbo",
+    "nombre": "Cafe Nescafe Dolca 170 g",
+    "marca": "Nescafe",
+    "formato": "170 g",
+    "producto_base": "cafe_nescafe_dolca_170g"
+  }
+]

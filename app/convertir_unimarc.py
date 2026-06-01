@@ -2,6 +2,11 @@ import csv
 import re
 from pathlib import Path
 
+try:
+    from .url_utils import generar_url_busqueda
+except ImportError:
+    from url_utils import generar_url_busqueda
+
 
 INPUT = Path("data/unimarc_real.csv")
 OUTPUT = Path("data/productos_supermercados.csv")
@@ -110,7 +115,11 @@ def convertir():
         for fila in lector:
             nombre = fila["nombre"]
             precio = limpiar_precio(fila["precio"])
-            url = fila.get("url") or "https://www.unimarc.cl/search?q=" + nombre.replace(" ", "%20")
+            url = fila.get("url") or generar_url_busqueda(
+                "https://www.unimarc.cl/search",
+                "q",
+                nombre
+            )
 
             writer.writerow({
                 "categoria": fila.get("categoria") or "",

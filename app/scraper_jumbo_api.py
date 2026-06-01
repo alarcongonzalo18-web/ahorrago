@@ -10,7 +10,6 @@ from urllib.parse import urlencode, quote
 
 BASE_URL = "https://www.jumbo.cl"
 API_URL = "https://ac.cnstrc.com/search/{query}"
-API_KEY = os.environ.get("JUMBO_API_KEY", "key_JopvNXKS61kwGkBe")
 OUTPUT = Path("data/jumbo_real.csv")
 PAGE_SIZE = 100
 
@@ -91,9 +90,19 @@ HEADERS = {
 }
 
 
+def obtener_api_key():
+    api_key = os.environ.get("JUMBO_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "Falta la variable de entorno JUMBO_API_KEY. "
+            "Configúrala en el entorno antes de ejecutar el scraper Jumbo."
+        )
+    return api_key
+
+
 def construir_url(termino, pagina):
     params = urlencode({
-        "key": API_KEY,
+        "key": obtener_api_key(),
         "num_results_per_page": PAGE_SIZE,
         "page": pagina,
     })
@@ -257,6 +266,7 @@ def guardar_productos(productos, path=OUTPUT):
 
 
 def main(categorias=None):
+    obtener_api_key()
     todos = []
     vistos_global = set()
     cats = categorias or CATEGORIAS

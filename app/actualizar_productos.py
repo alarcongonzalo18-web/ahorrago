@@ -7,6 +7,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from filelock import FileLock, Timeout
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -151,12 +153,14 @@ def main():
     backup_dir.mkdir(parents=True, exist_ok=True)
     logger = Logger(log_path)
     backup_db = None
+    lock = FileLock(str(LOCK), timeout=0)
 
     try:
-        if LOCK.exists():
-            raise RuntimeError("Ya hay una actualización en curso. Si no es así, elimina actualizacion_productos.lock.")
+        try:
+            lock.acquire()
+        except Timeout:
+            raise RuntimeError("Ya hay una actualización de productos en curso. Se cancela esta ejecución.")
 
-        LOCK.write_text(str(os.getpid()), encoding="utf-8")
         logger.write(f"Inicio actualización: {datetime.now().isoformat(timespec='seconds')}")
 
         backup_db = respaldar_archivo(DB, backup_dir, logger)
@@ -183,8 +187,8 @@ def main():
         restaurar_db(backup_db, logger)
         return 1
     finally:
-        if LOCK.exists():
-            LOCK.unlink()
+        if lock.is_locked:
+            lock.release()
         logger.close()
 
 

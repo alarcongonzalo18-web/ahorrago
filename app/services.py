@@ -1,6 +1,17 @@
 from collections import defaultdict
 from sqlalchemy.orm import Session, joinedload
 from .models import Producto, Precio
+from .url_utils import generar_url_busqueda
+
+
+DEFAULT_SEARCH_LIMIT = 50
+MAX_SEARCH_LIMIT = 100
+
+
+def normalizar_paginacion(limit=DEFAULT_SEARCH_LIMIT, offset=0):
+    limit = DEFAULT_SEARCH_LIMIT if limit is None else int(limit)
+    offset = 0 if offset is None else int(offset)
+    return max(1, min(limit, MAX_SEARCH_LIMIT)), max(0, offset)
 
 
 def _es_papel_higienico(nombre):
@@ -46,6 +57,10 @@ def buscar_producto(db: Session, nombre: str):
 
 def formatear_precio(valor):
     return f"${int(valor):,}".replace(",", ".")
+
+
+def calcular_ahorro(total_referencia, total_optimo):
+    return max(0, total_referencia - total_optimo)
 
 
 def buscar_productos_equivalentes(db: Session, producto: Producto):
@@ -135,7 +150,7 @@ def comparar_lista(db: Session, lista_productos):
 
     mas_barato = ordenado[0]
     mas_caro = ordenado[-1]
-    ahorro = mas_caro["total"] - mas_barato["total"]
+    ahorro = calcular_ahorro(mas_caro["total"], mas_barato["total"])
 
     productos_comparados = {}
 
@@ -159,9 +174,9 @@ def comparar_lista(db: Session, lista_productos):
 
     def generar_link(nombre, supermercado):
         base = {
-            "Líder": "https://www.lider.cl/supermercado/search?query=",
-            "Unimarc": "https://www.unimarc.cl/search?q=",
-            "Jumbo": "https://www.jumbo.cl/busqueda?ft="
+            "Líder": ("https://www.lider.cl/supermercado/search", "query"),
+            "Unimarc": ("https://www.unimarc.cl/search", "q"),
+            "Jumbo": ("https://www.jumbo.cl/busqueda", "ft"),
         }
 
         # limpiar texto
@@ -173,9 +188,12 @@ def comparar_lista(db: Session, lista_productos):
 
         limpio = limpio.strip()
 
-        query = limpio.replace(" ", "%20")
+        destino = base.get(supermercado)
+        if not destino:
+            return ""
 
-        return base.get(supermercado, "") + query
+        url_base, parametro = destino
+        return generar_url_busqueda(url_base, parametro, limpio)
 
     for nombre_producto, lista in productos_comparados.items():
         mejor = min(lista, key=lambda x: x["precio"])
@@ -239,12 +257,13 @@ def comparar_lista(db: Session, lista_productos):
     }
 
 
-def buscar_opciones_producto(db: Session, texto: str):
+def buscar_opciones_producto(db: Session, texto: str, limit=DEFAULT_SEARCH_LIMIT, offset=0):
     texto = texto.lower().strip()
+    limit, offset = normalizar_paginacion(limit, offset)
 
     productos = db.query(Producto).filter(
         Producto.nombre.ilike(f"%{texto}%")
-    ).all()
+    ).offset(offset).limit(limit).all()
 
     return [
         {

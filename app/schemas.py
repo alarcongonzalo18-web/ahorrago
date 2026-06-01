@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List
 
 
@@ -19,7 +19,8 @@ class ItemCarrito(BaseModel):
 class ResumenCompraRequest(BaseModel):
     items: List[ItemCarrito]
 
-    @validator("items")
+    @field_validator("items")
+    @classmethod
     def items_no_vacios_y_consolidados(cls, v):
         if not v:
             raise ValueError("items no puede estar vacío")

@@ -1,71 +1,17 @@
 import csv
 import re
-import unicodedata
 from pathlib import Path
 
 from sqlalchemy import inspect, text
 
 from .database import SessionLocal, Base, engine
 from .models import Supermercado, Categoria, Subcategoria, Producto, Precio
+from .normalizacion import generar_producto_base
 
 
 Base.metadata.create_all(bind=engine)
 
 CSV_PATH = Path("data/productos_supermercados.csv")
-
-
-def generar_producto_base(nombre, marca, tipo, formato):
-    def normalizar_texto(valor):
-        texto = str(valor or "").lower().replace(",", ".")
-        texto = unicodedata.normalize("NFKD", texto)
-        texto = "".join(c for c in texto if not unicodedata.combining(c))
-
-        reemplazos = {
-            "deslactosada": "sin lactosa",
-            "sin lactosa": "sin lactosa",
-            "sin tapa": "",
-            "con tapa": "",
-            "s/t": "",
-            "c/t": "",
-            "natural": "",
-            "lonco leche": "loncoleche",
-            "litros": "l",
-            "litro": "l"
-        }
-
-        for original, reemplazo in reemplazos.items():
-            texto = texto.replace(original, reemplazo)
-
-        texto = re.sub(r"(\d+(?:\.\d+)?)\s*l\b", r"\1l", texto)
-        texto = re.sub(r"(\d+(?:\.\d+)?)\s*ml\b", r"\1ml", texto)
-        texto = re.sub(r"(\d+(?:\.\d+)?)\s*cc\b", r"\1cc", texto)
-        texto = re.sub(r"[^a-z0-9\s.]", " ", texto)
-        return re.sub(r"\s+", " ", texto).strip()
-
-    def tokenizar(valor):
-        return normalizar_texto(valor).replace(".", "_").split()
-
-    palabras_nombre = tokenizar(nombre)
-    palabras_marca = tokenizar(marca)
-    palabras_tipo = tokenizar(tipo)
-    palabras_formato = tokenizar(formato)
-
-    stopwords = {"de", "la", "el", "y"}
-    palabras_excluir = set(palabras_marca + palabras_tipo + palabras_formato)
-    palabras_base = [
-        palabra
-        for palabra in palabras_nombre
-        if palabra not in stopwords and palabra not in palabras_excluir
-    ]
-
-    palabras = palabras_base + palabras_marca + palabras_tipo + palabras_formato
-
-    resultado = []
-    for palabra in palabras:
-        if palabra not in resultado:
-            resultado.append(palabra)
-
-    return "_".join(resultado[:6])
 
 
 def asegurar_columna_url_producto():

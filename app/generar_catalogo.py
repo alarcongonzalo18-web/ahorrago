@@ -1,6 +1,11 @@
 import csv
 from pathlib import Path
 
+try:
+    from .url_utils import generar_url_busqueda
+except ImportError:
+    from url_utils import generar_url_busqueda
+
 
 OUTPUT = Path("data/productos_supermercados.csv")
 
@@ -57,9 +62,8 @@ def generar():
                     for supermercado, factor in supermercados:
                         precio_base = 1000
                         precio = int(precio_base * factor)
-                        query = nombre.replace(" ", "%20")
                         dominio = dominios[supermercado]
-                        url = f"https://www.{dominio}.cl/search?q={query}"
+                        url = generar_url_busqueda(f"https://www.{dominio}.cl/search", "q", nombre)
 
                         filas.append({
                             "categoria": categoria,

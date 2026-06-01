@@ -1,151 +1,27 @@
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends
+﻿from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends, Query
 from sqlalchemy.orm import Session, joinedload
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 import json
-import unicodedata
-import re
 from fastapi import Response
+from sqlalchemy import func
 from .database import Base, engine, SessionLocal
 from . import models, schemas, services
+from .matching import candidato_compatible
+from .matching_diagnostics import resumen_matching
+from .normalizacion import (
+    calcular_precio_referencia,
+    clave_comparable,
+    detectar_familia,
+    detectar_familia_busqueda,
+    normalizar_formato,
+    normalizar_texto,
+    tokens_utiles,
+)
 
 Base.metadata.create_all(bind=engine)
-
-SUPERMERCADOS_REQUERIDOS = {"Líder", "Jumbo", "Unimarc"}
-
-MARCAS_CONOCIDAS = [
-    "Nuestra Cocina",
-    "Family Care",
-    "Cuisine & Co",
-    "Smart Clean",
-    "Juan Valdez",
-    "Marley Coffee",
-    "Los Criadores",
-    "La Rotunda",
-    "Rio Bueno",
-    "Río Bueno",
-    "Los Tilos",
-    "Las Parcelas de Valdivia",
-    "Huentelauquen",
-    "No+Gluten",
-    "Nescafe",
-    "Nescafé",
-    "Canada Dry",
-    "Coca-Cola",
-    "Coca Cola",
-    "Lonco Leche",
-    "Loncoleche",
-    "Limón Soda",
-    "Limon Soda",
-    "Miraflores",
-    "Schweppes",
-    "Kardamili",
-    "Quillayes",
-    "Copacabana",
-    "San Ignacio",
-    "Hydroshock",
-    "Monterrey",
-    "Cruzeiro",
-    "Pahuilmo",
-    "Santa Rosa",
-    "Confort",
-    "Favorita",
-    "Nubelin",
-    "Quilque",
-    "Matthei",
-    "Longavi",
-    "Spagnolia",
-    "Kingsbury",
-    "Banquete",
-    "Belmont",
-    "Carozzi",
-    "Tucapel",
-    "Lucchetti",
-    "Soprole",
-    "Surlat",
-    "Natura",
-    "Castaño",
-    "Castano",
-    "Iansa",
-    "Elite",
-    "Scott",
-    "Noble",
-    "Ideal",
-    "Sprite",
-    "Pepsi",
-    "Crush",
-    "Fanta",
-    "Bilz",
-    "Point",
-    "Ariel",
-    "Drive",
-    "Rinso",
-    "Popeye",
-    "Finish",
-    "Fuzol",
-    "Lider",
-    "Líder",
-    "Jumbo",
-    "Unimarc",
-    "Nestlé",
-    "Nestle",
-    "Milo",
-    "Nido",
-    "Danone",
-    "Chef",
-    "Merkat",
-    "Mizos",
-    "Vilay",
-    "Orasí",
-    "Orasi",
-    "Artisan",
-    "Colun",
-    "Omo",
-    "Calo",
-    "Kem",
-    "Pap",
-]
-
-TOKENS_GENERICOS = {
-    "",
-    "sin",
-    "marca",
-    "general",
-    "de",
-    "del",
-    "la",
-    "el",
-    "y",
-    "con",
-    "para",
-    "en",
-    "un",
-    "una",
-    "botella",
-    "bolsa",
-    "doypack",
-    "pack",
-    "pote",
-    "caja",
-    "lata",
-    "bidon",
-    "frasco",
-    "recarga",
-    "sabor",
-    "original",
-    "no",
-    "retornable",
-    "desechable",
-    "libre",
-    "colesterol",
-    "gr",
-    "ml",
-    "cc",
-    "kg",
-    "l",
-}
 
 app = FastAPI()
 app.add_middleware(
@@ -167,12 +43,17 @@ def get_db():
 
 @app.get("/")
 def inicio():
-    return {"mensaje": "SuperCheck funcionando 🚀"}
+    return {"mensaje": "SuperCheck funcionando ðŸš€"}
 
 
 @app.get("/buscar/{texto}")
-def buscar(texto: str, db: Session = Depends(get_db)):
-    return services.buscar_opciones_producto(db, texto[:100])
+def buscar(
+    texto: str,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    return services.buscar_opciones_producto(db, texto[:100], limit=limit, offset=offset)
 
 
 @app.post("/comparar")
@@ -200,13 +81,35 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     url_generica = 0
     precio_sospechoso = []
 
-    precios = db.query(models.Precio).join(models.Producto).join(models.Supermercado).all()
+    precios = db.query(
+        models.Producto.nombre.label("producto_nombre"),
+        models.Subcategoria.nombre.label("subcategoria_nombre"),
+        models.Supermercado.nombre.label("supermercado_nombre"),
+        models.Precio.precio_normal,
+        models.Precio.precio_oferta,
+        models.Precio.imagen_url,
+        models.Precio.url_producto,
+    ).join(
+        models.Producto,
+        models.Precio.producto_id == models.Producto.id,
+    ).join(
+        models.Supermercado,
+        models.Precio.supermercado_id == models.Supermercado.id,
+    ).outerjoin(
+        models.Subcategoria,
+        models.Producto.subcategoria_id == models.Subcategoria.id,
+    ).yield_per(500)
 
+    total_precios = 0
     for precio in precios:
-        producto = precio.producto
-        supermercado = precio.supermercado.nombre
-        subcategoria = producto.subcategoria.nombre if producto.subcategoria else "Sin subcategoria"
-        valor = valor_precio_producto(producto, precio)
+        total_precios += 1
+        supermercado = precio.supermercado_nombre
+        subcategoria = precio.subcategoria_nombre or "Sin subcategoria"
+        valor = valor_precio_por_nombre(
+            precio.producto_nombre,
+            precio.precio_normal,
+            precio.precio_oferta,
+        )
 
         por_supermercado[supermercado] += 1
         por_subcategoria[subcategoria] += 1
@@ -225,7 +128,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
             (precio.precio_oferta and precio.precio_normal and precio.precio_oferta < 500 and precio.precio_normal > precio.precio_oferta * 2)
         ):
             precio_sospechoso.append({
-                "producto": producto.nombre,
+                "producto": precio.producto_nombre,
                 "supermercado": supermercado,
                 "precio_normal": precio.precio_normal,
                 "precio_oferta": precio.precio_oferta,
@@ -234,7 +137,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
 
     return {
         "productos": db.query(models.Producto).count(),
-        "precios": len(precios),
+        "precios": total_precios,
         "supermercados": dict(sorted(por_supermercado.items())),
         "subcategorias": dict(sorted(por_subcategoria.items())),
         "sin_imagen": sin_imagen,
@@ -247,17 +150,23 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     }
 
 
+@app.get("/diagnostico/matching")
+def diagnostico_matching(db: Session = Depends(get_db)):
+    return resumen_matching(db)
+
+
 @app.get("/estado-datos")
 def estado_datos(db: Session = Depends(get_db)):
     root = Path(__file__).resolve().parents[1]
     db_path = root / "supercheck.db"
     csv_path = root / "data" / "productos_supermercados.csv"
     logs_path = root / "logs"
-    por_supermercado = defaultdict(int)
-
-    precios = db.query(models.Precio).join(models.Supermercado).all()
-    for precio in precios:
-        por_supermercado[precio.supermercado.nombre] += 1
+    por_supermercado = dict(
+        db.query(models.Supermercado.nombre, func.count(models.Precio.id))
+        .join(models.Precio, models.Precio.supermercado_id == models.Supermercado.id)
+        .group_by(models.Supermercado.nombre)
+        .all()
+    )
 
     ultimo_log = None
     if logs_path.exists():
@@ -270,7 +179,7 @@ def estado_datos(db: Session = Depends(get_db)):
 
     estado = {
         "productos": db.query(models.Producto).count(),
-        "precios": len(precios),
+        "precios": db.query(models.Precio).count(),
         "supermercados": dict(sorted(por_supermercado.items())),
         "base_actualizada": datetime.fromtimestamp(db_path.stat().st_mtime).isoformat(timespec="seconds") if db_path.exists() else None,
         "csv_actualizado": datetime.fromtimestamp(csv_path.stat().st_mtime).isoformat(timespec="seconds") if csv_path.exists() else None,
@@ -300,404 +209,27 @@ def es_url_producto_especifica(url):
     )
 
 
-def normalizar_texto(valor):
-    texto = str(valor or "").lower().replace(",", ".")
-    texto = unicodedata.normalize("NFKD", texto)
-    texto = "".join(c for c in texto if not unicodedata.combining(c))
-    texto = texto.replace("litros", "l").replace("litro", "l").replace("lt", "l")
-    texto = re.sub(r"(\d+(?:\.\d+)?)\s*(ml|cc|kg|g|l)\b", r"\1 \2 ", texto)
-    return " ".join(texto.split())
-
-
-def normalizar_marca(valor):
-    marca = normalizar_texto(valor)
-    if marca == "sin marca":
-        return ""
-
-    equivalencias = {
-        "coca cola": "coca-cola",
-        "lonco leche": "loncoleche",
-        "lider": "lider",
-        "limon soda": "limon soda",
-        "orasi": "orasi",
-        "nestle": "nestle",
-    }
-
-    return equivalencias.get(marca, marca)
-
-
-def detectar_marca_en_nombre(nombre):
-    texto = normalizar_texto(nombre)
-
-    for marca in sorted(MARCAS_CONOCIDAS, key=len, reverse=True):
-        marca_normalizada = normalizar_marca(marca)
-        if marca_normalizada and marca_normalizada in texto:
-            return marca_normalizada
-
-    return ""
-
-
-def marca_producto(producto):
-    return normalizar_marca(producto.marca) or detectar_marca_en_nombre(producto.nombre)
-
-
-def tokens_utiles(*valores):
-    tokens = []
-
-    for valor in valores:
-        for token in normalizar_texto(valor).replace("-", " ").split():
-            if token not in TOKENS_GENERICOS and token not in tokens:
-                tokens.append(token)
-
-    return tokens
-
-
-def normalizar_formato(valor):
-    texto = normalizar_texto(valor)
-    texto = texto.replace(" ", "")
-    texto = texto.replace("lts", "l").replace("lt", "l")
-    texto = texto.replace("litros", "l").replace("litro", "l")
-    return texto
-
-
-def obtener_unidad_base(formato):
-    texto = normalizar_texto(formato)
-    numero_texto = "".join(caracter for caracter in texto if caracter.isdigit() or caracter == ".")
-
-    try:
-        numero = float(numero_texto)
-    except ValueError:
-        return None
-
-    if numero <= 0:
-        return None
-
-    compactado = texto.replace(" ", "")
-
-    if "ml" in compactado or "cc" in compactado:
-        return numero / 1000, "L"
-
-    if compactado.endswith("l") or " l" in texto:
-        return numero, "L"
-
-    if "kg" in compactado:
-        return numero, "kg"
-
-    if compactado.endswith("g") or " g" in texto:
-        return numero / 1000, "kg"
-
-    return None
-
-
-def calcular_precio_referencia(precio, formato):
-    unidad = obtener_unidad_base(formato)
-    if not precio or not unidad:
-        return None
-
-    cantidad, nombre_unidad = unidad
-    if cantidad <= 0:
-        return None
-
-    valor = int(precio / cantidad)
-    return f"${valor:,}".replace(",", ".") + f" / {nombre_unidad}"
-
-
-def detectar_familia(texto):
-    if "detergente" in texto:
-        return "detergente"
-
-    if "papel higienico" in texto or "papel toilet" in texto:
-        return "papel_higienico"
-
-    if "aceite" in texto:
-        return "aceite"
-
-    if "cafe" in texto:
-        return "cafe"
-
-    if "azucar" in texto and "sin azucar" not in texto:
-        return "azucar"
-
-    if "fideo" in texto or "pasta" in texto:
-        return "fideos"
-
-    if "queso" in texto:
-        return "queso"
-
-    if "yogurt" in texto or "yoghurt" in texto or "yogur" in texto:
-        return "yogurt"
-
-    if "huevo" in texto:
-        return "huevos"
-
-    if "pan" in texto:
-        return "pan"
-
-    if "bebida" in texto or "gaseosa" in texto:
-        return "bebida"
-
-    if "leche" in texto:
-        if any(token in texto for token in ["postre", "flan", "galleta", "formula lactea"]):
-            return "derivado_leche"
-        return "leche"
-
-    if "arroz" in texto:
-        if "bebida" in texto:
-            return "bebida_arroz"
-        if "fideo" in texto or "pasta" in texto:
-            return "pasta_arroz"
-        if "galleta" in texto:
-            return "galleta_arroz"
-        if "sopa" in texto or "caldo" in texto:
-            return "preparado_arroz"
-        return "arroz"
-
-    return ""
-
-
-def detectar_familia_busqueda(texto):
-    texto = normalizar_texto(texto)
-
-    familias = {
-        "papel_higienico": ["papel higienico", "confort"],
-        "detergente": ["detergente"],
-        "aceite": ["aceite"],
-        "cafe": ["cafe"],
-        "azucar": ["azucar"],
-        "arroz": ["arroz"],
-        "fideos": ["fideo", "fideos", "pasta"],
-        "queso": ["queso"],
-        "yogurt": ["yogurt", "yoghurt", "yogur"],
-        "huevos": ["huevo", "huevos"],
-        "pan": ["pan"],
-        "bebida": ["bebida", "bebidas", "gaseosa", "gaseosas"],
-        "leche": ["leche"],
-    }
-
-    for familia, claves in familias.items():
-        if any(clave in texto for clave in claves):
-            return familia
-
-    return ""
-
-
-def detectar_atributos(texto):
-    atributos = [
-        "sin lactosa",
-        "sin azucar",
-        "semidescremada",
-        "descremada",
-        "entera",
-        "proteina",
-        "light",
-        "zero",
-        "normal",
-        "polvo",
-        "liquido",
-        "maravilla",
-        "oliva",
-        "girasol",
-        "canola",
-        "vegetal",
-        "grado 1",
-        "grado 2",
-        "integral",
-        "descafeinado",
-        "instantaneo",
-        "molido",
-        "granulado",
-        "blanca",
-        "rubia",
-    ]
-
-    return [
-        atributo.replace(" ", "_")
-        for atributo in atributos
-        if atributo in texto
-    ]
-
-
-def detectar_calificadores(texto):
-    calificadores = [
-        "chocolate",
-        "vainilla",
-        "frutilla",
-        "cappuccino",
-        "capuccino",
-        "caramelo",
-        "natural",
-        "cultivada",
-        "asada",
-        "avena",
-        "cola",
-        "papaya",
-        "pomelo",
-        "pina",
-        "limon",
-        "lima",
-        "naranja",
-        "ginger",
-        "capsulas",
-        "doypack",
-        "pack",
-        "basmati",
-        "sushi",
-        "risotto",
-        "champinon",
-        "chaufan",
-        "canola",
-        "maiz",
-        "coco",
-        "pepa",
-        "uva",
-        "spray",
-        "aloe",
-        "bicarbonato",
-        "hipoalergenico",
-        "flores",
-        "lirios",
-        "rosas",
-        "mantecoso",
-        "gauda",
-        "chanco",
-        "laminado",
-        "rallado",
-        "natural",
-        "griego",
-        "batido",
-        "frutilla",
-        "marraqueta",
-        "hallulla",
-        "molde",
-        "doble",
-        "hoja",
-    ]
-
-    return [
-        calificador.replace(" ", "_")
-        for calificador in calificadores
-        if calificador in texto
-    ]
-
-
-def detectar_metros_papel(texto):
-    texto = normalizar_texto(texto)
-
-    if detectar_familia(texto) != "papel_higienico":
-        return ""
-
-    match = re.search(r"(\d+(?:\.\d+)?)\s*(?:m|metros)\b", texto)
-    if not match:
-        return ""
-
-    numero = match.group(1).rstrip("0").rstrip(".")
-    return f"{numero}m"
-
-
-def tokens_firma(producto, texto, marca):
-    tokens_excluir = set(tokens_utiles(
-        marca,
-        producto.marca,
-        producto.tipo,
-        producto.formato,
-        detectar_familia(texto),
-    ))
-
-    tokens = []
-    for token in tokens_utiles(producto.nombre):
-        if token in tokens_excluir:
-            continue
-        if token.isdigit() or token.replace(".", "", 1).isdigit():
-            continue
-        if token not in tokens:
-            tokens.append(token)
-
-    return tokens[:4]
-
-
-def clave_comparable(producto):
-    texto = normalizar_texto(producto.nombre)
-    marca = marca_producto(producto)
-
-    partes = [
-        detectar_familia(texto),
-        marca,
-        normalizar_formato(producto.formato),
-        detectar_metros_papel(texto),
-        ",".join(detectar_atributos(texto)),
-        ",".join(detectar_calificadores(texto)),
-    ]
-
-    clave = "|".join(partes)
-
-    if clave.strip("|"):
-        return clave
-
-    return producto.producto_base or f"producto:{producto.id}"
-
-
-def candidato_compatible(producto, candidato):
-    texto_producto = normalizar_texto(
-        f"{producto.nombre} {producto.marca} {producto.tipo} {producto.formato}"
-    )
-    texto_candidato = normalizar_texto(
-        f"{candidato.nombre} {candidato.marca} {candidato.tipo} {candidato.formato}"
-    )
-    familia_producto = detectar_familia(texto_producto)
-    familia_candidato = detectar_familia(texto_candidato)
-
-    if familia_producto and familia_candidato and familia_producto != familia_candidato:
-        return False
-
-    if "sin lactosa" not in texto_producto and "sin lactosa" in texto_candidato:
-        return False
-
-    marca = marca_producto(producto)
-    marca_candidato = marca_producto(candidato)
-    if marca and marca_candidato and marca != marca_candidato:
-        return False
-
-    if marca and not marca_candidato and marca not in texto_candidato:
-        return False
-
-    tipo = normalizar_texto(producto.tipo)
-    if tipo and tipo != "general":
-        if tipo == "sin lactosa" and "sin lactosa" not in texto_candidato:
-            return False
-        if tipo != "sin lactosa" and tipo not in texto_candidato:
-            return False
-
-    formato = normalizar_formato(producto.formato)
-    formato_candidato = normalizar_formato(candidato.formato)
-    if formato and formato_candidato and formato != formato_candidato:
-        return False
-
-    if formato and not formato_candidato:
-        for token in tokens_utiles(producto.formato):
-            if token not in texto_candidato:
-                return False
-
-    metros_papel = detectar_metros_papel(texto_producto)
-    metros_papel_candidato = detectar_metros_papel(texto_candidato)
-    if metros_papel and metros_papel_candidato and metros_papel != metros_papel_candidato:
-        return False
-
-    calificadores_producto = set(detectar_calificadores(texto_producto))
-    calificadores_candidato = set(detectar_calificadores(texto_candidato))
-    if calificadores_producto and calificadores_candidato:
-        if not calificadores_producto.intersection(calificadores_candidato):
-            return False
-
-    firma_producto = set(tokens_firma(producto, texto_producto, marca))
-    firma_candidato = set(tokens_firma(candidato, texto_candidato, marca_candidato))
-
-    if firma_producto and firma_candidato:
-        coincidencias = firma_producto.intersection(firma_candidato)
-        minimo = 2 if min(len(firma_producto), len(firma_candidato)) >= 2 else 1
-        if len(coincidencias) < minimo:
-            return False
-
-    return True
+def valor_precio_por_nombre(nombre_producto, precio_normal, precio_oferta):
+    familia = detectar_familia(normalizar_texto(nombre_producto))
+
+    if (
+        precio_oferta and
+        precio_normal and
+        precio_oferta < 500 and
+        precio_normal > precio_oferta * 2
+    ):
+        return precio_normal
+
+    if (
+        familia == "papel_higienico" and
+        precio_oferta and
+        precio_normal and
+        precio_oferta < 500 and
+        precio_normal >= 500
+    ):
+        return precio_normal
+
+    return precio_oferta if precio_oferta else precio_normal
 
 
 def precio_valido_para_comparar(producto, precio):
@@ -714,26 +246,7 @@ def precio_valido_para_comparar(producto, precio):
 
 
 def valor_precio_producto(producto, precio):
-    familia = detectar_familia(normalizar_texto(producto.nombre))
-
-    if (
-        precio.precio_oferta and
-        precio.precio_normal and
-        precio.precio_oferta < 500 and
-        precio.precio_normal > precio.precio_oferta * 2
-    ):
-        return precio.precio_normal
-
-    if (
-        familia == "papel_higienico" and
-        precio.precio_oferta and
-        precio.precio_normal and
-        precio.precio_oferta < 500 and
-        precio.precio_normal >= 500
-    ):
-        return precio.precio_normal
-
-    return precio.precio_oferta if precio.precio_oferta else precio.precio_normal
+    return valor_precio_por_nombre(producto.nombre, precio.precio_normal, precio.precio_oferta)
 
 
 def buscar_url_por_atributos(db, producto, precio):
@@ -819,16 +332,22 @@ def _url_especifica_cached(producto, precio, urls_por_base, producto_por_id):
 
 
 @app.get("/productos/buscar/{texto}")
-def buscar_productos(texto: str, db: Session = Depends(get_db)):
+def buscar_productos(
+    texto: str,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
     texto = texto[:100]
+    limit, offset = services.normalizar_paginacion(limit, offset)
     palabras = tokens_utiles(texto)
     if not palabras:
         return []
     familia_buscada = detectar_familia_busqueda(texto)
 
-    # Filtrar en la BD usando los índices (en vez de cargar los 23k productos)
+    # Filtrar en la BD usando los Ã­ndices (en vez de cargar los 23k productos)
     condiciones = [models.Producto.nombre.ilike(f"%{p}%") for p in palabras]
-    productos = db.query(models.Producto).filter(*condiciones).all()
+    productos = db.query(models.Producto).filter(*condiciones).offset(offset).limit(limit).all()
     if familia_buscada:
         productos = [p for p in productos
                      if detectar_familia(normalizar_texto(p.nombre)) == familia_buscada]
@@ -836,7 +355,7 @@ def buscar_productos(texto: str, db: Session = Depends(get_db)):
         productos = [p for p in productos
                      if "sin azucar" not in normalizar_texto(p.nombre)]
 
-    # Cargar equivalentes vía producto_base (ya indexado) para el agrupamiento cross-supermercado
+    # Cargar equivalentes vÃ­a producto_base (ya indexado) para el agrupamiento cross-supermercado
     bases = {p.producto_base for p in productos if p.producto_base}
     if bases:
         equivalentes = db.query(models.Producto).filter(
@@ -1084,3 +603,4 @@ def calcular_resumen_compra(db, items):
 @app.post("/productos/resumen-compra")
 def resumen_compra(request: schemas.ResumenCompraRequest, db: Session = Depends(get_db)):
     return calcular_resumen_compra(db, request.items)
+

@@ -8,6 +8,7 @@ from app.database import engine
 
 INDICES = [
     ("ix_productos_nombre",    "CREATE INDEX IF NOT EXISTS ix_productos_nombre    ON productos (nombre)"),
+    ("ix_productos_producto_base", "CREATE INDEX IF NOT EXISTS ix_productos_producto_base ON productos (producto_base)"),
     ("ix_precios_producto_id", "CREATE INDEX IF NOT EXISTS ix_precios_producto_id ON precios (producto_id)"),
     ("ix_precios_supermercado_id", "CREATE INDEX IF NOT EXISTS ix_precios_supermercado_id ON precios (supermercado_id)"),
 ]
@@ -21,7 +22,7 @@ def main():
     with engine.connect() as conn:
         for nombre, sql in INDICES:
             conn.execute(text(sql))
-            print(f"  ✓ {nombre}")
+            print(f"  OK {nombre}")
         conn.commit()
 
     with engine.connect() as conn:

@@ -1,0 +1,6 @@
+﻿categoria,conflictos_actuales,conflictos_reducidos_estimados,equivalencias_actuales_grupos,equivalencias_proyectadas_grupos,falsos_positivos_estimados,grupos_riesgosos_excluidos,mejora_porcentual_productos_equivalentes,pares_riesgosos_detectados,productos,productos_equivalentes_actuales,productos_equivalentes_nuevos_seguros,productos_equivalentes_proyectados
+Bebe,64,64,141,224,0,129,59.17,1218,1471,360,213,573
+Bebidas,303,163,438,585,0,163,40.6,1427,4274,1197,486,1683
+Higiene Personal,160,160,273,390,0,162,59.13,1612,2839,663,392,1055
+Limpieza,131,131,262,262,0,163,0.0,1130,1640,632,0,632
+Mascotas,57,22,98,98,0,22,0.0,93,432,292,0,292

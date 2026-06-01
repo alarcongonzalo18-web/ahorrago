@@ -1,0 +1,14 @@
+﻿categoria,conflictos_detectados,grupos_con_equivalencia,porcentaje_equivalencia,porcentaje_sin_equivalencia,producto_base_unicos,productos_totales,supermercados_cubiertos
+Frutas y Verduras,43,37,7.41,92.59,961,998,2
+Congelados,105,71,7.7,92.3,1880,1960,2
+Panaderia,69,43,13.12,86.88,745,808,3
+Desayuno y Snacks,602,288,14.24,85.76,4406,4802,2
+Carnes y Pescados,272,133,14.9,85.1,1886,2060,2
+"Lácteos, Huevos y Congelados",28,14,15.22,84.78,170,184,1
+Despensa,467,260,15.68,84.32,3631,3998,3
+"Lacteos, Huevos y Congelados",545,440,17.82,82.18,5090,5658,3
+Higiene Personal,412,273,23.35,76.65,2449,2839,2
+Bebe,145,141,24.47,75.53,1252,1471,2
+Bebidas,865,438,28.01,71.99,3515,4274,3
+Limpieza,305,262,38.54,61.46,1270,1640,3
+Mascotas,184,98,67.59,32.41,238,432,2
