@@ -1183,3 +1183,32 @@ Ejecutar Fase 5J: reload test post-hardening en BD paralela y revision de rechaz
 - `reports/FASE_5I_PIPELINE_HARDENING.pdf`
 - `CAMBIOS_FASE_5I.md`
 
+
+
+---
+
+# Fase 5J-R — Fix del Validador de Categorías
+
+Fecha: 2026-06-02
+
+## Objetivo
+Corregir el validador antes del reload para no convertir falsos positivos en borrados permanentes.
+
+## Resultado
+- Borrados a la fuerza: 1.440 (v1) -> 999 (v2, solo confianza Alta).
+- Productos rescatados de borrado: 441 (287 a cuarentena + 154 falsos positivos eliminados).
+- Falsos positivos corregidos: vinagre de vino, Maggi Jugoso, carne al vino, bebida láctea.
+- Aciertos del bug 5H conservados: Pedigree/Whiskas en Carnes, Nivea/Cif en Crema.
+- Tests: 16/16 PASSED.
+
+## Cambios
+- Coincidencia por palabra completa (regex) en vez de substring.
+- Exclusiones de bebidas (vinagre, en/al vino, bebida láctea, saborizante, polvo, salsa).
+- Política de cuarentena: Alta=reject, Media=conservar+revisar.
+- Categoría insensible a acentos.
+
+## Archivos
+- `app/category_validator.py`
+- `tests/test_category_validator.py`
+- `reports/FASE_5JR_FIX_VALIDADOR.md` / `.pdf`
+- `reports/v2_reject_alta.csv`, `reports/v2_quarantine_media.csv`

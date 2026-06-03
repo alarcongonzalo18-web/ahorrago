@@ -3,21 +3,17 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R] /Count 23 >>
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R 51 0 R] /Count 24 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<< /Length 2085 >>
+<< /Length 2072 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(AhorraGo Master Report) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( AhorraGo Master Report) Tj
 0 -13 Td
 () Tj
@@ -117,6 +113,10 @@ BT
 (- Se reemplazaron URLs generadas con replace\(" ", "%20"\).) Tj
 0 -13 Td
 (- Las URLs ahora soportan tildes, n y caracteres especiales.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
 ET
 endstream
 endobj
@@ -124,15 +124,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
 endobj
 6 0 obj
-<< /Length 1930 >>
+<< /Length 1965 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-() Tj
-0 -13 Td
-(Archivos:) Tj
-0 -13 Td
 (- app/url_utils.py) Tj
 0 -13 Td
 (- app/convertir_lider.py) Tj
@@ -232,6 +228,10 @@ BT
 (- Reglas de trabajo para Codex.) Tj
 0 -13 Td
 (- Comandos de ejecucion.) Tj
+0 -13 Td
+(- Comandos de testing.) Tj
+0 -13 Td
+(- Reglas de seguridad.) Tj
 ET
 endstream
 endobj
@@ -239,15 +239,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
 endobj
 8 0 obj
-<< /Length 1789 >>
+<< /Length 1763 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- Comandos de testing.) Tj
-0 -13 Td
-(- Reglas de seguridad.) Tj
-0 -13 Td
 (- Definicion de terminado.) Tj
 0 -13 Td
 () Tj
@@ -347,6 +343,10 @@ BT
 (- app/services.py) Tj
 0 -13 Td
 (- frontend/index.html) Tj
+0 -13 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -354,15 +354,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
 endobj
 10 0 obj
-<< /Length 2258 >>
+<< /Length 2261 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- requirements.txt) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 (Creados:) Tj
 0 -13 Td
 () Tj
@@ -462,6 +458,10 @@ BT
 (- app/normalizacion.py) Tj
 0 -13 Td
 (- app/main.py) Tj
+0 -13 Td
+(- app/importar_csv.py) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -469,15 +469,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
 endobj
 12 0 obj
-<< /Length 2093 >>
+<< /Length 2163 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- app/importar_csv.py) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( 2. Matching de productos) Tj
 0 -13 Td
 () Tj
@@ -577,6 +573,10 @@ BT
 ( 7. Dependencias) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(Se agrego httpx, requerido por fastapi.testclient.TestClient para los tests de integracion.) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -584,15 +584,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
 endobj
 14 0 obj
-<< /Length 2334 >>
+<< /Length 2250 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(Se agrego httpx, requerido por fastapi.testclient.TestClient para los tests de integracion.) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 (Archivo:) Tj
 0 -13 Td
 (- requirements.txt) Tj
@@ -692,6 +688,10 @@ BT
 () Tj
 0 -13 Td
 (---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 3) Tj
 ET
 endstream
 endobj
@@ -699,15 +699,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
 endobj
 16 0 obj
-<< /Length 1667 >>
+<< /Length 1709 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-() Tj
-0 -13 Td
-( Fase 3) Tj
-0 -13 Td
 () Tj
 0 -13 Td
 () Tj
@@ -807,6 +803,10 @@ BT
 () Tj
 0 -13 Td
 (```python) Tj
+0 -13 Td
+(extraer_atributos\("Leche Soprole Entera 1L"\)) Tj
+0 -13 Td
+(```) Tj
 ET
 endstream
 endobj
@@ -814,15 +814,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
 endobj
 18 0 obj
-<< /Length 2067 >>
+<< /Length 2053 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(extraer_atributos\("Leche Soprole Entera 1L"\)) Tj
-0 -13 Td
-(```) Tj
-0 -13 Td
 () Tj
 0 -13 Td
 (Devuelve marca soprole, volumen 1000, unidad ml y categoria leche.) Tj
@@ -922,6 +918,10 @@ BT
 () Tj
 0 -13 Td
 (- app/normalizacion.py) Tj
+0 -13 Td
+(- app/matching.py) Tj
+0 -13 Td
+(- requirements.txt) Tj
 ET
 endstream
 endobj
@@ -929,15 +929,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
 endobj
 20 0 obj
-<< /Length 2472 >>
+<< /Length 2585 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- app/matching.py) Tj
-0 -13 Td
-(- requirements.txt) Tj
-0 -13 Td
 () Tj
 0 -13 Td
 (Creados:) Tj
@@ -1037,6 +1033,10 @@ BT
 (1. Medir precision con una muestra real etiquetada manualmente.) Tj
 0 -13 Td
 (2. Agregar fixtures para detergentes, papel higienico, aceites y cafes.) Tj
+0 -13 Td
+(3. Registrar matching_score en diagnosticos internos para revisar falsos positivos.) Tj
+0 -13 Td
+(4. Ajustar umbrales por categoria si aparecen patrones distintos.) Tj
 ET
 endstream
 endobj
@@ -1044,15 +1044,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 20 0 R >>
 endobj
 22 0 obj
-<< /Length 2190 >>
+<< /Length 2065 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(3. Registrar matching_score en diagnosticos internos para revisar falsos positivos.) Tj
-0 -13 Td
-(4. Ajustar umbrales por categoria si aparecen patrones distintos.) Tj
-0 -13 Td
 (5. Crear un reporte de productos agrupados por producto_base para detectar errores de equivalencia.) Tj
 0 -13 Td
 () Tj
@@ -1152,6 +1148,10 @@ BT
 (- Riesgo alto de falso positivo: 2 productos) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+( Conflictos Encontrados) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -1159,15 +1159,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
 endobj
 24 0 obj
-<< /Length 2106 >>
+<< /Length 2187 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-( Conflictos Encontrados) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 (Clasificaciones mas frecuentes:) Tj
 0 -13 Td
 () Tj
@@ -1267,6 +1263,10 @@ BT
 ( Scripts Creados) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(- python -m app.scripts.diagnostico_matching) Tj
+0 -13 Td
+(- python -m app.scripts.simular_reconstruccion_producto_base) Tj
 ET
 endstream
 endobj
@@ -1274,15 +1274,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
 endobj
 26 0 obj
-<< /Length 2209 >>
+<< /Length 2210 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- python -m app.scripts.diagnostico_matching) Tj
-0 -13 Td
-(- python -m app.scripts.simular_reconstruccion_producto_base) Tj
-0 -13 Td
 () Tj
 0 -13 Td
 ( Tests Agregados) Tj
@@ -1382,6 +1378,10 @@ BT
 (- Mascotas) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(No se modificaron categorias de alto riesgo como Frutas y Verduras, Carnes y Pescados, Panaderia o Congel) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -1389,15 +1389,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
 endobj
 28 0 obj
-<< /Length 2118 >>
+<< /Length 2096 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(No se modificaron categorias de alto riesgo como Frutas y Verduras, Carnes y Pescados, Panaderia o Congel) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( Modo de Trabajo) Tj
 0 -13 Td
 () Tj
@@ -1497,6 +1493,10 @@ BT
 () Tj
 0 -13 Td
 (- Productos evaluados: 10.656) Tj
+0 -13 Td
+(- Productos equivalentes actuales: 2.918) Tj
+0 -13 Td
+(- Productos equivalentes proyectados: 4.477) Tj
 ET
 endstream
 endobj
@@ -1504,15 +1504,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 28 0 R >>
 endobj
 30 0 obj
-<< /Length 1840 >>
+<< /Length 1915 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- Productos equivalentes actuales: 2.918) Tj
-0 -13 Td
-(- Productos equivalentes proyectados: 4.477) Tj
-0 -13 Td
 (- Mejora proyectada: 53,43%) Tj
 0 -13 Td
 (- Conflictos actuales en categorias objetivo: 715) Tj
@@ -1612,6 +1608,10 @@ BT
 ( Riesgos Pendientes) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(- La simulacion excluye 639 grupos riesgosos; esos grupos requieren revision manual.) Tj
+0 -13 Td
+(- Los 5.480 pares riesgosos detectados no deben aplicarse automaticamente.) Tj
 ET
 endstream
 endobj
@@ -1619,15 +1619,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
 endobj
 32 0 obj
-<< /Length 2385 >>
+<< /Length 2240 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- La simulacion excluye 639 grupos riesgosos; esos grupos requieren revision manual.) Tj
-0 -13 Td
-(- Los 5.480 pares riesgosos detectados no deben aplicarse automaticamente.) Tj
-0 -13 Td
 (- La mejora proyectada depende de aplicar solo grupos seguros.) Tj
 0 -13 Td
 (- Las categorias excluidas siguen pendientes para fases posteriores.) Tj
@@ -1727,6 +1723,10 @@ BT
 () Tj
 0 -13 Td
 (Rollback disponible:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
 ET
 endstream
 endobj
@@ -1734,15 +1734,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
 endobj
 34 0 obj
-<< /Length 2016 >>
+<< /Length 2015 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-() Tj
-0 -13 Td
-(```powershell) Tj
-0 -13 Td
 (python -m app.scripts.rollback_fase5b) Tj
 0 -13 Td
 (```) Tj
@@ -1842,6 +1838,10 @@ BT
 (Preparar una aplicacion controlada para Bebidas usando lista blanca, validacion manual por muestra y regl) Tj
 0 -13 Td
 (---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5B-FIX) Tj
 ET
 endstream
 endobj
@@ -1849,15 +1849,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
 endobj
 36 0 obj
-<< /Length 2333 >>
+<< /Length 2338 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-() Tj
-0 -13 Td
-( Fase 5B-FIX) Tj
-0 -13 Td
 () Tj
 0 -13 Td
 (Fecha: 2026-06-01) Tj
@@ -1957,6 +1953,10 @@ BT
 (- Los 14 fideos residuales en Limpieza > Blanqueadores no fueron modificados porque no pertenecen a los 2) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+( Validacion Final) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -1964,15 +1964,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
 endobj
 38 0 obj
-<< /Length 2155 >>
+<< /Length 2165 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-( Validacion Final) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 (- python -m pytest -q: 43 passed.) Tj
 0 -13 Td
 (- python -m compileall app tests: OK.) Tj
@@ -2072,6 +2068,10 @@ BT
 (---) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+( Fase 5C Reporte - AhorraGo) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -2079,15 +2079,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 38 0 R >>
 endobj
 40 0 obj
-<< /Length 2102 >>
+<< /Length 2119 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-( Fase 5C Reporte - AhorraGo) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( Resumen Ejecutivo) Tj
 0 -13 Td
 () Tj
@@ -2187,6 +2183,10 @@ BT
 (- No se modifico producto_base.) Tj
 0 -13 Td
 (- No se modificaron categorias ni subcategorias.) Tj
+0 -13 Td
+(- No se toco frontend, usuarios ni scraping.) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -2194,15 +2194,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 40 0 R >>
 endobj
 42 0 obj
-<< /Length 3227 >>
+<< /Length 3393 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- No se toco frontend, usuarios ni scraping.) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( Resultado) Tj
 0 -13 Td
 () Tj
@@ -2302,6 +2298,10 @@ BT
 (| 225 | Bebida Vegetal Notmilk Zero 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detect) Tj
 0 -13 Td
 (| 226 | Bebida Vegetal Notmilk Low Fat 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida det) Tj
+0 -13 Td
+(| 228 | Bebida Vegetal Original 1 L Nature's Heart | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lacteos, Huevos y Congelados > Leche | Mascotas > A) Tj
 ET
 endstream
 endobj
@@ -2309,15 +2309,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 42 0 R >>
 endobj
 44 0 obj
-<< /Length 2946 >>
+<< /Length 2834 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(| 228 | Bebida Vegetal Original 1 L Nature's Heart | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
-0 -13 Td
-(| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lacteos, Huevos y Congelados > Leche | Mascotas > A) Tj
-0 -13 Td
 (| 286 | Galletas Cachorro Raza Grande Sabor Leche Bolsa 500 g Master Dog | Desayuno y Snacks > Snacks | M) Tj
 0 -13 Td
 (| 300 | Alimento Seco Cachorro Raza Pequena Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y Pescados > Car) Tj
@@ -2417,6 +2413,10 @@ BT
 ( Decision) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(- La BD recargada no tiene menos errores que la actual.) Tj
+0 -13 Td
+(- Los 1986 errores reaparecen en la reload.) Tj
 ET
 endstream
 endobj
@@ -2424,15 +2424,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 44 0 R >>
 endobj
 46 0 obj
-<< /Length 2406 >>
+<< /Length 2311 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(- La BD recargada no tiene menos errores que la actual.) Tj
-0 -13 Td
-(- Los 1986 errores reaparecen en la reload.) Tj
-0 -13 Td
 (- El problema apunta a datos fuente/importadores/reglas de clasificacion.) Tj
 0 -13 Td
 (- No conviene reemplazar supercheck.db por supercheck_reload_test.db.) Tj
@@ -2532,6 +2528,10 @@ BT
 (- reports/fase5h_causa_raiz_resumen.csv) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
@@ -2539,15 +2539,11 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 46 0 R >>
 endobj
 48 0 obj
-<< /Length 1663 >>
+<< /Length 1965 >>
 stream
 BT
 /F1 10 Tf
 54 742 Td
-(---) Tj
-0 -13 Td
-() Tj
-0 -13 Td
 ( Fase 5I - Pipeline Hardening) Tj
 0 -13 Td
 () Tj
@@ -2629,66 +2625,137 @@ BT
 (- CAMBIOS_FASE_5I.md) Tj
 0 -13 Td
 () Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5J-R  Fix del Validador de Categorias) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-02) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+(Corregir el validador antes del reload para no convertir falsos positivos en borrados permanentes.) Tj
+0 -13 Td
+() Tj
 ET
 endstream
 endobj
 49 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 48 0 R >>
 endobj
+50 0 obj
+<< /Length 1091 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+( Resultado) Tj
+0 -13 Td
+(- Borrados a la fuerza: 1.440 \(v1\) -> 999 \(v2, solo confianza Alta\).) Tj
+0 -13 Td
+(- Productos rescatados de borrado: 441 \(287 a cuarentena + 154 falsos positivos eliminados\).) Tj
+0 -13 Td
+(- Falsos positivos corregidos: vinagre de vino, Maggi Jugoso, carne al vino, bebida lactea.) Tj
+0 -13 Td
+(- Aciertos del bug 5H conservados: Pedigree/Whiskas en Carnes, Nivea/Cif en Crema.) Tj
+0 -13 Td
+(- Tests: 16/16 PASSED.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios) Tj
+0 -13 Td
+(- Coincidencia por palabra completa \(regex\) en vez de substring.) Tj
+0 -13 Td
+(- Exclusiones de bebidas \(vinagre, en/al vino, bebida lactea, saborizante, polvo, salsa\).) Tj
+0 -13 Td
+(- Politica de cuarentena: Alta=reject, Media=conservar+revisar.) Tj
+0 -13 Td
+(- Categoria insensible a acentos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos) Tj
+0 -13 Td
+(- app/category_validator.py) Tj
+0 -13 Td
+(- tests/test_category_validator.py) Tj
+0 -13 Td
+(- reports/FASE_5JR_FIX_VALIDADOR.md / .pdf) Tj
+0 -13 Td
+(- reports/v2_reject_alta.csv, reports/v2_quarantine_media.csv) Tj
+ET
+endstream
+endobj
+51 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 50 0 R >>
+endobj
 xref
-0 50
+0 52
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000268 00000 n 
-0000000338 00000 n 
-0000002475 00000 n 
-0000002601 00000 n 
-0000004583 00000 n 
-0000004709 00000 n 
-0000006550 00000 n 
-0000006676 00000 n 
-0000008987 00000 n 
-0000009115 00000 n 
-0000011261 00000 n 
-0000011389 00000 n 
-0000013776 00000 n 
-0000013904 00000 n 
-0000015624 00000 n 
-0000015752 00000 n 
-0000017872 00000 n 
-0000018000 00000 n 
-0000020525 00000 n 
-0000020653 00000 n 
-0000022896 00000 n 
-0000023024 00000 n 
-0000025183 00000 n 
-0000025311 00000 n 
-0000027573 00000 n 
-0000027701 00000 n 
-0000029872 00000 n 
-0000030000 00000 n 
-0000031893 00000 n 
-0000032021 00000 n 
-0000034459 00000 n 
-0000034587 00000 n 
-0000036656 00000 n 
-0000036784 00000 n 
-0000039170 00000 n 
-0000039298 00000 n 
-0000041506 00000 n 
-0000041634 00000 n 
-0000043789 00000 n 
-0000043917 00000 n 
-0000047197 00000 n 
-0000047325 00000 n 
-0000050324 00000 n 
-0000050452 00000 n 
-0000052911 00000 n 
-0000053039 00000 n 
-0000054755 00000 n 
+0000000275 00000 n 
+0000000345 00000 n 
+0000002469 00000 n 
+0000002595 00000 n 
+0000004612 00000 n 
+0000004738 00000 n 
+0000006553 00000 n 
+0000006679 00000 n 
+0000008993 00000 n 
+0000009121 00000 n 
+0000011337 00000 n 
+0000011465 00000 n 
+0000013768 00000 n 
+0000013896 00000 n 
+0000015658 00000 n 
+0000015786 00000 n 
+0000017892 00000 n 
+0000018020 00000 n 
+0000020658 00000 n 
+0000020786 00000 n 
+0000022904 00000 n 
+0000023032 00000 n 
+0000025272 00000 n 
+0000025400 00000 n 
+0000027663 00000 n 
+0000027791 00000 n 
+0000029940 00000 n 
+0000030068 00000 n 
+0000032036 00000 n 
+0000032164 00000 n 
+0000034457 00000 n 
+0000034585 00000 n 
+0000036653 00000 n 
+0000036781 00000 n 
+0000039172 00000 n 
+0000039300 00000 n 
+0000041518 00000 n 
+0000041646 00000 n 
+0000043818 00000 n 
+0000043946 00000 n 
+0000047392 00000 n 
+0000047520 00000 n 
+0000050407 00000 n 
+0000050535 00000 n 
+0000052899 00000 n 
+0000053027 00000 n 
+0000055045 00000 n 
+0000055173 00000 n 
+0000056317 00000 n 
 trailer
-<< /Size 50 /Root 1 0 R >>
+<< /Size 52 /Root 1 0 R >>
 startxref
-54883
+56445
 %%EOF

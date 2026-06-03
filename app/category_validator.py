@@ -1,6 +1,19 @@
+"""category_validator.py - v2 (Fase 5J-R hardening fix)
+
+Cambios vs v1:
+- Coincidencia por PALABRA COMPLETA (regex \\b) en vez de substring crudo.
+  Elimina falsos positivos tipo "jugoso"->jugo, "cajun"->caju, "manilla"->mani.
+- Comparacion de categoria INSENSIBLE A ACENTOS ("Lacteos" == "Lácteos").
+- Exclusiones explicitas para la regla de bebidas (vinagre, "en vino",
+  bebida lactea, saborizante, polvo) -> condimentos y lacteos no se mandan a Bebidas.
+- POLITICA DE CUARENTENA: confianza Alta => se rechaza (se quita del load);
+  confianza Media => se CONSERVA y se registra para revision humana. Nunca se
+  pierde un producto por un match de confianza media.
+"""
 from __future__ import annotations
 
 import csv
+import re
 import unicodedata
 from dataclasses import dataclass
 from datetime import datetime
@@ -26,33 +39,43 @@ def normalize(value: str) -> str:
     return " ".join(text.lower().strip().split())
 
 
-def contains(text: str, keywords: list[str]) -> bool:
-    return any(normalize(keyword) in text for keyword in keywords)
+def _compile(keywords: list[str]) -> re.Pattern:
+    # Devuelve un patron que matchea cualquier keyword como palabra completa.
+    alts = sorted((re.escape(normalize(k)) for k in keywords), key=len, reverse=True)
+    return re.compile(r"\b(?:" + "|".join(alts) + r")\b")
 
 
-BEBIDAS = [
-    "bebida", "coca cola", "coca-cola", "pepsi", "sprite", "fanta", "bilz",
+def hit(pattern: re.Pattern, text: str) -> bool:
+    return bool(pattern.search(text))
+
+
+BEBIDAS = _compile([
+    "bebida", "coca cola", "pepsi", "sprite", "fanta", "bilz",
     "limon soda", "canada dry", "agua mineral", "agua purificada", "agua saborizada",
     "nectar", "jugo", "kombucha", "red bull", "energetica", "cerveza", "vino",
     "notmilk", "yogu yogu", "milo",
-]
-SNACKS = ["mani", "castana", "caju", "snack", "papas fritas"]
-MASCOTAS = [
+])
+SNACKS = _compile(["mani", "castana", "caju", "snack", "papas fritas"])
+MASCOTAS = _compile([
     "perro", "perros", "gato", "gatos", "gatito", "cachorro", "master dog",
     "master cat", "champion dog", "champion cat", "pedigree", "pet food",
     "alimento seco", "alimento humedo", "snack perro", "snack gato",
-]
-HIGIENE = [
+])
+HIGIENE = _compile([
     "nivea", "rexona", "dove", "desodorante", "shampoo", "acondicionador",
     "jabon", "pasta dental", "cepillo dental", "micelar", "tonico", "crema facial",
     "limpieza facial", "leche limpiadora",
-]
-LIMPIEZA = ["detergente", "cloro", "lavavajillas", "limpiador", "suavizante", "desinfectante"]
-BEBE_REAL = ["panal", "panales", "toallita bebe", "colado", "picado", "mamadera", "chupete"]
+])
+LIMPIEZA = _compile(["detergente", "cloro", "lavavajillas", "limpiador", "suavizante", "desinfectante"])
 
-FALSE_MASCOTA_HIGIENE = ["hair food", "aguacate", "original remedies", "cantu", "avena"]
-FALSE_BEBIDA_MASCOTA = ["trocitos jugosos", "al jugo", "alimento humedo"]
-FALSE_LIMPIEZA = ["pasta limpiadora", "pasta de limpieza", "betun pasta", "pink stuff"]
+# Exclusiones: si el nombre matchea esto, NO se aplica la regla de bebidas
+EXCLUDE_BEBIDA = _compile([
+    "vinagre", "en vino", "al vino", "bebida lactea", "saborizante", "polvo", "salsa",
+])
+
+FALSE_MASCOTA_HIGIENE = _compile(["hair food", "aguacate", "original remedies", "cantu", "avena"])
+FALSE_BEBIDA_MASCOTA = _compile(["trocitos jugosos", "al jugo", "alimento humedo"])
+FALSE_LIMPIEZA = _compile(["pasta limpiadora", "pasta de limpieza", "betun pasta", "pink stuff"])
 
 
 def suggested_bebida(text: str) -> tuple[str, str]:
@@ -91,89 +114,90 @@ def suggested_higiene(text: str) -> tuple[str, str]:
 
 def validate_category(nombre: str, categoria: str, subcategoria: str = "") -> CategoryValidation:
     text = normalize(nombre)
-    cat = str(categoria or "").strip()
+    cat = normalize(categoria)  # insensible a acentos
 
-    if cat == "Mascotas" and contains(text, FALSE_BEBIDA_MASCOTA):
+    if cat == "mascotas" and hit(FALSE_BEBIDA_MASCOTA, text):
         return CategoryValidation(True)
-    if cat == "Limpieza" and contains(text, FALSE_LIMPIEZA):
+    if cat == "limpieza" and hit(FALSE_LIMPIEZA, text):
         return CategoryValidation(True)
-    if contains(text, FALSE_MASCOTA_HIGIENE):
+    if hit(FALSE_MASCOTA_HIGIENE, text):
         return CategoryValidation(True)
 
-    if cat == "Bebe" and contains(text, BEBIDAS):
-        suggested = suggested_bebida(text)
-        return CategoryValidation(False, "bebida_en_bebe", *suggested, "Alta")
-    if cat == "Bebe" and contains(text, SNACKS):
+    beb_excl = hit(EXCLUDE_BEBIDA, text)
+
+    if cat == "bebe" and hit(BEBIDAS, text) and not beb_excl:
+        return CategoryValidation(False, "bebida_en_bebe", *suggested_bebida(text), "Alta")
+    if cat == "bebe" and hit(SNACKS, text):
         return CategoryValidation(False, "snack_en_bebe", "Desayuno y Snacks", "Snacks", "Alta")
-    if cat == "Bebe" and contains(text, LIMPIEZA):
+    if cat == "bebe" and hit(LIMPIEZA, text):
         return CategoryValidation(False, "limpieza_en_bebe", "Limpieza", "Limpiadores", "Alta")
 
-    if cat != "Mascotas" and contains(text, MASCOTAS):
-        suggested = suggested_mascota(text)
-        return CategoryValidation(False, "mascota_fuera_de_mascotas", *suggested, "Alta")
+    if cat != "mascotas" and hit(MASCOTAS, text):
+        return CategoryValidation(False, "mascota_fuera_de_mascotas", *suggested_mascota(text), "Alta")
 
-    if cat not in {"Higiene Personal", "Limpieza", "Mascotas"} and contains(text, HIGIENE):
-        suggested = suggested_higiene(text)
-        return CategoryValidation(False, "higiene_fuera_de_higiene", *suggested, "Alta")
+    if cat not in {"higiene personal", "limpieza", "mascotas"} and hit(HIGIENE, text):
+        return CategoryValidation(False, "higiene_fuera_de_higiene", *suggested_higiene(text), "Alta")
 
-    if cat not in {"Limpieza", "Higiene Personal"} and contains(text, LIMPIEZA):
+    if cat not in {"limpieza", "higiene personal"} and hit(LIMPIEZA, text):
         return CategoryValidation(False, "limpieza_fuera_de_limpieza", "Limpieza", "Limpiadores", "Alta")
 
-    if cat not in {"Bebidas", "Bebe"} and contains(text, BEBIDAS):
-        suggested = suggested_bebida(text)
-        return CategoryValidation(False, "bebida_fuera_de_bebidas", *suggested, "Media")
+    if cat not in {"bebidas", "bebe"} and hit(BEBIDAS, text) and not beb_excl:
+        return CategoryValidation(False, "bebida_fuera_de_bebidas", *suggested_bebida(text), "Media")
 
     return CategoryValidation(True)
 
 
 def validate_row(row: dict) -> CategoryValidation:
-    return validate_category(
-        row.get("nombre", ""),
-        row.get("categoria", ""),
-        row.get("subcategoria", ""),
-    )
+    return validate_category(row.get("nombre", ""), row.get("categoria", ""), row.get("subcategoria", ""))
 
 
-def log_rejection(
-    row: dict,
-    validation: CategoryValidation,
-    source: str,
-    log_path: Path = DEFAULT_REJECT_LOG,
-) -> None:
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    fields = [
-        "timestamp",
-        "source",
-        "nombre",
-        "categoria",
-        "subcategoria",
-        "reason",
-        "suggested_category",
-        "suggested_subcategory",
-        "confidence",
-    ]
-    exists = log_path.exists()
-    with log_path.open("a", newline="", encoding="utf-8-sig") as file:
-        writer = csv.DictWriter(file, fieldnames=fields)
-        if not exists:
-            writer.writeheader()
-        writer.writerow({
-            "timestamp": datetime.now().isoformat(timespec="seconds"),
-            "source": source,
-            "nombre": row.get("nombre", ""),
-            "categoria": row.get("categoria", ""),
-            "subcategoria": row.get("subcategoria", ""),
-            "reason": validation.reason,
-            "suggested_category": validation.suggested_category,
-            "suggested_subcategory": validation.suggested_subcategory,
-            "confidence": validation.confidence,
-        })
+# --- Politica de accion -------------------------------------------------
+# keep   -> producto valido, se conserva
+# review -> sospecha de confianza Media: se CONSERVA pero se marca para revision
+# reject -> error de confianza Alta: se quita del load
+def decide_action(v: CategoryValidation) -> str:
+    if v.accepted:
+        return "keep"
+    if v.confidence == "Alta":
+        return "reject"
+    return "review"
 
 
 def is_valid_row(row: dict, source: str = "", log_path: Path | None = None) -> bool:
-    validation = validate_row(row)
-    if validation.accepted:
+    """True = el producto se CONSERVA en el load (keep o review).
+    Solo confianza Alta (reject) devuelve False. Media se conserva y se cuarentena."""
+    v = validate_row(row)
+    action = decide_action(v)
+    if action == "keep":
         return True
     if log_path:
-        log_rejection(row, validation, source, log_path)
-    return False
+        if action == "reject":
+            _log(row, v, source, Path(log_path), action)
+        else:  # review -> cuarentena (sibling file)
+            q = Path(log_path).with_name("pipeline_category_quarantine.csv")
+            _log(row, v, source, q, action)
+    return action != "reject"
+
+
+def _log(row: dict, v: CategoryValidation, source: str, log_path: Path, action: str) -> None:
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    fields = ["timestamp", "action", "source", "nombre", "categoria", "subcategoria",
+              "reason", "suggested_category", "suggested_subcategory", "confidence"]
+    exists = log_path.exists()
+    with log_path.open("a", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=fields)
+        if not exists:
+            w.writeheader()
+        w.writerow({
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+            "action": action, "source": source,
+            "nombre": row.get("nombre", ""), "categoria": row.get("categoria", ""),
+            "subcategoria": row.get("subcategoria", ""), "reason": v.reason,
+            "suggested_category": v.suggested_category,
+            "suggested_subcategory": v.suggested_subcategory, "confidence": v.confidence,
+        })
+
+
+# compat: nombre antiguo
+def log_rejection(row, validation, source, log_path=DEFAULT_REJECT_LOG):
+    _log(row, validation, source, Path(log_path), decide_action(validation))
