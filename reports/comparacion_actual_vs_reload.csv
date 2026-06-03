@@ -1,0 +1,16 @@
+﻿metrica,actual,reload,diferencia,diferencia_porcentual
+productos,31124,31124,0,0.0
+precios,31139,31155,16,0.05
+categorias,13,13,0,0.0
+subcategorias,54,54,0,0.0
+producto_base_unicos,27299,27400,101,0.37
+equivalencias,2626,2550,-76,-2.89
+productos_con_equivalencia,6451,6274,-177,-2.74
+productos_sin_equivalencia,24673,24850,177,0.72
+conflictos,1545,1605,60,3.88
+hallazgos_categorias,0,89,89,100.0
+hallazgos_clasificacion_masiva,1986,1986,0,0.0
+hallazgos_alta_confianza,1639,1683,44,2.68
+hallazgos_media_confianza,347,303,-44,-12.68
+productos_sospechosos,3,3,0,0.0
+producto_base_conflictivos,1545,1605,60,3.88

@@ -1,0 +1,241 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 3197 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(Fase 5H - Root Cause) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5H - Root Cause de Clasificacion Masiva) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Modo READ ONLY / AUDITORIA. No modifica base de datos ni producto_base.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Estado General) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Hallazgos Fase 5F: 1986) Tj
+0 -13 Td
+(- Hallazgos alta confianza: 1639) Tj
+0 -13 Td
+(- Productos trazados: 51) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Causa Raiz Principal) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La causa raiz mas probable es que los scrapers asignan la categoria/subcategoria configurada para una bus) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Ejemplos: busquedas o secciones como alimento bebe, leche, carne, galleta, snack o crema facial pueden de) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resumen de Causas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Causa | Cantidad | % | Script afectado | Riesgo |) Tj
+0 -13 Td
+(|---|---:|---:|---|---|) Tj
+0 -13 Td
+(| scraper_categoria_por_busqueda_amplia | 51 | 100.0 | app/scraper_lider.py \(48\); app/scraper_jumbo_real.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Hipotesis A-H) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Hipotesis | Resultado | Evidencia |) Tj
+0 -13 Td
+(|---|---|---|) Tj
+0 -13 Td
+(| A: Supermercado entrega categoria incorrecta | No concluyente | No concluyente: los CSV locales no cons) Tj
+0 -13 Td
+(| B: Scraper captura mal la categoria | Confirmada parcialmente | Confirmada parcialmente: el scraper asi) Tj
+0 -13 Td
+(| C: convertir_jumbo.py introduce el error | No confirmada para la muestra | No confirmada para la muestr) Tj
+0 -13 Td
+(| D: convertir_lider.py introduce el error | No confirmada para la muestra | No confirmada para la muestr) Tj
+0 -13 Td
+(| E: convertir_unimarc.py introduce el error | No confirmada para la muestra | No confirmada para la mues) Tj
+0 -13 Td
+(| F: importar_csv.py asigna categoria incorrecta | Riesgo secundario | Riesgo secundario: importa lo que ) Tj
+0 -13 Td
+(| G: Mapeo de categorias generico o errado | Confirmada | Confirmada: 51 trazas apuntan a busquedas/mapeo) Tj
+0 -13 Td
+(| H: producto_base influye en categoria | Descartada en esta fase | Descartada en esta fase: producto_bas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Analisis de Scripts) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Script | Categorias hardcodeadas | Categoria por busqueda | Riesgo |) Tj
+0 -13 Td
+(|---|---|---|---|) Tj
+0 -13 Td
+(| app/scraper_lider.py | si | si | alto: asigna la categoria configurada a todos los productos extraidos ) Tj
+0 -13 Td
+(| app/scraper_jumbo_real.py | si | si | alto: asigna la categoria del termino de busqueda, no una taxonom) Tj
+0 -13 Td
+(| app/scraper_unimarc.py | si | si | alto: asigna la categoria del termino de busqueda y puede capturar r) Tj
+0 -13 Td
+(| app/combinar_supermercados.py | no | no | medio: preserva la categoria fuente sin validar incompatibili) Tj
+0 -13 Td
+(| app/importar_csv.py | no | no | medio: si el mismo nombre existe en varias filas, actualiza categoria p) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Ejemplos Trazados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| ID | Producto | Supermercado | BD | Fuente | Causa |) Tj
+0 -13 Td
+(|---:|---|---|---|---|---|) Tj
+0 -13 Td
+(| 199 | Bebida Vegetal Notmilk Protein Con 7gr Proteina 750 ml NotCo | Lider | Bebe > Alimentos Bebe | Be) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 4450 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(| 56 | Bebida Leche Lactea Yogu Yogu Chirimoya Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Be) Tj
+0 -13 Td
+(| 213 | Bebida Lactea Sin Lactosa Chocolate 200 ml Milo | Lider | Bebe > Alimentos Bebe | Bebe > Alimento) Tj
+0 -13 Td
+(| 3365 | Bebida Sin Azucar Pack Lata 6 Un Coca-Cola | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Be) Tj
+0 -13 Td
+(| 286 | Galletas Cachorro Raza Grande Sabor Leche Bolsa 500 g Master Dog | Lider | Desayuno y Snacks > Sn) Tj
+0 -13 Td
+(| 310 | Galleta Perro Cachoro Leche g g Pet Food | Lider | Desayuno y Snacks > Snacks | Desayuno y Snacks) Tj
+0 -13 Td
+(| 339 | Tonico Rose Care Leche & Tonico Micelar 2 En 1 200 ml Nivea | Lider | Lacteos, Huevos y Congelado) Tj
+0 -13 Td
+(| 1127 | Acondicionador Ballerina Micelar Botella - Bajo Poo | Lider | Lacteos, Huevos y Congelados > Que) Tj
+0 -13 Td
+(| 509 | Desodorante Spray Nivea Black&white Original Masculino Xl Hombre | Lider | Lacteos, Huevos y Cong) Tj
+0 -13 Td
+(| 132 | Bebida Leche Lactea Yogu Yogu Mora Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Bebe |) Tj
+0 -13 Td
+(| 148 | Bebida Leche Lactea Yogu Yogu Damasco Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Beb) Tj
+0 -13 Td
+(| 149 | Bebida Leche Lactea Yogu Yogu Frutilla Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Be) Tj
+0 -13 Td
+(| 150 | Bebida Leche Lactea Yogu Yogu Pina Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Bebe |) Tj
+0 -13 Td
+(| 151 | Bebida Leche Lactea Trencito Chocolate Caja | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Be) Tj
+0 -13 Td
+(| 217 | Bebida Vegetal Notmilk Chocolate Tetra Pak 200 ml NotCo | Lider | Bebe > Alimentos Bebe | Bebe > ) Tj
+0 -13 Td
+(| 218 | Bebida Vegetal Notmilk Original 1 L NotCo | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Bebe) Tj
+0 -13 Td
+(| 220 | Bebida Lactea Sabor Frutilla 200 ml Surlat | Lider | Bebe > Alimentos Bebe | Bebe > Alimentos Beb) Tj
+0 -13 Td
+(| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lider | Lacteos, Huevos y Congelados > Leche | Lact) Tj
+0 -13 Td
+(| 300 | Alimento Seco Cachorro Raza Pequena Carne Y Leche Bolsa 3 Kg Master Do | Lider | Carnes y Pescado) Tj
+0 -13 Td
+(| 306 | Alimento Seco Cachorro Raza Mediana/grande Sabor Carne Y Leche Bolsa 3 | Lider | Carnes y Pescado) Tj
+0 -13 Td
+(| 1878 | Alimento Seco Cachorro Carne Y Cereales Bolsa 3 Kg Cannes | Lider | Carnes y Pescados > Carnes |) Tj
+0 -13 Td
+(| 1886 | Alimento Humedo Cachorro Sabor Carne Pouch 85 g Pedigree | Lider | Carnes y Pescados > Carnes | ) Tj
+0 -13 Td
+(| 1890 | Alimento Seco Cachorro Pollo Y Carne Bolsa 2 Kg Purina One | Lider | Carnes y Pescados > Carnes ) Tj
+0 -13 Td
+(| 1891 | Galletas Perro Adulto Sabor Carne Bolsa 500 g Master Dog | Lider | Desayuno y Snacks > Snacks | ) Tj
+0 -13 Td
+(| 1895 | Alimento Seco Cachorro Raza Mediana/grande Carne Bolsa 3 Kg Champion D | Lider | Carnes y Pescad) Tj
+0 -13 Td
+(| 1896 | Alimento Seco Cachorro Raza Pequena Carne Bolsa 3 Kg Champion Dog | Lider | Carnes y Pescados > ) Tj
+0 -13 Td
+(| 1897 | Galletas Perro Adulto Sabor Carne Bolsa 500 g Champion Dog | Lider | Desayuno y Snacks > Snacks ) Tj
+0 -13 Td
+(| 1912 | Snack Perro Beef Stick Carne g Vitakraft | Lider | Desayuno y Snacks > Snacks | Desayuno y Snack) Tj
+0 -13 Td
+(| 1932 | Alimento Seco Cachorro Carne Bolsa 3 Kg Pedigree | Lider | Carnes y Pescados > Carnes | Carnes y) Tj
+0 -13 Td
+(| 1105 | Jabon Crema Ballerina Triple Humectacion Piel Sensible Hipoalergenico | Lider | Lacteos, Huevos ) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Correcciones Propuestas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(1. Agregar validador semantico antes de escribir cada CSV fuente.) Tj
+0 -13 Td
+(2. Reemplazar busquedas ambiguas por URLs/taxonomias mas especificas cuando existan.) Tj
+0 -13 Td
+(3. Bloquear categorias imposibles antes de combinar e importar.) Tj
+0 -13 Td
+(4. En importar_csv.py, evitar overwrite de categoria por nombre cuando supermercados distintos traen cate) Tj
+0 -13 Td
+(5. Agregar tests de regresion para NotMilk, Yogu Yogu, Coca-Cola, Master Dog, Pet Food, Nivea Micelar y D) Tj
+0 -13 Td
+(6. Ejecutar recarga limpia solo despues de corregir scrapers/importadores y validar 0 bloqueos criticos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Generados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/fase5h_trazabilidad_productos.csv) Tj
+0 -13 Td
+(- reports/fase5h_causa_raiz_resumen.csv) Tj
+0 -13 Td
+(- reports/FASE_5H_ROOT_CAUSE.md) Tj
+0 -13 Td
+(- reports/FASE_5H_ROOT_CAUSE.pdf) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000003440 00000 n 
+0000003566 00000 n 
+0000008068 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+8194
+%%EOF

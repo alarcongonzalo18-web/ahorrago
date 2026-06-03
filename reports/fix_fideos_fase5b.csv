@@ -1,0 +1,26 @@
+﻿producto_id,producto_nombre,categoria_anterior,subcategoria_anterior,producto_base_anterior,categoria_nueva,subcategoria_nueva,producto_base_nuevo,accion,timestamp
+386,Fideo Pasta Al Huevo Farfalle Bolsa 400 g Talliani,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_farfalle_bolsa,fix_aplicado,2026-06-01T20:18:03
+387,Fideo Pasta Al Huevo Rigati Bolsa 400 g Talliani,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_rigati_bolsa,fix_aplicado,2026-06-01T20:18:03
+390,Fideo Pasta Al Huevo Rigati Bolsa 400 g Trattoria,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_rigati_bolsa,fix_aplicado,2026-06-01T20:18:03
+391,Fideo Pasta Al Huevo Spaghetti N°5 Bolsa 400 g Talliani,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_spaghetti_n,fix_aplicado,2026-06-01T20:18:03
+392,Fideo Pasta Al Huevo Tallarines N°78 Bolsa 400 g Talliani,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_tallarines_n,fix_aplicado,2026-06-01T20:18:03
+404,Fideo Pasta Al Huevo Fetuccini N°88 Bolsa 400 g Trattoria,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_al_huevo_fetuccini_n,fix_aplicado,2026-06-01T20:18:03
+3475,Fideo Pasta Espirales N°49 Bolsa 400 g Carozzi,Limpieza,Blanqueadores,limpieza_carozzi_400_g,Despensa,Fideos,fideo_pasta_espirales_n_49_bolsa,fix_aplicado,2026-06-01T20:18:03
+3479,Fideo Pasta Farfalle Bolsa 400 g Selección,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_farfalle_bolsa_seleccion_sin,fix_aplicado,2026-06-01T20:18:03
+3483,Fideo Pasta Spirali Bolsa 400 g Selección,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_spirali_bolsa_seleccion_sin,fix_aplicado,2026-06-01T20:18:03
+3484,Fideo Pasta Cabellitos Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_cabellitos_bolsa_lucchetti_general,fix_aplicado,2026-06-01T20:18:03
+3485,Fideo Pasta Mariposas N°81 Bolsa 250 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_250_g,Despensa,Fideos,fideo_pasta_mariposas_n_81_bolsa,fix_aplicado,2026-06-01T20:18:03
+3486,Fideo Pasta Mix Tallarines N°87 Espinaca Bolsa 400 g Carozzi,Limpieza,Blanqueadores,limpieza_carozzi_400_g,Despensa,Fideos,fideo_pasta_mix_tallarines_n_87,fix_aplicado,2026-06-01T20:18:03
+3506,Fideo Pasta Caracolitos N°35 Bolsa 250 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_250_g,Despensa,Fideos,fideo_pasta_caracolitos_n_35_bolsa,fix_aplicado,2026-06-01T20:18:03
+3507,Fideo Pasta Rigati N°48 Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_rigati_n_48_bolsa,fix_aplicado,2026-06-01T20:18:03
+3514,Fideo Pasta Sin Gluten Spaghetti N°5 Bolsa 400 g Vivo,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_gluten_spaghetti_n_5,fix_aplicado,2026-06-01T20:18:03
+3516,Fideo Pasta Sin Gluten Spaghetti N°5 Caja 400 g Barilla,Limpieza,Blanqueadores,limpieza_400_g,Despensa,Fideos,fideo_pasta_gluten_spaghetti_n_5,fix_aplicado,2026-06-01T20:18:03
+3518,Fideo Pasta Integral Espirales Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_integral_espirales_bolsa_lucchetti,fix_aplicado,2026-06-01T20:18:03
+3521,Fideo Pasta Tallarines N°77 Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_tallarines_n_77_bolsa,fix_aplicado,2026-06-01T20:18:03
+3522,Fideo Pasta Quifaros N°33 Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_quifaros_n_33_bolsa,fix_aplicado,2026-06-01T20:18:03
+3523,Fideo Pasta Spaghetti N°5 Bolsa 400 g Carozzi,Limpieza,Blanqueadores,limpieza_carozzi_400_g,Despensa,Fideos,fideo_pasta_spaghetti_n_5_bolsa,fix_aplicado,2026-06-01T20:18:03
+3524,Fideo Pasta Quifaros N°36 Bolsa 400 g Carozzi,Limpieza,Blanqueadores,limpieza_carozzi_400_g,Despensa,Fideos,fideo_pasta_quifaros_n_36_bolsa,fix_aplicado,2026-06-01T20:18:03
+3525,Fideo Pasta Multigrano Espiral Fusilli Bolsa 350 g Vivo,Limpieza,Blanqueadores,limpieza_350_g,Despensa,Fideos,fideo_pasta_multigrano_espiral_fusilli_bolsa,fix_aplicado,2026-06-01T20:18:03
+3526,Fideo Pasta Mix Fusilli Tricolor Bolsa 400 g Carozzi,Limpieza,Blanqueadores,limpieza_carozzi_400_g,Despensa,Fideos,fideo_pasta_mix_fusilli_tricolor_bolsa,fix_aplicado,2026-06-01T20:18:03
+3527,Fideo Pasta Tres Vegetales Corbatas Bolsa 400 g Lucchetti,Limpieza,Blanqueadores,limpieza_lucchetti_400_g,Despensa,Fideos,fideo_pasta_tres_vegetales_corbatas_bolsa,fix_aplicado,2026-06-01T20:18:03
+3529,Fideo Pasta Multigrano Spaghetti N°5 Bolsa 350 g Vivo,Limpieza,Blanqueadores,limpieza_350_g,Despensa,Fideos,fideo_pasta_multigrano_spaghetti_n_5,fix_aplicado,2026-06-01T20:18:03

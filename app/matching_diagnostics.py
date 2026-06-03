@@ -162,10 +162,11 @@ def resumen_matching(db: Session, conflictos: list[dict] | None = None) -> dict:
     ), 2)
 
     score_muestras = []
+    limite_muestra = min(500, grupos_con_equivalencia)
     grupos = db.query(models.Producto.producto_base).filter(
         models.Producto.producto_base.isnot(None),
         models.Producto.producto_base != "",
-    ).group_by(models.Producto.producto_base).having(func.count(models.Producto.id) > 1).limit(80).all()
+    ).group_by(models.Producto.producto_base).having(func.count(models.Producto.id) > 1).limit(limite_muestra).all()
     for (base,) in grupos:
         productos = db.query(models.Producto).filter(models.Producto.producto_base == base).limit(3).all()
         if len(productos) >= 2:
@@ -178,6 +179,34 @@ def resumen_matching(db: Session, conflictos: list[dict] | None = None) -> dict:
     if cambios_path.exists():
         cambios_aplicados = max(0, len(_leer_csv(cambios_path)))
         fecha_ultima_actualizacion = cambios_path.stat().st_mtime
+    fases_csv = {
+        "fase5b": REPORTS_DIR / "fase5b_cambios.csv",
+        "fase5b_fix": REPORTS_DIR / "fix_fideos_fase5b.csv",
+        "fase5d_fix": REPORTS_DIR / "fase5d_fix_cambios.csv",
+        "fase5c": REPORTS_DIR / "fase5c_cambios.csv",
+    }
+    cambios_por_fase = {}
+    fechas = []
+    for fase, path in fases_csv.items():
+        if path.exists():
+            cambios_por_fase[fase] = len(_leer_csv(path))
+            fechas.append(path.stat().st_mtime)
+        else:
+            cambios_por_fase[fase] = 0
+    if fechas:
+        fecha_ultima_actualizacion = max(fechas)
+    categorias_aplicadas = ["Limpieza", "Mascotas"]
+    if cambios_por_fase.get("fase5c"):
+        categorias_aplicadas.extend(["Bebidas", "Higiene Personal", "Bebe"])
+    categorias_pendientes = [
+        categoria for categoria in [
+            "Frutas y Verduras",
+            "Congelados",
+            "Panaderia",
+            "Carnes y Pescados",
+            "Desayuno y Snacks",
+        ] if categoria not in categorias_aplicadas
+    ]
     return {
         "total_productos": total_productos,
         "producto_base_unicos": producto_base_unicos,
@@ -190,7 +219,10 @@ def resumen_matching(db: Session, conflictos: list[dict] | None = None) -> dict:
         "categorias_mejor_matching": sorted(categorias, key=lambda item: item["porcentaje_equivalencia"], reverse=True)[:5],
         "score_promedio": score_promedio,
         "cambios_aplicados": cambios_aplicados,
+        "cambios_por_fase": cambios_por_fase,
         "fecha_ultima_actualizacion": fecha_ultima_actualizacion,
+        "categorias_aplicadas": sorted(set(categorias_aplicadas)),
+        "categorias_pendientes": categorias_pendientes,
         "recomendaciones": [
             "Revisar producto_base conflictivos por formato y marca antes de crear usuarios.",
             "Priorizar categorias con menor porcentaje de equivalencia.",

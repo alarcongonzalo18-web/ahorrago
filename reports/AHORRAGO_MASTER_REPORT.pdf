@@ -1,429 +1,2694 @@
 %PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
-<<
-/F1 2 0 R /F2 3 0 R /F3 4 0 R /F4 7 0 R
->>
+<< /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<<
-/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
->>
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R] /Count 23 >>
 endobj
 3 0 obj
-<<
-/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
->>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 4 0 obj
-<<
-/BaseFont /Helvetica-BoldOblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
->>
+<< /Length 2085 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(AhorraGo Master Report) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( AhorraGo Master Report) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Historial acumulado de fases t?cnicas del proyecto.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 1) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Corregir problemas criticos y de alto impacto inicial sin romper el MVP actual, evitando refactor masivo,) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios Aplicados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 1. Seguridad: API Key de Jumbo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se elimino la API key hardcodeada de los scrapers de Jumbo.) Tj
+0 -13 Td
+(- Los scrapers ahora leen JUMBO_API_KEY desde variables de entorno.) Tj
+0 -13 Td
+(- Si falta la variable, el scraper falla con un mensaje claro sin exponer secretos.) Tj
+0 -13 Td
+(- Se creo .env.example con la variable requerida.) Tj
+0 -13 Td
+(- Se actualizo .gitignore para excluir .env y .env., manteniendo .env.example versionable.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/scraper_jumbo_real.py) Tj
+0 -13 Td
+(- app/scraper_jumbo_api.py) Tj
+0 -13 Td
+(- .env.example) Tj
+0 -13 Td
+(- .gitignore) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 2. Busquedas con LIMIT y OFFSET) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se agregaron parametros limit y offset a endpoints de busqueda.) Tj
+0 -13 Td
+(- Default: limit=50.) Tj
+0 -13 Td
+(- Maximo permitido: limit=100.) Tj
+0 -13 Td
+(- Se evito carga ilimitada en las busquedas principales de productos.) Tj
+0 -13 Td
+(- El frontend ahora consulta con limit=50&offset=0.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+(- app/services.py) Tj
+0 -13 Td
+(- frontend/index.html) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 3. URLs Correctamente Escapadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se creo helper centralizado para generar URLs de busqueda con urllib.parse.urlencode.) Tj
+0 -13 Td
+(- Se reemplazaron URLs generadas con replace\(" ", "%20"\).) Tj
+0 -13 Td
+(- Las URLs ahora soportan tildes, n y caracteres especiales.) Tj
+ET
+endstream
 endobj
 5 0 obj
-<<
-/Contents 28 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
 endobj
 6 0 obj
-<<
-/Contents 29 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 1930 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/url_utils.py) Tj
+0 -13 Td
+(- app/convertir_lider.py) Tj
+0 -13 Td
+(- app/convertir_jumbo.py) Tj
+0 -13 Td
+(- app/convertir_unimarc.py) Tj
+0 -13 Td
+(- app/generar_catalogo.py) Tj
+0 -13 Td
+(- app/services.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 4. Indices Basicos en SQLite) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se reforzo el script idempotente de indices.) Tj
+0 -13 Td
+(- Se agregaron indices seguros para:) Tj
+0 -13 Td
+(  - productos.nombre) Tj
+0 -13 Td
+(  - productos.producto_base) Tj
+0 -13 Td
+(  - precios.producto_id) Tj
+0 -13 Td
+(  - precios.supermercado_id) Tj
+0 -13 Td
+(- El script usa CREATE INDEX IF NOT EXISTS, por lo que no borra ni reconstruye datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- app/scripts/agregar_indices.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 5. Lock Real para Actualizacion de Productos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se reemplazo el lock manual por filelock.) Tj
+0 -13 Td
+(- Se evita que dos ejecuciones del pipeline corran al mismo tiempo.) Tj
+0 -13 Td
+(- Si ya existe una actualizacion en curso, el proceso sale con mensaje claro.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/actualizar_productos.py) Tj
+0 -13 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 6. Tests Iniciales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se creo el primer set minimo de tests para:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Normalizacion de texto.) Tj
+0 -13 Td
+(- Equivalencia entre Leche Soprole 1L y Leche Soprole 1000ml.) Tj
+0 -13 Td
+(- URLs con tildes y n.) Tj
+0 -13 Td
+(- Limites de busqueda.) Tj
+0 -13 Td
+(- Calculo basico de ahorro.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- tests/test_phase1.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 7. Documento para Agentes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se creo AGENTS.md con:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Stack detectado.) Tj
+0 -13 Td
+(- Reglas de trabajo para Codex.) Tj
+0 -13 Td
+(- Comandos de ejecucion.) Tj
+ET
+endstream
 endobj
 7 0 obj
-<<
-/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F4 /Subtype /Type1 /Type /Font
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
 endobj
 8 0 obj
-<<
-/Contents 30 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 1789 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- Comandos de testing.) Tj
+0 -13 Td
+(- Reglas de seguridad.) Tj
+0 -13 Td
+(- Definicion de terminado.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- AGENTS.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Dependencias Agregadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(En requirements.txt:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```txt) Tj
+0 -13 Td
+(filelock>=3.13.0) Tj
+0 -13 Td
+(pytest>=8.0.0) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Verificacion Ejecutada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Comandos ejecutados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+(venv\\Scripts\\python.exe -m pytest tests/test_phase1.py -q) Tj
+0 -13 Td
+(venv\\Scripts\\python.exe -m compileall app tests) Tj
+0 -13 Td
+(venv\\Scripts\\python.exe -m app.scripts.agregar_indices) Tj
+0 -13 Td
+(venv\\Scripts\\python.exe -c "from app.main import app; print\(app.title\)") Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Resultados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Tests: 5 passed.) Tj
+0 -13 Td
+(- Compilacion Python: OK.) Tj
+0 -13 Td
+(- Import de FastAPI app: OK.) Tj
+0 -13 Td
+(- Indices SQLite aplicados correctamente.) Tj
+0 -13 Td
+(- Verificacion de JUMBO_API_KEY faltante: muestra error claro.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados o Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Modificados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- .gitignore) Tj
+0 -13 Td
+(- app/actualizar_productos.py) Tj
+0 -13 Td
+(- app/convertir_jumbo.py) Tj
+0 -13 Td
+(- app/convertir_lider.py) Tj
+0 -13 Td
+(- app/convertir_unimarc.py) Tj
+0 -13 Td
+(- app/generar_catalogo.py) Tj
+0 -13 Td
+(- app/importar_csv.py) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+(- app/scraper_jumbo_api.py) Tj
+0 -13 Td
+(- app/scraper_jumbo_real.py) Tj
+0 -13 Td
+(- app/scripts/agregar_indices.py) Tj
+0 -13 Td
+(- app/services.py) Tj
+0 -13 Td
+(- frontend/index.html) Tj
+ET
+endstream
 endobj
 9 0 obj
-<<
-/Contents 31 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
 endobj
 10 0 obj
-<<
-/Contents 32 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2258 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Creados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- .env.example) Tj
+0 -13 Td
+(- AGENTS.md) Tj
+0 -13 Td
+(- app/url_utils.py) Tj
+0 -13 Td
+(- tests/test_phase1.py) Tj
+0 -13 Td
+(- CAMBIOS_FASE_1.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Aun existen .all\(\) en endpoints de diagnostico, estado de datos y logica interna no critica. No se toca) Tj
+0 -13 Td
+(- El pipeline completo de scrapers no fue ejecutado para evitar scraping externo y cambios masivos de dat) Tj
+0 -13 Td
+(- Hay un warning de Pydantic por uso de @validator; conviene migrarlo a @field_validator en una fase post) Tj
+0 -13 Td
+(- SQLite se mantiene como base actual, segun la restriccion de no migrar todavia.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Siguiente Fase Recomendada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(1. Optimizar endpoints pesados como /diagnostico/calidad y /estado-datos.) Tj
+0 -13 Td
+(2. Agregar tests de integracion con SQLite temporal.) Tj
+0 -13 Td
+(3. Migrar validadores Pydantic a estilo v2.) Tj
+0 -13 Td
+(4. Revisar limites y paginacion en comparador y diagnosticos.) Tj
+0 -13 Td
+(5. Revisar manejo de configuracion con carga explicita de .env si el flujo local lo necesita.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 2) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Reducir deuda tecnica sin romper el MVP, enfocandose en main.py, normalizacion duplicada, matching de pro) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios Aplicados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 1. Normalizacion compartida) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se creo app/normalizacion.py.) Tj
+0 -13 Td
+(- Se movieron funciones de normalizacion y comparacion de claves desde main.py.) Tj
+0 -13 Td
+(- importar_csv.py ahora usa generar_producto_base desde el modulo compartido.) Tj
+0 -13 Td
+(- Se mantuvo compatibilidad con imports existentes usados por tests.) Tj
+0 -13 Td
+(- Se normalizaron equivalencias de formato:) Tj
+0 -13 Td
+(  - 1L y 1000ml.) Tj
+0 -13 Td
+(  - 500g y 0.5kg.) Tj
+0 -13 Td
+(  - pack 6 y 6 unidades.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/normalizacion.py) Tj
+0 -13 Td
+(- app/main.py) Tj
+ET
+endstream
 endobj
 11 0 obj
-<<
-/Contents 33 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
 endobj
 12 0 obj
-<<
-/Contents 34 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2093 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- app/importar_csv.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 2. Matching de productos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se creo app/matching.py.) Tj
+0 -13 Td
+(- Se movio candidato_compatible y sus reglas relacionadas a un modulo dedicado.) Tj
+0 -13 Td
+(- main.py ahora importa esa logica en vez de contenerla directamente.) Tj
+0 -13 Td
+(- Se agregaron tests unitarios de equivalencias.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivos:) Tj
+0 -13 Td
+(- app/matching.py) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+(- tests/test_matching.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 3. Reduccion segura de main.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se retiro logica de normalizacion y matching desde main.py.) Tj
+0 -13 Td
+(- Los endpoints actuales se mantienen con las mismas rutas y estructura de respuesta.) Tj
+0 -13 Td
+(- No se reestructuro la API ni se cambio la UX.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 4. Optimizacion de endpoints pesados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- /diagnostico/calidad ahora consulta columnas necesarias y usa yield_per\(500\) en vez de cargar objetos c) Tj
+0 -13 Td
+(- /estado-datos ahora calcula conteos por supermercado con GROUP BY y conteos directos.) Tj
+0 -13 Td
+(- Se mantuvo la forma de respuesta esperada por el frontend.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 5. Tests de integracion minimos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se agrego SQLite temporal en memoria para pruebas de API.) Tj
+0 -13 Td
+(- Se prueba busqueda basica con datos minimos.) Tj
+0 -13 Td
+(- Se prueba limite de resultados.) Tj
+0 -13 Td
+(- Se prueba estado de datos con conteos basicos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- tests/test_integration.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 6. Pydantic v2) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se migro @validator a @field_validator.) Tj
+0 -13 Td
+(- El warning de Pydantic v2 desaparece en la suite de tests.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- app/schemas.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 7. Dependencias) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 13 0 obj
-<<
-/Contents 35 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
 endobj
 14 0 obj
-<<
-/Contents 36 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2334 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(Se agrego httpx, requerido por fastapi.testclient.TestClient para los tests de integracion.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Archivo:) Tj
+0 -13 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Comandos Ejecutados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -m pytest -q) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -m compileall app tests) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -c "from app.main import app; print\(app.title\)") Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Tests: 11 passed.) Tj
+0 -13 Td
+(- Compilacion: OK.) Tj
+0 -13 Td
+(- Import de FastAPI app: OK, salida FastAPI.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados o Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Modificados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/importar_csv.py) Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+(- app/schemas.py) Tj
+0 -13 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Creados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/normalizacion.py) Tj
+0 -13 Td
+(- app/matching.py) Tj
+0 -13 Td
+(- tests/test_matching.py) Tj
+0 -13 Td
+(- tests/test_integration.py) Tj
+0 -13 Td
+(- CAMBIOS_FASE_2.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Todavia quedan .all\(\) en rutas livianas \(categorias, subcategorias\) y en logica interna acotada; no se ) Tj
+0 -13 Td
+(- main.py aun contiene logica de busqueda y resumen de compra que podria separarse en una fase posterior.) Tj
+0 -13 Td
+(- El matching sigue siendo heuristico; requiere mas fixtures reales para cubrir casos de marcas, sabores,) Tj
+0 -13 Td
+(- No se ejecuto pipeline completo de scrapers para evitar cambios masivos de datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Siguiente Fase Recomendada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(1. Extraer busqueda de productos desde main.py a un service dedicado.) Tj
+0 -13 Td
+(2. Agregar fixtures realistas para matching por supermercado.) Tj
+0 -13 Td
+(3. Cubrir /productos/resumen-compra con tests de integracion.) Tj
+0 -13 Td
+(4. Revisar endpoints internos con .all\(\) restantes y paginar si empiezan a crecer.) Tj
+0 -13 Td
+(5. Evaluar carga explicita de .env local para mejorar experiencia del scraper sin exponer secretos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+ET
+endstream
 endobj
 15 0 obj
-<<
-/Contents 37 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
 endobj
 16 0 obj
-<<
-/Contents 38 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 1667 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+() Tj
+0 -13 Td
+( Fase 3) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Aumentar la precision del matching de productos y del comparador sin cambiar la arquitectura principal, s) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios Aplicados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 1. Normalizacion avanzada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se amplio app/normalizacion.py para reconocer equivalencias de formato:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Volumen:) Tj
+0 -13 Td
+(  - 1L = 1000ml) Tj
+0 -13 Td
+(  - 1.5L = 1500ml) Tj
+0 -13 Td
+(  - 2L = 2000ml) Tj
+0 -13 Td
+(- Peso:) Tj
+0 -13 Td
+(  - 1kg = 1000g) Tj
+0 -13 Td
+(  - 0.5kg = 500g) Tj
+0 -13 Td
+(  - 250g = 0.25kg) Tj
+0 -13 Td
+(- Cantidad:) Tj
+0 -13 Td
+(  - pack 6) Tj
+0 -13 Td
+(  - 6 un) Tj
+0 -13 Td
+(  - 6 unidades) Tj
+0 -13 Td
+(  - x6) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Esto reduce falsos negativos cuando distintos supermercados publican el mismo formato con unidades difere) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 2. Extractor de atributos estructurados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se agrego extraer_atributos\(nombre_producto\), que devuelve senales estructuradas para el matching:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```python) Tj
+0 -13 Td
+({) Tj
+0 -13 Td
+(    "marca": "soprole",) Tj
+0 -13 Td
+(    "volumen": 1000,) Tj
+0 -13 Td
+(    "peso": None,) Tj
+0 -13 Td
+(    "unidad": "ml",) Tj
+0 -13 Td
+(    "cantidad": None,) Tj
+0 -13 Td
+(    "categoria": "leche",) Tj
+0 -13 Td
+(    "sabores": [],) Tj
+0 -13 Td
+(    "tokens": [...]) Tj
+0 -13 Td
+(}) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Ejemplo cubierto por tests:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```python) Tj
+ET
+endstream
 endobj
 17 0 obj
-<<
-/Contents 39 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
 endobj
 18 0 obj
-<<
-/Contents 40 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2067 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(extraer_atributos\("Leche Soprole Entera 1L"\)) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Devuelve marca soprole, volumen 1000, unidad ml y categoria leche.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 3. Matching Score 0-100) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se creo matching_score\(producto, candidato\) en app/matching.py.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(El score combina:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Marca.) Tj
+0 -13 Td
+(- Volumen o peso normalizado.) Tj
+0 -13 Td
+(- Cantidad o pack.) Tj
+0 -13 Td
+(- Categoria/familia.) Tj
+0 -13 Td
+(- producto_base.) Tj
+0 -13 Td
+(- Interseccion de palabras clave.) Tj
+0 -13 Td
+(- Similitud textual con RapidFuzz.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(candidato_compatible ahora mantiene filtros duros para evitar falsos positivos y usa el score como senal ) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 4. RapidFuzz) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se agrego rapidfuzz a requirements.txt y se usa fuzz.token_set_ratio para evitar depender de comparacione) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Esto mejora casos como:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Coca Cola vs Coca-Cola.) Tj
+0 -13 Td
+(- Reordenamientos de palabras.) Tj
+0 -13 Td
+(- Diferencias menores en nombres publicados por supermercado.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 5. Casos problematicos cubiertos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se agregaron tests para:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Leche Soprole 1L vs Leche Soprole 1000ml.) Tj
+0 -13 Td
+(- Coca Cola 1.5L vs Coca Cola 1500ml.) Tj
+0 -13 Td
+(- Arroz Tucapel 1kg vs Arroz Tucapel 1000g.) Tj
+0 -13 Td
+(- Pack 6 Coca Cola vs Coca Cola x6.) Tj
+0 -13 Td
+(- Yogurt de sabores distintos, que no debe coincidir.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( 6. Fixtures reales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se creo tests/fixtures/productos_reales.json con ejemplos representativos de Jumbo, Lider y Unimarc.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Incluye pares equivalentes y un caso negativo de yogurt con sabores distintos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados o Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Modificados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/normalizacion.py) Tj
+ET
+endstream
 endobj
 19 0 obj
-<<
-/Contents 41 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
 endobj
 20 0 obj
-<<
-/Contents 42 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2472 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- app/matching.py) Tj
+0 -13 Td
+(- requirements.txt) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Creados:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- tests/test_matching_score.py) Tj
+0 -13 Td
+(- tests/test_fixtures_matching.py) Tj
+0 -13 Td
+(- tests/fixtures/productos_reales.json) Tj
+0 -13 Td
+(- CAMBIOS_FASE_3.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Tests Agregados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Tests unitarios para extractor de atributos.) Tj
+0 -13 Td
+(- Tests unitarios para score de matching.) Tj
+0 -13 Td
+(- Tests con fixtures reales.) Tj
+0 -13 Td
+(- Tests negativos para evitar coincidencias incorrectas por sabor.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Comandos Ejecutados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -m pytest -q) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -m compileall app tests) Tj
+0 -13 Td
+($env:PATH = "$PWD\\venv\\Scripts;$env:PATH"; python -c "from app.main import app; print\(app.title\)") Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Tests: 19 passed.) Tj
+0 -13 Td
+(- Compilacion: OK.) Tj
+0 -13 Td
+(- Import de FastAPI app: OK, salida FastAPI.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Precision Mejorada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La precision mejora porque el matching ya no depende solo de texto o formato literal:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Las unidades se comparan en una representacion comun.) Tj
+0 -13 Td
+(- Los packs se detectan como cantidad.) Tj
+0 -13 Td
+(- La marca se normaliza antes de comparar.) Tj
+0 -13 Td
+(- RapidFuzz tolera diferencias de orden, guiones y texto adicional.) Tj
+0 -13 Td
+(- Los sabores conocidos actuan como freno para evitar falsos positivos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- El sistema de sabores aun es una lista curada y puede necesitar ampliacion con datos reales.) Tj
+0 -13 Td
+(- El umbral de matching_score >= 68 esta calibrado con tests iniciales, pero debe validarse con mas produ) Tj
+0 -13 Td
+(- Algunas categorias complejas, como detergentes, papel higienico y promociones multipack, podrian requer) Tj
+0 -13 Td
+(- No se ejecuto el pipeline completo de scrapers para evitar cambios masivos de datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Proximos Pasos Recomendados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(1. Medir precision con una muestra real etiquetada manualmente.) Tj
+0 -13 Td
+(2. Agregar fixtures para detergentes, papel higienico, aceites y cafes.) Tj
+ET
+endstream
 endobj
 21 0 obj
-<<
-/Contents 43 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 20 0 R >>
 endobj
 22 0 obj
-<<
-/Contents 44 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2190 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(3. Registrar matching_score en diagnosticos internos para revisar falsos positivos.) Tj
+0 -13 Td
+(4. Ajustar umbrales por categoria si aparecen patrones distintos.) Tj
+0 -13 Td
+(5. Crear un reporte de productos agrupados por producto_base para detectar errores de equivalencia.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 4) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Mejorar la calidad de datos y aumentar equivalencias reales entre supermercados antes de crear usuarios, ) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Sin usuarios.) Tj
+0 -13 Td
+(- Sin login.) Tj
+0 -13 Td
+(- Sin cambios de frontend.) Tj
+0 -13 Td
+(- Sin migracion de base de datos.) Tj
+0 -13 Td
+(- Sin scraping masivo.) Tj
+0 -13 Td
+(- Sin modificar datos reales.) Tj
+0 -13 Td
+(- Con respaldo previo.) Tj
+0 -13 Td
+(- Con simulacion por defecto.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Iniciales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos: 31.124) Tj
+0 -13 Td
+(- Precios: 31.139) Tj
+0 -13 Td
+(- Producto_base conflictivos: 1.601) Tj
+0 -13 Td
+(- Productos duplicados: 244) Tj
+0 -13 Td
+(- Productos sospechosos: 3) Tj
+0 -13 Td
+(- Equivalencias detectadas: 2.538) Tj
+0 -13 Td
+(- Sin equivalencia: 79,94%) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Finales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La fase fue de diagnostico y simulacion, por lo que no cambio la base real.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Total productos analizados: 31.124) Tj
+0 -13 Td
+(- Producto_base unicos: 27.418) Tj
+0 -13 Td
+(- Grupos con equivalencia: 2.538) Tj
+0 -13 Td
+(- Porcentaje sin equivalencia recalculado por diagnostico: 81,03%) Tj
+0 -13 Td
+(- Producto_base conflictivos clasificados: 1.601) Tj
+0 -13 Td
+(- Score promedio muestreado: 70,91) Tj
+0 -13 Td
+(- Productos evaluados en simulacion: 31.124) Tj
+0 -13 Td
+(- Producto_base que cambiarian en simulacion: 29.542) Tj
+0 -13 Td
+(- Porcentaje de cambio simulado: 94,92%) Tj
+0 -13 Td
+(- Grupos con equivalencia propuestos: 915) Tj
+0 -13 Td
+(- Riesgo bajo: 2.001 productos) Tj
+0 -13 Td
+(- Riesgo medio: 126 productos) Tj
+0 -13 Td
+(- Riesgo alto de falso positivo: 2 productos) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 23 0 obj
-<<
-/Contents 45 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
 endobj
 24 0 obj
-<<
-/Contents 46 0 R /MediaBox [ 0 0 612 792 ] /Parent 27 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
+<< /Length 2106 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+( Conflictos Encontrados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Clasificaciones mas frecuentes:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Formato y peso distinto: 856 grupos.) Tj
+0 -13 Td
+(- Formato y volumen distinto: 659 grupos.) Tj
+0 -13 Td
+(- Marca distinta: 21 grupos.) Tj
+0 -13 Td
+(- Error de normalizacion con volumen distinto: 21 grupos.) Tj
+0 -13 Td
+(- Sabor distinto con volumen distinto: 7 grupos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias con Peor Matching) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Frutas y Verduras: 7,41% equivalencia.) Tj
+0 -13 Td
+(- Congelados: 7,70% equivalencia.) Tj
+0 -13 Td
+(- Panaderia: 13,12% equivalencia.) Tj
+0 -13 Td
+(- Desayuno y Snacks: 14,24% equivalencia.) Tj
+0 -13 Td
+(- Carnes y Pescados: 14,90% equivalencia.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias con Mejor Matching) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Mascotas: 57,18% equivalencia.) Tj
+0 -13 Td
+(- Bebidas: 28,01% equivalencia.) Tj
+0 -13 Td
+(- Limpieza: 27,50% equivalencia.) Tj
+0 -13 Td
+(- Bebe: 24,47% equivalencia.) Tj
+0 -13 Td
+(- Higiene Personal: 23,35% equivalencia.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/matching_diagnostics.py) Tj
+0 -13 Td
+(- app/scripts/diagnostico_matching.py) Tj
+0 -13 Td
+(- app/scripts/simular_reconstruccion_producto_base.py) Tj
+0 -13 Td
+(- tests/test_fase4_diagnostico.py) Tj
+0 -13 Td
+(- reports/diagnostico_matching.md) Tj
+0 -13 Td
+(- reports/conflictos_clasificados.csv) Tj
+0 -13 Td
+(- reports/equivalencias_por_categoria.csv) Tj
+0 -13 Td
+(- reports/grupos_sospechosos.csv) Tj
+0 -13 Td
+(- reports/simulacion_producto_base.csv) Tj
+0 -13 Td
+(- reports/simulacion_producto_base.md) Tj
+0 -13 Td
+(- reports/FASE_4_REPORTE.md) Tj
+0 -13 Td
+(- reports/FASE_4_REPORTE.pdf) Tj
+0 -13 Td
+(- reports/AHORRAGO_MASTER_REPORT.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_4.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/main.py) Tj
+0 -13 Td
+(- app/normalizacion.py) Tj
+0 -13 Td
+(- tests/fixtures/productos_reales.json) Tj
+0 -13 Td
+(- tests/test_integration.py) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Scripts Creados) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 25 0 obj
-<<
-/PageMode /UseNone /Pages 27 0 R /Type /Catalog
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
 endobj
 26 0 obj
-<<
-/Author (\(anonymous\)) /CreationDate (D:20260531220339-04'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260531220339-04'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
->>
+<< /Length 2209 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- python -m app.scripts.diagnostico_matching) Tj
+0 -13 Td
+(- python -m app.scripts.simular_reconstruccion_producto_base) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Tests Agregados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Clasificacion de conflictos.) Tj
+0 -13 Td
+(- Metricas por categoria.) Tj
+0 -13 Td
+(- Simulacion de reconstruccion sin modificar la base.) Tj
+0 -13 Td
+(- Nuevas reglas de normalizacion.) Tj
+0 -13 Td
+(- Falsos positivos y falsos negativos.) Tj
+0 -13 Td
+(- Endpoint /diagnostico/matching.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad de Datos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se creo respaldo automatico antes de la fase:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- backups/supercheck_20260531_213244.db) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La simulacion no modifico datos reales.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- El 94,92% de cambios propuestos en simulacion indica que no debe aplicarse automaticamente.) Tj
+0 -13 Td
+(- La simulacion propone menos grupos con equivalencia que el estado actual; sirve para diagnostico, no pa) Tj
+0 -13 Td
+(- El mayor problema actual esta en grupos producto_base demasiado amplios con formatos/pesos/volumenes in) Tj
+0 -13 Td
+(- Se requiere revision manual o reglas por categoria antes de cualquier limpieza real.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendaciones) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(1. No aplicar reconstruccion automatica todavia.) Tj
+0 -13 Td
+(2. Priorizar correccion de producto_base en bebidas, limpieza, mascotas y lacteos.) Tj
+0 -13 Td
+(3. Crear una muestra etiquetada manualmente de 300 a 500 productos.) Tj
+0 -13 Td
+(4. Ajustar reglas por categoria con metricas de precision y recall.) Tj
+0 -13 Td
+(5. Mantener /diagnostico/matching como endpoint interno antes de cambios de datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5A) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Mejorar equivalencias unicamente en categorias de mejor retorno y menor riesgo:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebidas) Tj
+0 -13 Td
+(- Limpieza) Tj
+0 -13 Td
+(- Higiene Personal) Tj
+0 -13 Td
+(- Bebe) Tj
+0 -13 Td
+(- Mascotas) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 27 0 obj
-<<
-/Count 19 /Kids [ 5 0 R 6 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 15 0 R 
-  16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R 24 0 R ] /Type /Pages
->>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
 endobj
 28 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1316
->>
+<< /Length 2118 >>
 stream
-Gau1.DboC_&B<Vj;p;;"SiGd'hZW1C_%g/A5]A$O<!eCTersXD]k_fC&\1\EXlBDp&GC(t2n%der-N&=fpN;%&40dlPudt+@lQGZ^`jWAJ0dJ_j)[0t&+0\gG8MU#+G)_uJcp<U\0&5Y+mAa[Ghd_f>n\&VE,Z]rbM8GYd!]QqBVDfQ?PHb<Z)$>;Wg1"W_Y=V\mi:K5i6)mn7D[?E[NaBQ=\!XlLt<gfN7r*B<l;,X=JZ1eJ@qkM&dnjH_$gbjYWm+V3#X3DKNbDkEN=]C"_PY7LgCiVN.^KY8A6mZb["S7[+@7?q'd3`k"-^kG6s7QLgeDp=8nHZ!Y6F]U[3Dr^5m]:_TlXqOYe-`hh-tJ5#,>]jn+S7=K9uXBf=aDRPaFV]<I=%Sb>RM29ghuI[ZR%T`M<7i\\&p.g%<b4tNf;;:WbD>mg#tBnQVkWgYb@#oA(r!HQq&\IZ%](1j1)e'.bY6\Ru\eNRrRVF!<C!p]YP=Q6d:\4LsA5pbY3\PSIC\#.Fl"[R]?)3<7qR-jBT)CDY7oAtjWm*m*,V;PH(o/])RmFk?-2I&a7r"rPgo&H%^!k>+QUIBaQ+WOdY_.RNKnYrLb*hO^Gl^0=f:V)84k-#6ak`:^$fXkR;%bCh_MFtsZ3/aKK<mP-[Jd(FkX+IQ@Vl`o&%+eUF2NM$)PtRjIT;_AE0O-#c:_H?eI/<g$q"".BlKn69ae'4pa:nbMe,lQ0g0#]'daG0Ib^(n.J/OXgh+DOoqei0NEa?%?i(?<\Td"4?Ne!Ip<P,U$TiR=5(uh"^hN*H0hIYf;g6tb<P08@sYc:?b[*kP&#>Oq%3A:6)jC)sUlOG,QG'`;fMRc]T-;^I,TEed]6EcYL@+@ht2q`rnV'RS3[@M4K=ct[08XG*+H5>o3l#G\m)fH`G8")*L;OKl_p?B*Xehrq)>p"0S]"N/hm8amd6+r_3R,RO!A7@.gaCl:]7fK0W*_[XJa#lB-"3J-lh0(%bIFkamRpI0?E-r>^Oh#D/E&1Tf3'Y#7)oE"8:J\/i`Z@E-LL8!Zc1(&*,NkNXW0MHdn0Un4791o@'/p;8]*Hl&B#m^IJRhV.+mjSt5GdDnG&3E:<VSApYUSsJVrpDc:409.mgHaHq*0[-5u"p'<YXg2bX+NSI68\I)88aPgU>1#cOiR'FYf@hRl8TZgH_lpjJ'Y3f%!q=%JNX1QE\(1:J.!gja(mn%:ZK9C"ri5<dlSq.q%h$okj)d&,qiPGFbfPli%h#++8F!Dnb&.791h4^FSHAIg%R&Q\(FkK/2!s[&NDCO9IcM$X8l;=PAa3)#OiUOkI2~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(No se modificaron categorias de alto riesgo como Frutas y Verduras, Carnes y Pescados, Panaderia o Congel) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Modo de Trabajo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La fase se ejecuto completa en DRY RUN:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No se modifico la base real.) Tj
+0 -13 Td
+(- No se ejecuto scraping.) Tj
+0 -13 Td
+(- No se modifico frontend.) Tj
+0 -13 Td
+(- No se crearon usuarios.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Reglas Implementadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Bebidas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Normalizacion de 1L, 1000ml, 1.5L, 1500ml, 2L, 2000ml.) Tj
+0 -13 Td
+(- Packs pack 6, x6, pack 12, x12.) Tj
+0 -13 Td
+(- Diferenciacion de retornable/no retornable.) Tj
+0 -13 Td
+(- Diferenciacion de zero/sin azucar/light vs normal.) Tj
+0 -13 Td
+(- Proteccion contra sabores distintos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Limpieza) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Normalizacion de ml, litros, gramos y kilogramos.) Tj
+0 -13 Td
+(- Deteccion de aroma.) Tj
+0 -13 Td
+(- Deteccion de concentrado, diluido, antibacterial y tradicional.) Tj
+0 -13 Td
+(- Proteccion contra Lavanda vs Limon y Antibacterial vs Tradicional.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Higiene Personal) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Deteccion de shampoo, acondicionador, jabon, desodorante, pasta dental y crema.) Tj
+0 -13 Td
+(- Deteccion de aroma.) Tj
+0 -13 Td
+(- Deteccion de genero/formato: hombre, mujer, infantil, adulto.) Tj
+0 -13 Td
+(- Proteccion contra hombre vs mujer e infantil vs adulto.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Bebe) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Deteccion de etapa.) Tj
+0 -13 Td
+(- Deteccion de talla.) Tj
+0 -13 Td
+(- Deteccion de cantidad.) Tj
+0 -13 Td
+(- Proteccion contra Talla M vs Talla G y Etapa 1 vs Etapa 2.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Mascotas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Deteccion de perro/gato.) Tj
+0 -13 Td
+(- Deteccion de peso.) Tj
+0 -13 Td
+(- Deteccion de etapa: cachorro, adulto, senior.) Tj
+0 -13 Td
+(- Proteccion contra cachorro vs adulto y gato vs perro.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Actuales vs Proyectadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos evaluados: 10.656) Tj
+ET
+endstream
 endobj
 29 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1300
->>
-stream
-Gatm;heV73&:Vr40bbD78(Y.#a%>^$h+OFQ]%=q,q[c:4H((`\9?p'\D?'H"G-Y3GbDEPY,'\^R:X[HGhaA#B#Z89m!oQ1ndu+L+(p[A%Os#<l!opAkmPY$$+;k>;$lB?b&4LNno3XkX<UW')m,M.O=TPE:%&0u_M>;R[=TJKW9ItQM6ms$.:cj?8'tiTf[pL;jL[5P4GMTl[K,H&QcsseLKP;*&^I,j[APsUbjI'iK_XT/q$t+r8#\P]"E/1G]!eK&;=7VdB#"hW1<iD-?2:Q]#jbsXX]<3jN+H2%D77t[5:i`iY<2<=uPN*k^r&j4_GQ;MG/5!mR3>pX,CM;kc2P^UO`<FPIO5T4)NkWHjdHkX!Va8t#dtHJ1#JW(5_4&f6iu4Fe3SG-KbZGc8i!BN6/fYL-5[0tE>bQ#pQ*MN]p[-G*haCX'EC7;t_snV$48E:NT.R;;@(Z6Kf<O7FH!6?!=&(4aPY[2QW,QhiPVDq7a[qpOR3T*Ap.*MK!kb^oV:blg^jZr)V.IJ7li>`-*sB-Rr41aG/$mskOR031Yt,C'i!p(BO%2M4DFsK<Ul"Fcc:J!l(A2h<n_nl8P/p7(/>.a^ogCk=S5:teT2%.$7-/:q4kK7`$EP@Q3fl?;V/^YHa:W$c^EMDW,"W\r-Gii;X'0<=LBEI8MN"[L7#R3Rao3LW%2L7X]FrNB5au4SfTHn>S/d9hrA@r&gBn^nh7uk.QV]GU!Fit*+[EIcOU<AMo3K-9*Kt%3.mGQ-@Ia;.I$TcNo'3FK:Un&fWui4<IpPmVl/Dh<6_Fjh.g0]sBo"`^$&$0/l_o+raLQe](9VB,\?NH)`*9^2?*P]@=e'C(mNurH/_STI8^6@oGZtoD72s/:-5)Blf!aq?Gl7Uh7f3WQaAlaCc@i65mjFnI*UWO]mqm2pc7U/UHHk28g:8TD0R?q8<1\*GFlbV&K#OikkWcM$]=;1Zd_H+PGb)+MD[H.d.Nsd@mt_^CZ:#urK(-=PJL`.E/IXW'[CV>8lYK"e&tV)@UU1N)dN&&J(IS_,,&9sOjcs?Z=p('@cW*>`g@BRnTfBI.N7eFV2\,^HFkf_=1`?k4Rs1mA?T1=C(II"[Cf*7YN(UU_,b^juCu?@?/(FH='=#CQ24Xr5Tlh,'[;8<j(@ZSDJVHWkfKhl3%$YnKaT;c"3[eb'+:I3e`RPZHn-r53J"V))br!*5qck!g?Ak>k8(X(,C$-pl]WU;tpN*V#i9+m/`<=.#_UOf\'LFYHUZ(O"@2Kc[:"PQR@rsl:H51+*<)9/.;I9MmmluD"2'2~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 28 0 R >>
 endobj
 30 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1196
->>
+<< /Length 1840 >>
 stream
-Gatm;CN%rc'`IH,ED`Ao3hS#Ql="7;!@MlB[-=%/hLGV.@[=TKQqF)Hd6[?l#>0$j20*6.qa/q!eief_EC_gW5_7IdbQ1K$nE)k9k.uEObU5Tu046g_X[gWc)#,iU+Q<loq.MoPRCA6hQ,>_f+24\k`%Hqb.$t_h,qOr3,2khL.uP.<#[\5dH.@4nW?ABPILGc)*8T0/l3SaELJj]jgh3&1AD6SLXAVqXEcIk6d=&ZL9ZE+e#nk7b6.Ve_@>D3[;2rSjM30a^:*2^H)FiRAp7]*(=KH?3`i[kSNMqr$nmTp5(C%hDhP<pdUh>l2(p/#(lWls_cEuBf=BH$/0ENRO/1agb3]J?m[gpCsjIg&0&>[-qLE%(n5GiqUB-^7h+Ec(uJ(cJ!(_<^jbR4.T;R@jS8Gei.M!-O]0=].m4^$?lYMuubri&Z_^5k)>#*,%q7?Ql('lQreUiI>+qY7T#l[5kY<O(ha@c=MfZbk84W)TQU<.6s66-aGK$Iu#Vfp^#_dGHI'9H.JhMF?=P1B2QNnq4b+^^lX]_r6A4XOh+T?InFZ:U6YMg)62YUf^/6.[[:GY!aac/BOf-m1R6F[[/lN2ndZA('`A0A^Itt7I7]noH]oe>P!3!KL(7']JR.J-5Y6BH7=g:eAO^^XAS(HjAa++W27Wje+28*\"#-IkZ5u+q;<Udh:jZXhg_as4qYYff3KpK6mUOgES<a7(%Q9"C8n#]Nm#r*NYSPWaeM?4h4]LJ/TafH+2+U253M94:G'94-[rN/0,V1FhUV8XNb[EZEL.q,BiJfI,Uji%N@kLn,J;<qW@2jo'&`HZZ1-)ZO?,$pL*Ff+P[tMD^F)HQP,a(hW!C[SX!1OVpBi&%`R<rs9J09F.PJ37mecHL)HGGNaC/-&%$OaGT'KK3n4@[RF?l&n4!<t!cp<*N"fkA+=*o0UM0DeFY_<S]gpnr_0e<AS79*d-kW)VpGW_AZ[-ispft=EPG7:*.p2NQD0^!`1#:[N:;;'(Q\SI%M3!4(QB>RfuZnBS*/sJd9AYu7R1.Z8@]BM>6a$'sf+0=F6,>8[b+9)+Yo(dTPH%,^3qTf5/,."#JGRXBP.r,9\1"q0%7.8;0o-2&`]9,tE6AJ]fHbHB9P>5oX/mTAj%D#?]b8J>Gl;eS'(--%XIur%O5-WKdr3/To>_L0j=g]`d_4PX40_uSCbd^:~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(- Productos equivalentes actuales: 2.918) Tj
+0 -13 Td
+(- Productos equivalentes proyectados: 4.477) Tj
+0 -13 Td
+(- Mejora proyectada: 53,43%) Tj
+0 -13 Td
+(- Conflictos actuales en categorias objetivo: 715) Tj
+0 -13 Td
+(- Conflictos reducibles estimados: 540) Tj
+0 -13 Td
+(- Grupos riesgosos excluidos: 639) Tj
+0 -13 Td
+(- Pares riesgosos detectados y no aplicados: 5.480) Tj
+0 -13 Td
+(- Falsos positivos estimados aplicables: 0) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias Mas Beneficiadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Mascotas: +73,28%) Tj
+0 -13 Td
+(- Limpieza: +63,64%) Tj
+0 -13 Td
+(- Bebe: +59,17%) Tj
+0 -13 Td
+(- Higiene Personal: +59,13%) Tj
+0 -13 Td
+(- Bebidas: +40,60%) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/fase5a_rules.py) Tj
+0 -13 Td
+(- app/scripts/simular_mejora_matching_fase5a.py) Tj
+0 -13 Td
+(- tests/test_fase5a_rules.py) Tj
+0 -13 Td
+(- tests/test_fase5a_simulacion.py) Tj
+0 -13 Td
+(- reports/fase5a_simulacion.md) Tj
+0 -13 Td
+(- reports/fase5a_detalle_categoria.csv) Tj
+0 -13 Td
+(- reports/fase5a_falsos_positivos.csv) Tj
+0 -13 Td
+(- reports/FASE_5A_REPORTE.md) Tj
+0 -13 Td
+(- reports/FASE_5A_REPORTE.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_5A.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/normalizacion.py) Tj
+0 -13 Td
+(- tests/fixtures/productos_reales.json) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Tests) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Se agregaron pruebas positivas, negativas y casos limite para:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebidas) Tj
+0 -13 Td
+(- Limpieza) Tj
+0 -13 Td
+(- Higiene Personal) Tj
+0 -13 Td
+(- Bebe) Tj
+0 -13 Td
+(- Mascotas) Tj
+0 -13 Td
+(- Simulacion DRY RUN) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Resultado final:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- 32 passed) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 31 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1350
->>
-stream
-Gatn&9lo&I&;KZM'mk$`$,pgSkp:MmDEHm+f[eG+iYl(Ln:1KJJ;Vi`hZ51Z8S&\fjU2T&9$b,-G8I:c63nb"Su`,US&>"FJgcBL&u%3R@=AOGo?lTsIj]hi(;qmu>_pq*a3iRfqfVX,?s\%a^?g;\k'k:g6I6I;gd[J6'\G6PA@=qCs$j\8Zmo9lPmNmRnIF[l0`TB0Y=;T?e0mP=b*6.n[TkI,gA4S?Jba-Y7R4d_dK]cMi>Vf%a_TDm!+[,mKrdh.7_N2C;5icAWi!h)LY%O6efi<'!*Xc?Bkl`"!(qL+;[h.-d+4QlCq(RTc,)D-C-ln?F)mdR%+DkoArN"P$MB"oOu#.los=!EcPY*2"%gUR^FZdUQ=N#<ZD;V^Den=,7DjPKl*9?=C6I-NG&=pk0UOoN?6l)\IH5CTA%\Js8OkH"jKg0aQ2144e9%,_n]TF0dROM;*fsV1[)TZhj@MH#T#37[J"2"ZhZS)d@jKH0L3%".`M0bF*+7)L8d;%A)/I7[\S1EY:uoYCZYV>`oBDUJ^V8MT/l$?1(QlIia`J0V03T[D_`m'7BY7PSZHf/qS4oafHm`';P*V%s5j"B*(I!nt(J<U.^)ENu-BhO5Xgt\^Ta4JNgQUB9"crkMAYZcB#"jK1@jQ&W4>E-XocD1V/6*KPWsif0\7ii!!gf4[7$%bC^.koWEeXUB<F?*6@]5QF"uQIa\4$k0:H7WFp*V0:BXmqfLOg`i$9Y-k#J/hu5f4NR>S8aPqUKalD/UNVP$#-qoK]MF;Z9gDpD0)1d+Y=t?ipi'40B"%$s(M5<QL@h4<6Cns25AR&q6L>:.RtGI8clIS3`o,[&-Kopp<B(SIf*)%W2a9,RJ3lC",HM6Led38X,.rpRDIlfp<d!ALqPuZnIJ&+-ssleKq]c*)\lk:*!9@JicKkp[RucW9PBR&2Y9*3Fgk?::_^Ig*Qr'Q+1k[6_E.MHb\r<P%](2rL][qiDnY*10cftf>LW_ZG[A=6K6U7^Gm3RqaCO5CFl[FJ!cih\KTuc`P/^u\Edn[[Ifi/#@A7NJR[EDpP7&)Kr9[Q1`[\m%cF_OZCm]amJu)$W&3q&PUX/LKdF3-U[Ujso)VaP!5A*>l-3Qb:$0!GcqPZ9'Wbac5+N2!VZC&OMAt&_L1XT5/\-Gd@)_5+1!%n?G/L4W)E.U6aM.0W-/ei8fs@t&,s?@FKIOIm<Vu):1"6p>Xd^pF`[u@4a6c.r(_.g!.G>"1689/s'M)\D\Fh^m'Q<`&rCF<Op%K]ip)*KI;pY98:Hb8\1;mU&L9?_Mc[YuHf#UGTb0l@t#OMr7T#_)?Hi3)>6N/.P4sZ8')r%)qoFEE-9hG~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
 endobj
 32 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1230
->>
+<< /Length 2385 >>
 stream
-Gau0C9lCt0&A@C2bgA#tol@emp#Zqt:r#Yd7P/p?+H=M5R`R1m-FlI6?XIb:/16TTH.?4L5[;N[S/K%"A.V*:XBTrZn7Dh?D],b^<k#lM."g%br48?Qch_PsABQBPH-2iiGWi[2q0um.jm:6,Lu[)$<]+-p9u]`7O)t$lc"D';X+,ZMB3>,r"+Qhhg^B^ldD?.GgF8H+c?$32a5\pWG-FOCqZhtD9*9cLJ`*][S8fi8Js?\%XrB,]'tjG0_`<giebhJQQkJ*cOFg2d;FSjJjrBUD2-08uEd=2kW<1I*Q/j@_*,9Tn:9"p06"@98\^U8"4R!_4d:fMLKn_,cD;bL8=_I^-;E65O(c?V"4iJV)P/HP+Mgji3<VZga)lYDop1Mc2J=kq#E>Uosqjd_9$7tW7dgi!=nG`='Ea:V;S.le__[`Rg?OlJ6O5Dn8@ulRBiU!#XkO==Y)tG7^K2$FWUu],QJj=JLGqg2Helt^8/%BG]LSM"4p6tDXaNgpr$$_0YmW0mlf<HL%q-k8oNN=(9*1Aao>7Uj]V[Yt.&N1pa12,8!-!9&tV9M8b.]>LEd8kQpA/uk_`RC$.b-ft)bfLf,8V$rQ<m[JU!rX@G,N[#C'DT2mB[bka&@!LK9^K$e^>a7lat6Yi\AYQ8[slrnT*+lY0e3+')ZBjYG-ul+fW[>qlRLC1fqOjcOiMIpTu9h-V$qqiM^]bXnh3g]0Eni+=-dY>/+1YtIj[mLZF+Ur>T/&=\(V%$PpP9^Vqnh78ecf6Mj*'g%=&g;>qA`;q-HTYB[9BWBqE(%)'$)V,_C5qHojS<Rm5rKC#[bE`-B:IiWpQ#)*7lL]1rm[;$e\ul1HHj(&>IQ>762.$N3cNocFOJJC(;DE\9n)o0\%FZ5i"n#q[qkjkr'bpAe?Lb4@%[<(@;(oX/a/XdjU1$:.3MggTS]5"'@]T9)f!%@*K]pZ#P[UdO2*.rTo5ANiMWQp3B>-/%jf3GXdO,q0dc:XkA0hZf0EH6Ucl$H8>,A<a6K(OfX3Ik8#f/5`K>?S>5i"PrBT*;(kJX[1i:O*;b_-6HK*Ij^e'&>'4:3GCP-fNl/-_s3G@d;+J8`[3djQ+!oDD]s<V<b0&?_k88DrdgcY$X,-!m<,ORkauBrSS>VREbrfT/QmiPY&QRhl[/#E)0uGRF,Fr4iAXT]DfYkA)uop/mf8\cnr-#_Z_JN2TP0"ucsdF^5@3Dgkmdp(If\VM,`)~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(- La simulacion excluye 639 grupos riesgosos; esos grupos requieren revision manual.) Tj
+0 -13 Td
+(- Los 5.480 pares riesgosos detectados no deben aplicarse automaticamente.) Tj
+0 -13 Td
+(- La mejora proyectada depende de aplicar solo grupos seguros.) Tj
+0 -13 Td
+(- Las categorias excluidas siguen pendientes para fases posteriores.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendacion Fase 5B) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Ejecutar limpieza controlada por categoria, empezando por Mascotas y Limpieza porque muestran mejor retor) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5B) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-05-31) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Aplicar mejoras reales y controladas de matching unicamente en las categorias de menor riesgo:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Limpieza) Tj
+0 -13 Td
+(- Mascotas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(La fase no modifico Bebidas, Bebe, Higiene Personal, Frutas y Verduras, Congelados, Panaderia, Carnes y P) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios Aplicados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se creo backup validado antes de modificar la base.) Tj
+0 -13 Td
+(- Se seleccionaron solo grupos seguros usando reglas de Fase 5A.) Tj
+0 -13 Td
+(- Se excluyeron grupos riesgosos, ambiguos o con conflictos de formato, aroma, etapa, sabor o especie.) Tj
+0 -13 Td
+(- Se aplicaron cambios por lote sobre producto_base.) Tj
+0 -13 Td
+(- Se genero trazabilidad completa en CSV.) Tj
+0 -13 Td
+(- Se creo script de rollback.) Tj
+0 -13 Td
+(- Se extendio /diagnostico/matching con metricas de equivalencias actuales, equivalencias por categoria, ) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Antes/Despues) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos modificados: 502) Tj
+0 -13 Td
+(- Equivalencias en categorias objetivo: 698 -> 924) Tj
+0 -13 Td
+(- Conflictos en categorias objetivo: 234 -> 163) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Por categoria:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Limpieza: 306 productos modificados, equivalencias 451 -> 632, conflictos 166 -> 133.) Tj
+0 -13 Td
+(- Mascotas: 196 productos modificados, equivalencias 247 -> 292, conflictos 68 -> 30.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad de Datos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Backup pre-aplicacion validado:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- backups/supercheck_pre_fase5b_20260531_215846.db) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Rollback disponible:) Tj
+ET
+endstream
 endobj
 33 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1389
->>
-stream
-GatU3@;jmY&H2$(E<nV@)&cWj--K%;TLmjZ_#hPh4:D;p</bpB(e>oH;I80d5>[NVB!s3oq'&WtJbSU-hVH9U(L6I0B3G:?9jr#$J`jpm#%$3j0YN*7e)$g#J)`gKG'o)OE<8[hhP+Y,>u:.Le[.?W4pamj(u,\lh!-.ocfkZEge5Nlp78'3-:>Wn6U757_77l8;:A5&;jb;7oN1AQU%beQgCKg:ot=oSNZ61$2&J!RBP^@d<HM^YBoO).Ynoij$o1<8>\M#Q0h?$(17BLST7s#$$EhS-fL9*^S8-uLU8EfF%4`haKk/.Vcb<"NEBeR$pbW$4Yf,ug_N_&\<?Rl>cj1)[-tM29pc@&Vim9fKqseC[r&b"tBXfilE_)Fn%F)go7ZGcan7\DZGnm2BTg9"h\s0-#<%6(F2*ga.bPe%H\GA:<e`P&6.85`JD2?),=2^.*"m)Ud$HO[?KIWqFW'W(/)[i=)W+\XNe<n-I=_p39L#b8nDAEg^>?\Pmi2tu403.kmQK#QrWu%qb55OQCP_4QCm`8DVil-nIiQg)mO^D=Qdr"<a'Xc=Ho8FWYX,VRdR"QVq7@S&0W2^Zgqr+b81$Dm$gqnT^LHB)Z$l2_hRTo"k=9uko8?+(/<T4[on6\q.>Gr-smTck7_,F#O?S>$qWcd66Q<*j68pER2XUU3W^(j:YI2+Y'[;Ke(bM!uKr`^DpV8dh`K=9aB$cb:WXZ1p;D*kk%'1B`jH;GEK#2s6Dp<boY<[e.Jr7Yi'0QDVXK@&H'f)e0AQd9/@4*4l9as]2"Kr*\dgl(lj6Sc*rcF'.d<Me('_m8R,7]6G<,TgVu^\i#VKa2/LFbT?7LOZ8^N6a'lIn0lVW2ZR";`fZbrh@S*-e0NO6&NaT1/#LRTJG8URY3N:]jhGtkqa)S\+>`DWq:,r]A`9bN#_VK&p]3oA[J:8pu=isgQlNJb9IYsW`:=j`lN)?HVh4#;6`eoP=%+#g/,m2Hh1ssO;l76]^'=#e86HI\n8s*,Ac=r+70`N+8Q5!]*h\fZ?m]XKI\rD9OWM-BZGKV/SstUI0IQ5h1Oi=J,Rt2<Y8YrK(;TKq"0/P=gb?',Oe1_4`^1Lc.)@.6t%r>)M?^r._69*)1q>.Qi`'pUiD+P*V/=fjDt)Yr!"P;-@^H&j!F8-*'^<X8Y[ps+.QSd>a]6@iN076e-=26Rn:BT62%d=j[et_W0B.Ohf`T=-Sm%UH^nS9942pl1A:YJUgi,tI;:X_j;=M\]XiXn-TN/,rbdU?@GhRgR/Em;*QO0nRlR@"'OKk1]3UK<NTGD)<5\2c,b>7(C5lA#pDS=JI9fp`^+M5)E;rG_T+1&OlaFP,%,lqUF#ge=9X$/,K<?+M,`SKLi%T8)-LK1W(O?;qZ2~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
 endobj
 34 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1452
->>
+<< /Length 2016 >>
 stream
-GatU39lJcG&A@sBbV<7rMS:+?VmK!F"h*0&l_B#U9T>;D,Z5[]7bh?X:pRc+j&E1&&I]/o2dc"_)*nNO7,:qp!$A+XGoK$`_fQ2^)Pf(c#B$E6eYq@=5ro<](ai1BJuV>AO^AP`b0e8op)O*,?s:J0D7hqZoB2WLMn8)ZZ1-E\]OZ_MZ!cLROT0G5dg)9>jl*q6^:o,V_r/[)^9iQ5D]*L@Jk>,uh"gNZL%i>Pc6la++%4Dpj5.(&!8->u@<\ljfdn&&@?+''a`V+3U"h*/%[tXi^lN=&-F=[o++]SEDaL_oSnbW&!6*(%5XMN;Kkf&]#4BkJ5t+q<+08j.)>BF]lCDe0%eNIRnXMYE5(6.R[?2@XrdfsO&`q6BoM$pte33-g#b3/)&]^#Vp<nHZrW"R^H93*^8#;k?/s0Re,3#NdcQE2do)8"MqYSNC*7Vq-;EBY]EIDQCZVtE/)j;k5L&X[[9\RmEe>?CFMU\Nnf()HP4O?nGVP_0%/BKZ#<D*L1Qj6_nZa8?\*(Y^h%P:YmB%1L&FuEFcW&2A)k8,h]mGc7)ll7q_?e$^LPEHZ4YGPt9<5r?t+$^dL"O8D0US0ui?.`dIC.F]qa?"u#>(VK0/^9G@_I+KJ@=Bm8a0`]YJcTN+37aa]G"e?rKM`:3][:moJdi"=[O1ANb1)Dml%?tidO3M,%o"VNFL6?1Nj4UtN=84=N:W5`H;hY?Z!b+Y#qV8m%,=e93G0?_o)Un[-6]=#8K(`6ntTuS/-oZQ[OVfcFs/E0cl24[X\fed$a@,p6M:JH?ML%qYf)t\7Xr3c?dV>:d40'87Y<Vl_V;>%E7l-kP_ADge<9gc2&SQ=C7VOO1u(pH\h@)QcM1eK&o:+IU!fAMqG?J])[eOWmS[!q'L';uB=A!>V'Sl\'D5/^iB*BC-OXnZ46IP3;j/i<^]?s"jHZ\_:U1Y2C)"J.UD"nu`di[!s5Ff)$[Tr?BJinT2(O91MXEeiOMH*gb05nK\1WJ-Pir"gf#q)qf0'ui,@K8\UaA+ATknb$6V.9MHHs_fpBeFdWl;SV.cq`j\rl1I\/fgOIAc?RYL;V;YL3Ebd@)WoO=hHhg=`SbDn5[3ou5+XT1?,:##!Mq?l>n\R!t\4"=9jW8AjFH3Pj/qJ=ADsD9#$n&a6L!]P8m=?.[='dd&nm7U`\V0Kg9COZbTJ9Nn^Y=RG;]QF41>5?TNdTj]k"d45n<?[Hn5iO1?l/CE!5`R6pLF.\7Jlk7^N55Dm];1A:,&EWnNGgMW98)71:(Zgt44hc\2N:V7%p+D1+ge,#lrR)<I7m.3/dD@Pp#BII8"0ga"&j5#8T#-,YrE0"Ul>'0u58#H!7S'fO);6t"?<*R'iMNr,QD7jHonITR;>Od!<\6C2XqcF5CW-``(YuNg9Ad]'_SVYRT`#Sljpu;)?/#Ui!*-6;j)7W15W@m'M#a<C*W.Bd~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+(python -m app.scripts.rollback_fase5b) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(CSV de trazabilidad:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/fase5b_cambios.csv) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Validacion:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/fase5b_validacion.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Creados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/fase5b_apply.py) Tj
+0 -13 Td
+(- app/scripts/aplicar_matching_fase5b.py) Tj
+0 -13 Td
+(- app/scripts/rollback_fase5b.py) Tj
+0 -13 Td
+(- tests/test_fase5b_apply.py) Tj
+0 -13 Td
+(- reports/fase5b_cambios.csv) Tj
+0 -13 Td
+(- reports/fase5b_validacion.md) Tj
+0 -13 Td
+(- reports/FASE_5B_REPORTE.md) Tj
+0 -13 Td
+(- reports/FASE_5B_REPORTE.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_5B.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Modificados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- app/matching_diagnostics.py) Tj
+0 -13 Td
+(- reports/AHORRAGO_MASTER_REPORT.md) Tj
+0 -13 Td
+(- reports/AHORRAGO_MASTER_REPORT.pdf) Tj
+0 -13 Td
+(- supercheck.db) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Tests) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Resultado final esperado de validacion:) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- 40 passed) Tj
+0 -13 Td
+(- compileall OK) Tj
+0 -13 Td
+(- Import de app.main OK) Tj
+0 -13 Td
+(- Aplicacion Fase 5B idempotente sin cambios pendientes despues de la primera ejecucion real) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos Pendientes) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebidas, Bebe e Higiene Personal quedaron fuera de la aplicacion real.) Tj
+0 -13 Td
+(- Los grupos excluidos por seguridad requieren revision manual o reglas adicionales.) Tj
+0 -13 Td
+(- La base SQLite fue modificada de forma controlada; el rollback esta disponible si se necesita revertir.) Tj
+0 -13 Td
+(- Las categorias de alto riesgo siguen pendientes para fases especificas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendacion Fase 5C) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Preparar una aplicacion controlada para Bebidas usando lista blanca, validacion manual por muestra y regl) Tj
+0 -13 Td
+(---) Tj
+ET
+endstream
 endobj
 35 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1241
->>
-stream
-Gat=+9lJcG'YO<E$k*h@(+phhqQL%f@G=LPBosUZ?Kr`/.E5@4OU<NTrP8F,"_B]P3-&QqU4Yqpb^4:'*_G>,")X[)"Pt_LnUZ;g=PSN5,f&CX=,Y2\AGZg)O:WKgUEk@<-]\r8eq7+$hCZ<]gll/Dio5U*>:F[[SA"+I.b>Gc<CJNbVX6AZhm)so0moR?I_k#jAF<Q++AibhOTBn8lF$Pkjei6RZmg9_s5G50ZA9t!%9L;h`a>&Fc"#c-98VGF=:.LF.e-^h[h??TMH0gW?<%g,IplNCl=Z!3)\+*H<a&#rq:OaI?:ZA_DNRNG]0C%Y3M8L/,jJGPYV#Fu,C$9\8bObnS1SFpiu_P`V,Th3I^gU^+Z42#dVJael?Q]=U]V<;4Hb;L/P10i8N9McOnasR5:2CEVIOC],OLQt_N9c$d_iYs`-Ng32R:mT$!WS^#S&o$fRE$E$BOu@_[oD$,\&@pSuXouGW&BX?r"ar;/u,VBLmV0ZITU+27.N<NaLOP7bT!iIq4Cc%-GNQ'<^N3GC'"tZF,FL=X,3[H""+7P&"Ce)f6`:Xtktf[rnigD./o+RSoStih:*fDYP[%!bH7B^$F\i>!8\g=ai#`<40*oose,`VK?0U/4tp@dX+@0-b0"M)_PlBgmI'.a]FH07,$?OU2J3Ek[r59dEMamW6tQa?ET8mDs*s=qP:ZKP.!JO\m-+u<uIPdU=RNZFG@h*,*SKc()mQ1QRnlDOO)qEFus;A0mG:aj_?r_HPm2%S-8b_6f-T8\LhPJZQ!e,Dknr$]SeX4ls`]C:k.s/cN%?VE[1AO&lYh]UC0)Q4i]M9;*;O.g[lOh8ZSbUpnX216afI*l^#NhP+q8PrI5/\bI'6R/#n]jgC$T=YI'F8HAO:^pRk\S8C\o;OKVI4^X$s",-N&UpRB9;1%>c>2!L[^[e=oJ<eZ9A<k1&p7\pQ/Bkofg$_L<0*K]:V*H\YEr#TA?\:/bknrMP-2/oC,BfP>LFF!jh7VOV*XT)*fPCURVTK)50P;<"/D?mUF7b[YtSY<AB;WlhWeho[fAWbt"3hJ!,(ilFSdF*SP8>Cjb"6+s+K21`eN8S3t(iV"4Omq4*cPt6I64t?d6/rG9[JpQn3Z(5qCK,N/kujVFHJT'^X";SAg]$+DlRisbceY.$.">PiP()3nm?#e?;h7spKJ$?:iWFO@*ZVIs'QqL]Vm;B/Fp!:#]DXG[.Kg44D"2V,bOdtG-N=*MDl0r~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
 endobj
 36 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1285
->>
+<< /Length 2333 >>
 stream
-GatU39lK&M&A@sBbV:]XMPr2_^$V[9@#G`_DVRU1!7mMU4%pnt-E/-]Y@!BsPAP+hA+`/Z*(fVDkfqS45n#J%^[_TedgRk4)6a6U941ne_<_@icUR4tIgq$H)C7(4?&1G7p#sk@GIq'XQo4m*)ul;)H]!a#TN?)Pa2VW!6>8lB'e!aX5=WE'liC_53fpP?Y6R=o(_1(jV=\&^kBOPU7aqJABZ5'K'Wl2ZW]G%JI"@$p&C;[D$M6bjdY9^tGA313W!HS.EM:b[YORH9cp]](qGt*Mg9(KMcaL_0\<?=j>>\[MgMI3Uc_?6u5)c:++'FZuLe"tgYj+edPT46\.^Ws9<R[ZWMjd8RH_h;mV_XD<92Soq$rid%>LWrN,V3\4@Vsnd1;\nrARGV26(f,)=.4Z?7Y.8FZs["R;FmlV)('5aRUM`ZO[+XMYh5k@q@p:"[CSSXcDPqe*/2[r?/u\VbE#ZtQ2k!T<_d1%C<'f:D7:f6Pa^0od+"/a-F1t+KFJdheLTHEO]@GfkD&>.UD9g,:YdO98QOm^>`E$F$RNmp4X7FLTV?k?(J\Wn;"d"9/uq*mcPG&D@hgimi&&C"l,1X$pAfbdf2@A9DkY&Wj[sNG.og'c:SpATc(>3_O\H'bju62L,)M:%BjK3#H:nNc4P2[o&51Fs\Ng6+8Yqsj,Y6H:ggSqhC;I1GXfB3Z/a8"sgBhnX:DcimjmOsp2slu&E9/t)C:1">\P"_j"a;0T(4rnn-GV#MT.l([mB#>![I0Lu[?=q>f\YQgEm5F_i>(T6h0[,oEkNWF:N3@<X_Io\e#W2eDB-\k*>3<PIW;IJ9`lrhG8u(abMS#GNsF]pe66]teo>N*#55Rl.D4>oj*2;LO\Q.fp`'#R'QCuVqDp_T61fg>7K6Gk3c1F3(gQiRY(X's)9N1dG6Cf0713c-6?5p0*TFqrRqjdIT&7FS"P;YdG)hn9X=;N%aaR,LN4]WukHukmDQ$+"oGr:hgsN[f:QT2F'8mojP,4eUk^f22<fV4$acNm^cR]gIT3\d"+5fVuDs@Q+OeP.d"#WeJ%V*VR@I/p5Fgl@_$ZFqg:-;rZdZP]QV#Qa4Um7kF=DrMN\E"-1'&n@\bY$mU>qVT4IrKF(rhJWM^7'PN8h>0.)[0<3gsOHiYj!SmA`FR_4en*':^G]5.o,#7PC^/nD0m^sDQjm\5EeP'V@8PWj8T/2T]Po7Y24`IP(>Rt_eK0"hG%ekOibdKFiNb&BdiI#a-0GO7_8t=5i02b\95M=oA'Au*%<e)^&t&:oMY~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+() Tj
+0 -13 Td
+( Fase 5B-FIX) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Corregir de forma quirurgica 25 productos tipo fideo/pasta afectados por Fase 5B.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Alcance) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No se ejecuto rollback completo de Fase 5B.) Tj
+0 -13 Td
+(- No se modifico Mascotas.) Tj
+0 -13 Td
+(- No se toco frontend, usuarios, scraping ni migracion de base.) Tj
+0 -13 Td
+(- Se modificaron solo los 25 IDs confirmados por reports/fase5b_cambios.csv.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos corregidos en esta ejecucion: 25.) Tj
+0 -13 Td
+(- Productos ya corregidos/idempotentes: 0.) Tj
+0 -13 Td
+(- IDs objetivo restantes en Limpieza > Blanqueadores: 0.) Tj
+0 -13 Td
+(- Fideos de Fase 5B-FIX en Despensa > Fideos: 25.) Tj
+0 -13 Td
+(- Fideos residuales globales en Limpieza > Blanqueadores fuera del alcance Fase 5B-FIX: 14.) Tj
+0 -13 Td
+(- Backup previo: C:\\Users\\Gonzalo\\Pictures\\supersuper\\backups\\supercheck_pre_fix_fideos_fase5b_20260601_2) Tj
+0 -13 Td
+(- CSV de trazabilidad: C:\\Users\\Gonzalo\\Pictures\\supersuper\\reports\\fix_fideos_fase5b.csv.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Rollback Especifico) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+(python -m app.scripts.rollback_fix_fideos_fase5b) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( IDs Corregidos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(386, 387, 390, 391, 392, 404, 3475, 3479, 3483, 3484, 3485, 3486, 3506, 3507, 3514, 3516, 3518, 3521, 352) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Validacion Esperada) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- 25 productos quedan en Despensa > Fideos.) Tj
+0 -13 Td
+(- producto_base vuelve al valor anterior registrado en Fase 5B.) Tj
+0 -13 Td
+(- Mascotas no cambia.) Tj
+0 -13 Td
+(- Productos validos de Limpieza no cambian.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Auditoria de Categorias) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Auditoria read-only ejecutada: python -m app.scripts.auditoria_categorias.) Tj
+0 -13 Td
+(- Hallazgos totales: 95.) Tj
+0 -13 Td
+(- mascota_en_higiene: 53.) Tj
+0 -13 Td
+(- alimento_en_limpieza: 31.) Tj
+0 -13 Td
+(- bebida_en_mascotas: 11.) Tj
+0 -13 Td
+(- Los 14 fideos residuales en Limpieza > Blanqueadores no fueron modificados porque no pertenecen a los 2) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 37 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1546
->>
-stream
-Gatm;gMYb8&:N/3%#bm>$ATBcMNSsTJ<S]c;5[8(!IZ,!NH[n8\pL,oQ\M'708>_H>bj'>qa-+-jdre7B.fZ?+8V'W:LO60cf"R\Kld=$"f-F,_sA#]B"_3J?'@T=8HplkfHa./eU'G`J'Q@KAu>D!ZIrj,]<JCJIL1d@3Z>gs;Ma;!T2uDC(Mch*b$YpUP[,WdrVS\"DIE/gUV?31rsh%@Sqt#[4g)G][>6G?GsY4K\I$Q)^_`4)hXGGYhnHgLp[RPHo]+V)Q5J;3ePF2Dot@3C>0EqT!SKg&pjB:PjH,3=cM7<V](E?tks>XO0M;W)dBd7sH+XYk#.7GC]lF-'oE]OT4c8Gc8-4`V?.[JXUk;u7qHlesiB/iG#:]WhIlNiY%:;(&)_&X-J/sa3oP'DQQ5J0>KAUV#"!F,>6:nIL@/skmo:A@g!1!-enCm[j@\YJ'[Rt+u(Tle=6@Il&>3Q*Yh2nRF[oeF=%fH<Zs8QZqC#Q_@(eIKMj&S'@!J>jE-\i;_R5A`OOhEoGT$I=c=)dYFqY0GiGt[k>/3aKFWYf&+/3%k\eU@AV/A*\7MaE(5Wt"`M2\OD88eYqK=B3^IZ)?t<i*bN7iU%81b(;C6o9%p;6KOJljWWBQMOM]N#@BLk3u@'OZ+Wg?qe=L9DTYKFg@R@9I%X=%T+FCsA4aK;3ZkM!Hfi]^bgQkt(]qg)7r%+;dGA8LR^f+hAQE@8"Q'+1"kK=4%<g,K5SBSsLo8]0('A%f5sVOt_L-4a4E<Y\`nOdkNUjLAED`?S&h:8;J@BX\4A,N+Mlb!`_%%6+Yr6a/=F7&jgu0PGod(-tnDGM$WX23\F:PfNYRVpYA0jN\RU72c?$,"t/OU)UMW@X,FIXQpmn0d"csN7`+7;d<3hSl4!<P,9#!H-4$aiFm<-\g]j$nL1U<H(/gCaCc5M2T-e!\-=%3nH,]2/Ur5bO+\[KCq3cCa#-0^&Zq\E+QAobddIUqkqnH`3t]%Z4_6"s:'Io"=u")5>U@&YrTl?T2Rgi4L=^"Nst/9*+J4P!Z.$EY`d6[=%nJcnqKt23Wq3MVBqEaI:`aC#R1FY@`[rlG,].5rF9b-c;JaA!$-30GK5;$SWkW'lboh..h^ANc_p`j#GL!</>(H"1dqI2Al\:\VQnYL^9a;iWf-ReKbGP#muYFd8X:tOcC2&7e`+Q@p86VLX%a+k1ZSBlLR`8]4r_Uh\t:f=&=k=5TuFrSq950Y!#D/ctin%:f[nA9TPhjcP>u=i3m>O^*u;_%"B8TiEl5A8'?&qN>9f_[Ssl@/Hub'C$C#5%>XlD9VptX_bhq#Y!mfmW94F9X@U5V[8^]q9W\qfKB8YDS:qZme2f(^@n0?Ug$WRje#Fau4Et%Er,7+\:m'Zn$RN%KXQf^)r\)<WNLG]m28h)I;AEnWgZkXb2N90lNtqJ/D@(!Zq6FNb1cG\3Xo(3dmi2POqp#7S<b-EsE)Io^QOb@3+Y11&_U6Ys@(=fZO='I_V".k'"tX?2B2_`bSpMo$TVtmK78@]P[RP+9:>^@.HN+%-15:n~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
 endobj
 38 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1237
->>
+<< /Length 2155 >>
 stream
-GatU39lJcG&A@sBb[l?IiG(gHgUFV)M?R1"]B`sWAjVIl"qmns;R"h]^DP)<Q]nYY0*9?PptcG:bTd;0&;-@aWWW%+L-JE:#RTf+Lbq_4r=qN"(Y=T@56B7_P#*DD;Vg>Y_5f<#B(9lSh1r`OXLi2EC>)5L2CC83%um=g*GkA__s#0/Nt.k\JQtQS+MWRNHYVM;2u5)IK[Ipp!>XjM4PYP*%57VB*NZGPrB$5?Z1tRo:uhim9Hs8$)XRcb%aI-Ue>5(J:TpjpF!(Rm`l=MpH/](2X9WSHElN"GE-.j<-\nhe2='q.Det5F?Bkb79dBFP2>R=oN893*QA]Gt-lf1jmOZI8"KqiQFJQuCO+Xcn4Oi'qg'hCrAUFK]/:pZXR$@\B]laEC:!bt+O(tm?Y]406oi*%=kI\OU$hSOiY6W%7O`Qgg;A7FMW,JmdUGR^](G[J.pjOKTc`_!9,M8&&J\t(B,"N8*=$ai)'i*-iU]Ho>I>Og8d0iA&A<+=e9MS/biX03IoCm7u4qXt3bGm,9T7tV^EfL:\j_fZ\'E2>T=#>%d!&o8=*18?b_dnl-SA3I:jYgug'XkTmRT3<39CN^9m)Vj-HQXgLNi"ua1H5G#p>e8TC(`&fFQ+n%XDU7se(-1Gj+u)nC(#Zr/WeY^H.)5$:X/+i.Zh9t2VW[+Q9,9<Q[2F#0)&Y&i8dQG"oP.?*RR-uUh+i\8o#A_64eEk%"uLc6JL`12U6?flO[H-*Wt'Z`hCgCmL>r^J@a3+#Wdg'JbI5pY>#*>H@99j@,`SgFLKa>XjCps@r?kuAl9YNQVWp<_=uU5(4%m`:kD9$*s:YJ2n!oXaf\RkL=?cfc-$n-FHVMAo!URRNNXsedgA89Bsc;nkQ$D!,qDO)SJAfF.,T5\]RiO>63`B@<nZG&V">-EW<,%JEGS+n/HV.oRoZT3E`O<W4:X?Bbc7FR$2)r[H8:Bna>?lF<#gt_Xm\he>!H"H!%8ADbNDA:\\4N`aD"+H;?h+#K>kaGl(L>FTW"/VqV1=dU+0KZ]ndjrjS&/KCJV>EpT2I31%ib:qY$uE=+h#UH8Ek'oB62V[uY1VEZ/htL$Ol:f\&#?_RH2;1O->5VOlGRmIhe!O/fZ1jk:3s5(!JMD"W:!YPcNK\pknE2]9o(6Lp>'[9H%u#`,rPfYtV8Z+$;Pd1Zid6HeEpg\H'Z']3]0#lKnK!CmK$27CT/b9$FL8h2=/1/=G7(+fFi)P$76~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+( Validacion Final) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- python -m pytest -q: 43 passed.) Tj
+0 -13 Td
+(- python -m compileall app tests: OK.) Tj
+0 -13 Td
+(- python -c "from app.main import app; print\(app.title\)": FastAPI.) Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5D-FIX) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Aplicar correcciones reales de categoria detectadas en Fase 5D, sin tocar falsos positivos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos corregidos en esta ejecucion: 64.) Tj
+0 -13 Td
+(- Productos ya corregidos/idempotentes: 0.) Tj
+0 -13 Td
+(- Backup previo: C:\\Users\\Gonzalo\\Pictures\\supersuper\\backups\\supercheck_pre_fase5d_fix_20260601_203003.d) Tj
+0 -13 Td
+(- CSV de trazabilidad: C:\\Users\\Gonzalo\\Pictures\\supersuper\\reports\\fase5d_fix_cambios.csv.) Tj
+0 -13 Td
+(- Hallazgos restantes post-auditoria: 0.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Detalle por Tipo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- alimento_en_limpieza: 20.) Tj
+0 -13 Td
+(- mascota_en_higiene: 44.) Tj
+0 -13 Td
+(- bebida_en_mascotas: 0.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No se ejecuto rollback completo.) Tj
+0 -13 Td
+(- No se modificaron falsos positivos.) Tj
+0 -13 Td
+(- No se modificaron bebidas en Mascotas.) Tj
+0 -13 Td
+(- No se toco frontend, usuarios, scraping ni migracion de base.) Tj
+0 -13 Td
+(- producto_base se mantuvo sin recalcular.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Rollback Especifico) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(```powershell) Tj
+0 -13 Td
+(python -m app.scripts.rollback_fix_categorias_fase5d) Tj
+0 -13 Td
+(```) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Validacion Final) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- python -m app.scripts.aplicar_fix_categorias_fase5d: idempotente, 0 cambios nuevos y 64 ya corregidos.) Tj
+0 -13 Td
+(- python -m app.scripts.auditoria_categorias: 0 hallazgos.) Tj
+0 -13 Td
+(- python -m pytest -q: 46 passed.) Tj
+0 -13 Td
+(- python -m compileall app tests: OK.) Tj
+0 -13 Td
+(- python -c "from app.main import app; print\(app.title\)": FastAPI.) Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 39 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1109
->>
-stream
-Gatn'9lJcG&;KZQ'ltgc>mQ<YOnuY+]LhjZ!,66@AAFlfg0lIn1+<BGIsjV2@(3@E=n5m@),&:KEorpd&HiXFC7i-A\6Hf:!s4-a[0&gE!ini$?S)bGmPbDBl=5W;(ZOQ9Yddp1YIeEQX0R0LZ2IA]^>`T&Qp'6+;&mK[d<WWF^"G.kJ8;PC,d6=A[_N8_j\Bi^CRY@qUB(5nX#F/Zkp1X[HodC@U:E%nE,>_W7[G<c)TkP%g'F#1%-#&q8&.uj>e>FmigggD>:Ts_<gHIr\6OedW%nX@O"_F`OTb^1+WMC$S<[=#bW;PaWAB-Fl;N:)"@[RD+DnVb21$!upL84t_&Z*>]G,i4Tp+.iq9_$ab<N*o*#eXu$DFt?/j1\N(bQh-6q@#sFu"N4_X99tfpg7eqa#`P\kA5!BTQI*D=]soKVM2.1_$TuZD,q<S9M'=)CfU#1Ooo'`=`gM-VhNmK[MJn=:FOP.W6Eui,R92]ik%mUb1@PY#T=D@?--deAp`@i4+](M!-dsgU!C2@"2Er,qP;HO<=om,BtG4/Sm>>#Gllk?;H*_aRg-md&(?]L*K[7C<36RV5eYB$&r?MerB]V=X4<WLVN/L.>@U/5GICrr.rY[5;C(/^gn<jF<QgcF-64:B]Ehp\[<7Eqd@7B4.U9,`KG24*&CbEgH%nhneX@H94aWsQnY?mMO)e%YIgCV\bEGW#+erA?_uKV?:gOVmG]r8br5+te'uUY&\\U92houo@ZR/m5IHc=/IKU994)GA(Tq8Vgc1\@%Hicc9X.iE#E]#o4bT`,dHn^.Ddh>(;9gE#.)s$4_3&u09]G)Sp?8_k`d.4hSqS0h=5p(*[N6gD0A7;@l)]&O;Ai9imGcR0mIREL&.OV9\sHU'CKD*)p/!M]Io&*@HRH6WG>t)W_6cNs.@j+[P[u/[GLnTZO%r=P'ZX9+FraJF!@AkEVbq.hQhlcu9;)JN$Y-SR70YaD695_9:FN+Q9SUPEV#pWOr3a4;0&'Uda=)hjq,WU&CmcrXWc$"ofJ^9NH_kR2\b3#`bK-54\H6KUO]?7:s!?sT+CcB3\c2Z47<b(VZS@&IAS]b62pQ;q_7mU&Srj)4+1&*T<r~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 38 0 R >>
 endobj
 40 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1072
->>
+<< /Length 2102 >>
 stream
-Gau1.9lJcG&;KZQ'm!%bW%<ghD!fKh3c0FYe(?]":`,(Ufh*MW;ScsprBalETQWq3DD++c/3PY!L+gRQI..0E/$/e(;j^l95QRZb5bSu\H3;?4nhfT[K-3k#!+r_Id;&5/\P2nPRh\:o[4gFET1PKT1bg(o!>c\3S&'_g`gUVJAm8_HR,shP65n%Ho[M(%#=uTqqF<odTA8mt;*:;KR?H9mko4#2&PI=Q'OI%daDit"RnT[2QCM,m10P=.\"&Ud)NU>"(Ob_D9kR6ZIjQHTPS960WA@-t/#;=g(^4nu[Xpit8t*spUDVfYF55?an8,>f<F$6[V9"meGtkEb*f4=Gi.Lh!iS@f&TAOeCMtJh5ZdnX4h'u^AR8MuDC8T._0'M["p0)jX>HJ[5m]tTd3aJn7qD%JQI#D8^DD/c[Xg;oc7q=Q;]m7NLO.`;,4A?%$!BJWp@.<?X&U(G+FN:#MJQnNQNoH/Y2sVUn@=l)3LdVfNVA8(,D;sL_T1'>i=/=pW[O:>G>SN1;Fgones'oihb]GhX-I[p<b]r$('J;M>SV_8<9.hbG1pP)<3CpgXE/"7`Mk&@/CT=qN#-Ke(pD6R7G8Hj14_3ism\GAo'bI3(du!T)?0%$ai$eT$&is[WR:]D*@s(N??/?kVln*ZN&tm(,:8q7I1^tuCc&*`\L&?/]-qJs+N_W="eM,cT^;2N>O>HZ]p@3U7.%#]u\[NLt+fdUL#*dWacSld_7DqWSij%!UJ%NI5okcL,%h0=Op%GJ\,gbEI%RkV+<mfe^HR8qR.nX7h7;j0P($%[dr`JeM.?//LDn'Y&V&.d-Ns$t(qoAs88,(h;j@XH$iSj0c5CN2/#8nid7BmqkkC\P^jI30K2:"kNeDMuh?&'"\ZZg4)iSMp%!rBQOBt@D&TUI_Q#L/2OAM/P`<`U.ZU*_`_KOo"UPQ[Gi@t-NBicjsG`]EuAU#0WsVP[BfdiG4@ZbR)\5JefV&.ZS(b9%`7MYqok^]-#DJ"<0,aP%)S@:8P!YE6Z\D,Zi]KnOmTppm^+Hfc7*0r*T_1K-gH?^\tqCJ+='*[^mf-ii2X~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+( Fase 5C Reporte - AhorraGo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resumen Ejecutivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fase 5C aplico matching real y controlado solo en categorias autorizadas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Antes/Despues) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos modificados: 22) Tj
+0 -13 Td
+(- Equivalencias: 2218 -> 2225) Tj
+0 -13 Td
+(- Equivalencias ganadas: 7) Tj
+0 -13 Td
+(- Conflictos: 829 -> 829) Tj
+0 -13 Td
+(- Conflictos reducidos: 0) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Productos Modificados por Categoria) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebe:  \(0\)) Tj
+0 -13 Td
+(- Bebidas:  \(22\)) Tj
+0 -13 Td
+(- Higiene Personal:  \(0\)) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Backup generado: C:\\Users\\Gonzalo\\Pictures\\supersuper\\backups\\supercheck_pre_fase5c_20260601_212826.db) Tj
+0 -13 Td
+(- Rollback disponible: python -m app.scripts.rollback_fase5c) Tj
+0 -13 Td
+(- Auditoria post-cambio: 0 hallazgos) Tj
+0 -13 Td
+(- No se modificaron categorias bloqueadas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- La fase fue conservadora: Bebidas tuvo cambios; Higiene Personal y Bebe quedaron sin cambios por falta ) Tj
+0 -13 Td
+(- Las categorias pendientes requieren reglas de marca/variedad mas completas antes de una aplicacion real) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendaciones) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Antes de ampliar Fase 5C, enriquecer MARCAS_CONOCIDAS para bebidas isotonicas/energeticas y reglas de t) Tj
+0 -13 Td
+(- Mantener auditoria de categorias en 0 antes de cualquier nueva aplicacion.) Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5F) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Detectar y clasificar errores masivos de categoria/subcategoria antes de usuarios, sin modificar datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Modo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- READ ONLY.) Tj
+0 -13 Td
+(- No se modifico base de datos.) Tj
+0 -13 Td
+(- No se modifico producto_base.) Tj
+0 -13 Td
+(- No se modificaron categorias ni subcategorias.) Tj
+ET
+endstream
 endobj
 41 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1409
->>
-stream
-Gatm;hf%LD&:WfGR$UEZPV`;U\3=3$(U[/(k#,B^&lLNe-eop7NnI\_jo5*kNBtZP@N^(ba92<f1HXJQis7sW+_j5q!k=c9n1'#<L<1Z.Bop3m)SSlLbJF$6&Z"G0L*DV0&I:8h\eBqLF_!MBS9,#5cNGSp4ncGj)#NoQ/-IbaZY<AQn>1_VH81G0Js&BlRRsqa)m1-cN\-=s.ofNAOOGIN1e:nEJZrqr1dahj!j!n$cr^?c*33e:7SX:iU`BV'_die3F.^e14j:hA<9Dg-"#J8l21Zsr(?VKnfn*T@Zu"e1/(-beM,ORg*L7*^>_CQ[@&7!<e7]CcM0&&[Zq^tBn6*3GQ(4<q<[eIaLHX>PUX;0k7H"n!T@L"eKcO/hg_\UM9UFa+D7FD8j*t]TklFCSBP![(W[la;iK9*da*(RKANO.:2,/s1OX:H6$W],G3NL6pj]$o2k4C$PnTR:=Ip#@t'iUh"R5#PI=(n:>!s0Lffh@S\6U:%[[LLqueK+^U<4/Oj#_oSKURW\t]N7(<P-6+R_1q9IXG0gH7\#mmn*HVK/(,^NadR#VHCP07Ie9jH7s`OoC9EJA('S[#)pNpW_:gs!LeV[!clb;#ERe*pVb#KSHif]qJ3,"/aR<e-YVENH;:83PP(jk!A;U"hH\!!+cjFr0i<_![><(WV0$K4:"L^l%T+.KF7O'>ME!Cl`>W1ZI`3'\Vht$E'0Ed%[$t5>i0<HccJQ<])VaY*$H_($Ki"`>j8JX<2"h%U5%>h3?SpVbjeYe'Oa\Lc\"`WKJW6)imYk:M(c#K]/M/Q;<+$d&>+C3PL[0*BK)9pK\gJ*usT_'kda"uR:kd%.37EJ]^<IQ<YNdL1>h.f(H8]P8/oG(P]m*j]Odug9\H_)%!ORA0?UNPXr)n7*^%6m0!`qbBDqiF3/['IuPG9_+5EURBGmuQ.RS6U%ED"O1B-KFG8T7*.#%5$5*Gqm&cpp$YSl\2g4k<`lE9_n^>+ih;%TA#"7J<=C*r:0.gP#5l6]9.L,O2oPZbI-O++D4nK4*hS*XL&3T8PTHa:!P&!Jib`R2-)k*;>-#BH'<UPr-2J:HN$VtCAIr(X#_knn)7IT9;&eZO+(F,Sp&)qES$as)ne#OH5uoYVJM3`QClS"7I:ELa9jKO?GIRr/?,*L%%g\KWUc`(DiJi<L9W\PUc?GbIP?Nr0)^\.9FT3cdGkgYgb&H9O`7o`+&Up2KLbL\Q@K_r)X$:W04S:M6Z3LukJ,mR"8@<$StGb557XGir$r\.c?=TY]kDq^>_V+fTgL`i.*pb*qlD,F(p'R*pHb[qs-N#G@D=acI@0R"I@.liFf_:A%3!nMJLKs!Fsf%?&)*(fh?Vc:m<@H0IOnp2gQ2%Y0H2)6Sj4!ui(4<*cudCHNTO[=*tQ^8HN~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 40 0 R >>
 endobj
 42 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1144
->>
+<< /Length 3227 >>
 stream
-GauI69lK&M&;KZQ'lth./Hf4P^+A/"h;.e_'Nm[k+#9^,LQ4b`,]2',o`Zd[2m'dP`Y!M?8<0M/e]^Z!,`k7m`4)fM\>`p5K`IfCYCU5(#5&$]f9<+(rsXI[MCFdh$aFU?1qBS]YIc]H](7R.r+@MR'c0M.DrANrPU67(FGHuC7OFF8O\0:Hglo^*"SX05P-4Jk3:CMN@>=V5m@T2aKmF."Dbf!;ak&=kUpsI]*O80;pH)oH:cRIl^@bu&r</f;ISn@mjaRnYY.8*&AU62B8kWEsHn*[);+S\X)-+[4f4o&R"FOOQ-"X$QXk5a<3#IakWZaY3]t,h"=j@4+9M)8s%'GiW"r^pOOB.b\5L8>Wj.AhTeOQ2X"8IJdl'E)Ti`AV7`-tgEDC>38#-a?1oJ/<rqoCb?W,!VkL"4=6YgM)P"%RSMXm-.Bm,YMN=tuZEMrHQ5:ob'n\=srNa-:,i3MK@_1nre6f0O,i$CU!Z?jfJDEP[<k6(d;R*RCVk4J6N;XcnJ&qTog<r_).b5lCn<,VC]1.ORY,H(0rr'H=k7LHDYuis5(qj].OFaZ'G]&(p96X!(F4P`nT$#e%86%n4iaUDft+=rtKiNC@Nj[(as^o:Z&fnpg:XQ=o6n2Tmp)dd=qf\,NLu_h75TRRb`l[p2EGjOtKdN<#GrCK3o.>)[.e?AnE\<s/Ai*&mV5K';Ic4HCcPE-f19g,FE@P4gpoXaY@IUh)9N%.>bh\$uf+--^(4i@MES&=4\QiL$ZeK2%.ml*\HfQE/hK_QD][IJ473_Io3L+E"LRdZ>r!3r@2HZq?(Zi%;+D7Dk?Yo/`2_I^G0b+s$CIpD.A][8t`c#+$CUo'r(o8>G9K1r$9W^lU]-Xkg8@GFAdGQU9quOJKHga@/T/1;7[PE!2MV2rTZ,'Qi#cUs+>*Lig/>jh28^k%D)0B](,AHYg646LM3AEb;Q_H'B#@X58+I]De7q<O6==);ka9pXglM#Em"o?3Jada2>NV:O@)sQ:oC1i$g*rTQ*D4!B`qC`p\XC\-unf<gKp>W33j$h=@\rp`503aO;P1IgKAWZYP-,/%KPOs5bEG^a1\AI&$<hc#Y_7<a0I\6-Z)KH0E7%JeH=t4VK?L`E:O\M9iNh5AZ_b"+2jV@K~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(- No se toco frontend, usuarios ni scraping.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Hallazgos totales: 1986.) Tj
+0 -13 Td
+(- Alta confianza: 1639.) Tj
+0 -13 Td
+(- Media confianza: 347.) Tj
+0 -13 Td
+(- Baja confianza: 0.) Tj
+0 -13 Td
+(- Falso positivo probable: 0.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias Mas Afectadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebe: 627) Tj
+0 -13 Td
+(- Desayuno y Snacks: 407) Tj
+0 -13 Td
+(- Lacteos, Huevos y Congelados: 391) Tj
+0 -13 Td
+(- Carnes y Pescados: 213) Tj
+0 -13 Td
+(- Congelados: 104) Tj
+0 -13 Td
+(- Despensa: 99) Tj
+0 -13 Td
+(- Bebidas: 75) Tj
+0 -13 Td
+(- Mascotas: 44) Tj
+0 -13 Td
+(- Frutas y Verduras: 17) Tj
+0 -13 Td
+(- Limpieza: 3) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Motivos Principales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Producto de mascotas fuera de Mascotas: 657) Tj
+0 -13 Td
+(- Producto de higiene personal fuera de Higiene Personal: 457) Tj
+0 -13 Td
+(- Bebida detectada dentro de categoria Bebe: 416) Tj
+0 -13 Td
+(- Bebida fuera de Bebidas: 298) Tj
+0 -13 Td
+(- Snack/fruto seco detectado dentro de categoria Bebe: 126) Tj
+0 -13 Td
+(- Producto de limpieza fuera de Limpieza: 27) Tj
+0 -13 Td
+(- Producto de limpieza detectado dentro de categoria Bebe: 5) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Productos Criticos Alta Confianza) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| ID | Producto | Actual | Sugerida | Motivo |) Tj
+0 -13 Td
+(|---:|---|---|---|---|) Tj
+0 -13 Td
+(| 56 | Bebida Leche Lactea Yogu Yogu Chirimoya Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 132 | Bebida Leche Lactea Yogu Yogu Mora Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida dete) Tj
+0 -13 Td
+(| 148 | Bebida Leche Lactea Yogu Yogu Damasco Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 149 | Bebida Leche Lactea Yogu Yogu Frutilla Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 150 | Bebida Leche Lactea Yogu Yogu Pina Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida dete) Tj
+0 -13 Td
+(| 151 | Bebida Leche Lactea Trencito Chocolate Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 199 | Bebida Vegetal Notmilk Protein Con 7gr Proteina 750 ml NotCo | Bebe > Alimentos Bebe | Bebidas > ) Tj
+0 -13 Td
+(| 213 | Bebida Lactea Sin Lactosa Chocolate 200 ml Milo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Beb) Tj
+0 -13 Td
+(| 217 | Bebida Vegetal Notmilk Chocolate Tetra Pak 200 ml NotCo | Bebe > Alimentos Bebe | Bebidas > Bebid) Tj
+0 -13 Td
+(| 218 | Bebida Vegetal Notmilk Original 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida de) Tj
+0 -13 Td
+(| 220 | Bebida Lactea Sabor Frutilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 221 | Bebida Lactea Sabor Chocolate 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 222 | Bebida Lactea Sabor Vainilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 225 | Bebida Vegetal Notmilk Zero 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detect) Tj
+0 -13 Td
+(| 226 | Bebida Vegetal Notmilk Low Fat 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida det) Tj
+ET
+endstream
 endobj
 43 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 981
->>
-stream
-Gatn&?#SFN'Sc)P($B1,]-<'k3$d9F#MZ&[[ZFcg6;$(P0NUi9g.Bigf2#/7g;\mkE+=Goiog!>IEic7(0H*e0hMJ$!Hc?fO:B#-OOJ1l\:IN(H>_9Z+E77=%6^d[;;->6%>33sHGgAje]To%1qoPMa"3<F\<s$t&&-1A(CDF#C+5BD^g<e3jKVO0E3Xm!_%QsD2=nP)^VN?V;skZklu-^a$5O@5((/n@'0u/B8,@-G8B:8%rBacHCFWjg'@"jWiWXhZ#uCe$.j;<Ta+UEU(^4"^:CGg6\@@P]\(9Ul)S9L+]urgE]sspC>7*C2KMVi93HgL9+j8Mi8"@Ru)>"KqZ+'&8UlHFeWX2[f.&cFK<=cQUmup$>l89mDn20=pSbD$b`GO3]OGN?a,n8Pf*#$hW/)n$8cNNf8;p[J;j=Fe[a.s=c9iaYu,.dQ&V=D(L/]VV<Q3frMa5)&NM!``Tj%f)/7_bu3FY0#q:'Ni7IXR#`2-^"]c1C@T.Rn)"bCliirq<R'KB(W4YZ)ln?Dt$dBphd8VX-lF)Q'ltIe.@neliP[iARcJ%g>mclKU)dEoE%*2IsN!Ll:U"Y3e+-8sTifW9tuhND35[SHg(>JgLd3UUjEGg54=;!KMU*4Rbei[_e*6FU5VBSB)`^AttFr_Wg:PFrH=`\]2QN1GY"--73VVW3-AhiV2)0\7-M`4D`QV@l%TQ[396`1FFC/MqS0uQXK^a%c_!lS@.m#<6m<C;k!4M"7NNigr?k8MCeO<;+d^s\J0$$'gdV;;-gu/PfQPnC>>6_gKo*NA%!T.RLDlCG-js(j+COt.N`eZ/nPOU;R.U6,(j-dm#c`6;l\Q5YpHN$_AbmB]@KCI_itrGE[kdQ^Kfje&F4Wi)%6V4=JpF0_t<^tIa!=.c:S"Us6RIHRN]H$s-;/SHY9CV3l`kui61a/9Rm$qTQ\jQ@NSPZs1JqAVTM;V'>f?:a8@"u>(6O.l'*=~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 42 0 R >>
 endobj
 44 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1470
->>
+<< /Length 2946 >>
 stream
-GatU3hbW9%&:WfGQq(>6i89Bj<!bN\+5k:]kt./%HB\$[>AEVoh)-\[p!q\imXThun.J/-BBS$;Dn^-063%%>h5@7RNY\jK)F>:WiYo[ER_[nk:)5q#48grY,l'9K=V=HlT^&(DcQZ677rEO2(;muZ)8i3:N]l\@jDquQ!jF!;?A5^'I#T@acoESirW7us=SsY:5AeIRcDK"/lrbD%OkZGWi>Z1kT15k#V?1H*;NiWa_$-5nPO[^?#E[4$BsnmE(A<l_^]#+&drelgdT:E()kd41e_UsME=Sg^)g5V9T^7+0EpV@Adqu/-Oo\4"g("(cdBm"M8$8#n>6AIBkqne5d%I3W^d18XPfJ@r(l!X.A,r)k/$t<:>L2tBS:k3!XJO]^(o-^D7BPg//OEtC^&s'c:d_*&-tn;A**9eQVPCH)m)D9oZgC%=;!=lhHPNG-]"Z_+5R1&N/K&6Q9U+N\>bdLdlo\FqQH%=o4?rj/S]+fl#:Zgt'Ph<PU*E3i?AFVSd59Mb+s%p]_2u>&p[\"-gc`1keU"T!l+5:7J=tP>bE__,@Jd"#';2q1#;cU.Z#b#E4Z^*.ZdmqP[^RhSh3.@F:!XNXjOkH+Ha$IMkb-u$=qPpXKbiJYcI$klADtGfhf/DC`sGjg%9<Ws@^mE-ZYWW)93Ck?lWQBS:9bZ`#aT][s756`"*+i"\^IldUSLRblME[V^<hclGbIc%*k^@+A5/@`\eG<RQeoZ?A<soZ1J-a[s*0g'O/[+kl5Ld0'L^V\ORC*H8GY/j_*F/3fu?;V>i(RoG<D$H*45EB,gP!KpCk#"*5nmZ33`Lc8/V>S/jtVk7^'O?;aP8#M@3r[\35e0*ZcRO"44=Bi:X_#o?I5lB>Kn.3)&F)g,.OOpso;'*1t<pZgh@!pA-U^m*Jn=gu<oC(Ks9FNbBk65ERTUJNn7UaUh^=F_n:N^o;0tU&%*aBWXCCbbh1.%!;UfBWrV[E<=0o:"SkBE_<&NndpSoE'9+IH2+8AHc#YiXI#@roLpf\UqG+QV7DMiGe.I!58,G<U71B)[XgNAFFbXQSU1^EqoXh:+=tp"XW(-#^&s:gMNlP*d'D?3=$Z(4<uTkjTYXA6a'_?BGJG,_8\t%@Q^iSJZ#&(oG;c8L>ZY,)DNf]g[P`B&!*ZPE=$8H$!Ja=V^qDtsd@(:842;A2RQqet-^J)D-ZH`*,g0K@.aS.-TtOkU^&ptVQI"J@52]=_<!1*^;isQ^e`4t_`q%I49m*A8DS.gHE`EG9a)WMrF7tOC)p%&N+(a(X1mWlelo"ZU>7o01jK2HGTB0qN%P';,Hj,dR`KqoIIfEhd'.mF2[dUW:3o$o?Y%t:d3Ou9)Y&QF!5G66Rf[]#u>+\<:q3t(PM<:A4DL*]4Zi>S]duM*qk*o@p^84n;%!6]/D(F6Z5T3%#02gQd4*f=8Otg4F%6U^U#E\%gf]rP(rXO4<4M_(\rrXVW2dZ~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(| 228 | Bebida Vegetal Original 1 L Nature's Heart | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lacteos, Huevos y Congelados > Leche | Mascotas > A) Tj
+0 -13 Td
+(| 286 | Galletas Cachorro Raza Grande Sabor Leche Bolsa 500 g Master Dog | Desayuno y Snacks > Snacks | M) Tj
+0 -13 Td
+(| 300 | Alimento Seco Cachorro Raza Pequena Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y Pescados > Car) Tj
+0 -13 Td
+(| 306 | Alimento Seco Cachorro Raza Mediana/grande Sabor Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y P) Tj
+0 -13 Td
+(| 310 | Galleta Perro Cachoro Leche g g Pet Food | Desayuno y Snacks > Snacks | Mascotas > Alimento Perro) Tj
+0 -13 Td
+(| 339 | Tonico Rose Care Leche & Tonico Micelar 2 En 1 200 ml Nivea | Lacteos, Huevos y Congelados > Lech) Tj
+0 -13 Td
+(| 429 | Bebida Vegetal Notmilk Chocolate 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 444 | Bebida Vegetal De Avellana Sabor Chocolate Caja 1 L Vivicosi | Bebe > Alimentos Bebe | Bebidas > ) Tj
+0 -13 Td
+(| 509 | Desodorante Spray Nivea Black&white Original Masculino Xl Hombre | Lacteos, Huevos y Congelados >) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Generados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/fase5f_clasificacion_masiva.csv) Tj
+0 -13 Td
+(- reports/fase5f_clasificacion_masiva.md) Tj
+0 -13 Td
+(- reports/FASE_5F_REPORTE.md) Tj
+0 -13 Td
+(- reports/FASE_5F_REPORTE.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_5F.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendacion Fase 5F-FIX) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Crear una fase separada con backup y rollback especifico.) Tj
+0 -13 Td
+(- Aplicar primero solo alta confianza y categorias de destino con subcategoria clara.) Tj
+0 -13 Td
+(- Revisar manualmente hallazgos de media confianza.) Tj
+0 -13 Td
+(- No recalcular producto_base hasta terminar movimientos de categoria.) Tj
+0 -13 Td
+(- Prioridad inicial: Bebidas/Snacks/Limpieza dentro de Bebe y productos de mascotas fuera de Mascotas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5G - Reload Test Paralelo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Crear una BD paralela desde cero y comparar su calidad contra la BD actual sin modificar supercheck.db.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos en BD actual: 31124.) Tj
+0 -13 Td
+(- Productos en BD reload: 31124.) Tj
+0 -13 Td
+(- Precios en BD actual: 31139.) Tj
+0 -13 Td
+(- Precios en BD reload: 31155.) Tj
+0 -13 Td
+(- Hallazgos clasificacion masiva actual: 1986.) Tj
+0 -13 Td
+(- Hallazgos clasificacion masiva reload: 1986.) Tj
+0 -13 Td
+(- Hallazgos alta confianza actual: 1639.) Tj
+0 -13 Td
+(- Hallazgos alta confianza reload: 1683.) Tj
+0 -13 Td
+(- Conflictos actual: 1545.) Tj
+0 -13 Td
+(- Conflictos reload: 1605.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Decision) Tj
+0 -13 Td
+() Tj
+ET
+endstream
 endobj
 45 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 1052
->>
-stream
-GauI6?#S^^(kqGS(%9C>h:4@W,B8lQX9;g@GGS@-5VuOe7E.(31Bb=55jJ:D<C25,!U<6;]/L>]!9_JoH0p+_!<V%]70tZn@/(cF-BKeZLHu4!*DEcTo3h;1$t1%cLhSGtEpu1.BC4=:.tt'@^3nQ19NqHgXWaoA\GCm=(iK"mYu7=E%ceN2YN/Sc`?"1<B3D49^&^Pf\Gd5KcZ&P=?q-WPfl&agLV\`Z(;b[!AiWjfZ;[>"H\aJf#LFLceYBQCX;d3Z_>u[_bn@Td\gMTt8u(HKIKL9=0NK!Z-E^5_C7tb`[!N&KH)%fq-.em:/r]9S0h08H&BC.mA,hFMdbseF@P$e;Ia=S3'mDTediTh_@=3_Ql*o_)3GK9(\>)#kkLY<[S`8l7g%R[FMD17;NE$-8TTJXJYI*m$OEuZ,]T5VH&rsNtZ8#ag]]Nh&";a\6@EV_0O7oq99&&Sm<FXO'DW_Ik)nM#k<]itD,r\le$gqO^cNtd(724nf7nLdR@dZNmm:`(@&aD*X;nZAbKMX(0oNKL@dMGg6%d9lY_k$AAUQl4(93tW(GiY0_-)(gh%Om(@7S4UDo27a92-cK`N<u,Zb#C!t/SCR-2i-@$O>KK\A40Nb/k@C)V,$jBc9Bf2Y:T^rkGi6a00b*kG+KjN81ShdR?^7rapm*3$!toBG(FVef5\Ye$IAsH-uPkVOaLu"Xe%UM&n..3i<="S>NsC(C_&Kk=a5H&^!n$jZ<$8!(QPSA;HrPHf#i:XIiX%d(]-eWZ(G;8iPt65i5Vj)!qYF1LsVX8g8Q+\[U>Sk]Fn"T]kjUumn_&$nc*LYnGD4L[r3QujbEFcn!#\$pM9d.%6]RFQ`:"0&Vf0/qL18jjO#rZ:*(LSfu3=sP+V/VMM9*8oWQ[0k^NI(_^o_#rATPcV;h\+l/=Vd[:e;;+$X+f^i=\b&A\bs%ZrrMI+UIe`KtB-.OCU/VJo(QS*j@+o[h!&3r8Fk^E:_+ag>?%ms8@SrE%S,hI1LgYe,3'+&BSrT]sF*4!o_]]1_+gHL(5$8&0nD)$^*@RXqAY~>endstream
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 44 0 R >>
 endobj
 46 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 822
->>
+<< /Length 2406 >>
 stream
-Gat=)_/e!Y&A@6WhQ\c&e99iIJJ2JU^sEs&aH=Y8g6c_gacYWojm*f;9j;;0LKnXgle2%)p?a>"L(&A%<&Lm`j7GH(?=:H85+Bd#^;,NsBK,5VaY@!p$7r&'V!??FP]ekXC:%1%k=NuKeod<nfd/+GRZjop=qaIhCrMP<LPC4\C;qhCdA4_62m9I"`qjh0]c(0>K.c;MZNU4hP+D9.h#T,kKa1(oei<Js0,BpdBIF#704W=pfs(h*eVtCmA+8UO!6V#q(?JKN3$4?Ue23AX`"&Q-ZX_D>2+CPH1RqBOPUhRP\oEjLA-B/6<,]\Y1i0Rqh#P]nBtH;4U%)$e-h'!o[S,_MbQ-bX@T"2Q^q@bbaFGq%]u/%MR)5P;!LF<J#7+k`ao!94EgcZas&X9\)poA>l%?hI.$_#J>d=km[EG^a:#9#hgS@rT+$J0t#rd-tGe'1_9CK_$<5*3S!<6#q'qNM449ATd(JPg>GHJ+47-.H9i`)+YahY`6ALN)9,d(Z;$rJV"UT"kaacG>^/gPJ#$anHh'h,^_D<lRD:sMQ!$u("q2Xo"Z%B1:cL]f<'EE4tEq&"Zk=`KNol"o^]p`]Xc`UWj.'Lf0p([;om9Q]cp9+dt7ffnf%L-/m;JO;@o<HlkWIA^f=+5"o:7l1c-=0pFQLV`kSnRp%>^I"M^k4b!fEQH<j\'(W2,_S['s(I>21A=,kpDM[M<]_-ijk^i[MT/GpTtPT4`TrgWoRsiiNRLd)UgErs5u0U5k:LNZTA!iOrG%9V)s>9:`SR.(WIDe71`bg^X2s>(2e7"2F_d^.Ui-17*_*mF.S9rA~>endstream
+BT
+/F1 10 Tf
+54 742 Td
+(- La BD recargada no tiene menos errores que la actual.) Tj
+0 -13 Td
+(- Los 1986 errores reaparecen en la reload.) Tj
+0 -13 Td
+(- El problema apunta a datos fuente/importadores/reglas de clasificacion.) Tj
+0 -13 Td
+(- No conviene reemplazar supercheck.db por supercheck_reload_test.db.) Tj
+0 -13 Td
+(- Conviene arreglar importadores/datos fuente y seguir con Fase 5F-FIX quirurgica.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/FASE_5G_RELOAD_TEST.md) Tj
+0 -13 Td
+(- reports/FASE_5G_RELOAD_TEST.pdf) Tj
+0 -13 Td
+(- reports/comparacion_actual_vs_reload.csv) Tj
+0 -13 Td
+(- reports/auditoria_reload_test.md) Tj
+0 -13 Td
+(- reports/reload_test/) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5H - Root Cause Clasificacion Masiva) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Identificar la causa raiz de los errores masivos que reaparecen despues de una recarga limpia.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos trazados: 51.) Tj
+0 -13 Td
+(- Causa raiz principal: scraper_categoria_por_busqueda_amplia.) Tj
+0 -13 Td
+(- Trazas con esa causa: 51 de 51.) Tj
+0 -13 Td
+(- Scripts con evidencia directa: app/scraper_lider.py y app/scraper_jumbo_real.py.) Tj
+0 -13 Td
+(- Scripts con riesgo estructural: app/scraper_unimarc.py, app/combinar_supermercados.py, app/importar_csv) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Evidencia) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- NotMilk, Yogu Yogu, Milo y Coca-Cola aparecen en Bebe > Alimentos Bebe.) Tj
+0 -13 Td
+(- Master Dog y Pet Food aparecen en Carnes, Desayuno y Snacks o Lacteos.) Tj
+0 -13 Td
+(- Nivea micelar y desodorantes aparecen en Lacteos.) Tj
+0 -13 Td
+(- La categoria erronea ya existe en los CSV fuente trazados.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Decision) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No conviene corregir solo la BD sin arreglar el pipeline.) Tj
+0 -13 Td
+(- No conviene reemplazar la BD actual por reload.) Tj
+0 -13 Td
+(- Conviene ejecutar Fase 5I para corregir scrapers/importadores y agregar validadores pre-import.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/FASE_5H_ROOT_CAUSE.md) Tj
+0 -13 Td
+(- reports/FASE_5H_ROOT_CAUSE.pdf) Tj
+0 -13 Td
+(- reports/fase5h_trazabilidad_productos.csv) Tj
+0 -13 Td
+(- reports/fase5h_causa_raiz_resumen.csv) Tj
+0 -13 Td
+() Tj
+ET
+endstream
+endobj
+47 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 46 0 R >>
+endobj
+48 0 obj
+<< /Length 1663 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(---) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5I - Pipeline Hardening) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Impedir que categorias imposibles entren al pipeline antes de una nueva recarga.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Cambios) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Se creo app/category_validator.py.) Tj
+0 -13 Td
+(- Se integro la validacion en app/scraper_lider.py.) Tj
+0 -13 Td
+(- Se integro la validacion en app/scraper_jumbo_real.py.) Tj
+0 -13 Td
+(- Se integro la validacion en app/scraper_unimarc.py.) Tj
+0 -13 Td
+(- Se integro la validacion en app/combinar_supermercados.py.) Tj
+0 -13 Td
+(- Se integro la validacion en app/importar_csv.py.) Tj
+0 -13 Td
+(- Se agregaron tests para NotMilk, Coca-Cola, Yogu Yogu, Master Dog, Champion Dog, Pedigree, Nivea, Rexon) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado Estimado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Hallazgos Fase 5F: 1986.) Tj
+0 -13 Td
+(- Bloqueados por validador: 1934.) Tj
+0 -13 Td
+(- Remanente estimado: 52.) Tj
+0 -13 Td
+(- Objetivo solicitado: menos de 300 hallazgos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No se modifico supercheck.db.) Tj
+0 -13 Td
+(- No se ejecuto recarga.) Tj
+0 -13 Td
+(- No se ejecuto scraping.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Siguiente Paso) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Ejecutar Fase 5J: reload test post-hardening en BD paralela y revision de rechazos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/FASE_5I_PIPELINE_HARDENING.md) Tj
+0 -13 Td
+(- reports/FASE_5I_PIPELINE_HARDENING.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_5I.md) Tj
+0 -13 Td
+() Tj
+ET
+endstream
+endobj
+49 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 48 0 R >>
 endobj
 xref
-0 47
+0 50
 0000000000 65535 f 
-0000000061 00000 n 
-0000000122 00000 n 
-0000000229 00000 n 
-0000000341 00000 n 
-0000000460 00000 n 
-0000000655 00000 n 
-0000000850 00000 n 
-0000000955 00000 n 
-0000001150 00000 n 
-0000001345 00000 n 
-0000001541 00000 n 
-0000001737 00000 n 
-0000001933 00000 n 
-0000002129 00000 n 
-0000002325 00000 n 
-0000002521 00000 n 
-0000002717 00000 n 
-0000002913 00000 n 
-0000003109 00000 n 
-0000003305 00000 n 
-0000003501 00000 n 
-0000003697 00000 n 
-0000003893 00000 n 
-0000004089 00000 n 
-0000004285 00000 n 
-0000004355 00000 n 
-0000004636 00000 n 
-0000004823 00000 n 
-0000006231 00000 n 
-0000007623 00000 n 
-0000008911 00000 n 
-0000010353 00000 n 
-0000011675 00000 n 
-0000013156 00000 n 
-0000014700 00000 n 
-0000016033 00000 n 
-0000017410 00000 n 
-0000019048 00000 n 
-0000020377 00000 n 
-0000021578 00000 n 
-0000022742 00000 n 
-0000024243 00000 n 
-0000025479 00000 n 
-0000026551 00000 n 
-0000028113 00000 n 
-0000029257 00000 n 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000268 00000 n 
+0000000338 00000 n 
+0000002475 00000 n 
+0000002601 00000 n 
+0000004583 00000 n 
+0000004709 00000 n 
+0000006550 00000 n 
+0000006676 00000 n 
+0000008987 00000 n 
+0000009115 00000 n 
+0000011261 00000 n 
+0000011389 00000 n 
+0000013776 00000 n 
+0000013904 00000 n 
+0000015624 00000 n 
+0000015752 00000 n 
+0000017872 00000 n 
+0000018000 00000 n 
+0000020525 00000 n 
+0000020653 00000 n 
+0000022896 00000 n 
+0000023024 00000 n 
+0000025183 00000 n 
+0000025311 00000 n 
+0000027573 00000 n 
+0000027701 00000 n 
+0000029872 00000 n 
+0000030000 00000 n 
+0000031893 00000 n 
+0000032021 00000 n 
+0000034459 00000 n 
+0000034587 00000 n 
+0000036656 00000 n 
+0000036784 00000 n 
+0000039170 00000 n 
+0000039298 00000 n 
+0000041506 00000 n 
+0000041634 00000 n 
+0000043789 00000 n 
+0000043917 00000 n 
+0000047197 00000 n 
+0000047325 00000 n 
+0000050324 00000 n 
+0000050452 00000 n 
+0000052911 00000 n 
+0000053039 00000 n 
+0000054755 00000 n 
 trailer
-<<
-/ID 
-[<c1a5ed7504979f106f4303b129337f81><c1a5ed7504979f106f4303b129337f81>]
-% ReportLab generated PDF document -- digest (opensource)
-
-/Info 26 0 R
-/Root 25 0 R
-/Size 47
->>
+<< /Size 50 /Root 1 0 R >>
 startxref
-30170
+54883
 %%EOF

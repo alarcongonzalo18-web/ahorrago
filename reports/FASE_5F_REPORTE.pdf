@@ -1,0 +1,235 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 1957 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(Fase 5F - Auditoria Masiva) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Reporte Fase 5F - Auditoria Masiva Read Only) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fecha: 2026-06-01) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Objetivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Detectar y clasificar errores masivos de categoria/subcategoria antes de usuarios, sin modificar datos.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Modo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- READ ONLY.) Tj
+0 -13 Td
+(- No se modifico base de datos.) Tj
+0 -13 Td
+(- No se modifico producto_base.) Tj
+0 -13 Td
+(- No se modificaron categorias ni subcategorias.) Tj
+0 -13 Td
+(- No se toco frontend, usuarios ni scraping.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resultado) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Hallazgos totales: 1986.) Tj
+0 -13 Td
+(- Alta confianza: 1639.) Tj
+0 -13 Td
+(- Media confianza: 347.) Tj
+0 -13 Td
+(- Baja confianza: 0.) Tj
+0 -13 Td
+(- Falso positivo probable: 0.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias Mas Afectadas) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebe: 627) Tj
+0 -13 Td
+(- Desayuno y Snacks: 407) Tj
+0 -13 Td
+(- Lacteos, Huevos y Congelados: 391) Tj
+0 -13 Td
+(- Carnes y Pescados: 213) Tj
+0 -13 Td
+(- Congelados: 104) Tj
+0 -13 Td
+(- Despensa: 99) Tj
+0 -13 Td
+(- Bebidas: 75) Tj
+0 -13 Td
+(- Mascotas: 44) Tj
+0 -13 Td
+(- Frutas y Verduras: 17) Tj
+0 -13 Td
+(- Limpieza: 3) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Motivos Principales) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Producto de mascotas fuera de Mascotas: 657) Tj
+0 -13 Td
+(- Producto de higiene personal fuera de Higiene Personal: 457) Tj
+0 -13 Td
+(- Bebida detectada dentro de categoria Bebe: 416) Tj
+0 -13 Td
+(- Bebida fuera de Bebidas: 298) Tj
+0 -13 Td
+(- Snack/fruto seco detectado dentro de categoria Bebe: 126) Tj
+0 -13 Td
+(- Producto de limpieza fuera de Limpieza: 27) Tj
+0 -13 Td
+(- Producto de limpieza detectado dentro de categoria Bebe: 5) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Productos Criticos Alta Confianza) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| ID | Producto | Actual | Sugerida | Motivo |) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 3863 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(|---:|---|---|---|---|) Tj
+0 -13 Td
+(| 56 | Bebida Leche Lactea Yogu Yogu Chirimoya Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 132 | Bebida Leche Lactea Yogu Yogu Mora Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida dete) Tj
+0 -13 Td
+(| 148 | Bebida Leche Lactea Yogu Yogu Damasco Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 149 | Bebida Leche Lactea Yogu Yogu Frutilla Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 150 | Bebida Leche Lactea Yogu Yogu Pina Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida dete) Tj
+0 -13 Td
+(| 151 | Bebida Leche Lactea Trencito Chocolate Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 199 | Bebida Vegetal Notmilk Protein Con 7gr Proteina 750 ml NotCo | Bebe > Alimentos Bebe | Bebidas > ) Tj
+0 -13 Td
+(| 213 | Bebida Lactea Sin Lactosa Chocolate 200 ml Milo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Beb) Tj
+0 -13 Td
+(| 217 | Bebida Vegetal Notmilk Chocolate Tetra Pak 200 ml NotCo | Bebe > Alimentos Bebe | Bebidas > Bebid) Tj
+0 -13 Td
+(| 218 | Bebida Vegetal Notmilk Original 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida de) Tj
+0 -13 Td
+(| 220 | Bebida Lactea Sabor Frutilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 221 | Bebida Lactea Sabor Chocolate 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida ) Tj
+0 -13 Td
+(| 222 | Bebida Lactea Sabor Vainilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 225 | Bebida Vegetal Notmilk Zero 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detect) Tj
+0 -13 Td
+(| 226 | Bebida Vegetal Notmilk Low Fat 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida det) Tj
+0 -13 Td
+(| 228 | Bebida Vegetal Original 1 L Nature's Heart | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lacteos, Huevos y Congelados > Leche | Mascotas > A) Tj
+0 -13 Td
+(| 286 | Galletas Cachorro Raza Grande Sabor Leche Bolsa 500 g Master Dog | Desayuno y Snacks > Snacks | M) Tj
+0 -13 Td
+(| 300 | Alimento Seco Cachorro Raza Pequena Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y Pescados > Car) Tj
+0 -13 Td
+(| 306 | Alimento Seco Cachorro Raza Mediana/grande Sabor Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y P) Tj
+0 -13 Td
+(| 310 | Galleta Perro Cachoro Leche g g Pet Food | Desayuno y Snacks > Snacks | Mascotas > Alimento Perro) Tj
+0 -13 Td
+(| 339 | Tonico Rose Care Leche & Tonico Micelar 2 En 1 200 ml Nivea | Lacteos, Huevos y Congelados > Lech) Tj
+0 -13 Td
+(| 429 | Bebida Vegetal Notmilk Chocolate 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida d) Tj
+0 -13 Td
+(| 444 | Bebida Vegetal De Avellana Sabor Chocolate Caja 1 L Vivicosi | Bebe > Alimentos Bebe | Bebidas > ) Tj
+0 -13 Td
+(| 509 | Desodorante Spray Nivea Black&white Original Masculino Xl Hombre | Lacteos, Huevos y Congelados >) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Archivos Generados) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/fase5f_clasificacion_masiva.csv) Tj
+0 -13 Td
+(- reports/fase5f_clasificacion_masiva.md) Tj
+0 -13 Td
+(- reports/FASE_5F_REPORTE.md) Tj
+0 -13 Td
+(- reports/FASE_5F_REPORTE.pdf) Tj
+0 -13 Td
+(- CAMBIOS_FASE_5F.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendacion Fase 5F-FIX) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Crear una fase separada con backup y rollback especifico.) Tj
+0 -13 Td
+(- Aplicar primero solo alta confianza y categorias de destino con subcategoria clara.) Tj
+0 -13 Td
+(- Revisar manualmente hallazgos de media confianza.) Tj
+0 -13 Td
+(- No recalcular producto_base hasta terminar movimientos de categoria.) Tj
+0 -13 Td
+(- Prioridad inicial: Bebidas/Snacks/Limpieza dentro de Bebe y productos de mascotas fuera de Mascotas.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000002200 00000 n 
+0000002326 00000 n 
+0000006241 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+6367
+%%EOF

@@ -1,0 +1,101 @@
+﻿producto_id,producto,categoria,subcategoria,supermercado,producto_base,clasificacion
+4425,Agua Botella Purificada Con Gas 500 ml Benedictino,Bebe,Alimentos Bebe,Líder,agua_botella_purificada_con_gas_benedictino,posible error de matching
+4424,Agua Botella Purificada Sin Gas 500 ml Benedictino,Bebe,Alimentos Bebe,Líder,agua_botella_purificada_gas_benedictino_sin,posible error de matching
+4453,Agua Botella Saborizada Manzana 2 L Benedictino,Bebe,Alimentos Bebe,Líder,agua_botella_saborizada_manzana_benedictino_sin,posible error de matching
+4675,"Agua Mineral Con Gas Botella 1,6 L Vital",Bebe,Alimentos Bebe,Líder,agua_mineral_con_gas_botella_vital,posible error de matching
+4676,"Agua Mineral Sin Gas Botella 1,6 L Vital",Bebe,Alimentos Bebe,Líder,agua_mineral_gas_botella_vital_sin,posible error de matching
+4401,Agua Saborizada Manzana Botella 500 ml Benedictino,Bebe,Alimentos Bebe,Líder,agua_saborizada_manzana_botella_benedictino_sin,posible error de matching
+4497,Bebida Botella Sabor Original 591 ml Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_botella_sabor_original_coca_cola,posible error de matching
+4492,Bebida Botella Sabor Original Limón 591 ml Sprite,Bebe,Alimentos Bebe,Líder,bebida_botella_sabor_original_limon_sprite,posible error de matching
+3453,Bebida Botella Sin Azúcar 591 ml Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_botella_sin_azucar_coca_cola,posible error de matching
+3355,Bebida Frambuesa Sin Azúcar Añadida Botella 500 Kombuchacha,Bebe,Alimentos Bebe,Líder,bebida_frambuesa_azucar_anadida_botella_500,posible error de matching
+3419,Bebida Frambuesa Sin Azúcar Añadida Lata 355 Kombuchacha,Bebe,Alimentos Bebe,Líder,bebida_frambuesa_azucar_anadida_lata_355,posible error de matching
+4348,Bebida Frutal Pack Lata 6 Un Bilz,Bebe,Alimentos Bebe,Líder,bebida_frutal_pack_lata_bilz_sin,posible error de matching
+4352,Bebida Ginger Ale Pack Lata 6 Un Canada Dry,Bebe,Alimentos Bebe,Líder,bebida_ginger_ale_pack_lata_canada,posible error de matching
+4672,Bebida Light Botella 2 L Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_botella_coca_cola_light_2l,posible error de matching
+4383,Bebida Light Pack Lata 6 Un Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_pack_lata_coca_cola_light,posible error de matching
+4346,Bebida Limón Pack Lata 6 Un Sprite,Bebe,Alimentos Bebe,Líder,bebida_limon_pack_lata_sprite_sin,posible error de matching
+4523,Bebida Naranja Pack Lata 6 Un Fanta,Bebe,Alimentos Bebe,Líder,bebida_naranja_pack_lata_fanta_sin,posible error de matching
+4356,Bebida Original Botella 1500 ml Pepsi,Bebe,Alimentos Bebe,Líder,bebida_original_botella_pepsi_general_1500ml,posible error de matching
+4357,Bebida Original Botella 3 L Pepsi,Bebe,Alimentos Bebe,Líder,bebida_original_botella_pepsi_general_3l,posible error de matching
+4544,Bebida Original Botella 600 ml Pepsi,Bebe,Alimentos Bebe,Líder,bebida_original_botella_pepsi_general_600ml,posible error de matching
+4412,Bebida Original Botella Retornable 2 L Inca Kola,Bebe,Alimentos Bebe,Líder,bebida_original_botella_retornable_inca_kola,posible error de matching
+4437,Bebida Original Limón Botella 600 ml Limón Soda,Bebe,Alimentos Bebe,Líder,bebida_original_limon_botella_soda_sin,posible error de matching
+4532,Bebida Original Pack Lata 6 Un Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_original_pack_lata_coca_cola,posible error de matching
+4533,Bebida Original Pack Lata 6 Un Limón Soda,Bebe,Alimentos Bebe,Líder,bebida_original_pack_lata_limon_soda,posible error de matching
+4524,Bebida Papaya Botella,Bebe,Alimentos Bebe,Líder,bebida_papaya_botella_sin_marca_general,posible error de matching
+4349,Bebida Papaya Original Botella,Bebe,Alimentos Bebe,Líder,bebida_papaya_original_botella_sin_marca,posible error de matching
+4519,Bebida Papaya Pack Lata,Bebe,Alimentos Bebe,Líder,bebida_papaya_pack_lata_sin_marca,posible error de matching
+4353,Bebida Sabor Papaya Botella,Bebe,Alimentos Bebe,Líder,bebida_sabor_papaya_botella_sin_marca,posible error de matching
+4543,Bebida Sabor Piña Botella 2500 ml Kem,Bebe,Alimentos Bebe,Líder,bebida_sabor_pina_botella_kem_sin,posible error de matching
+3365,Bebida Sin Azúcar Pack Lata 6 Un Coca-Cola,Bebe,Alimentos Bebe,Líder,bebida_sin_azucar_pack_lata_coca,posible error de matching
+4389,Bebida Zero Botella 3 L Pepsi,Bebe,Alimentos Bebe,Líder,bebida_botella_pepsi_zero_3l,posible error de matching
+4367,Bebida Zero Botella 600 ml Pepsi,Bebe,Alimentos Bebe,Líder,bebida_botella_pepsi_zero_600ml,posible error de matching
+4534,Bebida Zero Pack Lata 6 Un Pepsi Zero,Bebe,Alimentos Bebe,Líder,bebida_pack_lata_pepsi_zero_6,posible error de matching
+28681,Caja de Toallas Húmedas Aqua Baby Bio 360 un.,Bebe,Panales,Jumbo,caja_toallas_humedas_aqua_baby_bio,posible error de matching
+1774,Castañas De Caju 80 g Lider,Bebe,Alimentos Bebe,Líder,castanas_caju_lider_general_80_g,posible error de matching
+1770,Castañas De Cajú 400 g Lider,Bebe,Alimentos Bebe,Líder,castanas_caju_lider_general_400_g,posible error de matching
+5185,Detergente Líquido Hipoalergénico Bebé Botella 3 l Popeye,Bebe,Alimentos Bebe,Líder,detergente_hipoalergenico_bebe_botella_popeye_sin,posible error de matching
+2902,Emulsionado Neutro 700 ml Babyland,Bebe,Alimentos Bebe,Líder,emulsionado_neutro_babyland_sin_marca_general,posible error de matching
+2867,Emulsionado Neutro Botella 410 ml Babyland,Bebe,Alimentos Bebe,Líder,emulsionado_neutro_botella_babyland_sin_marca,posible error de matching
+3648,Galletas Saladas 90 g Cracker,Bebe,Alimentos Bebe,Líder,galletas_saladas_cracker_sin_marca_general,posible error de matching
+3656,Galletas Saladas Pack 3 Un 270 g Cracker,Bebe,Alimentos Bebe,Líder,galletas_saladas_pack_3_un_cracker,posible error de matching
+1765,Maní Con Pasas Bolsa 180 g Marco Polo,Bebe,Alimentos Bebe,Líder,mani_con_pasas_bolsa_marco_polo,posible error de matching
+1730,Maní Japonés 200 g Lider,Bebe,Alimentos Bebe,Líder,mani_japones_lider_general_200_g,posible error de matching
+1778,Maní Japonés 400 g Lider,Bebe,Alimentos Bebe,Líder,mani_japones_lider_general_400_g,posible error de matching
+1743,Maní Japonés Bolsa 200 g De La Rosa,Bebe,Alimentos Bebe,Líder,mani_japones_bolsa_rosa_sin_marca,posible error de matching
+1726,Mix Nut Mix 2 350 g Marco Polo,Bebe,Alimentos Bebe,Líder,mix_nut_2_marco_polo_sin,posible error de matching
+1720,Mix Nut Mix 350 g Marco Polo,Bebe,Alimentos Bebe,Líder,mix_nut_marco_polo_sin_marca,posible error de matching
+28644,Pañales Pampers Premium Care 14-18 kg Talla XXG 60 un.,Bebe,Panales,Jumbo,panales_pampers_premium_care_14_talla,posible error de matching
+28728,Toallas Húmedas Aqua Baby Bio 60 un.,Bebe,Panales,Jumbo,toallas_humedas_aqua_baby_bio_un_,posible error de matching
+22118,Agua Score Water Sin Gas 500 ml,Bebidas,Aguas,Jumbo,agua_score_water_gas_sin_marca,posible error de matching
+22119,Agua Score Water con Gas 500 ml,Bebidas,Aguas,Jumbo,agua_score_water_con_gas_sin,posible error de matching
+22056,Agua Sin Gas Cachantún 2.5 L,Bebidas,Aguas,Jumbo,agua_gas_cachantun_sin_marca_general,posible error de matching
+22062,Agua con Gas Cachantún 2.5 L,Bebidas,Aguas,Jumbo,agua_con_gas_cachantun_sin_marca,posible error de matching
+23370,Aireador de Vino,Bebidas,Vinos,Jumbo,aireador_vino_sin_marca_general,posible error de matching
+24248,Aireador para vino,Bebidas,Vinos,Jumbo,aireador_para_vino_sin_marca_general,posible error de matching
+21166,Bebida 310 ml,Bebidas,Bebidas,Jumbo,bebida_sin_marca_general_310ml,posible error de matching
+20649,Bebida 7Up 3 L,Bebidas,Bebidas,Jumbo,bebida_7up_sin_marca_general_3l,posible error de matching
+21112,Bebida 7Up 500 ml,Bebidas,Bebidas,Jumbo,bebida_7up_sin_marca_general_500ml,posible error de matching
+20647,Bebida Bilz 1.5 L,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_general_1_5l,posible error de matching
+20654,Bebida Bilz 3 L,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_general_3l,posible error de matching
+21154,Bebida Bilz 310 ml,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_general_310ml,posible error de matching
+21120,Bebida Bilz 350 cc,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_general_350cc,posible error de matching
+21092,Bebida Bilz 500 cc,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_general_500cc,posible error de matching
+20749,Bebida Bilz Zero 3 L,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_zero_3l,posible error de matching
+21096,Bebida Bilz Zero 500 cc,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_zero_500cc,posible error de matching
+20716,Bebida Bilz Zero 600 ml,Bebidas,Bebidas,Jumbo,bebida_bilz_sin_marca_zero_600ml,posible error de matching
+20821,Bebida Coca-Cola,Bebidas,Bebidas,Jumbo,bebida_coca_cola_general,posible error de matching
+20972,Bebida Coca-Cola Lata 350 cc,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_general_350cc,posible error de matching
+21324,Bebida Coca-Cola Lata Zero 350 ml,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_zero_350ml,posible error de matching
+21305,Bebida Coca-Cola Light 2 L,Bebidas,Bebidas,Jumbo,bebida_coca_cola_light_2l,posible error de matching
+21130,Bebida Coca-Cola Light 220 ml,Bebidas,Bebidas,Jumbo,bebida_coca_cola_light_220ml,posible error de matching
+20744,Bebida Coca-Cola Light 3 L,Bebidas,Bebidas,Jumbo,bebida_coca_cola_light_3l,posible error de matching
+20657,Bebida Coca-Cola Light 591 ml,Bebidas,Bebidas,Jumbo,bebida_coca_cola_light_591ml,posible error de matching
+20980,Bebida Coca-Cola Light Lata 350 cc,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_light_350cc,posible error de matching
+21318,Bebida Coca-Cola Light Lata 350 ml,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_light_350ml,posible error de matching
+21284,Bebida Coca-Cola Original 2 L,Bebidas,Bebidas,Jumbo,bebida_original_coca_cola_general_2l,posible error de matching
+21129,Bebida Coca-Cola Original 220 ml,Bebidas,Bebidas,Jumbo,bebida_original_coca_cola_general_220ml,posible error de matching
+20683,Bebida Coca-Cola Original 3 L,Bebidas,Bebidas,Jumbo,bebida_original_coca_cola_general_3l,posible error de matching
+20693,Bebida Coca-Cola Original 591 ml,Bebidas,Bebidas,Jumbo,bebida_original_coca_cola_general_591ml,posible error de matching
+21283,Bebida Coca-Cola Zero 2 L,Bebidas,Bebidas,Jumbo,bebida_coca_cola_zero_2l,posible error de matching
+21132,Bebida Coca-Cola Zero 220 ml,Bebidas,Bebidas,Jumbo,bebida_coca_cola_zero_220ml,posible error de matching
+20625,Bebida Coca-Cola Zero 3 L,Bebidas,Bebidas,Jumbo,bebida_coca_cola_zero_3l,posible error de matching
+20975,Bebida Coca-Cola Zero Lata 350 cc,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_zero_350cc,posible error de matching
+20793,Bebida Coca-Cola Zero Lata 473 cc,Bebidas,Bebidas,Jumbo,bebida_lata_coca_cola_zero_473cc,posible error de matching
+20626,Bebida Crush 3 L,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_general_3l,posible error de matching
+21123,Bebida Crush 350 ml,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_general_350ml,posible error de matching
+21091,Bebida Crush 500 ml,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_general_500ml,posible error de matching
+21080,Bebida Crush Light 500 ml,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_light_500ml,posible error de matching
+20988,Bebida Crush Light Lata 350 cc,Bebidas,Bebidas,Jumbo,bebida_crush_lata_sin_marca_light,posible error de matching
+20786,Bebida Crush Zero 3 L,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_zero_3l,posible error de matching
+21101,Bebida Crush Zero 350 ml,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_zero_350ml,posible error de matching
+20811,Bebida Crush Zero 600 ml,Bebidas,Bebidas,Jumbo,bebida_crush_sin_marca_zero_600ml,posible error de matching
+20909,Bebida Energética Monster Mango Loco 473 cc,Bebidas,Bebidas,Jumbo,bebida_energetica_monster_mango_loco_sin,posible error de matching
+20943,Bebida Energética Monster Pipeline Punch 473 cc,Bebidas,Bebidas,Jumbo,bebida_energetica_monster_pipeline_punch_sin,posible error de matching
+20932,Bebida Energética Mr. Big Lata 473 cc,Bebidas,Bebidas,Jumbo,bebida_energetica_mr__big_lata_sin,posible error de matching
+20936,Bebida Energética Mr. Big Panther 500 ml,Bebidas,Bebidas,Jumbo,bebida_energetica_mr__big_panther_sin,posible error de matching
+20917,Bebida Energética Mr. Big Panther Botella 2 L,Bebidas,Bebidas,Jumbo,bebida_energetica_mr__big_panther_botella,posible error de matching
+20775,Bebida Energética Mr. Big Panther Lata 473 cc,Bebidas,Bebidas,Jumbo,bebida_energetica_mr__big_panther_lata,posible error de matching
+20924,Bebida Energética Red Bull Fruta del Dragón 250 ml,Bebidas,Bebidas,Jumbo,bebida_energetica_red_bull_fruta_del,posible error de matching
+20800,Bebida Energética Rockstar 500 ml,Bebidas,Bebidas,Jumbo,bebida_energetica_rockstar_sin_marca_general,posible error de matching

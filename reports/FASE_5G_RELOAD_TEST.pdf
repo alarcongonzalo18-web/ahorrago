@@ -1,0 +1,213 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 2399 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(Fase 5G - Reload Test Paralelo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5G - Reload Test Paralelo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Modo: comparacion controlada. No se modifica supercheck.db.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resumen Ejecutivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos en BD actual: 31124) Tj
+0 -13 Td
+(- Productos en BD reload: 31124) Tj
+0 -13 Td
+(- Hallazgos actuales: 1986) Tj
+0 -13 Td
+(- Hallazgos reload: 1986) Tj
+0 -13 Td
+(- Hallazgos alta confianza actual: 1639) Tj
+0 -13 Td
+(- Hallazgos alta confianza reload: 1683) Tj
+0 -13 Td
+(- Diferencia porcentual de hallazgos: 0.0%) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Decision Tecnica) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- La BD recargada tiene menos errores que la actual: no) Tj
+0 -13 Td
+(- Los errores reaparecen en la recarga: si) Tj
+0 -13 Td
+(- Origen probable: scripts_datos_fuente) Tj
+0 -13 Td
+(- Conviene reemplazar la BD actual: no) Tj
+0 -13 Td
+(- Conviene arreglar importadores/datos fuente antes: si) Tj
+0 -13 Td
+(- Conviene seguir con Fase 5F-FIX: si) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Comparacion) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Metrica | Actual | Reload | Diferencia | Diferencia % |) Tj
+0 -13 Td
+(|---|---:|---:|---:|---:|) Tj
+0 -13 Td
+(| productos | 31124 | 31124 | 0 | 0.0 |) Tj
+0 -13 Td
+(| precios | 31139 | 31155 | 16 | 0.05 |) Tj
+0 -13 Td
+(| categorias | 13 | 13 | 0 | 0.0 |) Tj
+0 -13 Td
+(| subcategorias | 54 | 54 | 0 | 0.0 |) Tj
+0 -13 Td
+(| producto_base_unicos | 27299 | 27400 | 101 | 0.37 |) Tj
+0 -13 Td
+(| equivalencias | 2626 | 2550 | -76 | -2.89 |) Tj
+0 -13 Td
+(| productos_con_equivalencia | 6451 | 6274 | -177 | -2.74 |) Tj
+0 -13 Td
+(| productos_sin_equivalencia | 24673 | 24850 | 177 | 0.72 |) Tj
+0 -13 Td
+(| conflictos | 1545 | 1605 | 60 | 3.88 |) Tj
+0 -13 Td
+(| hallazgos_categorias | 0 | 89 | 89 | 100.0 |) Tj
+0 -13 Td
+(| hallazgos_clasificacion_masiva | 1986 | 1986 | 0 | 0.0 |) Tj
+0 -13 Td
+(| hallazgos_alta_confianza | 1639 | 1683 | 44 | 2.68 |) Tj
+0 -13 Td
+(| hallazgos_media_confianza | 347 | 303 | -44 | -12.68 |) Tj
+0 -13 Td
+(| productos_sospechosos | 3 | 3 | 0 | 0.0 |) Tj
+0 -13 Td
+(| producto_base_conflictivos | 1545 | 1605 | 60 | 3.88 |) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias Top Actual) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Lacteos, Huevos y Congelados: 5658) Tj
+0 -13 Td
+(- Desayuno y Snacks: 4802) Tj
+0 -13 Td
+(- Bebidas: 4274) Tj
+0 -13 Td
+(- Despensa: 4038) Tj
+0 -13 Td
+(- Higiene Personal: 2800) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1309 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(- Carnes y Pescados: 2060) Tj
+0 -13 Td
+(- Congelados: 1960) Tj
+0 -13 Td
+(- Limpieza: 1595) Tj
+0 -13 Td
+(- Bebe: 1471) Tj
+0 -13 Td
+(- Frutas y Verduras: 998) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Categorias Top Reload) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Lacteos, Huevos y Congelados: 5658) Tj
+0 -13 Td
+(- Desayuno y Snacks: 4802) Tj
+0 -13 Td
+(- Bebidas: 4274) Tj
+0 -13 Td
+(- Despensa: 3998) Tj
+0 -13 Td
+(- Higiene Personal: 2839) Tj
+0 -13 Td
+(- Carnes y Pescados: 2060) Tj
+0 -13 Td
+(- Congelados: 1960) Tj
+0 -13 Td
+(- Limpieza: 1640) Tj
+0 -13 Td
+(- Bebe: 1471) Tj
+0 -13 Td
+(- Frutas y Verduras: 998) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Auditorias Ejecutadas Sobre Reload) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- reports/reload_test/auditoria_categorias.md) Tj
+0 -13 Td
+(- reports/reload_test/fase5f_clasificacion_masiva.md) Tj
+0 -13 Td
+(- reports/reload_test/diagnostico_matching.md) Tj
+0 -13 Td
+(- reports/reload_test/auditoria_datos.md) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendacion) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- No reemplazar supercheck.db solo por esta prueba si los errores reaparecen.) Tj
+0 -13 Td
+(- Corregir reglas de importacion/clasificacion de datos fuente antes de una recarga productiva.) Tj
+0 -13 Td
+(- Mantener Fase 5F-FIX como siguiente fase quirurgica para datos actuales, con backup y rollback.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000002642 00000 n 
+0000002768 00000 n 
+0000004129 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4255
+%%EOF

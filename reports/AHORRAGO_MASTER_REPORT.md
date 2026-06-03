@@ -827,3 +827,359 @@ Resultado final esperado de validacion:
 ## Recomendacion Fase 5C
 
 Preparar una aplicacion controlada para Bebidas usando lista blanca, validacion manual por muestra y reglas estrictas para retornable/no retornable, sabor, zero/light/sin azucar y formatos multipack.
+---
+
+# Fase 5B-FIX
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Corregir de forma quirurgica 25 productos tipo fideo/pasta afectados por Fase 5B.
+
+## Alcance
+
+- No se ejecuto rollback completo de Fase 5B.
+- No se modifico Mascotas.
+- No se toco frontend, usuarios, scraping ni migracion de base.
+- Se modificaron solo los 25 IDs confirmados por reports/fase5b_cambios.csv.
+
+## Resultado
+
+- Productos corregidos en esta ejecucion: 25.
+- Productos ya corregidos/idempotentes: 0.
+- IDs objetivo restantes en Limpieza > Blanqueadores: 0.
+- Fideos de Fase 5B-FIX en Despensa > Fideos: 25.
+- Fideos residuales globales en Limpieza > Blanqueadores fuera del alcance Fase 5B-FIX: 14.
+- Backup previo: C:\Users\Gonzalo\Pictures\supersuper\backups\supercheck_pre_fix_fideos_fase5b_20260601_201803.db.
+- CSV de trazabilidad: C:\Users\Gonzalo\Pictures\supersuper\reports\fix_fideos_fase5b.csv.
+
+## Rollback Especifico
+
+```powershell
+python -m app.scripts.rollback_fix_fideos_fase5b
+```
+
+## IDs Corregidos
+
+386, 387, 390, 391, 392, 404, 3475, 3479, 3483, 3484, 3485, 3486, 3506, 3507, 3514, 3516, 3518, 3521, 3522, 3523, 3524, 3525, 3526, 3527, 3529
+
+## Validacion Esperada
+
+- 25 productos quedan en Despensa > Fideos.
+- producto_base vuelve al valor anterior registrado en Fase 5B.
+- Mascotas no cambia.
+- Productos validos de Limpieza no cambian.
+
+## Auditoria de Categorias
+
+- Auditoria read-only ejecutada: `python -m app.scripts.auditoria_categorias`.
+- Hallazgos totales: 95.
+- mascota_en_higiene: 53.
+- alimento_en_limpieza: 31.
+- bebida_en_mascotas: 11.
+- Los 14 fideos residuales en Limpieza > Blanqueadores no fueron modificados porque no pertenecen a los 25 IDs confirmados del fix quirurgico.
+
+## Validacion Final
+
+- `python -m pytest -q`: 43 passed.
+- `python -m compileall app tests`: OK.
+- `python -c "from app.main import app; print(app.title)"`: FastAPI.
+---
+
+# Fase 5D-FIX
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Aplicar correcciones reales de categoria detectadas en Fase 5D, sin tocar falsos positivos.
+
+## Resultado
+
+- Productos corregidos en esta ejecucion: 64.
+- Productos ya corregidos/idempotentes: 0.
+- Backup previo: C:\Users\Gonzalo\Pictures\supersuper\backups\supercheck_pre_fase5d_fix_20260601_203003.db.
+- CSV de trazabilidad: C:\Users\Gonzalo\Pictures\supersuper\reports\fase5d_fix_cambios.csv.
+- Hallazgos restantes post-auditoria: 0.
+
+## Detalle por Tipo
+
+- alimento_en_limpieza: 20.
+- mascota_en_higiene: 44.
+- bebida_en_mascotas: 0.
+
+## Seguridad
+
+- No se ejecuto rollback completo.
+- No se modificaron falsos positivos.
+- No se modificaron bebidas en Mascotas.
+- No se toco frontend, usuarios, scraping ni migracion de base.
+- producto_base se mantuvo sin recalcular.
+
+## Rollback Especifico
+
+```powershell
+python -m app.scripts.rollback_fix_categorias_fase5d
+```
+
+## Validacion Final
+
+- `python -m app.scripts.aplicar_fix_categorias_fase5d`: idempotente, 0 cambios nuevos y 64 ya corregidos.
+- `python -m app.scripts.auditoria_categorias`: 0 hallazgos.
+- `python -m pytest -q`: 46 passed.
+- `python -m compileall app tests`: OK.
+- `python -c "from app.main import app; print(app.title)"`: FastAPI.
+---
+
+# Fase 5C Reporte - AhorraGo
+
+## Resumen Ejecutivo
+
+Fase 5C aplico matching real y controlado solo en categorias autorizadas.
+
+## Metricas Antes/Despues
+
+- Productos modificados: 22
+- Equivalencias: 2218 -> 2225
+- Equivalencias ganadas: 7
+- Conflictos: 829 -> 829
+- Conflictos reducidos: 0
+
+## Productos Modificados por Categoria
+
+- Bebe:  (0)
+- Bebidas: ###################### (22)
+- Higiene Personal:  (0)
+
+## Seguridad
+
+- Backup generado: C:\Users\Gonzalo\Pictures\supersuper\backups\supercheck_pre_fase5c_20260601_212826.db
+- Rollback disponible: `python -m app.scripts.rollback_fase5c`
+- Auditoria post-cambio: 0 hallazgos
+- No se modificaron categorias bloqueadas.
+
+## Riesgos
+
+- La fase fue conservadora: Bebidas tuvo cambios; Higiene Personal y Bebe quedaron sin cambios por falta de grupos suficientemente seguros.
+- Las categorias pendientes requieren reglas de marca/variedad mas completas antes de una aplicacion real.
+
+## Recomendaciones
+
+- Antes de ampliar Fase 5C, enriquecer MARCAS_CONOCIDAS para bebidas isotónicas/energéticas y reglas de tallas de Bebe.
+- Mantener auditoria de categorias en 0 antes de cualquier nueva aplicacion.
+---
+
+# Fase 5F
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Detectar y clasificar errores masivos de categoria/subcategoria antes de usuarios, sin modificar datos.
+
+## Modo
+
+- READ ONLY.
+- No se modifico base de datos.
+- No se modifico producto_base.
+- No se modificaron categorias ni subcategorias.
+- No se toco frontend, usuarios ni scraping.
+
+## Resultado
+
+- Hallazgos totales: 1986.
+- Alta confianza: 1639.
+- Media confianza: 347.
+- Baja confianza: 0.
+- Falso positivo probable: 0.
+
+## Categorias Mas Afectadas
+
+- Bebe: 627
+- Desayuno y Snacks: 407
+- Lacteos, Huevos y Congelados: 391
+- Carnes y Pescados: 213
+- Congelados: 104
+- Despensa: 99
+- Bebidas: 75
+- Mascotas: 44
+- Frutas y Verduras: 17
+- Limpieza: 3
+
+## Motivos Principales
+
+- Producto de mascotas fuera de Mascotas: 657
+- Producto de higiene personal fuera de Higiene Personal: 457
+- Bebida detectada dentro de categoria Bebe: 416
+- Bebida fuera de Bebidas: 298
+- Snack/fruto seco detectado dentro de categoria Bebe: 126
+- Producto de limpieza fuera de Limpieza: 27
+- Producto de limpieza detectado dentro de categoria Bebe: 5
+
+## Productos Criticos Alta Confianza
+
+| ID | Producto | Actual | Sugerida | Motivo |
+|---:|---|---|---|---|
+| 56 | Bebida Leche Láctea Yogu Yogu Chirimoya Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 132 | Bebida Leche Láctea Yogu Yogu Mora Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 148 | Bebida Leche Láctea Yogu Yogu Damasco Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 149 | Bebida Leche Láctea Yogu Yogu Frutilla Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 150 | Bebida Leche Láctea Yogu Yogu Piña Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 151 | Bebida Leche Láctea Trencito Chocolate Caja | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 199 | Bebida Vegetal Notmilk Protein Con 7gr Proteína 750 ml NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 213 | Bebida Láctea Sin Lactosa Chocolate 200 ml Milo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 217 | Bebida Vegetal Notmilk Chocolate Tetra Pak 200 ml NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 218 | Bebida Vegetal Notmilk Original 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 220 | Bebida Láctea Sabor Frutilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 221 | Bebida Láctea Sabor Chocolate 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 222 | Bebida Láctea Sabor Vainilla 200 ml Surlat | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 225 | Bebida Vegetal Notmilk Zero 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 226 | Bebida Vegetal Notmilk Low Fat 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 228 | Bebida Vegetal Original 1 L Nature's Heart | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 246 | Chocolate Lenguas De Gato Leche 120 g Costa | Lacteos, Huevos y Congelados > Leche | Mascotas > Alimento Gatos | Producto de mascotas fuera de Mascotas |
+| 286 | Galletas Cachorro Raza Grande Sabor Leche Bolsa 500 g Master Dog | Desayuno y Snacks > Snacks | Mascotas > Alimento Perros | Producto de mascotas fuera de Mascotas |
+| 300 | Alimento Seco Cachorro Raza Pequeña Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y Pescados > Carnes | Mascotas > Alimento Perros | Producto de mascotas fuera de Mascotas |
+| 306 | Alimento Seco Cachorro Raza Mediana/grande Sabor Carne Y Leche Bolsa 3 Kg Master Dog | Carnes y Pescados > Carnes | Mascotas > Alimento Perros | Producto de mascotas fuera de Mascotas |
+| 310 | Galleta Perro Cachoro Leche g g Pet Food | Desayuno y Snacks > Snacks | Mascotas > Alimento Perros | Producto de mascotas fuera de Mascotas |
+| 339 | Tónico Rose Care Leche & Tonico Micelar 2 En 1 200 ml Nivea | Lacteos, Huevos y Congelados > Leche | Higiene Personal > Cuidado Facial | Producto de higiene personal fuera de Higiene Personal |
+| 429 | Bebida Vegetal Notmilk Chocolate 1 L NotCo | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 444 | Bebida Vegetal De Avellana Sabor Chocolate Caja 1 L Vivicosí | Bebe > Alimentos Bebe | Bebidas > Bebidas | Bebida detectada dentro de categoria Bebe |
+| 509 | Desodorante Spray Nivea Black&white Original Masculino Xl Hombre | Lacteos, Huevos y Congelados > Huevos | Higiene Personal > Desodorantes | Producto de higiene personal fuera de Higiene Personal |
+
+## Archivos Generados
+
+- reports/fase5f_clasificacion_masiva.csv
+- reports/fase5f_clasificacion_masiva.md
+- reports/FASE_5F_REPORTE.md
+- reports/FASE_5F_REPORTE.pdf
+- CAMBIOS_FASE_5F.md
+
+## Recomendacion Fase 5F-FIX
+
+- Crear una fase separada con backup y rollback especifico.
+- Aplicar primero solo alta confianza y categorias de destino con subcategoria clara.
+- Revisar manualmente hallazgos de media confianza.
+- No recalcular producto_base hasta terminar movimientos de categoria.
+- Prioridad inicial: Bebidas/Snacks/Limpieza dentro de Bebe y productos de mascotas fuera de Mascotas.
+
+---
+
+# Fase 5G - Reload Test Paralelo
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Crear una BD paralela desde cero y comparar su calidad contra la BD actual sin modificar `supercheck.db`.
+
+## Resultado
+
+- Productos en BD actual: 31124.
+- Productos en BD reload: 31124.
+- Precios en BD actual: 31139.
+- Precios en BD reload: 31155.
+- Hallazgos clasificacion masiva actual: 1986.
+- Hallazgos clasificacion masiva reload: 1986.
+- Hallazgos alta confianza actual: 1639.
+- Hallazgos alta confianza reload: 1683.
+- Conflictos actual: 1545.
+- Conflictos reload: 1605.
+
+## Decision
+
+- La BD recargada no tiene menos errores que la actual.
+- Los 1986 errores reaparecen en la reload.
+- El problema apunta a datos fuente/importadores/reglas de clasificacion.
+- No conviene reemplazar `supercheck.db` por `supercheck_reload_test.db`.
+- Conviene arreglar importadores/datos fuente y seguir con Fase 5F-FIX quirurgica.
+
+## Archivos
+
+- `reports/FASE_5G_RELOAD_TEST.md`
+- `reports/FASE_5G_RELOAD_TEST.pdf`
+- `reports/comparacion_actual_vs_reload.csv`
+- `reports/auditoria_reload_test.md`
+- `reports/reload_test/`
+
+---
+
+# Fase 5H - Root Cause Clasificacion Masiva
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Identificar la causa raiz de los errores masivos que reaparecen despues de una recarga limpia.
+
+## Resultado
+
+- Productos trazados: 51.
+- Causa raiz principal: `scraper_categoria_por_busqueda_amplia`.
+- Trazas con esa causa: 51 de 51.
+- Scripts con evidencia directa: `app/scraper_lider.py` y `app/scraper_jumbo_real.py`.
+- Scripts con riesgo estructural: `app/scraper_unimarc.py`, `app/combinar_supermercados.py`, `app/importar_csv.py`.
+
+## Evidencia
+
+- NotMilk, Yogu Yogu, Milo y Coca-Cola aparecen en `Bebe > Alimentos Bebe`.
+- Master Dog y Pet Food aparecen en `Carnes`, `Desayuno y Snacks` o `Lacteos`.
+- Nivea micelar y desodorantes aparecen en `Lacteos`.
+- La categoria erronea ya existe en los CSV fuente trazados.
+
+## Decision
+
+- No conviene corregir solo la BD sin arreglar el pipeline.
+- No conviene reemplazar la BD actual por reload.
+- Conviene ejecutar Fase 5I para corregir scrapers/importadores y agregar validadores pre-import.
+
+## Archivos
+
+- `reports/FASE_5H_ROOT_CAUSE.md`
+- `reports/FASE_5H_ROOT_CAUSE.pdf`
+- `reports/fase5h_trazabilidad_productos.csv`
+- `reports/fase5h_causa_raiz_resumen.csv`
+
+---
+
+# Fase 5I - Pipeline Hardening
+
+Fecha: 2026-06-01
+
+## Objetivo
+
+Impedir que categorias imposibles entren al pipeline antes de una nueva recarga.
+
+## Cambios
+
+- Se creo `app/category_validator.py`.
+- Se integro la validacion en `app/scraper_lider.py`.
+- Se integro la validacion en `app/scraper_jumbo_real.py`.
+- Se integro la validacion en `app/scraper_unimarc.py`.
+- Se integro la validacion en `app/combinar_supermercados.py`.
+- Se integro la validacion en `app/importar_csv.py`.
+- Se agregaron tests para NotMilk, Coca-Cola, Yogu Yogu, Master Dog, Champion Dog, Pedigree, Nivea, Rexona y Dove.
+
+## Resultado Estimado
+
+- Hallazgos Fase 5F: 1986.
+- Bloqueados por validador: 1934.
+- Remanente estimado: 52.
+- Objetivo solicitado: menos de 300 hallazgos.
+
+## Seguridad
+
+- No se modifico `supercheck.db`.
+- No se ejecuto recarga.
+- No se ejecuto scraping.
+
+## Siguiente Paso
+
+Ejecutar Fase 5J: reload test post-hardening en BD paralela y revision de rechazos.
+
+## Archivos
+
+- `reports/FASE_5I_PIPELINE_HARDENING.md`
+- `reports/FASE_5I_PIPELINE_HARDENING.pdf`
+- `CAMBIOS_FASE_5I.md`
+

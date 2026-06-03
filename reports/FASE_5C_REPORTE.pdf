@@ -1,0 +1,110 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 1643 >>
+stream
+BT
+/F1 10 Tf
+54 742 Td
+(Fase 5C - AhorraGo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Fase 5C Reporte - AhorraGo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Resumen Ejecutivo) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Fase 5C aplico matching real y controlado solo en categorias autorizadas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Metricas Antes/Despues) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Productos modificados: 22) Tj
+0 -13 Td
+(- Equivalencias: 2218 -> 2225) Tj
+0 -13 Td
+(- Equivalencias ganadas: 7) Tj
+0 -13 Td
+(- Conflictos: 829 -> 829) Tj
+0 -13 Td
+(- Conflictos reducidos: 0) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Productos Modificados por Categoria) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Bebe:  \(0\)) Tj
+0 -13 Td
+(- Bebidas:  \(22\)) Tj
+0 -13 Td
+(- Higiene Personal:  \(0\)) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Seguridad) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Backup generado: C:\\Users\\Gonzalo\\Pictures\\supersuper\\backups\\supercheck_pre_fase5c_20260601_212826.db) Tj
+0 -13 Td
+(- Rollback disponible: python -m app.scripts.rollback_fase5c) Tj
+0 -13 Td
+(- Auditoria post-cambio: 0 hallazgos) Tj
+0 -13 Td
+(- No se modificaron categorias bloqueadas.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Riesgos) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- La fase fue conservadora: Bebidas tuvo cambios; Higiene Personal y Bebe quedaron sin cambios por falta ) Tj
+0 -13 Td
+(- Las categorias pendientes requieren reglas de marca/variedad mas completas antes de una aplicacion real) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+( Recomendaciones) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Antes de ampliar Fase 5C, enriquecer MARCAS_CONOCIDAS para bebidas isotonicas/energeticas y reglas de t) Tj
+0 -13 Td
+(- Mantener auditoria de categorias en 0 antes de cualquier nueva aplicacion.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000185 00000 n 
+0000001880 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2006
+%%EOF

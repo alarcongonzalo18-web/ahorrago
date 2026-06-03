@@ -1,4 +1,4 @@
-﻿from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends, Query
 from sqlalchemy.orm import Session, joinedload
 from collections import defaultdict
