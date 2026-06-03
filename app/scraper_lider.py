@@ -10,6 +10,8 @@ from html import unescape
 from pathlib import Path
 from urllib.parse import urljoin
 
+from app.category_validator import is_valid_row
+
 
 OUTPUT = Path("data/lider_real.csv")
 
@@ -197,7 +199,7 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
         if not nombre or not precio:
             continue
 
-        productos.append({
+        producto = {
             "categoria": categoria,
             "subcategoria": subcategoria,
             "nombre": nombre,
@@ -208,7 +210,10 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
             "promocion": "",
             "url": urljoin(url, link) if link else "",
             "imagen_url": urljoin(url, imagen) if imagen else ""
-        })
+        }
+        if not is_valid_row(producto, "scraper_lider", Path("reports") / "pipeline_category_rejections.csv"):
+            continue
+        productos.append(producto)
 
     return productos
 

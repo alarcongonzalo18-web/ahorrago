@@ -2,6 +2,8 @@ import csv
 import re
 from pathlib import Path
 
+from app.category_validator import is_valid_row
+
 
 OUTPUT = Path("data/productos_supermercados.csv")
 
@@ -110,8 +112,7 @@ def leer_filas(path, supermercado):
             nombre = (fila.get("nombre") or "").strip()
             if not nombre:
                 continue
-
-            filas.append({
+            fila_normalizada = {
                 "categoria": (fila.get("categoria") or "").strip(),
                 "subcategoria": (fila.get("subcategoria") or "").strip(),
                 "nombre": nombre,
@@ -127,7 +128,10 @@ def leer_filas(path, supermercado):
                 "url": (fila.get("url") or "").strip(),
                 "imagen_url": (fila.get("imagen_url") or "").strip(),
                 "producto_base": "",
-            })
+            }
+            if not is_valid_row(fila_normalizada, f"combinar_supermercados:{supermercado}", Path("reports") / "pipeline_category_rejections.csv"):
+                continue
+            filas.append(fila_normalizada)
 
     return filas
 

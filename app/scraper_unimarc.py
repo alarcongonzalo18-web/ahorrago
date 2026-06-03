@@ -9,6 +9,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import StaleElementReferenceException
 
+from app.category_validator import is_valid_row
+
 
 BASE = "https://www.unimarc.cl/search"
 OUTPUT = Path("data/unimarc_real.csv")
@@ -262,6 +264,8 @@ def scrape_categoria(driver, categoria, subcategoria, termino):
 
             producto["categoria"] = categoria
             producto["subcategoria"] = subcategoria
+            if not is_valid_row(producto, "scraper_unimarc", Path("reports") / "pipeline_category_rejections.csv"):
+                continue
             productos.append(producto)
             encontrados_pagina += 1
 

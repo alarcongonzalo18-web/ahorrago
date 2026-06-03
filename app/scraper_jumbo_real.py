@@ -8,6 +8,8 @@ import urllib.request
 from pathlib import Path
 from urllib.parse import urlencode, quote
 
+from app.category_validator import is_valid_row
+
 BASE_URL = "https://www.jumbo.cl"
 API_URL = "https://ac.cnstrc.com/search/{query}"
 OUTPUT = Path("data/jumbo_real.csv")
@@ -231,6 +233,8 @@ def scrape_categoria(categoria, subcategoria, termino):
         for r in resultados:
             producto = extraer_producto(r, categoria, subcategoria)
             if not producto:
+                continue
+            if not is_valid_row(producto, "scraper_jumbo_real", Path("reports") / "pipeline_category_rejections.csv"):
                 continue
             key = (producto["nombre"], producto["precio"], producto["url"])
             if key in vistos:
