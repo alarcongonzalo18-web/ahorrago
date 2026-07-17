@@ -3235,11 +3235,14 @@ function renderRecomendacion(resumen) {
         document.getElementById("totalOptimo").textContent = formatearPrecio(resumen.total_optimo);
     }
 
+    // La linea de ahorro solo tiene sentido cuando conviene dividir; en los
+    // casos "una tienda"/"ahorro bajo" el propio mensaje ya explica la decision.
     const ahorro = Number(resumen.ahorro || 0);
+    const recomienda_dividir = resumen.recomendacion === "dividir" || resumen.recomendacion === "dividir_fuerte";
     banner.className = `reco-banner reco-${resumen.recomendacion || "una_tienda"}`;
     banner.innerHTML = `
         <span class="reco-headline">${escapeHtml(resumen.mensaje)}</span>
-        ${ahorro > 0 ? `<span class="reco-ahorro">Ahorras ${formatearPrecio(ahorro)} frente a comprar todo en ${escapeHtml(resumen.mejor_proveedor_unico || "una sola tienda")}</span>` : ""}
+        ${recomienda_dividir && ahorro > 0 ? `<span class="reco-ahorro">Ahorras ${formatearPrecio(ahorro)} frente a comprar todo en ${escapeHtml(resumen.mejor_proveedor_unico || "una sola tienda")}</span>` : ""}
     `;
     banner.hidden = false;
 }
