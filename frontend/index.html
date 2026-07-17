@@ -391,6 +391,26 @@ body.dark .brand-icon {
     gap: 16px;
 }
 
+.reco-banner {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--soft);
+    color: var(--ink);
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+.reco-banner .reco-headline { font-weight: 700; display: block; }
+.reco-banner .reco-ahorro { margin-top: 4px; font-size: 0.85rem; color: var(--muted); }
+.reco-banner.reco-dividir,
+.reco-banner.reco-dividir_fuerte {
+    border-color: var(--success);
+    background: var(--success-soft);
+}
+.reco-banner.reco-dividir .reco-ahorro,
+.reco-banner.reco-dividir_fuerte .reco-ahorro { color: var(--success); font-weight: 600; }
+
 .results-context {
     display: none;
     align-items: center;
@@ -2183,6 +2203,7 @@ body.dark .buy-btn:hover {
                         <span>Total óptimo</span>
                         <strong id="totalOptimo" class="total-value">$0</strong>
                     </div>
+                    <div id="recomendacionCompra" class="reco-banner" hidden></div>
                     <div id="totalesSupermercado" class="market-total-list"></div>
                     <button class="btn-go w-100 py-3 mt-3" onclick="guardarListaOptima()">Guardar lista</button>
                     <button class="btn-outline-go w-100 py-2 mt-2" onclick="limpiarCarrito()">Vaciar compra</button>
@@ -3099,6 +3120,7 @@ function agregarACompra(id) {
     renderCompraOptima();
     actualizarDashboard(carritoCompra);
     actualizarEstadoCarrito();
+    actualizarResumenOficial();
     mostrarToast("Producto agregado a la compra");
 }
 
@@ -3115,6 +3137,7 @@ function cambiarCantidad(id, delta) {
     renderCompraOptima();
     actualizarDashboard(carritoCompra);
     actualizarEstadoCarrito();
+    actualizarResumenOficial();
 }
 
 function quitarDeCompra(id) {
@@ -3123,6 +3146,7 @@ function quitarDeCompra(id) {
     renderCompraOptima();
     actualizarDashboard(carritoCompra);
     actualizarEstadoCarrito();
+    actualizarResumenOficial();
 }
 
 function limpiarCarrito() {
@@ -3131,6 +3155,7 @@ function limpiarCarrito() {
     renderCompraOptima();
     actualizarDashboard(carritoCompra);
     actualizarEstadoCarrito();
+    actualizarResumenOficial();
     mostrarToast("Compra vaciada");
 }
 
@@ -3170,6 +3195,66 @@ function renderCompraOptima() {
     `).join("") || "<p class='text-muted-app mb-0'>Agrega productos desde los resultados.</p>";
     renderTotalesSupermercado(carritoCompra);
     renderIcons();
+}
+
+let _resumenTimer = null;
+
+// Calculadora oficial: pide el resumen al backend (/productos/resumen-compra).
+// Devuelve null si no hay red/backend, para conservar el calculo cliente como fallback.
+async function obtenerResumenOficial() {
+    const items = carritoCompra.map(producto => ({
+        producto_id: producto.id,
+        cantidad: producto.cantidad || 1
+    }));
+    if (!items.length) return null;
+    try {
+        const res = await fetch(`${API}/productos/resumen-compra`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items })
+        });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (error) {
+        return null;
+    }
+}
+
+function renderRecomendacion(resumen) {
+    const banner = document.getElementById("recomendacionCompra");
+    if (!banner) return;
+    if (!resumen || !resumen.mensaje || resumen.recomendacion === "sin_datos") {
+        banner.hidden = true;
+        banner.innerHTML = "";
+        banner.className = "reco-banner";
+        return;
+    }
+
+    // El backend es la calculadora oficial: su total manda sobre el del cliente.
+    if (typeof resumen.total_optimo === "number" && resumen.total_optimo > 0) {
+        document.getElementById("totalOptimo").textContent = formatearPrecio(resumen.total_optimo);
+    }
+
+    const ahorro = Number(resumen.ahorro || 0);
+    banner.className = `reco-banner reco-${resumen.recomendacion || "una_tienda"}`;
+    banner.innerHTML = `
+        <span class="reco-headline">${escapeHtml(resumen.mensaje)}</span>
+        ${ahorro > 0 ? `<span class="reco-ahorro">Ahorras ${formatearPrecio(ahorro)} frente a comprar todo en ${escapeHtml(resumen.mejor_proveedor_unico || "una sola tienda")}</span>` : ""}
+    `;
+    banner.hidden = false;
+}
+
+// Debounce: los controles +/- del carrito disparan cambios en rafaga.
+function actualizarResumenOficial() {
+    clearTimeout(_resumenTimer);
+    const banner = document.getElementById("recomendacionCompra");
+    if (!carritoCompra.length) {
+        if (banner) { banner.hidden = true; banner.innerHTML = ""; banner.className = "reco-banner"; }
+        return;
+    }
+    _resumenTimer = setTimeout(async () => {
+        renderRecomendacion(await obtenerResumenOficial());
+    }, 250);
 }
 
 function actualizarEstadoCarrito() {
@@ -3581,6 +3666,7 @@ window.addEventListener("load", () => {
     actualizarSubcategorias();
     actualizarDashboard(carritoCompra, 0);
     actualizarEstadoCarrito();
+    actualizarResumenOficial();
     actualizarContextoResultados(0);
     document.getElementById("resultados").innerHTML = renderEstadoInicial();
     renderIcons();
