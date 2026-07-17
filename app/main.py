@@ -417,12 +417,12 @@ def buscar_productos(
                     precio.precio_normal <= precio.precio_oferta * 2
                 )
 
-                mejor_actual = mejor_por_proveedor.get(supermercado)
+                mejor_actual = mejor_por_proveedor.get(proveedor)
                 if mejor_actual and mejor_actual["precio"] <= valor:
                     continue
 
-                mejor_por_proveedor[supermercado] = {
-                    "proveedor": supermercado,
+                mejor_por_proveedor[proveedor] = {
+                    "proveedor": proveedor,
                     "precio": valor,
                     "precio_normal": precio.precio_normal,
                     "precio_oferta": precio.precio_oferta,

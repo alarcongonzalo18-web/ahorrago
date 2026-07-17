@@ -106,12 +106,12 @@ def metricas_por_categoria(db: Session, conflictos: list[dict] | None = None) ->
         "supermercados": set(),
         "conflictos_detectados": 0,
     })
-    supermercados = db.query(
+    filas_proveedor = db.query(
         models.Producto.id,
         models.Categoria.nombre.label("categoria"),
-        models.Supermercado.nombre.label("supermercado"),
+        models.Proveedor.nombre.label("proveedor"),
     ).join(models.Precio, models.Precio.producto_id == models.Producto.id).join(
-        models.Supermercado, models.Precio.supermercado_id == models.Supermercado.id
+        models.Proveedor, models.Precio.proveedor_id == models.Proveedor.id
     ).outerjoin(models.Categoria, models.Producto.categoria_id == models.Categoria.id).all()
 
     for producto in productos:
@@ -122,8 +122,8 @@ def metricas_por_categoria(db: Session, conflictos: list[dict] | None = None) ->
             data["bases"][producto.producto_base] += 1
         data["conflictos_detectados"] += conflictos_por_producto.get(producto.id, 0)
 
-    for row in supermercados:
-        por_categoria[row.categoria or "Sin categoria"]["supermercados"].add(row.supermercado)
+    for row in filas_proveedor:
+        por_categoria[row.categoria or "Sin categoria"]["supermercados"].add(row.proveedor)
 
     resultado = []
     for categoria, data in por_categoria.items():

@@ -3515,7 +3515,7 @@ async function cargarEstadoDatos() {
     try {
         const res = await fetch(`${API}/estado-datos`);
         const estado = await res.json();
-        const supermercados = Object.entries(estado.supermercados || {})
+        const supermercados = Object.entries(estado.proveedores || {})
             .map(([nombre, cantidad]) => `${escapeHtml(nombre)}: ${Number(cantidad).toLocaleString("es-CL")}`)
             .join("<br>");
 

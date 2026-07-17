@@ -7,7 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import Base
 from app.main import app, get_db
-from app.models import Categoria, Precio, Producto, Subcategoria, Supermercado
+from app.models import Categoria, Precio, Producto, Proveedor, Subcategoria
 
 
 def crear_cliente_con_datos():
@@ -23,8 +23,8 @@ def crear_cliente_con_datos():
     try:
         categoria = Categoria(nombre="Despensa")
         subcategoria = Subcategoria(nombre="Leche", categoria=categoria)
-        lider = Supermercado(nombre="Lider")
-        jumbo = Supermercado(nombre="Jumbo")
+        lider = Proveedor(nombre="Lider")
+        jumbo = Proveedor(nombre="Jumbo")
         leche_1l = Producto(
             nombre="Leche Soprole 1L",
             marca="Soprole",
@@ -55,9 +55,9 @@ def crear_cliente_con_datos():
         db.add_all([categoria, subcategoria, lider, jumbo, leche_1l, leche_1000ml, arroz])
         db.flush()
         db.add_all([
-            Precio(producto=leche_1l, supermercado=lider, precio_normal=1200, url_producto="https://lider.test/p/1"),
-            Precio(producto=leche_1000ml, supermercado=jumbo, precio_normal=1100, url_producto="https://jumbo.test/p/1"),
-            Precio(producto=arroz, supermercado=lider, precio_normal=1800, url_producto="https://lider.test/p/2"),
+            Precio(producto=leche_1l, proveedor=lider, precio_normal=1200, url_producto="https://lider.test/p/1"),
+            Precio(producto=leche_1000ml, proveedor=jumbo, precio_normal=1100, url_producto="https://jumbo.test/p/1"),
+            Precio(producto=arroz, proveedor=lider, precio_normal=1800, url_producto="https://lider.test/p/2"),
         ])
         db.commit()
     finally:
@@ -105,7 +105,7 @@ def test_estado_datos_usa_conteos_basicos():
         data = response.json()
         assert data["productos"] == 3
         assert data["precios"] == 3
-        assert data["supermercados"]["Lider"] == 2
+        assert data["proveedores"]["Lider"] == 2
         assert Path("supercheck.db").exists() or data["base_actualizada"] is None
     finally:
         app.dependency_overrides.clear()
