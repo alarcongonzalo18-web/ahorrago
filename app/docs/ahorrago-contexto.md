@@ -51,19 +51,52 @@ El commit 3686a58 dejó el rename a medio hacer y nadie lo validó:
   frontend seguía leyendo `estado.supermercados` → panel vacío en silencio.
 - tests/test_integration.py importaba Supermercado y no cargaba.
 
-### Tests huérfanos (PENDIENTE decidir):
-tests/test_auditoria_datos.py y tests/test_fase4_diagnostico.py importan
-módulos de `app/scripts/` que el commit be1e027 ("limpieza profunda")
-borró. No se pueden ejecutar: prueban código que ya no existe. Se dejaron
-intactos a la espera de decisión (borrarlos o reescribirlos).
+### Tests huérfanos — RESUELTO (17-07-2026):
+test_auditoria_datos.py eliminado (probaba solo código borrado de
+app/scripts/). test_fase4_diagnostico.py rescatado (3 de 4 tests probaban
+código vivo). La suite completa corre sin exclusiones: 48 tests verdes.
+
+## Visión y rumbo (decidido 17-07-2026)
+
+North Star ampliado: comparador multi-rubro consultable por WhatsApp —
+el usuario manda su lista por chat y recibe la comparación y la compra
+óptima en el mismo chat.
+
+Decisiones de rumbo:
+1. **Rubros nuevos congelados** hasta que el bot esté en producción con
+   supermercados. Un canal funcionando con 1 rubro > 3 rubros sin usuarios.
+2. **El bot se construye desacoplado del canal** (app/chat.py). Twilio,
+   Meta Cloud API o Telegram son solo transportes.
+3. Cada vertical futura tendrá su propia estrategia de matching
+   (tecnología = modelo/SKU exacto, no texto difuso). No intentar un
+   motor universal.
+
+### Bot WhatsApp — estado
+- **Hecho (17-07-2026)**: núcleo conversacional (app/chat.py) + webhook
+  POST /webhook/whatsapp estilo Twilio (form-urlencoded → TwiML), con 7
+  tests. Verificado contra servidor real: "2 leches" → comparación
+  completa con compra óptima.
+- **Siguiente (requiere al dueño)**: cuenta Twilio (sandbox WhatsApp
+  gratis) apuntando el webhook a la app → probar desde el teléfono. Para
+  eso la app debe estar accesible: túnel (ngrok/cloudflared) para probar,
+  o el deploy definitivo.
+- **Bloqueador estructural**: la app no está desplegada (corre en
+  localhost). Sin servidor público no hay webhook ni usuarios. Decidir
+  hosting (PaaS tipo Railway/Fly o VPS). SQLite aguanta esta escala.
+  Ojo scraping: probablemente deba seguir corriendo en PC local y subir
+  el CSV/base al servidor (retailers bloquean IPs de datacenter).
+- **Después**: número dedicado para AhorraGo en Meta (NO el +56 9 6222
+  9771, que es de Reikobyte), y más adelante un LLM barato que traduzca
+  lenguaje natural a llamadas API (la v1 usa comandos simples).
 
 ## Plan próximos commits (orden estricto)
 1. ~~Fix backend producto_base~~ — hecho 17-07-2026.
-2. Limpieza:
+2. ~~Bot: núcleo + webhook~~ — hecho 17-07-2026.
+3. Limpieza:
    - Eliminar .summary-grid en desktop (ya está oculto en móvil)
    - Badge carrito: usar sum(p.cantidad) en vez de carritoCompra.length
-3. Sticky bottom bar consumiendo el endpoint arreglado
-4. Panel detallado "Ver plan" con compra inteligente
+4. Sticky bottom bar consumiendo el endpoint arreglado
+5. Panel detallado "Ver plan" con compra inteligente
 
 ## Decisiones de producto tomadas
 - Modelo B: controles +/− SOLO en carrito (no duplicar en cards)
