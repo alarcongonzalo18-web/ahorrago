@@ -13,3 +13,4 @@ backups/
 *.db-shm
 .claude/
 actualizacion_productos.lock
+reports/
