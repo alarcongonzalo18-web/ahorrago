@@ -124,11 +124,42 @@ Plan de datos (orden de palanca):
    `?pagenumber=N` hasta página vacía; medido: bebidas pasó de ~144 a
    958 productos (6,6×); (b) +42 categorías nuevas descubiertas vía
    sitemap y validadas en vivo (licores, pisco, jamón, harina, helados,
-   etc. — 93 categorías totales). **Falta correr el scrape completo**
-   (lo hace la tarea programada del PC del dueño, o manual:
-   `python -m app.scraper_lider` → `combinar` → `reconstruir`); estimado
-   25-40k filas de Líder, todas con EAN. Tras esa corrida, correr
-   `python -m app.reporte_cobertura` para medir el salto de comparables.
+   etc. — 93 categorías totales).
+
+   ⚠️ **REGRESIÓN AL CORRER EL SCRAPE COMPLETO — PENDIENTE DE ARREGLAR
+   (pausado 17-07-2026, retomar acá).** Se corrió el scraper por trozos
+   (8 tandas rápidas seguidas) desde el PC del trabajo. Resultado:
+   `data/lider_real.csv` quedó con 8.415 filas (99% con EAN) — pero eso
+   es MENOS que las 8.682 viejas, PESE a que bebidas sola subió a 958.
+   Al comparar viejo vs nuevo por subcategoría, muchas categorías se
+   desplomaron o cayeron a 0: Alimentos Bebé 471→0, Mermeladas 198→0,
+   Legumbres 125→0, Bebidas Energéticas 34→0, Salsas 523→48, Aceite
+   437→45, Congelados 360→11, Pescados 412→45, Detergentes 168→48,
+   Condimentos 141→47. Categorías en 0 = la URL devolvió vacío.
+   - **Causa más probable**: rate-limiting de Líder durante el scrape
+     rápido de 8 trozos seguidos. El loop nuevo `extraer_productos()`
+     corta la categoría en cuanto una página viene vacía o entera
+     repetida — y una página vacía por BLOQUEO es indistinguible de una
+     página vacía por FIN REAL. Así, un throttle transitorio trunca la
+     categoría (o la mata entera si falla la página 1).
+   - **Estado del working tree**: `data/lider_real.csv` está MODIFICADO
+     y SIN COMMITEAR con esta versión regresada. **NO commitear así.**
+     El CSV viejo (mejor) sigue siendo el de `git HEAD`. Antes de
+     retomar: `git checkout HEAD -- data/lider_real.csv` para volver al
+     bueno, o regenerar bien.
+   - **Fix a implementar en `app/scraper_lider.py` antes de re-scrapear**:
+     (1) distinguir bloqueo de fin real — si una página viene vacía pero
+     el sitio devolvió HTTP 200 con cuerpo sospechosamente corto o un
+     429/403, reintentar con backoff en vez de cortar; (2) pausar más
+     entre categorías (subir el `time.sleep`), y ojalá correr en 1 sola
+     corrida pausada, no 8 ráfagas; (3) validación post-scrape: comparar
+     conteo por subcategoría contra la corrida anterior y ABORTAR el
+     guardado si alguna categoría conocida cae >50% (guardia anti-
+     regresión). Recién con eso: `combinar` → `reconstruir` →
+     `reporte_cobertura`.
+   - Las mejoras de CÓDIGO (paginación + 42 categorías, commit `62e883c`)
+     están bien y siguen commiteadas; lo único que regresó son los DATOS
+     de esta corrida puntual, por throttling. Es 100% reproducible bien.
 3. Correr `reporte_cobertura` después de cada actualización y dirigir el
    esfuerzo a las categorías con peor % (hoy: Carnes 1,2%, Bebé 2,2%,
    Congelados 2,4%).
