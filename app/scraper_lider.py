@@ -15,6 +15,20 @@ from app.url_utils import extraer_ean_lider
 
 OUTPUT = Path("data/lider_real.csv")
 
+# Umbral de bytes bajo el cual un HTML se considera pagina de bloqueo/challenge
+# y no un listado real (un listado de Lider, aun sin productos, trae todo el
+# chrome del sitio y pesa >100KB).
+MIN_HTML_BYTES = 5000
+
+
+class BloqueoError(Exception):
+    """El sitio respondio con throttling (429/403/503) o un cuerpo sospechoso.
+
+    Se distingue de un fin de categoria real: un bloqueo es transitorio y se
+    reintenta con backoff; un fin real deja la pagina con el chrome completo
+    pero sin items.
+    """
+
 CATEGORIAS = [
     # Lácteos y refrigerados
     ("Lacteos, Huevos y Congelados", "Leche",           "https://super.lider.cl/v/leches"),
@@ -124,7 +138,7 @@ CATEGORIAS = [
 ]
 
 
-def descargar_html(url, intentos=4):
+def descargar_html(url, intentos=5):
     request = urllib.request.Request(
         url,
         headers={
@@ -140,18 +154,37 @@ def descargar_html(url, intentos=4):
     for intento in range(1, intentos + 1):
         try:
             with urllib.request.urlopen(request, timeout=45) as response:
-                return response.read().decode("utf-8", errors="replace")
+                html = response.read().decode("utf-8", errors="replace")
+            # cuerpo sospechosamente corto = probable pagina de bloqueo/challenge,
+            # no un listado real: se trata como bloqueo transitorio y se reintenta.
+            if len(html) < MIN_HTML_BYTES:
+                raise BloqueoError(f"cuerpo corto ({len(html)} bytes)")
+            return html
+        except urllib.error.HTTPError as exc:
+            # HTTPError es subclase de URLError: hay que capturarlo antes.
+            ultimo_error = exc
+            if exc.code in (429, 403, 503):
+                # throttling: backoff exponencial largo (5,10,20,40,60...).
+                espera = min(60, 5 * 2 ** (intento - 1))
+                print(f"Throttling HTTP {exc.code} en {url}. Esperando {espera}s ({intento}/{intentos})...")
+                if intento == intentos:
+                    break
+                time.sleep(espera)
+                continue
+            # otros codigos (404, etc.) no son transitorios: no reintentar.
+            raise
         except (
             TimeoutError,
             ConnectionError,
             http.client.HTTPException,
             urllib.error.URLError,
+            BloqueoError,
         ) as exc:
             ultimo_error = exc
             if intento == intentos:
                 break
 
-            espera = 2 * intento
+            espera = min(30, 3 * intento)
             print(f"Descarga fallida ({intento}/{intentos}) para {url}: {exc}. Reintentando en {espera}s...")
             time.sleep(espera)
 
@@ -217,6 +250,11 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
 MAX_PAGINAS = 60
 
 
+def _descargar_pagina(categoria, subcategoria, pagina_url):
+    html_pagina = descargar_html(pagina_url)
+    return extraer_productos_desde_html(categoria, subcategoria, pagina_url, html_pagina)
+
+
 def extraer_productos(categoria, subcategoria, url):
     """Recorre la categoria pagina a pagina hasta que venga vacia.
 
@@ -224,6 +262,12 @@ def extraer_productos(categoria, subcategoria, url):
     8 paginas reales en /v/bebidas), asi que no sirve para saber cuantas
     paginas hay: se avanza secuencialmente con ?pagenumber=N hasta que una
     pagina no traiga productos.
+
+    Anti-throttling: una pagina vacia puede ser fin real de categoria o un
+    bloqueo transitorio. Antes de concluir el fin se reverifica con un
+    reintento tras una pausa larga. Si falla la pagina 1 entera se propaga el
+    error (RuntimeError) para que el llamador marque la categoria como ERROR,
+    nunca como "0 productos" valido (que corromperia el guardado).
     """
     print(f"Scrapeando Lider {subcategoria}...")
     productos = []
@@ -232,19 +276,27 @@ def extraer_productos(categoria, subcategoria, url):
     for pagina in range(1, MAX_PAGINAS + 1):
         pagina_url = url if pagina == 1 else f"{url}?pagenumber={pagina}"
         try:
-            html_pagina = descargar_html(pagina_url)
+            productos_pagina = _descargar_pagina(categoria, subcategoria, pagina_url)
         except RuntimeError as exc:
-            print(f"{pagina_url} -> error, se detiene la categoria: {exc}")
+            if pagina == 1:
+                # la categoria entera no cargo: propagar (posible throttle).
+                raise
+            print(f"{pagina_url} -> error tras reintentos, se corta la categoria: {exc}")
             break
 
-        productos_pagina = extraer_productos_desde_html(
-            categoria,
-            subcategoria,
-            pagina_url,
-            html_pagina
-        )
         if not productos_pagina:
-            break
+            # reverificar: un throttle transitorio se recupera tras la pausa;
+            # un fin real sigue vacio.
+            time.sleep(5)
+            try:
+                productos_pagina = _descargar_pagina(categoria, subcategoria, pagina_url)
+            except RuntimeError as exc:
+                if pagina == 1:
+                    raise
+                print(f"{pagina_url} -> vacia y error al reverificar: {exc}")
+                break
+            if not productos_pagina:
+                break  # fin real de la categoria
 
         nuevos = 0
         for producto in productos_pagina:
@@ -262,33 +314,69 @@ def extraer_productos(categoria, subcategoria, url):
         if nuevos == 0:
             break
 
-        time.sleep(0.3)
+        time.sleep(1.0)
 
     return productos
 
 
-def guardar_productos(productos):
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+CAMPOS = [
+    "categoria",
+    "subcategoria",
+    "nombre",
+    "precio",
+    "precio_normal",
+    "precio_oferta",
+    "precio_referencia",
+    "promocion",
+    "url",
+    "imagen_url",
+    "ean",
+]
 
-    with open(OUTPUT, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=[
-                "categoria",
-                "subcategoria",
-                "nombre",
-                "precio",
-                "precio_normal",
-                "precio_oferta",
-                "precio_referencia",
-                "promocion",
-                "url",
-                "imagen_url",
-                "ean",
-            ]
-        )
+
+def guardar_productos(productos, destino=OUTPUT):
+    destino = Path(destino)
+    destino.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(destino, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CAMPOS)
         writer.writeheader()
         writer.writerows(productos)
+
+
+def contar_por_subcategoria(productos):
+    """Cuenta productos por subcategoria. Acepta dicts o filas de CSV."""
+    conteo = {}
+    for p in productos:
+        sub = p.get("subcategoria", "")
+        conteo[sub] = conteo.get(sub, 0) + 1
+    return conteo
+
+
+def leer_conteo_previo(path=OUTPUT):
+    """Conteo por subcategoria del CSV existente. {} si no existe."""
+    path = Path(path)
+    if not path.exists():
+        return {}
+    with open(path, newline="", encoding="utf-8") as f:
+        return contar_por_subcategoria(csv.DictReader(f))
+
+
+def validar_anti_regresion(nuevos, previos, umbral=0.5):
+    """Subcategorias conocidas que cayeron mas de `umbral` vs la corrida previa.
+
+    Devuelve lista de (subcategoria, antes, ahora). Una caida a 0 o por debajo
+    del `umbral` (ej: >50%) se considera regresion, senal de throttling. No
+    marca subidas ni subcategorias nuevas (no estaban antes).
+    """
+    caidas = []
+    for sub, antes in previos.items():
+        if antes == 0:
+            continue
+        ahora = nuevos.get(sub, 0)
+        if ahora < antes * (1 - umbral):
+            caidas.append((sub, antes, ahora))
+    return caidas
 
 
 def main():
@@ -313,7 +401,25 @@ def main():
         except Exception as e:
             print(f"Error en {subcategoria} ({url}): {e}. Continuando...")
 
-    guardar_productos(productos)
+    # guardia anti-regresion: nunca pisar el CSV bueno con una corrida que
+    # perdio categorias por throttling. Si alguna subcategoria conocida cae
+    # >50% (o a 0), guardar aparte en .nuevo para inspeccion y avisar.
+    previos = leer_conteo_previo(OUTPUT)
+    nuevos_conteo = contar_por_subcategoria(productos)
+    caidas = validar_anti_regresion(nuevos_conteo, previos)
+
+    if caidas:
+        destino = OUTPUT.with_suffix(OUTPUT.suffix + ".nuevo")
+        guardar_productos(productos, destino)
+        print("\n*** REGRESION DETECTADA: no se piso", OUTPUT, "***")
+        print(f"La corrida nueva ({len(productos)} productos) quedo en {destino}")
+        print("Subcategorias que cayeron >50% (probable throttling):")
+        for sub, antes, ahora in sorted(caidas, key=lambda c: c[1] - c[2], reverse=True):
+            print(f"  - {sub}: {antes} -> {ahora}")
+        print("Revisa el .nuevo o re-scrapea en una sola pasada pausada antes de reemplazar.")
+        return
+
+    guardar_productos(productos, OUTPUT)
     print(f"{len(productos)} productos Lider guardados")
 
 
