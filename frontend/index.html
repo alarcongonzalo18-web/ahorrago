@@ -2683,7 +2683,7 @@ function aplicarFiltros(productos) {
         .filter(producto => !categoria || productoPerteneceACategoria(producto, categoria))
         .filter(producto => !subcategoria || productoPerteneceASubcategoria(producto, categoria, subcategoria))
         .filter(producto => !formato || String(producto.formato || "").toLowerCase() === formato)
-        .map(producto => ({ ...producto, precios: producto.precios.filter(precio => mercados.has(precio.supermercado)) }))
+        .map(producto => ({ ...producto, precios: producto.precios.filter(precio => mercados.has(precio.proveedor)) }))
         .map(producto => ({
             ...producto,
             precios: producto.precios.filter(precio => {
@@ -2748,7 +2748,7 @@ function renderPrecio(precio, min) {
     return `
         <div class="price-row">
             <div>
-                <span class="store-name">${escapeHtml(precio.supermercado)}</span>
+                <span class="store-name">${escapeHtml(precio.proveedor)}</span>
                 ${esMejor ? "<span class='best-pill'>Más barato</span>" : ""}
                 ${tieneDescuento ? `<span class="offer-pill">Oferta -${precio.descuento}%</span>` : ""}
             </div>
@@ -2781,7 +2781,7 @@ function actualizarDashboard(productosCompra = carritoCompra, productosEncontrad
     const conteoMercados = {};
 
     optimos.forEach(item => {
-        conteoMercados[item.mejor.supermercado] = (conteoMercados[item.mejor.supermercado] || 0) + 1;
+        conteoMercados[item.mejor.proveedor] = (conteoMercados[item.mejor.proveedor] || 0) + 1;
     });
 
     const mejorSuper = Object.entries(conteoMercados).sort((a, b) => b[1] - a[1])[0];
@@ -3093,7 +3093,7 @@ function renderFilaTabla(producto) {
                 </div>
             </td>
             <td><strong class="price-value best">${formatearPrecio(mejor.precio)}</strong></td>
-            <td>${escapeHtml(mejor.supermercado)}</td>
+            <td>${escapeHtml(mejor.proveedor)}</td>
             <td>${formatearPrecio(ahorro)}</td>
             <td>
                 <div style="display:flex; flex-direction:column; gap:6px">
@@ -3187,7 +3187,7 @@ function renderCompraOptima() {
             ${item.producto.imagen_url ? `<img src="${escapeHtml(item.producto.imagen_url)}" alt="${escapeHtml(item.producto.nombre)}">` : "<i data-lucide='package'></i>"}
             <div>
                 <div class="optimal-name">${escapeHtml(item.producto.nombre)}</div>
-                <div class="optimal-meta">${escapeHtml(item.producto.formato || "")}<br>${escapeHtml(item.mejor.supermercado)}</div>
+                <div class="optimal-meta">${escapeHtml(item.producto.formato || "")}<br>${escapeHtml(item.mejor.proveedor)}</div>
             </div>
             <div>
                 <div class="optimal-price">${formatearPrecio(item.mejor.precio * item.producto.cantidad)}</div>
@@ -3237,7 +3237,7 @@ function calcularTotalesSupermercado(productos) {
 
     return mercados.map(mercado => {
         const items = productos.map(producto => ({
-            precio: producto.precios.find(p => p.supermercado === mercado),
+            precio: producto.precios.find(p => p.proveedor === mercado),
             cantidad: producto.cantidad || 1
         })).filter(item => item.precio);
 

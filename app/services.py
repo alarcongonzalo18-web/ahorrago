@@ -174,7 +174,7 @@ def comparar_lista(db: Session, lista_productos):
 
     def generar_link(nombre, proveedor):
         base = {
-            "Líder": ("https://www.lider.cl/proveedor/search", "query"),
+            "Líder": ("https://www.lider.cl/supermercado/search", "query"),
             "Unimarc": ("https://www.unimarc.cl/search", "q"),
             "Jumbo": ("https://www.jumbo.cl/busqueda", "ft"),
         }
