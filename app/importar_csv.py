@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker
 
 from .database import SessionLocal, Base, engine
-from .models import Supermercado, Categoria, Subcategoria, Producto, Precio
+from .models import Vertical, Proveedor, Categoria, Subcategoria, Producto, Precio
 from .normalizacion import generar_producto_base
 from .category_validator import is_valid_row
 
@@ -28,40 +28,32 @@ def crear_session_local_para_db(db_path: Path):
 
 def asegurar_columna_url_producto(target_engine=engine):
     columnas = [columna["name"] for columna in inspect(target_engine).get_columns("precios")]
-
     if "url_producto" in columnas:
         return
-
     with target_engine.begin() as conn:
         conn.execute(text("ALTER TABLE precios ADD COLUMN url_producto VARCHAR"))
 
 
 def asegurar_columna_producto_base(target_engine=engine):
     columnas = [columna["name"] for columna in inspect(target_engine).get_columns("productos")]
-
     if "producto_base" in columnas:
         return
-
     with target_engine.begin() as conn:
         conn.execute(text("ALTER TABLE productos ADD COLUMN producto_base VARCHAR"))
 
 
 def asegurar_columna_imagen_url(target_engine=engine):
     columnas = [columna["name"] for columna in inspect(target_engine).get_columns("precios")]
-
     if "imagen_url" in columnas:
         return
-
     with target_engine.begin() as conn:
         conn.execute(text("ALTER TABLE precios ADD COLUMN imagen_url VARCHAR"))
 
 
 def asegurar_columna_precio_referencia(target_engine=engine):
     columnas = [columna["name"] for columna in inspect(target_engine).get_columns("precios")]
-
     if "precio_referencia" in columnas:
         return
-
     with target_engine.begin() as conn:
         conn.execute(text("ALTER TABLE precios ADD COLUMN precio_referencia VARCHAR"))
 
@@ -70,28 +62,35 @@ def limpiar_numero(valor):
     texto = str(valor or "").strip()
     if not texto:
         return None
-
     numeros = re.sub(r"[^0-9]", "", texto)
     return float(numeros) if numeros else None
 
 
-def obtener_o_crear_supermercado(db, nombre):
-    item = db.query(Supermercado).filter(Supermercado.nombre == nombre).first()
+def obtener_o_crear_vertical(db, nombre, slug):
+    item = db.query(Vertical).filter(Vertical.slug == slug).first()
     if item:
         return item
-
-    item = Supermercado(nombre=nombre)
+    item = Vertical(nombre=nombre, slug=slug)
     db.add(item)
     db.flush()
     return item
 
 
-def obtener_o_crear_categoria(db, nombre):
-    item = db.query(Categoria).filter(Categoria.nombre == nombre).first()
+def obtener_o_crear_proveedor(db, nombre, vertical_id):
+    item = db.query(Proveedor).filter(Proveedor.nombre == nombre, Proveedor.vertical_id == vertical_id).first()
     if item:
         return item
+    item = Proveedor(nombre=nombre, vertical_id=vertical_id)
+    db.add(item)
+    db.flush()
+    return item
 
-    item = Categoria(nombre=nombre)
+
+def obtener_o_crear_categoria(db, nombre, vertical_id):
+    item = db.query(Categoria).filter(Categoria.nombre == nombre, Categoria.vertical_id == vertical_id).first()
+    if item:
+        return item
+    item = Categoria(nombre=nombre, vertical_id=vertical_id)
     db.add(item)
     db.flush()
     return item
@@ -102,10 +101,8 @@ def obtener_o_crear_subcategoria(db, nombre, categoria_id):
         Subcategoria.nombre == nombre,
         Subcategoria.categoria_id == categoria_id
     ).first()
-
     if item:
         return item
-
     item = Subcategoria(nombre=nombre, categoria_id=categoria_id)
     db.add(item)
     db.flush()
@@ -121,7 +118,6 @@ def obtener_o_crear_producto(db, nombre, categoria_id, subcategoria_id, marca, t
         item.tipo = tipo
         item.formato = formato
         return item
-
     item = Producto(
         nombre=nombre,
         categoria_id=categoria_id,
@@ -150,6 +146,8 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
     rechazados = 0
     db = session_factory()
     try:
+        vertical_supermercados = obtener_o_crear_vertical(db, "Supermercados", "supermercados")
+
         with open(csv_path, newline="", encoding="utf-8-sig") as archivo:
             lector = csv.DictReader(archivo)
 
@@ -157,8 +155,8 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
                 if not is_valid_row(fila, "importar_csv", Path("reports") / "pipeline_category_rejections.csv"):
                     rechazados += 1
                     continue
-                supermercado = obtener_o_crear_supermercado(db, fila["supermercado"].strip())
-                categoria = obtener_o_crear_categoria(db, fila["categoria"].strip())
+                proveedor = obtener_o_crear_proveedor(db, fila["supermercado"].strip(), vertical_supermercados.id)
+                categoria = obtener_o_crear_categoria(db, fila["categoria"].strip(), vertical_supermercados.id)
                 subcategoria = obtener_o_crear_subcategoria(
                     db,
                     fila["subcategoria"].strip(),
@@ -190,7 +188,7 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
 
                 precio_existente = db.query(Precio).filter(
                     Precio.producto_id == producto.id,
-                    Precio.supermercado_id == supermercado.id
+                    Precio.proveedor_id == proveedor.id
                 ).first()
 
                 if precio_existente:
@@ -203,7 +201,7 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
                 else:
                     nuevo_precio = Precio(
                         producto_id=producto.id,
-                        supermercado_id=supermercado.id,
+                        proveedor_id=proveedor.id,
                         precio_normal=precio_normal,
                         precio_oferta=precio_oferta,
                         precio_referencia=fila.get("precio_referencia"),

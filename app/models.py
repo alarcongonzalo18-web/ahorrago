@@ -3,11 +3,22 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-class Supermercado(Base):
-    __tablename__ = "supermercados"
+class Vertical(Base):
+    __tablename__ = "verticales"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String, nullable=False, unique=True)
+    slug = Column(String, nullable=False, unique=True)  # e.g., 'supermercados', 'tecnologia', 'mascotas'
+
+
+class Proveedor(Base):
+    __tablename__ = "proveedores"
 
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
+    vertical_id = Column(Integer, ForeignKey("verticales.id"))
+
+    vertical = relationship("Vertical")
 
 
 class Categoria(Base):
@@ -15,6 +26,9 @@ class Categoria(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
+    vertical_id = Column(Integer, ForeignKey("verticales.id"))
+
+    vertical = relationship("Vertical")
 
 
 class Subcategoria(Base):
@@ -50,7 +64,7 @@ class Precio(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     producto_id = Column(Integer, ForeignKey("productos.id"), index=True)
-    supermercado_id = Column(Integer, ForeignKey("supermercados.id"), index=True)
+    proveedor_id = Column(Integer, ForeignKey("proveedores.id"), index=True)
 
     precio_normal = Column(Float)
     precio_oferta = Column(Float, nullable=True)
@@ -60,4 +74,4 @@ class Precio(Base):
     imagen_url = Column(String, nullable=True)
 
     producto = relationship("Producto")
-    supermercado = relationship("Supermercado")
+    proveedor = relationship("Proveedor")

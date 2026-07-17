@@ -84,12 +84,12 @@ def comparar_lista(db: Session, lista_productos):
             continue
 
         productos_equivalentes = buscar_productos_equivalentes(db, producto)
-        mejor_por_supermercado = {}
+        mejor_por_proveedor = {}
 
         ids = [p.id for p in productos_equivalentes]
         precios_all = db.query(Precio).filter(
             Precio.producto_id.in_(ids)
-        ).options(joinedload(Precio.supermercado)).all()
+        ).options(joinedload(Precio.proveedor)).all()
         precios_por_id = defaultdict(list)
         for p in precios_all:
             precios_por_id[p.producto_id].append(p)
@@ -97,34 +97,34 @@ def comparar_lista(db: Session, lista_productos):
         for producto_equivalente in productos_equivalentes:
             for precio in precios_por_id[producto_equivalente.id]:
                 valor = _valor_precio(producto_equivalente, precio)
-                supermercado = precio.supermercado.nombre
+                proveedor = precio.proveedor.nombre
 
-                mejor_actual = mejor_por_supermercado.get(supermercado)
+                mejor_actual = mejor_por_proveedor.get(proveedor)
                 if mejor_actual and mejor_actual["valor"] <= valor:
                     continue
 
-                mejor_por_supermercado[supermercado] = {
+                mejor_por_proveedor[proveedor] = {
                     "producto": producto_equivalente,
                     "precio": precio,
                     "valor": valor
                 }
 
-        for supermercado, mejor in mejor_por_supermercado.items():
+        for proveedor, mejor in mejor_por_proveedor.items():
             producto_comparado = mejor["producto"]
             precio = mejor["precio"]
             valor = mejor["valor"]
             subtotal = valor * item.cantidad
 
-            if supermercado not in resultados:
-                resultados[supermercado] = {
-                    "supermercado": supermercado,
+            if proveedor not in resultados:
+                resultados[proveedor] = {
+                    "proveedor": proveedor,
                     "total": 0,
                     "productos": []
                 }
 
-            resultados[supermercado]["total"] += subtotal
+            resultados[proveedor]["total"] += subtotal
 
-            resultados[supermercado]["productos"].append({
+            resultados[proveedor]["productos"].append({
                 "nombre": producto_comparado.nombre,
                 "marca": producto_comparado.marca,
                 "tipo": producto_comparado.tipo,
@@ -154,8 +154,8 @@ def comparar_lista(db: Session, lista_productos):
 
     productos_comparados = {}
 
-    for supermercado in ordenado:
-        for prod in supermercado["productos"]:
+    for proveedor in ordenado:
+        for prod in proveedor["productos"]:
             nombre_producto = prod.get("producto_base") or prod["nombre"]
 
             if nombre_producto not in productos_comparados:
@@ -163,7 +163,7 @@ def comparar_lista(db: Session, lista_productos):
 
             productos_comparados[nombre_producto].append({
                 "nombre": prod["nombre"],
-                "supermercado": supermercado["supermercado"],
+                "proveedor": proveedor["proveedor"],
                 "precio": prod["precio_unitario"],
                 "cantidad": prod["cantidad"],
                 "subtotal": prod["subtotal"],
@@ -172,9 +172,9 @@ def comparar_lista(db: Session, lista_productos):
 
     compra_optima = {}
 
-    def generar_link(nombre, supermercado):
+    def generar_link(nombre, proveedor):
         base = {
-            "Líder": ("https://www.lider.cl/supermercado/search", "query"),
+            "Líder": ("https://www.lider.cl/proveedor/search", "query"),
             "Unimarc": ("https://www.unimarc.cl/search", "q"),
             "Jumbo": ("https://www.jumbo.cl/busqueda", "ft"),
         }
@@ -188,7 +188,7 @@ def comparar_lista(db: Session, lista_productos):
 
         limpio = limpio.strip()
 
-        destino = base.get(supermercado)
+        destino = base.get(proveedor)
         if not destino:
             return ""
 
@@ -197,21 +197,21 @@ def comparar_lista(db: Session, lista_productos):
 
     for nombre_producto, lista in productos_comparados.items():
         mejor = min(lista, key=lambda x: x["precio"])
-        supermercado = mejor["supermercado"]
+        proveedor = mejor["proveedor"]
 
-        if supermercado not in compra_optima:
-            compra_optima[supermercado] = []
+        if proveedor not in compra_optima:
+            compra_optima[proveedor] = []
 
-        compra_optima[supermercado].append({
+        compra_optima[proveedor].append({
             "nombre": mejor["nombre"],
             "precio": mejor["precio"],
             "cantidad": mejor["cantidad"],
             "subtotal": mejor["subtotal"],
-            "url": mejor.get("url") or generar_link(mejor["nombre"], supermercado)
+            "url": mejor.get("url") or generar_link(mejor["nombre"], proveedor)
         })
 
     mensaje = "🛒 Comparación de compra\n\n"
-    mensaje += f"🥇 Más barato total: {mas_barato['supermercado']}\n"
+    mensaje += f"🥇 Más barato total: {mas_barato['proveedor']}\n"
     mensaje += f"💰 Ahorro estimado: {formatear_precio(ahorro)}\n\n"
 
     mensaje += "🧠 Mejor opción por producto:\n"
@@ -224,17 +224,17 @@ def comparar_lista(db: Session, lista_productos):
 
         for item in lista:
             check = " ✅" if item["precio"] == mejor["precio"] else ""
-            mensaje += f"- {item['supermercado']}: {formatear_precio(item['precio'])}{check}\n"
+            mensaje += f"- {item['proveedor']}: {formatear_precio(item['precio'])}{check}\n"
 
     mensaje += "\n🧠 Compra óptima sugerida:\n"
 
-    for supermercado, productos in compra_optima.items():
-        mensaje += f"\n🏬 {supermercado}:\n"
+    for proveedor, productos in compra_optima.items():
+        mensaje += f"\n🏬 {proveedor}:\n"
 
-        total_supermercado = 0
+        total_proveedor = 0
 
         for producto in productos:
-            total_supermercado += producto["subtotal"]
+            total_proveedor += producto["subtotal"]
             mensaje += (
                 f"- {producto['nombre']} "
                 f"x{producto['cantidad']} "
@@ -244,12 +244,12 @@ def comparar_lista(db: Session, lista_productos):
             if producto.get("url"):
                 mensaje += f"  🔗 {producto['url']}\n"
 
-        mensaje += f"Subtotal en {supermercado}: {formatear_precio(total_supermercado)}\n"
+        mensaje += f"Subtotal en {proveedor}: {formatear_precio(total_proveedor)}\n"
 
     mensaje += "\n📌 Precios referenciales sujetos a stock y disponibilidad."
 
     return {
-        "mejor_opcion": mas_barato["supermercado"],
+        "mejor_opcion": mas_barato["proveedor"],
         "ahorro": ahorro,
         "comparacion": ordenado,
         "compra_optima": compra_optima,

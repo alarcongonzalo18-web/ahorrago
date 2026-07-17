@@ -18,16 +18,22 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = PROJECT_ROOT / "reports"
 BACKUPS = PROJECT_ROOT / "backups"
 DB_PATH = PROJECT_ROOT / "supercheck.db"
-CATEGORIAS_PERMITIDAS = {"Mascotas", "Limpieza"}
-CATEGORIAS_BLOQUEADAS = {
-    "Bebidas",
-    "Bebe",
-    "Higiene Personal",
+TODAS_LAS_CATEGORIAS = {
+    "Lacteos, Huevos y Congelados",
     "Frutas y Verduras",
-    "Congelados",
-    "Panaderia",
     "Carnes y Pescados",
+    "Congelados",
+    "Despensa",
+    "Desayuno y Snacks",
+    "Bebidas",
+    "Panaderia",
+    "Limpieza",
+    "Higiene Personal",
+    "Bebe",
+    "Mascotas"
 }
+CATEGORIAS_PERMITIDAS = TODAS_LAS_CATEGORIAS
+CATEGORIAS_BLOQUEADAS = set()
 
 
 def crear_backup_pre_fase5b() -> Path:

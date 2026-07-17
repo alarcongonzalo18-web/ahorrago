@@ -6,8 +6,7 @@ from urllib.parse import quote_plus, urljoin
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import StaleElementReferenceException
+from bs4 import BeautifulSoup
 
 from app.category_validator import is_valid_row
 
@@ -147,88 +146,10 @@ def extraer_precio_referencia(texto):
     return ""
 
 
-def obtener_tarjeta(driver, nombre_elemento):
-    return driver.execute_script(
-        """
-        let e = arguments[0];
-        while (e && e.tagName !== 'SECTION') {
-            e = e.parentElement;
-        }
-        return e;
-        """,
-        nombre_elemento
-    )
-
-
-def extraer_producto(driver, nombre_elemento):
-    try:
-        tarjeta = obtener_tarjeta(driver, nombre_elemento)
-
-        if not tarjeta:
-            return None
-
-        nombre = nombre_elemento.text.strip()
-        texto = tarjeta.text.strip()
-        precio_normal, precio_oferta = extraer_precios(texto)
-        precio = precio_oferta or precio_normal or limpiar_precio(texto)
-
-        try:
-            link = tarjeta.find_element(By.CSS_SELECTOR, "a[href*='/product/']").get_attribute("href")
-        except Exception:
-            link = ""
-
-        try:
-            imagen_elemento = tarjeta.find_element(By.CSS_SELECTOR, "img")
-            imagen = (
-                imagen_elemento.get_attribute("src") or
-                imagen_elemento.get_attribute("data-src") or
-                imagen_elemento.get_attribute("data-nimg")
-            )
-            if not imagen:
-                srcset = imagen_elemento.get_attribute("srcset") or ""
-                imagen = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
-        except Exception:
-            imagen = ""
-
-        if not nombre or not precio:
-            return None
-
-        return {
-            "nombre": nombre,
-            "precio": precio,
-            "precio_normal": precio_normal,
-            "precio_oferta": precio_oferta,
-            "precio_referencia": extraer_precio_referencia(texto),
-            "promocion": "Oferta" if precio_oferta else "",
-            "url": link,
-            "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
-        }
-    except StaleElementReferenceException:
-        return None
-
-
-def extraer_producto_por_indice(driver, indice, intentos=3):
-    for intento in range(intentos):
-        try:
-            nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
-            if indice >= len(nombres):
-                return None
-
-            producto = extraer_producto(driver, nombres[indice])
-            if producto:
-                return producto
-        except StaleElementReferenceException:
-            pass
-
-        time.sleep(0.6 + intento * 0.4)
-
-    return None
-
-
 def scrape_categoria(driver, categoria, subcategoria, termino):
     productos = []
 
-    print(f"Scrapeando Unimarc {subcategoria}...")
+    print(f"Scrapeando Unimarc {subcategoria}...", flush=True)
 
     page = 1
     paginas_vacias_consecutivas = 0
@@ -238,16 +159,21 @@ def scrape_categoria(driver, categoria, subcategoria, termino):
         driver.get(url)
         time.sleep(5)
 
-        nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        nombres = soup.select('.Shelf_nameProduct__0KIRG')
+
         if not nombres and page == 1:
             time.sleep(4)
             driver.refresh()
             time.sleep(5)
-            nombres = driver.find_elements(By.CSS_SELECTOR, ".Shelf_nameProduct__0KIRG")
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+            nombres = soup.select('.Shelf_nameProduct__0KIRG')
 
         if not nombres:
             paginas_vacias_consecutivas += 1
-            print(f"{url} -> 0 productos")
+            print(f"{url} -> 0 productos", flush=True)
             if paginas_vacias_consecutivas >= 2:
                 break
             page += 1
@@ -256,20 +182,50 @@ def scrape_categoria(driver, categoria, subcategoria, termino):
         paginas_vacias_consecutivas = 0
         encontrados_pagina = 0
 
-        for indice in range(len(nombres)):
-            producto = extraer_producto_por_indice(driver, indice)
-
-            if not producto:
+        for nombre_el in nombres:
+            tarjeta = nombre_el.find_parent('section')
+            if not tarjeta:
                 continue
 
-            producto["categoria"] = categoria
-            producto["subcategoria"] = subcategoria
+            nombre = nombre_el.text.strip()
+            texto = tarjeta.text.strip()
+            precio_normal, precio_oferta = extraer_precios(texto)
+            precio = precio_oferta or precio_normal or limpiar_precio(texto)
+
+            link_el = tarjeta.find('a', href=lambda x: x and '/product/' in x)
+            link = link_el.get('href') if link_el else ""
+
+            img_el = tarjeta.find('img')
+            imagen = ""
+            if img_el:
+                imagen = img_el.get('src') or img_el.get('data-src') or img_el.get('data-nimg') or ""
+                if not imagen:
+                    srcset = img_el.get('srcset') or ""
+                    imagen = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+
+            if not nombre or not precio:
+                continue
+
+            producto = {
+                "categoria": categoria,
+                "subcategoria": subcategoria,
+                "nombre": nombre,
+                "precio": precio,
+                "precio_normal": precio_normal,
+                "precio_oferta": precio_oferta,
+                "precio_referencia": extraer_precio_referencia(texto),
+                "promocion": "Oferta" if precio_oferta else "",
+                "url": urljoin("https://www.unimarc.cl", link) if link else "",
+                "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
+            }
+
             if not is_valid_row(producto, "scraper_unimarc", Path("reports") / "pipeline_category_rejections.csv"):
                 continue
+
             productos.append(producto)
             encontrados_pagina += 1
 
-        print(f"{url} -> {encontrados_pagina} productos")
+        print(f"{url} -> {encontrados_pagina} productos", flush=True)
 
         if encontrados_pagina == 0:
             break
@@ -302,13 +258,14 @@ def guardar_productos(productos):
         writer.writerows(productos)
 
 
-def main():
+def main(categorias=None):
     driver = crear_driver()
     productos = []
     vistos = set()
+    cats = categorias or CATEGORIAS
 
     try:
-        for categoria, subcategoria, termino in CATEGORIAS:
+        for categoria, subcategoria, termino in cats:
             try:
                 for producto in scrape_categoria(driver, categoria, subcategoria, termino):
                     key = (
@@ -325,12 +282,12 @@ def main():
                     vistos.add(key)
                     productos.append(producto)
             except Exception as e:
-                print(f"Error en {subcategoria}: {e}. Continuando...")
+                print(f"Error en {subcategoria}: {e}. Continuando...", flush=True)
     finally:
         driver.quit()
 
     guardar_productos(productos)
-    print(f"{len(productos)} productos Unimarc guardados")
+    print(f"{len(productos)} productos Unimarc guardados", flush=True)
 
 
 if __name__ == "__main__":

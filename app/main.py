@@ -74,7 +74,7 @@ def obtener_subcategorias(categoria_id: int, db: Session = Depends(get_db)):
 
 @app.get("/diagnostico/calidad")
 def diagnostico_calidad(db: Session = Depends(get_db)):
-    por_supermercado = defaultdict(int)
+    por_proveedor = defaultdict(int)
     por_subcategoria = defaultdict(int)
     sin_imagen = 0
     sin_url = 0
@@ -84,7 +84,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     precios = db.query(
         models.Producto.nombre.label("producto_nombre"),
         models.Subcategoria.nombre.label("subcategoria_nombre"),
-        models.Supermercado.nombre.label("supermercado_nombre"),
+        models.Proveedor.nombre.label("proveedor_nombre"),
         models.Precio.precio_normal,
         models.Precio.precio_oferta,
         models.Precio.imagen_url,
@@ -93,8 +93,8 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
         models.Producto,
         models.Precio.producto_id == models.Producto.id,
     ).join(
-        models.Supermercado,
-        models.Precio.supermercado_id == models.Supermercado.id,
+        models.Proveedor,
+        models.Precio.proveedor_id == models.Proveedor.id,
     ).outerjoin(
         models.Subcategoria,
         models.Producto.subcategoria_id == models.Subcategoria.id,
@@ -103,7 +103,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     total_precios = 0
     for precio in precios:
         total_precios += 1
-        supermercado = precio.supermercado_nombre
+        supermercado = precio.proveedor_nombre
         subcategoria = precio.subcategoria_nombre or "Sin subcategoria"
         valor = valor_precio_por_nombre(
             precio.producto_nombre,
@@ -111,7 +111,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
             precio.precio_oferta,
         )
 
-        por_supermercado[supermercado] += 1
+        por_proveedor[supermercado] += 1
         por_subcategoria[subcategoria] += 1
 
         if not precio.imagen_url:
@@ -129,7 +129,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
         ):
             precio_sospechoso.append({
                 "producto": precio.producto_nombre,
-                "supermercado": supermercado,
+                "proveedor": supermercado,
                 "precio_normal": precio.precio_normal,
                 "precio_oferta": precio.precio_oferta,
                 "valor_usado": valor,
@@ -138,7 +138,7 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
     return {
         "productos": db.query(models.Producto).count(),
         "precios": total_precios,
-        "supermercados": dict(sorted(por_supermercado.items())),
+        "proveedores": dict(sorted(por_proveedor.items())),
         "subcategorias": dict(sorted(por_subcategoria.items())),
         "sin_imagen": sin_imagen,
         "sin_url": sin_url,
@@ -161,10 +161,10 @@ def estado_datos(db: Session = Depends(get_db)):
     db_path = root / "supercheck.db"
     csv_path = root / "data" / "productos_supermercados.csv"
     logs_path = root / "logs"
-    por_supermercado = dict(
-        db.query(models.Supermercado.nombre, func.count(models.Precio.id))
-        .join(models.Precio, models.Precio.supermercado_id == models.Supermercado.id)
-        .group_by(models.Supermercado.nombre)
+    por_proveedor = dict(
+        db.query(models.Proveedor.nombre, func.count(models.Precio.id))
+        .join(models.Precio, models.Precio.proveedor_id == models.Proveedor.id)
+        .group_by(models.Proveedor.nombre)
         .all()
     )
 
@@ -180,7 +180,7 @@ def estado_datos(db: Session = Depends(get_db)):
     estado = {
         "productos": db.query(models.Producto).count(),
         "precios": db.query(models.Precio).count(),
-        "supermercados": dict(sorted(por_supermercado.items())),
+        "proveedores": dict(sorted(por_proveedor.items())),
         "base_actualizada": datetime.fromtimestamp(db_path.stat().st_mtime).isoformat(timespec="seconds") if db_path.exists() else None,
         "csv_actualizado": datetime.fromtimestamp(csv_path.stat().st_mtime).isoformat(timespec="seconds") if csv_path.exists() else None,
         "ultimo_log": ultimo_log,
@@ -260,7 +260,7 @@ def buscar_url_por_atributos(db, producto, precio):
         return None
 
     candidatos = db.query(models.Producto, models.Precio).join(models.Precio).filter(
-        models.Precio.supermercado_id == precio.supermercado_id,
+        models.Precio.proveedor_id == precio.proveedor_id,
         models.Precio.url_producto.isnot(None)
     ).all()
 
@@ -303,7 +303,7 @@ def obtener_url_especifica(db, producto, precio):
         return None
 
     candidatos = db.query(models.Precio).join(models.Producto).filter(
-        models.Precio.supermercado_id == precio.supermercado_id,
+        models.Precio.proveedor_id == precio.proveedor_id,
         models.Producto.producto_base == producto.producto_base,
         models.Precio.url_producto.isnot(None)
     ).all()
@@ -324,7 +324,7 @@ def _url_especifica_cached(producto, precio, urls_por_base, producto_por_id):
         return precio.url_producto
     if not producto.producto_base:
         return None
-    for precio_candidato in urls_por_base.get((precio.supermercado_id, producto.producto_base), []):
+    for precio_candidato in urls_por_base.get((precio.proveedor_id, producto.producto_base), []):
         candidato = producto_por_id.get(precio_candidato.producto_id)
         if candidato and candidato_compatible(producto, candidato):
             return precio_candidato.url_producto
@@ -355,7 +355,7 @@ def buscar_productos(
         productos = [p for p in productos
                      if "sin azucar" not in normalizar_texto(p.nombre)]
 
-    # Cargar equivalentes vÃ­a producto_base (ya indexado) para el agrupamiento cross-supermercado
+    # Cargar equivalentes vÃ­a producto_base (ya indexado) para el agrupamiento cross-proveedor
     bases = {p.producto_base for p in productos if p.producto_base}
     if bases:
         equivalentes = db.query(models.Producto).filter(
@@ -370,7 +370,7 @@ def buscar_productos(
     ids_relevantes = list(todos_relevantes.keys())
     todos_precios = db.query(models.Precio).filter(
         models.Precio.producto_id.in_(ids_relevantes)
-    ).options(joinedload(models.Precio.supermercado)).all()
+    ).options(joinedload(models.Precio.proveedor)).all()
 
     precios_por_producto = defaultdict(list)
     urls_por_base = defaultdict(list)
@@ -379,7 +379,7 @@ def buscar_productos(
         if es_url_producto_especifica(precio.url_producto):
             prod = todos_relevantes.get(precio.producto_id)
             if prod and prod.producto_base:
-                urls_por_base[(precio.supermercado_id, prod.producto_base)].append(precio)
+                urls_por_base[(precio.proveedor_id, prod.producto_base)].append(precio)
 
     resultado = []
     grupos_vistos = set()
@@ -397,7 +397,7 @@ def buscar_productos(
         grupos_vistos.add(grupo_id)
 
         equivalentes = grupos_por_clave[grupo_id] or [producto]
-        mejor_por_supermercado = {}
+        mejor_por_proveedor = {}
 
         for equivalente in equivalentes:
             if not candidato_compatible(producto, equivalente):
@@ -408,7 +408,7 @@ def buscar_productos(
                     continue
 
                 valor = valor_precio_producto(equivalente, precio)
-                supermercado = precio.supermercado.nombre
+                proveedor = precio.proveedor.nombre
                 tiene_descuento = bool(
                     precio.precio_oferta and
                     precio.precio_normal and
@@ -417,12 +417,12 @@ def buscar_productos(
                     precio.precio_normal <= precio.precio_oferta * 2
                 )
 
-                mejor_actual = mejor_por_supermercado.get(supermercado)
+                mejor_actual = mejor_por_proveedor.get(supermercado)
                 if mejor_actual and mejor_actual["precio"] <= valor:
                     continue
 
-                mejor_por_supermercado[supermercado] = {
-                    "supermercado": supermercado,
+                mejor_por_proveedor[supermercado] = {
+                    "proveedor": supermercado,
                     "precio": valor,
                     "precio_normal": precio.precio_normal,
                     "precio_oferta": precio.precio_oferta,
@@ -436,7 +436,7 @@ def buscar_productos(
                 }
 
         lista_precios = sorted(
-            mejor_por_supermercado.values(),
+            mejor_por_proveedor.values(),
             key=lambda item: item["precio"]
         )
 
@@ -471,7 +471,7 @@ def calcular_resumen_compra(db, items):
 
     precios_todos = db.query(models.Precio).filter(
         models.Precio.producto_id.in_(ids)
-    ).options(joinedload(models.Precio.supermercado)).all()
+    ).options(joinedload(models.Precio.proveedor)).all()
 
     precios_por_producto = defaultdict(list)
     for precio in precios_todos:
@@ -480,14 +480,14 @@ def calcular_resumen_compra(db, items):
             precios_por_producto[precio.producto_id].append(precio)
 
     mejor_precio_por_super = {}
-    todos_supers = set()
+    todos_proveedores = set()
     for pid, precios_list in precios_por_producto.items():
         producto = producto_por_id[pid]
         for p in precios_list:
-            sname = p.supermercado.nombre
-            todos_supers.add(sname)
+            pname = p.proveedor.nombre
+            todos_proveedores.add(pname)
             val = valor_precio_producto(producto, p)
-            key = (pid, sname)
+            key = (pid, pname)
             if key not in mejor_precio_por_super or val < mejor_precio_por_super[key]:
                 mejor_precio_por_super[key] = val
 
@@ -509,8 +509,8 @@ def calcular_resumen_compra(db, items):
             productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
             continue
 
-        supers_disponibles = {p.supermercado.nombre for p in precios_prod}
-        if len(supers_disponibles) == 1:
+        proveedores_disponibles = {p.proveedor.nombre for p in precios_prod}
+        if len(proveedores_disponibles) == 1:
             productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
 
         mejor = min(precios_prod, key=lambda p: valor_precio_producto(producto_por_id[p.producto_id], p))
@@ -518,14 +518,14 @@ def calcular_resumen_compra(db, items):
         subtotal = valor * cantidad
 
         total_optimo += subtotal
-        sname = mejor.supermercado.nombre
-        distribucion[sname]["cantidad"] += cantidad
-        distribucion[sname]["subtotal"] += subtotal
+        pname = mejor.proveedor.nombre
+        distribucion[pname]["cantidad"] += cantidad
+        distribucion[pname]["subtotal"] += subtotal
 
     if total_optimo == 0:
         return {
             "total_optimo": 0, "ahorro": 0, "porcentaje": 0,
-            "mejor_super_unico": None, "total_mejor_super_unico": None,
+            "mejor_proveedor_unico": None, "total_mejor_proveedor_unico": None,
             "distribucion": {}, "tiendas_optimas": 0,
             "productos_sin_comparacion": productos_sin_comparacion,
             "recomendacion": "sin_datos",
@@ -533,52 +533,52 @@ def calcular_resumen_compra(db, items):
         }
 
     ids_con_precios = set(precios_por_producto.keys())
-    totales_super_completo = {}
-    for sname in todos_supers:
+    totales_proveedor_completo = {}
+    for pname in todos_proveedores:
         total = 0
         completo = True
         for item in items:
             if item.producto_id not in ids_con_precios:
                 continue
-            key = (item.producto_id, sname)
+            key = (item.producto_id, pname)
             if key not in mejor_precio_por_super:
                 completo = False
                 break
             total += mejor_precio_por_super[key] * item.cantidad
         if completo:
-            totales_super_completo[sname] = total
+            totales_proveedor_completo[pname] = total
 
-    if totales_super_completo:
-        mejor_super, total_mejor_super = min(totales_super_completo.items(), key=lambda x: x[1])
-        ahorro = total_mejor_super - total_optimo
+    if totales_proveedor_completo:
+        mejor_proveedor, total_mejor_proveedor = min(totales_proveedor_completo.items(), key=lambda x: x[1])
+        ahorro = total_mejor_proveedor - total_optimo
     else:
         cobertura = {}
         totales_parciales = {}
-        for sname in todos_supers:
-            cobertura[sname] = sum(
-                1 for item in items if (item.producto_id, sname) in mejor_precio_por_super
+        for pname in todos_proveedores:
+            cobertura[pname] = sum(
+                1 for item in items if (item.producto_id, pname) in mejor_precio_por_super
             )
-            totales_parciales[sname] = sum(
-                mejor_precio_por_super[(item.producto_id, sname)] * item.cantidad
-                for item in items if (item.producto_id, sname) in mejor_precio_por_super
+            totales_parciales[pname] = sum(
+                mejor_precio_por_super[(item.producto_id, pname)] * item.cantidad
+                for item in items if (item.producto_id, pname) in mejor_precio_por_super
             )
         max_coverage = max(cobertura.values())
-        supers_con_max = [s for s, c in cobertura.items() if c == max_coverage]
-        mejor_super = min(supers_con_max, key=lambda s: totales_parciales[s])
-        total_mejor_super = None
+        proveedores_con_max = [s for s, c in cobertura.items() if c == max_coverage]
+        mejor_proveedor = min(proveedores_con_max, key=lambda s: totales_parciales[s])
+        total_mejor_proveedor = None
         ahorro = 0
 
     tiendas_optimas = len(distribucion)
 
-    if total_mejor_super is None:
+    if total_mejor_proveedor is None:
         recomendacion = "una_tienda"
-        mensaje = f"No encontramos todos los productos en una sola tienda. {mejor_super} tiene la mayor cobertura."
+        mensaje = f"No encontramos todos los productos en una sola tienda. {mejor_proveedor} tiene la mayor cobertura."
     elif ahorro < 1000 or tiendas_optimas == 1:
         recomendacion = "una_tienda"
-        mensaje = f"Te conviene comprar todo en {mejor_super}"
+        mensaje = f"Te conviene comprar todo en {mejor_proveedor}"
     elif ahorro < 7000:
         recomendacion = "ahorro_bajo"
-        mensaje = f"Por ${ahorro:,.0f} de diferencia, conviene comprar todo en {mejor_super}".replace(",", ".")
+        mensaje = f"Por ${ahorro:,.0f} de diferencia, conviene comprar todo en {mejor_proveedor}".replace(",", ".")
     elif ahorro < 15000:
         recomendacion = "dividir_compra"
         mensaje = f"Te conviene dividir en {tiendas_optimas} supermercados"
@@ -589,9 +589,9 @@ def calcular_resumen_compra(db, items):
     return {
         "total_optimo": total_optimo,
         "ahorro": ahorro,
-        "porcentaje": round(ahorro / total_mejor_super, 4) if total_mejor_super else 0,
-        "mejor_super_unico": mejor_super,
-        "total_mejor_super_unico": total_mejor_super,
+        "porcentaje": round(ahorro / total_mejor_proveedor, 4) if total_mejor_proveedor else 0,
+        "mejor_proveedor_unico": mejor_proveedor,
+        "total_mejor_proveedor_unico": total_mejor_proveedor,
         "distribucion": dict(distribucion),
         "tiendas_optimas": tiendas_optimas,
         "productos_sin_comparacion": productos_sin_comparacion,

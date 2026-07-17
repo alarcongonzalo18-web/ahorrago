@@ -168,7 +168,7 @@ def main():
         for path in RAW_FILES.values():
             respaldar_archivo(path, backup_dir, logger)
 
-        for nombre, comando in STEPS[:3]:
+        for nombre, comando in [STEPS[2]]:
             ejecutar(nombre, comando, logger)
 
         validar_raw(logger)
