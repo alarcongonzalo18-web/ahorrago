@@ -144,6 +144,10 @@ def seleccionar_cambios(db: Session, riesgos: set[tuple[str, str]] | None = None
     for producto, categoria in rows:
         if categoria in CATEGORIAS_BLOQUEADAS:
             continue
+        # los grupos por EAN son verdad dura (mismo codigo de barras);
+        # el matching textual no debe deshacerlos
+        if (producto.producto_base or "").startswith("ean:"):
+            continue
         key = key_fase5a(producto, categoria)
         if (categoria, key) in riesgos:
             continue

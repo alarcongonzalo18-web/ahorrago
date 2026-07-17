@@ -54,6 +54,9 @@ class Producto(Base):
     tipo = Column(String, nullable=True)
     formato = Column(String, nullable=True)
     producto_base = Column(String, index=True, nullable=True)
+    # Codigo de barras normalizado (sin ceros a la izquierda). Mismo ean =
+    # mismo producto por definicion, sin importar como lo nombre cada tienda.
+    ean = Column(String, index=True, nullable=True)
 
     categoria = relationship("Categoria")
     subcategoria = relationship("Subcategoria")

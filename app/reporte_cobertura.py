@@ -28,6 +28,7 @@ def calcular_cobertura(db):
             proveedores_por_producto[precio.producto_id].add(precio.proveedor.nombre)
 
     por_proveedor = defaultdict(int)
+    ean_por_proveedor = defaultdict(int)
     matriz_categoria = defaultdict(lambda: defaultdict(int))
     grupos = defaultdict(set)
     grupos_categoria = defaultdict(lambda: defaultdict(set))
@@ -37,6 +38,8 @@ def calcular_cobertura(db):
         supers = proveedores_por_producto.get(producto.id, set())
         for s in supers:
             por_proveedor[s] += 1
+            if producto.ean:
+                ean_por_proveedor[s] += 1
             matriz_categoria[categoria][s] += 1
         base = producto.producto_base or f"producto:{producto.id}"
         grupos[base] |= supers
@@ -60,6 +63,7 @@ def calcular_cobertura(db):
         "productos_totales": len(productos),
         "precios_totales": len(precios),
         "productos_por_proveedor": dict(por_proveedor),
+        "ean_por_proveedor": dict(ean_por_proveedor),
         "matriz_categoria_proveedor": {c: dict(m) for c, m in matriz_categoria.items()},
         "grupos_producto_base": total_grupos,
         "grupos_comparables": comparables,
@@ -74,9 +78,11 @@ def formatear_reporte(datos):
     lineas.append("=== Cobertura del catalogo ===")
     lineas.append(f"Productos: {datos['productos_totales']} | Precios: {datos['precios_totales']}")
     lineas.append("")
-    lineas.append("Productos por proveedor:")
+    lineas.append("Productos por proveedor (y % con EAN):")
     for proveedor, cantidad in sorted(datos["productos_por_proveedor"].items(), key=lambda x: -x[1]):
-        lineas.append(f"  {proveedor:12} {cantidad}")
+        con_ean = datos.get("ean_por_proveedor", {}).get(proveedor, 0)
+        pct = f"{con_ean / cantidad * 100:.0f}%" if cantidad else "0%"
+        lineas.append(f"  {proveedor:12} {cantidad}  (ean: {con_ean}, {pct})")
     lineas.append("")
     lineas.append(
         f"Grupos producto_base: {datos['grupos_producto_base']} | "

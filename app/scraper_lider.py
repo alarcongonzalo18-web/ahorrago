@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 from app.category_validator import is_valid_row
+from app.url_utils import extraer_ean_lider
 
 
 OUTPUT = Path("data/lider_real.csv")
@@ -209,7 +210,8 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
             "precio_referencia": "",
             "promocion": "",
             "url": urljoin(url, link) if link else "",
-            "imagen_url": urljoin(url, imagen) if imagen else ""
+            "imagen_url": urljoin(url, imagen) if imagen else "",
+            "ean": extraer_ean_lider(urljoin(url, link) if link else "")
         }
         if not is_valid_row(producto, "scraper_lider", Path("reports") / "pipeline_category_rejections.csv"):
             continue
@@ -257,6 +259,7 @@ def guardar_productos(productos):
                 "promocion",
                 "url",
                 "imagen_url",
+                "ean",
             ]
         )
         writer.writeheader()

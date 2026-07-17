@@ -216,7 +216,10 @@ def scrape_categoria(driver, categoria, subcategoria, termino):
                 "precio_referencia": extraer_precio_referencia(texto),
                 "promocion": "Oferta" if precio_oferta else "",
                 "url": urljoin("https://www.unimarc.cl", link) if link else "",
-                "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else ""
+                "imagen_url": urljoin("https://www.unimarc.cl", imagen) if imagen else "",
+                # El HTML renderizado de Unimarc no expone EAN; su VTEX API
+                # publica esta apagada (404/500). Pendiente: API interna BFF.
+                "ean": ""
             }
 
             if not is_valid_row(producto, "scraper_unimarc", Path("reports") / "pipeline_category_rejections.csv"):
@@ -252,6 +255,7 @@ def guardar_productos(productos):
                 "promocion",
                 "url",
                 "imagen_url",
+                "ean",
             ]
         )
         writer.writeheader()

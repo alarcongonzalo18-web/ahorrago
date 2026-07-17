@@ -42,6 +42,14 @@ def asegurar_columna_producto_base(target_engine=engine):
         conn.execute(text("ALTER TABLE productos ADD COLUMN producto_base VARCHAR"))
 
 
+def asegurar_columna_ean(target_engine=engine):
+    columnas = [columna["name"] for columna in inspect(target_engine).get_columns("productos")]
+    if "ean" in columnas:
+        return
+    with target_engine.begin() as conn:
+        conn.execute(text("ALTER TABLE productos ADD COLUMN ean VARCHAR"))
+
+
 def asegurar_columna_imagen_url(target_engine=engine):
     columnas = [columna["name"] for columna in inspect(target_engine).get_columns("precios")]
     if "imagen_url" in columnas:
@@ -135,6 +143,7 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
     Base.metadata.create_all(bind=target_engine)
     asegurar_columna_url_producto(target_engine)
     asegurar_columna_producto_base(target_engine)
+    asegurar_columna_ean(target_engine)
     asegurar_columna_imagen_url(target_engine)
     asegurar_columna_precio_referencia(target_engine)
 
@@ -179,6 +188,9 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
                     fila["tipo"],
                     fila["formato"]
                 )
+                ean = (fila.get("ean") or "").strip()
+                if ean:
+                    producto.ean = ean
 
                 precio_normal = limpiar_numero(fila.get("precio_normal")) or limpiar_numero(fila.get("precio")) or 0
                 precio_oferta = limpiar_numero(fila.get("precio_oferta"))
@@ -216,12 +228,43 @@ def importar_productos(csv_path: Path = CSV_PATH, session_factory=SessionLocal, 
                     db.commit()
 
         db.commit()
+        unificados = unificar_producto_base_por_ean(db)
+        if unificados:
+            print(f"Grupos unificados por EAN: {unificados} productos.")
         print("Productos importados correctamente.")
         if rechazados:
             print(f"Filas rechazadas por categoria imposible: {rechazados}")
         return importados
     finally:
         db.close()
+
+
+def unificar_producto_base_por_ean(db):
+    """Mismo EAN = mismo producto: unifica producto_base como 'ean:<codigo>'.
+
+    Solo actua cuando 2+ productos comparten EAN. Un producto con EAN unico
+    conserva su producto_base textual — aislarlo en un grupo propio le
+    quitaria los matches por texto que ya tiene, y el EAN guardado queda
+    listo para cuando otra fuente traiga el mismo codigo.
+    """
+    filas = db.query(Producto.ean, Producto.id).filter(
+        Producto.ean.isnot(None), Producto.ean != ""
+    ).all()
+    por_ean = {}
+    for ean, pid in filas:
+        por_ean.setdefault(ean, []).append(pid)
+
+    unificados = 0
+    for ean, ids in por_ean.items():
+        if len(ids) < 2:
+            continue
+        base = f"ean:{ean}"
+        for producto in db.query(Producto).filter(Producto.id.in_(ids)):
+            if producto.producto_base != base:
+                producto.producto_base = base
+                unificados += 1
+    db.commit()
+    return unificados
 
 
 def main() -> int:

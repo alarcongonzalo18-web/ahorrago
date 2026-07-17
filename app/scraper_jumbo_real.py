@@ -203,6 +203,9 @@ def extraer_producto(resultado, categoria, subcategoria):
         "promocion":        promocion,
         "url":              url,
         "imagen_url":       imagen,
+        # La API de busqueda de Jumbo (Constructor.io) no expone EAN; RefId es
+        # un codigo interno de Cencosud. Pendiente: API interna del PDP.
+        "ean":              "",
     }
 
 
@@ -261,7 +264,7 @@ def guardar_productos(productos, path=OUTPUT):
     fieldnames = [
         "categoria", "subcategoria", "nombre", "precio",
         "precio_normal", "precio_oferta", "precio_referencia",
-        "promocion", "url", "imagen_url",
+        "promocion", "url", "imagen_url", "ean",
     ]
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

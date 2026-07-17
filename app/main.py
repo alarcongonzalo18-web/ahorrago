@@ -491,7 +491,8 @@ def equivalentes_por_item(db, items):
     for pid, producto in producto_por_id.items():
         grupo = {producto.id: producto}
         for candidato in candidatos_por_base.get(producto.producto_base, []):
-            if candidato_compatible(producto, candidato):
+            mismo_ean = bool(producto.ean) and candidato.ean == producto.ean
+            if mismo_ean or candidato_compatible(producto, candidato):
                 grupo[candidato.id] = candidato
         comparables_por_id[pid] = list(grupo.values())
 

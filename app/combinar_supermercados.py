@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 from app.category_validator import is_valid_row
+from app.url_utils import extraer_ean_lider
 
 
 OUTPUT = Path("data/productos_supermercados.csv")
@@ -128,7 +129,12 @@ def leer_filas(path, supermercado):
                 "url": (fila.get("url") or "").strip(),
                 "imagen_url": (fila.get("imagen_url") or "").strip(),
                 "producto_base": "",
+                "ean": (fila.get("ean") or "").strip(),
             }
+            if not fila_normalizada["ean"] and supermercado == "Líder":
+                # retroactivo: las URLs de Lider traen el GTIN aunque el CSV
+                # crudo venga de una corrida anterior sin columna ean
+                fila_normalizada["ean"] = extraer_ean_lider(fila_normalizada["url"])
             if not is_valid_row(fila_normalizada, f"combinar_supermercados:{supermercado}", Path("reports") / "pipeline_category_rejections.csv"):
                 continue
             filas.append(fila_normalizada)
@@ -173,6 +179,7 @@ def combinar():
         "url",
         "imagen_url",
         "producto_base",
+        "ean",
     ]
 
     with open(OUTPUT, "w", newline="", encoding="utf-8-sig") as salida:
