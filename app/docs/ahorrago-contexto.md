@@ -112,12 +112,13 @@ Plan de datos (orden de palanca):
    retroactivo — el GTIN-14 viene en la URL `/ip/<slug>/00780...`),
    unificación de producto_base como `ean:<código>` cuando 2+ productos
    comparten EAN, fase5b no pisa grupos EAN, resumen-compra matchea por
-   EAN aunque el texto difiera. **Pendiente para que pague**: EAN de una
-   segunda cadena. Sondeado 17-07: Jumbo no lo expone en Constructor.io
-   (RefId = código interno) ni VTEX API pública (410) ni PDP (shell JS);
-   Unimarc VTEX API responde 404/500. Vía: abrir devtools en un PDP de
-   Jumbo/Unimarc desde casa y encontrar la API interna que hidrata la
-   página (ahí está el EAN seguro).
+   EAN aunque el texto difiera. **EAN de 2ª cadena (Jumbo) ENCONTRADO
+   17-07-2026** explorando jumbo.cl con el navegador: `POST bff.jumbo.cl/catalog/pdp`
+   con body `{"slug","store":"jumboclj512"}` y header `apiKey` estático devuelve
+   `items[].ean` (GTIN-13). Verificado reproducible sin sesión. Contrato completo +
+   integración en [ean-jumbo.md](ean-jumbo.md). **Falta**: hacer el backfill de EAN
+   en el catálogo Jumbo (POST por slug, pausado) y re-`reconstruir` → medir con
+   `reporte_cobertura`. Unimarc (3ª cadena) queda por explorar igual.
 2. ~~Profundizar Líder~~ — **hecho 17-07-2026** (commit `62e883c`), doble fix:
    (a) la paginación confiaba en los links del widget del sitio, que
    muestra solo algunos (3 de ~20 páginas reales) — ahora avanza
