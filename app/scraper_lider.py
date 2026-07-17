@@ -1,4 +1,3 @@
-import base64
 import csv
 import http.client
 import json
@@ -24,6 +23,10 @@ CATEGORIAS = [
     ("Lacteos, Huevos y Congelados", "Quesos",          "https://super.lider.cl/v/quesos"),
     ("Lacteos, Huevos y Congelados", "Mantequilla",     "https://super.lider.cl/v/mantequilla"),
     ("Lacteos, Huevos y Congelados", "Crema",           "https://super.lider.cl/v/crema"),
+    ("Lacteos, Huevos y Congelados", "Margarina",       "https://super.lider.cl/v/margarina"),
+    ("Lacteos, Huevos y Congelados", "Manjar",          "https://super.lider.cl/v/manjar"),
+    ("Lacteos, Huevos y Congelados", "Flanes y Postres", "https://super.lider.cl/v/flanes"),
+    ("Lacteos, Huevos y Congelados", "Kefir",           "https://super.lider.cl/v/kefir"),
     # Frutas y verduras
     ("Frutas y Verduras",            "Frutas",          "https://super.lider.cl/v/frutas"),
     ("Frutas y Verduras",            "Verduras",        "https://super.lider.cl/v/verduras"),
@@ -33,8 +36,18 @@ CATEGORIAS = [
     ("Carnes y Pescados",            "Cecinas",         "https://super.lider.cl/v/cecinas"),
     ("Carnes y Pescados",            "Pescados",        "https://super.lider.cl/v/pescados"),
     ("Carnes y Pescados",            "Mariscos",        "https://super.lider.cl/v/mariscos"),
+    ("Carnes y Pescados",            "Cerdo",           "https://super.lider.cl/v/cerdo"),
+    ("Carnes y Pescados",            "Pavo",            "https://super.lider.cl/v/pavo"),
+    ("Carnes y Pescados",            "Vacuno",          "https://super.lider.cl/v/vacuno"),
+    ("Carnes y Pescados",            "Jamon",           "https://super.lider.cl/v/jamon"),
+    ("Carnes y Pescados",            "Salchichas",      "https://super.lider.cl/v/salchichas"),
+    ("Carnes y Pescados",            "Chorizo",         "https://super.lider.cl/v/chorizo"),
+    ("Carnes y Pescados",            "Salmon",          "https://super.lider.cl/v/salmon"),
     # Congelados
     ("Congelados",                   "Congelados",      "https://super.lider.cl/v/congelados"),
+    ("Congelados",                   "Nuggets",         "https://super.lider.cl/v/nuggets"),
+    ("Congelados",                   "Hamburguesas",    "https://super.lider.cl/v/hamburguesas"),
+    ("Congelados",                   "Helados",         "https://super.lider.cl/v/helados"),
     # Despensa
     ("Despensa", "Arroz",            "https://super.lider.cl/v/arroz"),
     ("Despensa", "Aceite",           "https://super.lider.cl/v/aceites"),
@@ -45,12 +58,28 @@ CATEGORIAS = [
     ("Despensa", "Salsas",           "https://super.lider.cl/v/salsas"),
     ("Despensa", "Condimentos",      "https://super.lider.cl/v/condimentos"),
     ("Despensa", "Legumbres",        "https://super.lider.cl/v/legumbres"),
+    ("Despensa", "Harina",           "https://super.lider.cl/v/harina"),
+    ("Despensa", "Avena",            "https://super.lider.cl/v/avena"),
+    ("Despensa", "Miel",             "https://super.lider.cl/v/miel"),
+    ("Despensa", "Mayonesa",         "https://super.lider.cl/v/mayonesa"),
+    ("Despensa", "Ketchup",          "https://super.lider.cl/v/ketchup"),
+    ("Despensa", "Mostaza",          "https://super.lider.cl/v/mostaza"),
+    ("Despensa", "Vinagre",          "https://super.lider.cl/v/vinagre"),
+    ("Despensa", "Atun",             "https://super.lider.cl/v/atun"),
+    ("Despensa", "Aceitunas",        "https://super.lider.cl/v/aceitunas"),
+    ("Despensa", "Pure",             "https://super.lider.cl/v/pure"),
+    ("Despensa", "Quinoa",           "https://super.lider.cl/v/quinoa"),
+    ("Despensa", "Endulzantes",      "https://super.lider.cl/v/endulzante"),
     # Desayuno y snacks
     ("Desayuno y Snacks",            "Cereales",        "https://super.lider.cl/v/cereales"),
     ("Desayuno y Snacks",            "Galletas",        "https://super.lider.cl/v/galletas"),
     ("Desayuno y Snacks",            "Chocolates",      "https://super.lider.cl/v/chocolates"),
     ("Desayuno y Snacks",            "Snacks",          "https://super.lider.cl/v/snacks"),
     ("Desayuno y Snacks",            "Mermeladas",      "https://super.lider.cl/v/mermeladas"),
+    ("Desayuno y Snacks",            "Granola",         "https://super.lider.cl/v/granola"),
+    ("Desayuno y Snacks",            "Caramelos",       "https://super.lider.cl/v/caramelos"),
+    ("Desayuno y Snacks",            "Gomitas",         "https://super.lider.cl/v/gomitas"),
+    ("Desayuno y Snacks",            "Mani",            "https://super.lider.cl/v/mani"),
     # Bebidas
     ("Bebidas",                      "Bebidas",         "https://super.lider.cl/v/bebidas"),
     ("Bebidas",                      "Jugos",           "https://super.lider.cl/v/jugos"),
@@ -58,8 +87,16 @@ CATEGORIAS = [
     ("Bebidas",                      "Cervezas",        "https://super.lider.cl/v/cervezas"),
     ("Bebidas",                      "Vinos",           "https://super.lider.cl/v/vinos"),
     ("Bebidas",                      "Bebidas Energeticas", "https://super.lider.cl/v/bebidas-energeticas"),
+    ("Bebidas",                      "Licores",         "https://super.lider.cl/v/licores"),
+    ("Bebidas",                      "Pisco",           "https://super.lider.cl/v/pisco"),
+    ("Bebidas",                      "Whisky",          "https://super.lider.cl/v/whisky"),
+    ("Bebidas",                      "Vodka",           "https://super.lider.cl/v/vodka"),
+    ("Bebidas",                      "Limonadas",       "https://super.lider.cl/v/limonadas"),
     # Panadería
     ("Panaderia",                    "Pan",             "https://super.lider.cl/v/pan"),
+    ("Panaderia",                    "Marraqueta",      "https://super.lider.cl/v/marraqueta"),
+    ("Panaderia",                    "Hallulla",        "https://super.lider.cl/v/hallulla"),
+    ("Panaderia",                    "Tortas",          "https://super.lider.cl/v/tortas"),
     # Limpieza del hogar
     ("Limpieza",                     "Detergentes",     "https://super.lider.cl/v/detergentes"),
     ("Limpieza",                     "Papel higienico", "https://super.lider.cl/v/papel-higienico"),
@@ -67,6 +104,9 @@ CATEGORIAS = [
     ("Limpieza",                     "Lavavajillas",    "https://super.lider.cl/v/lavavajillas"),
     ("Limpieza",                     "Suavizantes",     "https://super.lider.cl/v/suavizantes"),
     ("Limpieza",                     "Blanqueadores",   "https://super.lider.cl/v/blanqueadores"),
+    ("Limpieza",                     "Cloro",           "https://super.lider.cl/v/cloro"),
+    ("Limpieza",                     "Servilletas",     "https://super.lider.cl/v/servilletas"),
+    ("Limpieza",                     "Desinfectantes",  "https://super.lider.cl/v/desinfectantes"),
     # Higiene personal
     ("Higiene Personal",             "Shampoo",         "https://super.lider.cl/v/shampoo"),
     ("Higiene Personal",             "Acondicionador",  "https://super.lider.cl/v/acondicionador"),
@@ -80,6 +120,7 @@ CATEGORIAS = [
     # Mascotas
     ("Mascotas",                     "Alimento Perros", "https://super.lider.cl/v/alimento-para-perros"),
     ("Mascotas",                     "Alimento Gatos",  "https://super.lider.cl/v/alimento-para-gatos"),
+    ("Mascotas",                     "Arena Sanitaria", "https://super.lider.cl/v/arena-sanitaria"),
 ]
 
 
@@ -136,53 +177,6 @@ def extraer_json_ld(html):
     return []
 
 
-def decodificar_data_value(valor):
-    texto = valor.rstrip(".")
-    padding = "=" * ((4 - len(texto) % 4) % 4)
-
-    try:
-        return base64.b64decode(texto + padding).decode("utf-8")
-    except Exception:
-        return ""
-
-
-def detectar_urls_paginas(html, url_base):
-    urls = {url_base}
-
-    for valor in re.findall(r'data-value="([^"]+)"', html):
-        ruta = decodificar_data_value(valor)
-        if ruta and "pagenumber=" in ruta:
-            urls.add(urljoin(url_base, ruta))
-
-    paginas = []
-    for pagina_url in urls:
-        match = re.search(r"pagenumber=(\d+)", pagina_url)
-        pagina = int(match.group(1)) if match else 1
-        paginas.append((pagina, pagina_url))
-
-    paginas = [(pagina, pagina_url) for pagina, pagina_url in paginas if pagina == 1 or "pagenumber=" in pagina_url]
-
-    if len(paginas) > 1:
-        max_pagina = max(pagina for pagina, _ in paginas)
-        plantilla = next((pagina_url for pagina, pagina_url in paginas if pagina > 1), "")
-
-        if plantilla:
-            for pagina in range(1, max_pagina + 1):
-                if pagina == 1:
-                    paginas.append((pagina, url_base))
-                else:
-                    paginas.append((
-                        pagina,
-                        re.sub(r"pagenumber=\d+", f"pagenumber={pagina}", plantilla)
-                    ))
-
-    paginas_unicas = {}
-    for pagina, pagina_url in paginas:
-        paginas_unicas[pagina] = pagina_url
-
-    return [pagina_url for _, pagina_url in sorted(paginas_unicas.items())]
-
-
 def extraer_productos_desde_html(categoria, subcategoria, url, html):
     productos = []
 
@@ -220,24 +214,55 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
     return productos
 
 
+MAX_PAGINAS = 60
+
+
 def extraer_productos(categoria, subcategoria, url):
+    """Recorre la categoria pagina a pagina hasta que venga vacia.
+
+    El widget de paginacion del sitio muestra solo algunos links (ej: 3 de
+    8 paginas reales en /v/bebidas), asi que no sirve para saber cuantas
+    paginas hay: se avanza secuencialmente con ?pagenumber=N hasta que una
+    pagina no traiga productos.
+    """
     print(f"Scrapeando Lider {subcategoria}...")
-    html = descargar_html(url)
-    urls_paginas = detectar_urls_paginas(html, url)
     productos = []
+    vistos = set()
 
-    print(f"{subcategoria}: {len(urls_paginas)} paginas")
+    for pagina in range(1, MAX_PAGINAS + 1):
+        pagina_url = url if pagina == 1 else f"{url}?pagenumber={pagina}"
+        try:
+            html_pagina = descargar_html(pagina_url)
+        except RuntimeError as exc:
+            print(f"{pagina_url} -> error, se detiene la categoria: {exc}")
+            break
 
-    for pagina_url in urls_paginas:
-        html_pagina = html if pagina_url == url else descargar_html(pagina_url)
         productos_pagina = extraer_productos_desde_html(
             categoria,
             subcategoria,
             pagina_url,
             html_pagina
         )
-        productos.extend(productos_pagina)
+        if not productos_pagina:
+            break
+
+        nuevos = 0
+        for producto in productos_pagina:
+            key = (producto["nombre"], producto["precio"], producto["url"])
+            if key in vistos:
+                continue
+            vistos.add(key)
+            productos.append(producto)
+            nuevos += 1
+
         print(f"{pagina_url} -> {len(productos)} acumulados")
+
+        # si la pagina entera eran repetidos, el sitio esta reciclando
+        # contenido mas alla del final real: cortar
+        if nuevos == 0:
+            break
+
+        time.sleep(0.3)
 
     return productos
 
