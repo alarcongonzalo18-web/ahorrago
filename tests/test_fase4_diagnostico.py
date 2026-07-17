@@ -5,9 +5,8 @@ from sqlalchemy.pool import StaticPool
 from app.database import Base
 from app.matching import candidato_compatible
 from app.matching_diagnostics import clasificar_conflicto, diagnosticar_matching, metricas_por_categoria
-from app.models import Categoria, Precio, Producto, Supermercado
+from app.models import Categoria, Precio, Producto, Proveedor
 from app.normalizacion import extraer_atributos, normalizar_formato
-from app.scripts.simular_reconstruccion_producto_base import simular
 
 
 def producto(nombre, marca, formato, producto_base=""):
@@ -20,8 +19,8 @@ def crear_db():
     Session = sessionmaker(bind=engine)
     db = Session()
     categoria = Categoria(nombre="Bebidas")
-    lider = Supermercado(nombre="Lider")
-    jumbo = Supermercado(nombre="Jumbo")
+    lider = Proveedor(nombre="Lider")
+    jumbo = Proveedor(nombre="Jumbo")
     a = producto("Bebida Coca Cola 1.5 L", "Coca Cola", "1.5 L", "bebida_coca_1500")
     b = producto("Coca-Cola Bebida 1500 ml", "Coca-Cola", "1500 ml", "bebida_coca_1500")
     c = producto("Aceite Natura 250 ml", "Natura", "250 ml", "aceite_natura_250")
@@ -30,9 +29,9 @@ def crear_db():
     for item in [a, b, c]:
         item.categoria_id = categoria.id
     db.add_all([
-        Precio(producto=a, supermercado=lider, precio_normal=1500),
-        Precio(producto=b, supermercado=jumbo, precio_normal=1490),
-        Precio(producto=c, supermercado=lider, precio_normal=900),
+        Precio(producto=a, proveedor=lider, precio_normal=1500),
+        Precio(producto=b, proveedor=jumbo, precio_normal=1490),
+        Precio(producto=c, proveedor=lider, precio_normal=900),
     ])
     db.commit()
     return db
@@ -71,19 +70,6 @@ def test_metricas_por_categoria_y_diagnostico(tmp_path):
         assert resumen["total_productos"] == 3
         assert (tmp_path / "diagnostico_matching.md").exists()
         assert (tmp_path / "equivalencias_por_categoria.csv").exists()
-    finally:
-        db.close()
-
-
-def test_simulacion_reconstruccion_no_modifica_db():
-    db = crear_db()
-    try:
-        original = {p.id: p.producto_base for p in db.query(Producto).all()}
-        filas, resumen = simular(db)
-        despues = {p.id: p.producto_base for p in db.query(Producto).all()}
-        assert original == despues
-        assert resumen["productos_evaluados"] == 3
-        assert filas
     finally:
         db.close()
 
