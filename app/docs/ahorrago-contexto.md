@@ -126,40 +126,30 @@ Plan de datos (orden de palanca):
    sitemap y validadas en vivo (licores, pisco, jamón, harina, helados,
    etc. — 93 categorías totales).
 
-   ⚠️ **REGRESIÓN AL CORRER EL SCRAPE COMPLETO — PENDIENTE DE ARREGLAR
-   (pausado 17-07-2026, retomar acá).** Se corrió el scraper por trozos
-   (8 tandas rápidas seguidas) desde el PC del trabajo. Resultado:
-   `data/lider_real.csv` quedó con 8.415 filas (99% con EAN) — pero eso
-   es MENOS que las 8.682 viejas, PESE a que bebidas sola subió a 958.
-   Al comparar viejo vs nuevo por subcategoría, muchas categorías se
-   desplomaron o cayeron a 0: Alimentos Bebé 471→0, Mermeladas 198→0,
-   Legumbres 125→0, Bebidas Energéticas 34→0, Salsas 523→48, Aceite
-   437→45, Congelados 360→11, Pescados 412→45, Detergentes 168→48,
-   Condimentos 141→47. Categorías en 0 = la URL devolvió vacío.
-   - **Causa más probable**: rate-limiting de Líder durante el scrape
-     rápido de 8 trozos seguidos. El loop nuevo `extraer_productos()`
-     corta la categoría en cuanto una página viene vacía o entera
-     repetida — y una página vacía por BLOQUEO es indistinguible de una
-     página vacía por FIN REAL. Así, un throttle transitorio trunca la
-     categoría (o la mata entera si falla la página 1).
-   - **Estado del working tree**: `data/lider_real.csv` está MODIFICADO
-     y SIN COMMITEAR con esta versión regresada. **NO commitear así.**
-     El CSV viejo (mejor) sigue siendo el de `git HEAD`. Antes de
-     retomar: `git checkout HEAD -- data/lider_real.csv` para volver al
-     bueno, o regenerar bien.
-   - **Fix a implementar en `app/scraper_lider.py` antes de re-scrapear**:
-     (1) distinguir bloqueo de fin real — si una página viene vacía pero
-     el sitio devolvió HTTP 200 con cuerpo sospechosamente corto o un
-     429/403, reintentar con backoff en vez de cortar; (2) pausar más
-     entre categorías (subir el `time.sleep`), y ojalá correr en 1 sola
-     corrida pausada, no 8 ráfagas; (3) validación post-scrape: comparar
-     conteo por subcategoría contra la corrida anterior y ABORTAR el
-     guardado si alguna categoría conocida cae >50% (guardia anti-
-     regresión). Recién con eso: `combinar` → `reconstruir` →
-     `reporte_cobertura`.
-   - Las mejoras de CÓDIGO (paginación + 42 categorías, commit `62e883c`)
-     están bien y siguen commiteadas; lo único que regresó son los DATOS
-     de esta corrida puntual, por throttling. Es 100% reproducible bien.
+   ✅ **REGRESIÓN POR THROTTLING — FIX DE CÓDIGO HECHO (17-07-2026, commit
+   `8a063c0`).** El problema: al correr el scrape en 8 ráfagas rápidas, Líder
+   aplicó rate-limiting y `data/lider_real.csv` regresó (8.415 < 8.682 filas;
+   Alimentos Bebé 471→0, Mermeladas 198→0, Legumbres 125→0, Salsas 523→48,
+   Aceite 437→45, etc.). Causa: el loop no distinguía una página vacía por
+   BLOQUEO de una por FIN REAL, así que un throttle truncaba/mataba categorías;
+   y al guardar se pisaba el CSV bueno.
+   - El CSV regresado **ya fue revertido al bueno** (8.682 filas, la de `git HEAD`).
+   - **Fix aplicado en `app/scraper_lider.py`** (3 partes):
+     (1) `descargar_html` detecta HTTP 429/403/503 con backoff exponencial
+     (5→60s) y cuerpo sospechosamente corto (`BloqueoError`) → reintenta en vez
+     de cortar; (2) `extraer_productos` reverifica páginas vacías tras pausa
+     larga y propaga el fallo de página 1 como ERROR (no "0 válido"), sleep
+     0.3s→1.0s; (3) **guardia anti-regresión**: antes de sobrescribir compara
+     conteo por subcategoría vs la corrida previa y, si algo cae >50% o a 0,
+     guarda en `data/lider_real.csv.nuevo` y avisa **sin pisar los buenos**.
+     Cubierto por `tests/test_scraper_lider_guard.py` (5/5).
+   - **PENDIENTE (requiere al dueño)**: correr `python -m app.scraper_lider` en
+     UNA sola pasada pausada (no en ráfagas). Si sale limpio pisa el CSV; si hay
+     throttle deja `.nuevo` intacto. Después: `combinar` → `reconstruir` →
+     `reporte_cobertura`. La corrida no se hace desde la sesión de Claude por el
+     mismo riesgo de throttling.
+   - Las mejoras de CÓDIGO previas (paginación + 42 categorías, commit `62e883c`)
+     siguen bien. Ya es 100% reproducible sin riesgo de destruir los datos buenos.
 3. Correr `reporte_cobertura` después de cada actualización y dirigir el
    esfuerzo a las categorías con peor % (hoy: Carnes 1,2%, Bebé 2,2%,
    Congelados 2,4%).
@@ -171,9 +161,13 @@ Plan de datos (orden de palanca):
 ## Plan próximos commits (orden estricto)
 1. ~~Fix backend producto_base~~ — hecho 17-07-2026.
 2. ~~Bot: núcleo + webhook~~ — hecho 17-07-2026.
-3. Limpieza:
-   - Eliminar .summary-grid en desktop (ya está oculto en móvil)
-   - Badge carrito: usar sum(p.cantidad) en vez de carritoCompra.length
+3. ~~Limpieza~~ — hecho 17-07-2026:
+   - Eliminada la `.summary-grid` de la home (sección + JS que la poblaba en
+     `actualizarDashboard`, que ahora solo alimenta `historialTexto`). El CSS
+     `.summary-grid`/`.summary-card` quedó huérfano (inofensivo, candidato a
+     borrar en una pasada estética).
+   - Badge carrito ahora usa la suma de `cantidad` (unidades), no
+     `carritoCompra.length` (ítems distintos).
 4. Sticky bottom bar consumiendo el endpoint arreglado
 5. Panel detallado "Ver plan" con compra inteligente
 

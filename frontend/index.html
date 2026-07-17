@@ -2054,33 +2054,6 @@ body.dark .buy-btn:hover {
             <button onclick="buscarManual()" class="btn-go">Buscar</button>
         </section>
 
-        <section class="summary-grid">
-            <article class="summary-card">
-                <div class="summary-icon"><i data-lucide="badge-dollar-sign"></i></div>
-                <div>
-                    <div class="summary-label">Tu ahorro estimado</div>
-                    <div id="ahorroEstimado" class="summary-value">$0</div>
-                    <div class="summary-foot">con la compra óptima</div>
-                </div>
-            </article>
-            <article class="summary-card">
-                <div class="summary-icon"><i data-lucide="trophy"></i></div>
-                <div>
-                    <div class="summary-label">Mejor supermercado</div>
-                    <div id="mejorSupermercado" class="summary-value">-</div>
-                    <div id="mejorSupermercadoDetalle" class="summary-foot">sin resultados</div>
-                </div>
-            </article>
-            <article class="summary-card">
-                <div class="summary-icon"><i data-lucide="shopping-bag"></i></div>
-                <div>
-                    <div class="summary-label">Productos encontrados</div>
-                    <div id="productosEncontrados" class="summary-value">0</div>
-                    <div class="summary-foot">comparables</div>
-                </div>
-            </article>
-        </section>
-
         <section class="content-grid">
             <aside id="filtersPanel" class="filters mobile-collapsed">
                 <button id="filtersToggle" class="mobile-filter-toggle" type="button" onclick="toggleFiltrosMovil()">
@@ -2769,27 +2742,14 @@ function renderImagenProducto(producto) {
     return "<i data-lucide='package' class='text-muted-app'></i>";
 }
 
-function actualizarDashboard(productosCompra = carritoCompra, productosEncontrados = productosVisibles.length) {
+function actualizarDashboard(productosCompra = carritoCompra) {
+    // La grilla de stats de la home se elimino; solo queda alimentar el
+    // "Precio mas bajo detectado" del panel Historial reciente.
     const optimos = productosCompra.map(producto => ({
         producto,
         mejor: producto.precios.reduce((actual, precio) => precio.precio < actual.precio ? precio : actual, producto.precios[0])
     })).filter(item => item.mejor);
 
-    const totalOptimo = optimos.reduce((total, item) => total + item.mejor.precio * (item.producto.cantidad || 1), 0);
-    const totalCaro = productosCompra.reduce((total, producto) => total + Math.max(...producto.precios.map(precio => precio.precio)) * (producto.cantidad || 1), 0);
-    const ahorro = Math.max(0, totalCaro - totalOptimo);
-    const conteoMercados = {};
-
-    optimos.forEach(item => {
-        conteoMercados[item.mejor.proveedor] = (conteoMercados[item.mejor.proveedor] || 0) + 1;
-    });
-
-    const mejorSuper = Object.entries(conteoMercados).sort((a, b) => b[1] - a[1])[0];
-
-    document.getElementById("ahorroEstimado").textContent = formatearPrecio(ahorro);
-    document.getElementById("productosEncontrados").textContent = productosEncontrados;
-    document.getElementById("mejorSupermercado").textContent = mejorSuper ? mejorSuper[0] : "-";
-    document.getElementById("mejorSupermercadoDetalle").textContent = mejorSuper ? `en ${mejorSuper[1]} de ${productosCompra.length} agregados` : "agrega productos";
     document.getElementById("historialTexto").textContent = optimos[0] ? `${optimos[0].producto.nombre}: ${formatearPrecio(optimos[0].mejor.precio)}` : "Busca un producto para comenzar";
 }
 
@@ -3214,8 +3174,9 @@ function renderCompraOptima() {
 
 function actualizarEstadoCarrito() {
     const contador = document.getElementById("carritoContador");
-    contador.textContent = carritoCompra.length;
-    contador.classList.toggle("show", carritoCompra.length > 0);
+    const totalUnidades = carritoCompra.reduce((suma, producto) => suma + (producto.cantidad || 1), 0);
+    contador.textContent = totalUnidades;
+    contador.classList.toggle("show", totalUnidades > 0);
 
     document.querySelectorAll("[data-add-product]").forEach(button => {
         const id = Number(button.dataset.addProduct);
