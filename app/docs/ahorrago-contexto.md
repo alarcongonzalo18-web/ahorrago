@@ -107,11 +107,21 @@ Medido con `python -m app.reporte_cobertura` sobre los datos reales:
   el problema no son categorías faltantes sino profundidad y matching.
 
 Plan de datos (orden de palanca):
-1. **Capturar EAN en los 3 scrapers** y agregar columna `ean` a Producto;
-   matching: EAN exacto primero, producto_base como fallback.
+1. ~~Infraestructura EAN~~ — **hecho 17-07-2026** (commit `a1bb4bb`):
+   columna `Producto.ean`, extracción desde URLs de Líder (99% cobertura,
+   retroactivo — el GTIN-14 viene en la URL `/ip/<slug>/00780...`),
+   unificación de producto_base como `ean:<código>` cuando 2+ productos
+   comparten EAN, fase5b no pisa grupos EAN, resumen-compra matchea por
+   EAN aunque el texto difiera. **Pendiente para que pague**: EAN de una
+   segunda cadena. Sondeado 17-07: Jumbo no lo expone en Constructor.io
+   (RefId = código interno) ni VTEX API pública (410) ni PDP (shell JS);
+   Unimarc VTEX API responde 404/500. Vía: abrir devtools en un PDP de
+   Jumbo/Unimarc desde casa y encontrar la API interna que hidrata la
+   página (ahí está el EAN seguro).
 2. **Profundizar Líder** (más subcategorías `/v/` o su API de búsqueda)
    hasta paridad ~20k. Cada producto nuevo de Líder suma comparables
-   directo porque Jumbo ya tiene el catálogo contra el cual matchear.
+   directo porque Jumbo ya tiene el catálogo contra el cual matchear —
+   y ahora cada producto de Líder llega con EAN.
 3. Correr `reporte_cobertura` después de cada actualización y dirigir el
    esfuerzo a las categorías con peor % (hoy: Carnes 1,2%, Bebé 2,2%,
    Congelados 2,4%).
