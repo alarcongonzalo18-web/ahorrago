@@ -168,14 +168,18 @@ Plan de datos (orden de palanca):
      borrar en una pasada estética).
    - Badge carrito ahora usa la suma de `cantidad` (unidades), no
      `carritoCompra.length` (ítems distintos).
-4. **[PARCIAL 17-07-2026] Frontend consume la calculadora oficial** (Fase B de la
-   auditoría): el panel "Compra óptima" ahora llama a `POST /productos/resumen-compra`
+4. **[HECHO 17-07-2026] Frontend consume la calculadora oficial** (Fase B de la
+   auditoría): el panel "Compra óptima" llama a `POST /productos/resumen-compra`
    (`obtenerResumenOficial`/`renderRecomendacion`/`actualizarResumenOficial` en
    `frontend/index.html`, con debounce y fallback al cálculo cliente si el backend no
-   responde). Muestra un banner de recomendación con el `mensaje` y el `ahorro` oficiales,
-   y el `total_optimo` del backend manda sobre el del cliente. **Falta**: la sticky bottom
-   bar en móvil y retirar del todo el cálculo cliente (unificar con `services.comparar_lista`).
-   **QA visual pendiente (requiere la app corriendo, lo hace Gonzalo).**
+   responde). Banner de recomendación con el `mensaje` y el `ahorro` oficiales (la línea de
+   ahorro solo en casos "dividir"), y el `total_optimo` del backend manda sobre el del cliente.
+   **Sticky bottom bar móvil hecha** (`#stickyCompra` + `renderStickyCompra`): barra fija
+   inferior <1024px con unidades, total y recomendación, tap → `enfocarCompraOptima`.
+   **Verificado en Chrome real** (búsqueda, agregar, banner, total del backend, vaciar) +
+   render de la barra forzando el media (screenshot). **Falta de Fase B**: retirar del todo el
+   cálculo cliente y unificar los dos motores de óptimo del backend
+   (`services.comparar_lista` + `calcular_resumen_compra`).
 5. Panel detallado "Ver plan" con compra inteligente (el banner es el primer paso).
 
 ## Decisiones de producto tomadas

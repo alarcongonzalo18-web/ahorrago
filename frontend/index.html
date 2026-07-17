@@ -1201,6 +1201,55 @@ body.dark .subcategory-chip {
 
 .toast-app.show { display: block; }
 
+/* Barra inferior fija con el resumen de compra (solo movil). Da acceso
+   persistente al total/recomendacion cuando el panel queda bajo el fold. */
+.sticky-compra {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 15;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--brand);
+    color: var(--panel);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+}
+.sticky-compra-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sticky-compra-count {
+    flex: none;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--brand);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+}
+.sticky-compra-texto { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.sticky-compra-total { font-size: 1.05rem; font-weight: 900; }
+.sticky-compra-reco {
+    font-size: 0.78rem;
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 52vw;
+}
+.sticky-compra-cta { flex: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 800; font-size: 0.9rem; }
+@media (max-width: 1024px) {
+    .sticky-compra:not([hidden]) { display: flex; }
+    body.has-sticky-compra { padding-bottom: 76px; }
+}
+
 /* Capa visual profesional - reversible desde backups/index_antes_redisenio_*.html */
 :root {
     --page: #F5F7FA;
@@ -2282,6 +2331,17 @@ body.dark .buy-btn:hover {
 
 <div id="toast" class="toast-app"></div>
 
+<div id="stickyCompra" class="sticky-compra" hidden onclick="enfocarCompraOptima()" role="button" tabindex="0" aria-label="Ver compra óptima">
+    <div class="sticky-compra-info">
+        <span id="stickyCompraCount" class="sticky-compra-count">0</span>
+        <div class="sticky-compra-texto">
+            <strong id="stickyCompraTotal" class="sticky-compra-total">$0</strong>
+            <span id="stickyCompraReco" class="sticky-compra-reco">Tu compra óptima</span>
+        </div>
+    </div>
+    <span class="sticky-compra-cta">Ver compra <i data-lucide="arrow-right"></i></span>
+</div>
+
 <script>
 const API_HOST = window.location.hostname || "localhost";
 const API = `http://${API_HOST}:8001`;
@@ -3223,17 +3283,22 @@ async function obtenerResumenOficial() {
 function renderRecomendacion(resumen) {
     const banner = document.getElementById("recomendacionCompra");
     if (!banner) return;
+    const stickyReco = document.getElementById("stickyCompraReco");
     if (!resumen || !resumen.mensaje || resumen.recomendacion === "sin_datos") {
         banner.hidden = true;
         banner.innerHTML = "";
         banner.className = "reco-banner";
+        if (stickyReco) stickyReco.textContent = "Tu compra óptima";
         return;
     }
 
     // El backend es la calculadora oficial: su total manda sobre el del cliente.
     if (typeof resumen.total_optimo === "number" && resumen.total_optimo > 0) {
         document.getElementById("totalOptimo").textContent = formatearPrecio(resumen.total_optimo);
+        const stickyTotal = document.getElementById("stickyCompraTotal");
+        if (stickyTotal) stickyTotal.textContent = formatearPrecio(resumen.total_optimo);
     }
+    if (stickyReco) stickyReco.textContent = resumen.mensaje;
 
     // La linea de ahorro solo tiene sentido cuando conviene dividir; en los
     // casos "una tienda"/"ahorro bajo" el propio mensaje ya explica la decision.
@@ -3260,11 +3325,33 @@ function actualizarResumenOficial() {
     }, 250);
 }
 
+// Barra inferior movil: refleja unidades y total (cliente, inmediato). El
+// backend refina total y mensaje en renderRecomendacion.
+function renderStickyCompra() {
+    const bar = document.getElementById("stickyCompra");
+    if (!bar) return;
+    const unidades = carritoCompra.reduce((suma, producto) => suma + (producto.cantidad || 1), 0);
+    if (!unidades) {
+        bar.hidden = true;
+        document.body.classList.remove("has-sticky-compra");
+        return;
+    }
+    const totalCliente = carritoCompra.reduce((total, producto) => {
+        const mejor = (producto.precios || []).reduce((min, p) => p.precio < min ? p.precio : min, Infinity);
+        return total + (isFinite(mejor) ? mejor * (producto.cantidad || 1) : 0);
+    }, 0);
+    document.getElementById("stickyCompraCount").textContent = unidades;
+    document.getElementById("stickyCompraTotal").textContent = formatearPrecio(totalCliente);
+    bar.hidden = false;
+    document.body.classList.add("has-sticky-compra");
+}
+
 function actualizarEstadoCarrito() {
     const contador = document.getElementById("carritoContador");
     const totalUnidades = carritoCompra.reduce((suma, producto) => suma + (producto.cantidad || 1), 0);
     contador.textContent = totalUnidades;
     contador.classList.toggle("show", totalUnidades > 0);
+    renderStickyCompra();
 
     document.querySelectorAll("[data-add-product]").forEach(button => {
         const id = Number(button.dataset.addProduct);
