@@ -29,19 +29,36 @@ No es solo comparar precios — recomienda una acción concreta.
   - Límite máximo 99
   - Migración de carritos viejos en localStorage
 
-### BUG CRÍTICO PENDIENTE (detectado por Codex):
-El endpoint /productos/resumen-compra solo busca por producto_id 
-exacto, pero la app agrupa productos por producto_base para comparar 
-entre supermercados.
+### BUG CRÍTICO producto_base (detectado por Codex) — ARREGLADO (17-07-2026):
+El endpoint /productos/resumen-compra solo buscaba por producto_id
+exacto, pero la app agrupa productos por producto_base para comparar
+entre supermercados. Consecuencia: productos comparables se marcaban
+como "sin comparación" y el total usaba el precio del proveedor
+equivocado.
 
-Consecuencia: productos comparables se marcan como "sin comparación".
+Solución aplicada: nueva helper `equivalentes_por_item()` en app/main.py
+que replica el patrón de /productos/buscar (agrupa por producto_base y
+filtra con candidato_compatible). Cubierto por
+test_resumen_compra_con_equivalente_en_otro_proveedor_elige_precio_menor.
 
-Solución: replicar el patrón que ya usa /productos/buscar para agrupar 
-por producto_base. Buscar TODOS los productos con el mismo producto_base 
-para calcular ahorros reales.
+### Secuelas del rename Multi-Rubro (Supermercado → Proveedor), arregladas 17-07-2026:
+El commit 3686a58 dejó el rename a medio hacer y nadie lo validó:
+- `/productos/buscar` tiraba **HTTP 500** (NameError: 'supermercado' no
+  definido en app/main.py). El buscador entero estaba caído en main.
+- `/diagnostico/matching` tiraba AttributeError (models.Supermercado ya
+  no existe) desde app/matching_diagnostics.py.
+- `/estado-datos` pasó a devolver la clave "proveedores", pero el
+  frontend seguía leyendo `estado.supermercados` → panel vacío en silencio.
+- tests/test_integration.py importaba Supermercado y no cargaba.
+
+### Tests huérfanos (PENDIENTE decidir):
+tests/test_auditoria_datos.py y tests/test_fase4_diagnostico.py importan
+módulos de `app/scripts/` que el commit be1e027 ("limpieza profunda")
+borró. No se pueden ejecutar: prueban código que ya no existe. Se dejaron
+intactos a la espera de decisión (borrarlos o reescribirlos).
 
 ## Plan próximos commits (orden estricto)
-1. Fix backend producto_base (CRÍTICO antes de cualquier feature visual)
+1. ~~Fix backend producto_base~~ — hecho 17-07-2026.
 2. Limpieza:
    - Eliminar .summary-grid en desktop (ya está oculto en móvil)
    - Badge carrito: usar sum(p.cantidad) en vez de carritoCompra.length

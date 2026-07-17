@@ -461,7 +461,12 @@ def buscar_productos(
     return resultado
 
 
-def calcular_resumen_compra(db, items):
+def equivalentes_por_item(db, items):
+    """Para cada producto_id pedido, junta los productos comparables de otros proveedores.
+
+    El carrito manda el id de un producto concreto, pero el mismo articulo existe con
+    otro id en cada proveedor. El nexo es producto_base, igual que en /productos/buscar.
+    """
     ids = [item.producto_id for item in items]
 
     productos = db.query(models.Producto).filter(
@@ -469,24 +474,60 @@ def calcular_resumen_compra(db, items):
     ).all()
     producto_por_id = {p.id: p for p in productos}
 
-    precios_todos = db.query(models.Precio).filter(
-        models.Precio.producto_id.in_(ids)
-    ).options(joinedload(models.Precio.proveedor)).all()
+    bases = {p.producto_base for p in productos if p.producto_base}
+    if bases:
+        candidatos = db.query(models.Producto).filter(
+            models.Producto.producto_base.in_(bases)
+        ).all()
+    else:
+        candidatos = []
+
+    candidatos_por_base = defaultdict(list)
+    for candidato in candidatos:
+        candidatos_por_base[candidato.producto_base].append(candidato)
+
+    comparables_por_id = {}
+    for pid, producto in producto_por_id.items():
+        grupo = {producto.id: producto}
+        for candidato in candidatos_por_base.get(producto.producto_base, []):
+            if candidato_compatible(producto, candidato):
+                grupo[candidato.id] = candidato
+        comparables_por_id[pid] = list(grupo.values())
+
+    return producto_por_id, comparables_por_id
+
+
+def calcular_resumen_compra(db, items):
+    producto_por_id, comparables_por_id = equivalentes_por_item(db, items)
+
+    ids_relevantes = {p.id for grupo in comparables_por_id.values() for p in grupo}
+    if ids_relevantes:
+        precios_todos = db.query(models.Precio).filter(
+            models.Precio.producto_id.in_(ids_relevantes)
+        ).options(joinedload(models.Precio.proveedor)).all()
+    else:
+        precios_todos = []
 
     precios_por_producto = defaultdict(list)
     for precio in precios_todos:
-        producto = producto_por_id.get(precio.producto_id)
-        if producto and precio_valido_para_comparar(producto, precio):
-            precios_por_producto[precio.producto_id].append(precio)
+        precios_por_producto[precio.producto_id].append(precio)
+
+    # Clave = id pedido por el carrito; valor = (producto que tiene ese precio, precio).
+    # El producto viaja junto al precio porque valor_precio_producto lo necesita.
+    precios_por_item = defaultdict(list)
+    for pid, grupo in comparables_por_id.items():
+        for equivalente in grupo:
+            for precio in precios_por_producto.get(equivalente.id, []):
+                if precio_valido_para_comparar(equivalente, precio):
+                    precios_por_item[pid].append((equivalente, precio))
 
     mejor_precio_por_super = {}
     todos_proveedores = set()
-    for pid, precios_list in precios_por_producto.items():
-        producto = producto_por_id[pid]
-        for p in precios_list:
+    for pid, pares in precios_por_item.items():
+        for equivalente, p in pares:
             pname = p.proveedor.nombre
             todos_proveedores.add(pname)
-            val = valor_precio_producto(producto, p)
+            val = valor_precio_producto(equivalente, p)
             key = (pid, pname)
             if key not in mejor_precio_por_super or val < mejor_precio_por_super[key]:
                 mejor_precio_por_super[key] = val
@@ -504,17 +545,17 @@ def calcular_resumen_compra(db, items):
             productos_sin_comparacion.append({"id": pid, "nombre": "Producto no encontrado"})
             continue
 
-        precios_prod = precios_por_producto.get(pid, [])
-        if not precios_prod:
+        pares = precios_por_item.get(pid, [])
+        if not pares:
             productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
             continue
 
-        proveedores_disponibles = {p.proveedor.nombre for p in precios_prod}
+        proveedores_disponibles = {p.proveedor.nombre for _, p in pares}
         if len(proveedores_disponibles) == 1:
             productos_sin_comparacion.append({"id": pid, "nombre": producto.nombre})
 
-        mejor = min(precios_prod, key=lambda p: valor_precio_producto(producto_por_id[p.producto_id], p))
-        valor = valor_precio_producto(producto, mejor)
+        equivalente_mejor, mejor = min(pares, key=lambda par: valor_precio_producto(par[0], par[1]))
+        valor = valor_precio_producto(equivalente_mejor, mejor)
         subtotal = valor * cantidad
 
         total_optimo += subtotal
@@ -532,7 +573,7 @@ def calcular_resumen_compra(db, items):
             "mensaje": "No encontramos precios para estos productos",
         }
 
-    ids_con_precios = set(precios_por_producto.keys())
+    ids_con_precios = set(precios_por_item.keys())
     totales_proveedor_completo = {}
     for pname in todos_proveedores:
         total = 0

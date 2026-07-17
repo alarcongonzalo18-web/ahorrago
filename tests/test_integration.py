@@ -122,3 +122,45 @@ def test_endpoint_diagnostico_matching_responde_resumen():
         assert "recomendaciones" in data
     finally:
         app.dependency_overrides.clear()
+
+
+def test_resumen_compra_con_equivalente_en_otro_proveedor_elige_precio_menor():
+    client = crear_cliente_con_datos()
+    try:
+        # El carrito solo conoce el id que devolvio la busqueda (Leche Soprole 1L, Lider,
+        # $1200), pero el mismo producto_base existe en Jumbo a $1100 con otro id.
+        busqueda = client.get("/productos/buscar/leche").json()
+        producto_id = busqueda[0]["id"]
+
+        response = client.post(
+            "/productos/resumen-compra",
+            json={"items": [{"producto_id": producto_id, "cantidad": 2}]},
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["total_optimo"] == 2200
+        assert data["distribucion"] == {"Jumbo": {"cantidad": 2, "subtotal": 2200}}
+        assert data["productos_sin_comparacion"] == []
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_resumen_compra_sin_equivalente_marca_producto_sin_comparacion():
+    client = crear_cliente_con_datos()
+    try:
+        # El arroz existe solo en Lider: no hay nada que comparar.
+        busqueda = client.get("/productos/buscar/arroz").json()
+        producto_id = busqueda[0]["id"]
+
+        response = client.post(
+            "/productos/resumen-compra",
+            json={"items": [{"producto_id": producto_id, "cantidad": 1}]},
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["total_optimo"] == 1800
+        assert [item["id"] for item in data["productos_sin_comparacion"]] == [producto_id]
+    finally:
+        app.dependency_overrides.clear()
