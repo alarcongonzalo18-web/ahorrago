@@ -118,10 +118,17 @@ Plan de datos (orden de palanca):
    Unimarc VTEX API responde 404/500. Vía: abrir devtools en un PDP de
    Jumbo/Unimarc desde casa y encontrar la API interna que hidrata la
    página (ahí está el EAN seguro).
-2. **Profundizar Líder** (más subcategorías `/v/` o su API de búsqueda)
-   hasta paridad ~20k. Cada producto nuevo de Líder suma comparables
-   directo porque Jumbo ya tiene el catálogo contra el cual matchear —
-   y ahora cada producto de Líder llega con EAN.
+2. ~~Profundizar Líder~~ — **hecho 17-07-2026** (commit `62e883c`), doble fix:
+   (a) la paginación confiaba en los links del widget del sitio, que
+   muestra solo algunos (3 de ~20 páginas reales) — ahora avanza
+   `?pagenumber=N` hasta página vacía; medido: bebidas pasó de ~144 a
+   958 productos (6,6×); (b) +42 categorías nuevas descubiertas vía
+   sitemap y validadas en vivo (licores, pisco, jamón, harina, helados,
+   etc. — 93 categorías totales). **Falta correr el scrape completo**
+   (lo hace la tarea programada del PC del dueño, o manual:
+   `python -m app.scraper_lider` → `combinar` → `reconstruir`); estimado
+   25-40k filas de Líder, todas con EAN. Tras esa corrida, correr
+   `python -m app.reporte_cobertura` para medir el salto de comparables.
 3. Correr `reporte_cobertura` después de cada actualización y dirigir el
    esfuerzo a las categorías con peor % (hoy: Carnes 1,2%, Bebé 2,2%,
    Congelados 2,4%).
