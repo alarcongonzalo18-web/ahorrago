@@ -89,6 +89,37 @@ Decisiones de rumbo:
   9771, que es de Reikobyte), y más adelante un LLM barato que traduzca
   lenguaje natural a llamadas API (la v1 usa comandos simples).
 
+### Cobertura del catálogo — diagnóstico (17-07-2026)
+
+Medido con `python -m app.reporte_cobertura` sobre los datos reales:
+- **37.883 productos pero solo 1.562 grupos comparables (4,9%)**; apenas
+  173 existen en los 3 supermercados. El comparador solo puede comparar
+  ~5% de su catálogo — esta es LA métrica a subir, no el total de productos.
+- **Líder es el proveedor más delgado** (6.383 vs 22.324 de Jumbo) siendo
+  la cadena más grande de Chile. Causa probable: su scraper usa listas
+  curadas `/v/` mientras Jumbo/Unimarc usan búsquedas amplias.
+- **Ningún scraper captura EAN (código de barras)**. Jumbo y Unimarc
+  corren sobre VTEX (la API expone `ean` por SKU) y Líder sobre stack
+  Walmart (UPC en el JSON). Matchear por EAN primero y texto después es
+  la vía correcta para disparar la comparabilidad — es lo que hacen los
+  comparadores serios.
+- Los 3 scrapers cubren las mismas ~50 subcategorías (canasta completa);
+  el problema no son categorías faltantes sino profundidad y matching.
+
+Plan de datos (orden de palanca):
+1. **Capturar EAN en los 3 scrapers** y agregar columna `ean` a Producto;
+   matching: EAN exacto primero, producto_base como fallback.
+2. **Profundizar Líder** (más subcategorías `/v/` o su API de búsqueda)
+   hasta paridad ~20k. Cada producto nuevo de Líder suma comparables
+   directo porque Jumbo ya tiene el catálogo contra el cual matchear.
+3. Correr `reporte_cobertura` después de cada actualización y dirigir el
+   esfuerzo a las categorías con peor % (hoy: Carnes 1,2%, Bebé 2,2%,
+   Congelados 2,4%).
+4. **BD**: `Precio` no tiene fecha — agregar timestamp + tabla de
+   historial de precios (los botones "Historial" y "Alertas" del frontend
+   lo necesitan; sin historial no hay "te aviso cuando baje").
+5. Recién después: rubros/pasillos nuevos (licores, farmacia, hogar).
+
 ## Plan próximos commits (orden estricto)
 1. ~~Fix backend producto_base~~ — hecho 17-07-2026.
 2. ~~Bot: núcleo + webhook~~ — hecho 17-07-2026.
