@@ -115,10 +115,13 @@ Plan de datos (orden de palanca):
    EAN aunque el texto difiera. **EAN de 2ª cadena (Jumbo) ENCONTRADO
    17-07-2026** explorando jumbo.cl con el navegador: `POST bff.jumbo.cl/catalog/pdp`
    con body `{"slug","store":"jumboclj512"}` y header `apiKey` estático devuelve
-   `items[].ean` (GTIN-13). Verificado reproducible sin sesión. Contrato completo +
-   integración en [ean-jumbo.md](ean-jumbo.md). **Falta**: hacer el backfill de EAN
-   en el catálogo Jumbo (POST por slug, pausado) y re-`reconstruir` → medir con
-   `reporte_cobertura`. Unimarc (3ª cadena) queda por explorar igual.
+   `items[].ean` (GTIN-13). Contrato en [ean-jumbo.md](ean-jumbo.md). **Unimarc (3ª cadena)
+   TAMBIÉN encontrado 17-07-2026**: `GET bff-unimarc-ecommerce.unimarc.cl/catalog/product/search/by-slug/<slug>`
+   con headers `channel:UNIMARC/source:web/version:1.0.0` (sin auth) → `products[0].item.ean`.
+   Contrato en [ean-unimarc.md](ean-unimarc.md). **Las 3 cadenas tienen fuente de EAN** (Líder de
+   la URL, Jumbo y Unimarc del BFF por slug). **Falta**: escribir la captura/backfill de EAN en
+   los scrapers de Jumbo y Unimarc (por slug, pausado), re-`reconstruir` → medir con
+   `reporte_cobertura` cuánto sube el % comparable.
 2. ~~Profundizar Líder~~ — **hecho 17-07-2026** (commit `62e883c`), doble fix:
    (a) la paginación confiaba en los links del widget del sitio, que
    muestra solo algunos (3 de ~20 páginas reales) — ahora avanza
