@@ -1,2 +1,0 @@
-﻿causa_probable,cantidad,porcentaje,ejemplos,script_afectado,correccion_recomendada,riesgo
-scraper_categoria_por_busqueda_amplia,51,100.0,199 Bebida Vegetal Notmilk Protein Con 7gr Proteí | 56 Bebida Leche Láctea Yogu Yogu Chirimoya Caja | 213 Bebida Láctea Sin Lactosa Chocolate 200 ml Mi | 3365 Bebida Sin Azúcar Pack Lata 6 Un Coca-Cola,app/scraper_lider.py (48); app/scraper_jumbo_real.py (3),Validar cada resultado contra reglas de categoria antes de escribir CSV; limitar busquedas ambiguas.,alto
