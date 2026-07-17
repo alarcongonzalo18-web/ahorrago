@@ -1,5 +1,6 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends, Query
+from fastapi import FastAPI, Depends, Query, Request
+from xml.sax.saxutils import escape as xml_escape
 from sqlalchemy.orm import Session, joinedload
 from collections import defaultdict
 from datetime import datetime
@@ -8,7 +9,7 @@ import json
 from fastapi import Response
 from sqlalchemy import func
 from .database import Base, engine, SessionLocal
-from . import models, schemas, services
+from . import chat, models, schemas, services
 from .matching import candidato_compatible
 from .matching_diagnostics import resumen_matching
 from .normalizacion import (
@@ -644,4 +645,20 @@ def calcular_resumen_compra(db, items):
 @app.post("/productos/resumen-compra")
 def resumen_compra(request: schemas.ResumenCompraRequest, db: Session = Depends(get_db)):
     return calcular_resumen_compra(db, request.items)
+
+
+@app.post("/webhook/whatsapp")
+async def webhook_whatsapp(request: Request, db: Session = Depends(get_db)):
+    """Webhook de WhatsApp en formato Twilio: form-urlencoded entra, TwiML sale.
+
+    Twilio manda el mensaje del usuario en el campo Body. La logica vive en
+    app.chat (independiente del canal); esto solo traduce el transporte.
+    """
+    form = await request.form()
+    respuesta = chat.responder(db, str(form.get("Body", "")))
+    twiml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        f"<Response><Message>{xml_escape(respuesta)}</Message></Response>"
+    )
+    return Response(content=twiml, media_type="application/xml")
 

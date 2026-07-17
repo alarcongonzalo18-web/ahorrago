@@ -1,6 +1,7 @@
 # Web framework
 fastapi>=0.110.0
 uvicorn>=0.27.0
+python-multipart>=0.0.9  # parseo de formularios (webhook WhatsApp)
 
 # Base de datos y ORM
 sqlalchemy>=2.0.0
