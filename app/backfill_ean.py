@@ -95,7 +95,7 @@ def backfill(clave, pausa=None, limite=None, cache=None, cache_path=ean_cache.RU
         flush=True,
     )
 
-    procesados = con_ean = bloqueos_seguidos = 0
+    procesados = con_ean = bloqueos_seguidos = fallidos = 0
 
     for slug in pendientes:
         try:
@@ -120,6 +120,14 @@ def backfill(clave, pausa=None, limite=None, cache=None, cache_path=ean_cache.RU
             )
             time.sleep(espera)
             continue
+        except Exception as exc:
+            # Red defensiva: ningun error inesperado de un producto puede tumbar
+            # una corrida de horas. Se saltea ese slug (no se cachea, para que la
+            # proxima corrida lo reintente) y se sigue.
+            fallidos += 1
+            if fallidos <= 5:
+                print(f"  error en '{slug}', se saltea: {type(exc).__name__}: {str(exc)[:70]}", flush=True)
+            continue
 
         bloqueos_seguidos = 0
         # se cachea incluso el "" (sin EAN) para no volver a preguntarlo nunca
@@ -141,7 +149,8 @@ def backfill(clave, pausa=None, limite=None, cache=None, cache_path=ean_cache.RU
     ean_cache.guardar(cache, cache_path)
     entradas, total_con_ean = ean_cache.total(cache)
     print(
-        f"[{cadena}] listo. Esta corrida: {procesados} consultados, {con_ean} con EAN. "
+        f"[{cadena}] listo. Esta corrida: {procesados} consultados, {con_ean} con EAN"
+        f"{f', {fallidos} saltados por error' if fallidos else ''}. "
         f"Caché total: {entradas} slugs, {total_con_ean} con EAN.",
         flush=True,
     )
@@ -153,7 +162,8 @@ def _parse_args(argv):
         print("Uso: python -m app.backfill_ean <jumbo|unimarc|all> [--pausa S] [--limite N]")
         raise SystemExit(1)
     claves = list(FUENTES) if argv[0] == "all" else [argv[0]]
-    pausa, limite = 0.5, None
+    # pausa=None -> cada cadena usa la suya (FUENTES); --pausa la sobrescribe
+    pausa, limite = None, None
     i = 1
     while i < len(argv):
         if argv[i] == "--pausa" and i + 1 < len(argv):

@@ -114,7 +114,10 @@ def _pedir_json(req, intentos=5):
                 return json.loads(resp.read().decode("utf-8", errors="replace"))
         except urllib.error.HTTPError as exc:
             ultimo = exc
-            if exc.code in (429, 403, 503):
+            # 5xx son errores transitorios del servidor del retailer, igual que
+            # el throttling: se reintentan. Un 500 suelto no puede tumbar un
+            # backfill de horas (ya paso: mato la corrida de Unimarc a los 8.605).
+            if exc.code in (429, 403, 500, 502, 503, 504):
                 if intento == intentos:
                     break
                 time.sleep(min(60, 5 * 2 ** (intento - 1)))
