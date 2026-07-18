@@ -119,7 +119,13 @@ Plan de datos (orden de palanca):
    TAMBIÉN encontrado 17-07-2026**: `GET bff-unimarc-ecommerce.unimarc.cl/catalog/product/search/by-slug/<slug>`
    con headers `channel:UNIMARC/source:web/version:1.0.0` (sin auth) → `products[0].item.ean`.
    Contrato en [ean-unimarc.md](ean-unimarc.md). **Las 3 cadenas tienen fuente de EAN** (Líder de
-   la URL, Jumbo y Unimarc del BFF por slug). **Módulo de captura hecho 17-07-2026**:
+   la URL, Jumbo y Unimarc del BFF por slug).
+   **FIX CRÍTICO 17-07-2026 en `extraer_ean_lider`**: la URL de Líder trae `00` + los 12 dígitos
+   de datos del EAN-13 SIN el dígito verificador; la versión vieja sólo quitaba ceros y devolvía
+   EANs de 12 dígitos que NO casaban con Jumbo/Unimarc (rompía el match de Líder en silencio).
+   Ahora se reconstruye el check digit (`ean13_check_digit`) → 90% quedan en 13 dígitos y casan
+   (verificado cross-cadena: Leche Colun Descremada 200ml = `7802920009636` en las 3). **Requiere
+   re-`combinar` + `reconstruir`** para repoblar los EAN buenos de Líder. **Módulo de captura hecho 17-07-2026**:
    `app/ean_fetch.py` (funciones puras + `fetch_ean_jumbo`/`fetch_ean_unimarc` con backoff y
    headers de navegador — Unimarc bloquea 403 sin User-Agent/Origin) y `app/backfill_ean.py`
    (backfill resumible por CSV, con checkpoints y anti-bloqueo). Verificado en vivo (4 EAN reales

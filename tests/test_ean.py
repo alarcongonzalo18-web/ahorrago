@@ -9,12 +9,21 @@ from app.url_utils import extraer_ean_lider
 
 
 def test_extraer_ean_lider_desde_url_real():
+    # el id de 14 dígitos = "00" + 12 dígitos de datos; se reconstruye el
+    # dígito verificador para obtener el EAN-13 real (que casa con Jumbo/Unimarc)
     url = "https://super.lider.cl/ip/leches-colacion/leche-sin-lactosa/00780292000814?channable=06660b69640030"
-    assert extraer_ean_lider(url) == "780292000814"
+    assert extraer_ean_lider(url) == "7802920008141"
 
 
 def test_extraer_ean_lider_sin_query():
-    assert extraer_ean_lider("https://super.lider.cl/ip/leche/slug/00780292000814") == "780292000814"
+    assert extraer_ean_lider("https://super.lider.cl/ip/leche/slug/00780292000814") == "7802920008141"
+
+
+def test_extraer_ean_lider_casa_con_jumbo_unimarc():
+    # producto real: la Leche Colun Descremada Sin Lactosa 200 ml da 7802920009636
+    # tanto en Lider (reconstruido) como en Jumbo y Unimarc (EAN directo del BFF)
+    url = "https://super.lider.cl/ip/leche/leche-descremada-sin-lactosa/00780292000963?x=1"
+    assert extraer_ean_lider(url) == "7802920009636"
 
 
 def test_extraer_ean_lider_casos_invalidos():
