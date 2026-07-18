@@ -15,7 +15,8 @@ if (-not (Test-Path $Bat)) {
 #
 # Por que estos horarios:
 #  - Lider y Jumbo son los de mas publico -> van en la ventana mas profunda de bajo trafico.
-#  - Unimarc tiene menos publico -> tolera el horario mas temprano.
+#  - Unimarc y Tottus tienen menos publico -> toleran los horarios mas tempranos.
+#  - Tottus va primero ademas porque es el mas rapido (urllib puro, sin navegador).
 #  - Cada tarea corre su scraper + combinar + reconstruir, asi la base queda publicada
 #    despues de cada cadena (no hay que esperar a que terminen las tres).
 #
@@ -24,6 +25,7 @@ if (-not (Test-Path $Bat)) {
 # Ojo: si una corrida se pasa de su ventana, la siguiente se saltea por el lock
 # (MultipleInstances IgnoreNew) y se recupera con StartWhenAvailable.
 $Tareas = @(
+    @{ Nombre = "AhorraGo - Actualizar Tottus";  Cadena = "tottus";  Hora = "21:00" }
     @{ Nombre = "AhorraGo - Actualizar Unimarc"; Cadena = "unimarc"; Hora = "22:30" }
     @{ Nombre = "AhorraGo - Actualizar Jumbo";   Cadena = "jumbo";   Hora = "00:00" }
     @{ Nombre = "AhorraGo - Actualizar Lider";   Cadena = "lider";   Hora = "02:00" }
@@ -37,7 +39,7 @@ $Tareas = @(
 # Corre backfill + publica a la base (--sin-scrape), sin pedirle nada extra a los
 # retailers en el segundo paso.
 $BatEan = Join-Path $Root "backfill-ean.bat"
-$TareaEan = @{ Nombre = "AhorraGo - EAN (Jumbo y Unimarc)"; Args = "all"; Hora = "03:00" }
+$TareaEan = @{ Nombre = "AhorraGo - EAN"; Args = "all"; Hora = "03:00" }
 
 # WakeToRun: despierta el equipo si esta suspendido (no sirve si esta apagado del
 #   todo; ver la nota de "equipo apagado" en app/docs/estado-y-handoff.md).
@@ -89,10 +91,11 @@ if (Test-Path $BatEan) {
 }
 
 # La tarea unica anterior ya no aplica: se elimina para que no corra en paralelo.
-$vieja = Get-ScheduledTask -TaskName "AhorraGo - Actualizar productos" -ErrorAction SilentlyContinue
-if ($vieja) {
-    Unregister-ScheduledTask -TaskName "AhorraGo - Actualizar productos" -Confirm:$false
-    Write-Host "Tarea antigua unificada eliminada (quedaba duplicando el trabajo)."
+foreach ($obsoleta in @("AhorraGo - Actualizar productos", "AhorraGo - EAN (Jumbo y Unimarc)")) {
+    if (Get-ScheduledTask -TaskName $obsoleta -ErrorAction SilentlyContinue) {
+        Unregister-ScheduledTask -TaskName $obsoleta -Confirm:$false
+        Write-Host "Tarea obsoleta eliminada: $obsoleta"
+    }
 }
 
 Write-Host ""

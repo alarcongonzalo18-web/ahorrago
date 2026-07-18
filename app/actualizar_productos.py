@@ -43,18 +43,21 @@ RAW_FILES = {
     "Líder": DATA / "lider_real.csv",
     "Jumbo": DATA / "jumbo_real.csv",
     "Unimarc": DATA / "unimarc_real.csv",
+    "Tottus": DATA / "tottus_real.csv",
 }
 
-STEPS = [
-    ("Scraper Líder", [sys.executable, "-m", "app.scraper_lider"]),
-    ("Scraper Jumbo", [sys.executable, "-m", "app.scraper_jumbo_real"]),
-    ("Scraper Unimarc", [sys.executable, "-m", "app.scraper_unimarc"]),
-    ("Combinar CSV", [sys.executable, "-m", "app.combinar_supermercados"]),
-    ("Reconstruir base", [sys.executable, "-m", "app.reconstruir_base"]),
-]
+# Cadena -> paso de su scraper. Con nombre y no por indice: antes combinar y
+# reconstruir se referenciaban como STEPS[3]/STEPS[4], asi que sumar una cadena
+# rompia el pipeline en silencio.
+SCRAPERS = {
+    "lider": ("Scraper Líder", [sys.executable, "-m", "app.scraper_lider"]),
+    "jumbo": ("Scraper Jumbo", [sys.executable, "-m", "app.scraper_jumbo_real"]),
+    "unimarc": ("Scraper Unimarc", [sys.executable, "-m", "app.scraper_unimarc"]),
+    "tottus": ("Scraper Tottus", [sys.executable, "-m", "app.scraper_tottus"]),
+}
 
-# Nombre de cadena -> indice de su scraper en STEPS, para las corridas parciales.
-SCRAPERS = {"lider": 0, "jumbo": 1, "unimarc": 2}
+PASO_COMBINAR = ("Combinar CSV", [sys.executable, "-m", "app.combinar_supermercados"])
+PASO_RECONSTRUIR = ("Reconstruir base", [sys.executable, "-m", "app.reconstruir_base"])
 
 
 class Logger:
@@ -197,13 +200,13 @@ def parsear_args(argv):
                 f"Cadena(s) desconocida(s): {', '.join(desconocidas)}. "
                 f"Validas: {', '.join(SCRAPERS)}"
             )
-        return [SCRAPERS[c] for c in pedidas]
+        return pedidas
 
-    return list(SCRAPERS.values())
+    return list(SCRAPERS)
 
 
 def main(argv=None):
-    indices_scrapers = parsear_args(argv if argv is not None else sys.argv[1:])
+    cadenas = parsear_args(argv if argv is not None else sys.argv[1:])
     LOGS.mkdir(exist_ok=True)
     BACKUPS.mkdir(exist_ok=True)
     run_id = timestamp()
@@ -221,9 +224,8 @@ def main(argv=None):
             raise RuntimeError("Ya hay una actualización de productos en curso. Se cancela esta ejecución.")
 
         logger.write(f"Inicio actualización: {datetime.now().isoformat(timespec='seconds')}")
-        if indices_scrapers:
-            nombres = ", ".join(STEPS[i][0] for i in indices_scrapers)
-            logger.write(f"Scrapers a correr: {nombres}")
+        if cadenas:
+            logger.write("Scrapers a correr: " + ", ".join(SCRAPERS[c][0] for c in cadenas))
         else:
             logger.write("Sin scrape: solo combinar + reconstruir (datos ya en disco).")
 
@@ -232,13 +234,13 @@ def main(argv=None):
         for path in RAW_FILES.values():
             respaldar_archivo(path, backup_dir, logger)
 
-        for indice in indices_scrapers:
-            ejecutar(*STEPS[indice], logger)
+        for cadena in cadenas:
+            ejecutar(*SCRAPERS[cadena], logger)
 
         validar_raw(logger)
-        ejecutar(*STEPS[3], logger)
+        ejecutar(*PASO_COMBINAR, logger)
         validar_csv_final(logger)
-        ejecutar(*STEPS[4], logger)
+        ejecutar(*PASO_RECONSTRUIR, logger)
         validar_base(logger)
 
         logger.write("")

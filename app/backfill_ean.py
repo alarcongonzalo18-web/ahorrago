@@ -25,8 +25,10 @@ from app import ean_cache
 from app.ean_fetch import (
     BloqueoError,
     fetch_ean_jumbo,
+    fetch_ean_tottus,
     fetch_ean_unimarc,
     slug_jumbo,
+    slug_tottus,
     slug_unimarc,
 )
 
@@ -46,6 +48,14 @@ FUENTES = {
         "fetch": fetch_ean_unimarc,
         # Unimarc aguanto 6.400 seguidos sin quejarse.
         "pausa": 0.3,
+    },
+    "tottus": {
+        "cadena": "Tottus",
+        "path": Path("data/tottus_real.csv"),
+        "slug": slug_tottus,
+        "fetch": fetch_ean_tottus,
+        # Sin medir todavia cuanto aguanta: se arranca conservador.
+        "pausa": 1.0,
     },
 }
 

@@ -1,8 +1,11 @@
 from app.ean_fetch import (
     ean_desde_respuesta_jumbo,
+    ean_desde_respuesta_tottus,
     ean_desde_respuesta_unimarc,
+    extraer_next_data,
     normalizar_ean,
     slug_jumbo,
+    slug_tottus,
     slug_unimarc,
 )
 
@@ -50,3 +53,39 @@ def test_ean_desde_respuesta_unimarc():
     assert ean_desde_respuesta_unimarc({"products": []}) == ""
     assert ean_desde_respuesta_unimarc({"products": [{"item": {}}]}) == ""
     assert ean_desde_respuesta_unimarc(None) == ""
+
+
+def test_slug_tottus():
+    u = "https://www.tottus.cl/tottus-cl/articulo/112737597/leche-natural-colun-st-1-lt"
+    assert slug_tottus(u) == "/tottus-cl/articulo/112737597/leche-natural-colun-st-1-lt"
+    # con query o fragmento se corta ahi
+    assert slug_tottus(u + "?utm=x") == "/tottus-cl/articulo/112737597/leche-natural-colun-st-1-lt"
+    # urls que no son de articulo
+    assert slug_tottus("https://www.tottus.cl/tottus-cl/buscar?Ntt=leche") == ""
+    assert slug_tottus("") == ""
+
+
+def test_extraer_next_data():
+    html = '<html><body><script id="__NEXT_DATA__" type="application/json">{"a":1}</script></body></html>'
+    assert extraer_next_data(html) == {"a": 1}
+    assert extraer_next_data("<html>sin next data</html>") is None
+    # JSON roto no revienta
+    assert extraer_next_data('<script id="__NEXT_DATA__">{roto</script>') is None
+    assert extraer_next_data("") is None
+
+
+def test_ean_desde_respuesta_tottus():
+    # el EAN vive en variants[].okayToShopBarcodes (el nombre no dice "ean")
+    data = {"props": {"pageProps": {"productData": {
+        "variants": [{"okayToShopBarcodes": ["7802920777542"]}]
+    }}}}
+    assert ean_desde_respuesta_tottus(data) == "7802920777542"
+    # sin codigos / sin variantes / vacio
+    assert ean_desde_respuesta_tottus({"props": {"pageProps": {"productData": {"variants": [{}]}}}}) == ""
+    assert ean_desde_respuesta_tottus({"props": {"pageProps": {}}}) == ""
+    assert ean_desde_respuesta_tottus(None) == ""
+    # primera variante sin codigo, segunda con codigo
+    data2 = {"props": {"pageProps": {"productData": {"variants": [
+        {"okayToShopBarcodes": []}, {"okayToShopBarcodes": ["7801234567890"]},
+    ]}}}}
+    assert ean_desde_respuesta_tottus(data2) == "7801234567890"

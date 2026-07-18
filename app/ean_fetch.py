@@ -42,6 +42,11 @@ UNIMARC_BYSLUG_URL = (
     "https://bff-unimarc-ecommerce.unimarc.cl/catalog/product/search/by-slug/{slug}"
 )
 
+# --- Tottus ---
+# La ficha es HTML con los datos embebidos en __NEXT_DATA__ (Next.js). El EAN vive
+# en variants[].okayToShopBarcodes (el nombre no menciona "ean"; ver docs/tottus.md).
+TOTTUS_BASE = "https://www.tottus.cl"
+
 # El WAF de Unimarc rechaza (403) requests sin User-Agent/Origin de navegador.
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -93,6 +98,39 @@ def ean_desde_respuesta_unimarc(data):
         ean = normalizar_ean((producto.get("item") or {}).get("ean"))
         if ean:
             return ean
+    return ""
+
+
+def slug_tottus(url):
+    """De una URL de Tottus deja el path del articulo (clave de cache).
+
+    `https://www.tottus.cl/tottus-cl/articulo/112737597/leche-...` ->
+    `/tottus-cl/articulo/112737597/leche-...`
+    """
+    m = re.search(r"tottus\.cl(/tottus-cl/articulo/[^?#\s]+)", url or "")
+    return m.group(1) if m else ""
+
+
+def extraer_next_data(html):
+    """El JSON embebido de Next.js (`__NEXT_DATA__`), o None."""
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html or "", re.S)
+    if not m:
+        return None
+    try:
+        return json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return None
+
+
+def ean_desde_respuesta_tottus(data):
+    """Extrae el EAN del __NEXT_DATA__ de una ficha de Tottus."""
+    pagina = ((data or {}).get("props") or {}).get("pageProps") or {}
+    producto = pagina.get("productData") or {}
+    for variante in producto.get("variants") or []:
+        for codigo in variante.get("okayToShopBarcodes") or []:
+            ean = normalizar_ean(codigo)
+            if ean:
+                return ean
     return ""
 
 
@@ -161,6 +199,51 @@ def fetch_ean_jumbo(slug):
         },
     )
     return ean_desde_respuesta_jumbo(_pedir_json(req))
+
+
+def _pedir_texto(req, intentos=5):
+    """Como _pedir_json pero devuelve el cuerpo crudo (para HTML)."""
+    ultimo = None
+    for intento in range(1, intentos + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            ultimo = exc
+            if exc.code in (429, 403, 500, 502, 503, 504):
+                if intento == intentos:
+                    break
+                time.sleep(min(60, 5 * 2 ** (intento - 1)))
+                continue
+            if exc.code in (404, 410, 422):
+                return None
+            raise
+        except (
+            TimeoutError,
+            ConnectionError,
+            http.client.HTTPException,
+            urllib.error.URLError,
+        ) as exc:
+            ultimo = exc
+            if intento == intentos:
+                break
+            time.sleep(min(30, 3 * intento))
+    raise BloqueoError(f"fallo tras {intentos} intentos: {ultimo}")
+
+
+def fetch_ean_tottus(slug):
+    """Devuelve el EAN de un producto de Tottus por el path de su ficha."""
+    if not slug:
+        return ""
+    url = slug if slug.startswith("http") else TOTTUS_BASE + slug
+    req = urllib.request.Request(
+        url,
+        headers={
+            "Accept": "text/html,application/xhtml+xml",
+            "User-Agent": USER_AGENT,
+        },
+    )
+    return ean_desde_respuesta_tottus(extraer_next_data(_pedir_texto(req)))
 
 
 def fetch_ean_unimarc(slug):

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from app import ean_cache
 from app.category_validator import is_valid_row
-from app.ean_fetch import slug_jumbo, slug_unimarc
+from app.ean_fetch import slug_jumbo, slug_tottus, slug_unimarc
 from app.url_utils import extraer_ean_lider
 
 
@@ -15,12 +15,14 @@ OUTPUT = Path("data/productos_supermercados.csv")
 SLUG_POR_CADENA = {
     "Jumbo": slug_jumbo,
     "Unimarc": slug_unimarc,
+    "Tottus": slug_tottus,
 }
 
 FUENTES = [
     ("data/lider_real.csv", "Líder"),
     ("data/jumbo_real.csv", "Jumbo"),
     ("data/unimarc_real.csv", "Unimarc"),
+    ("data/tottus_real.csv", "Tottus"),
 ]
 
 MARCAS = [
