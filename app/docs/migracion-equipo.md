@@ -61,6 +61,50 @@ Selenium Manager solo).
 4. **Apagar las tareas en el equipo viejo** con `.\pausar-actualizacion-productos.ps1`, o los
    dos equipos van a scrapear en paralelo contra los mismos retailers (más riesgo de bloqueo).
 
+## Trabajar en un equipo y actualizar en otro
+
+Es el esquema recomendado (y el mismo que hará falta al desplegar): **este PC para
+desarrollar, el otro sólo para correr el pipeline**.
+
+### Regla de oro: el actualizador es el dueño de los datos
+
+| | Equipo de trabajo | Equipo actualizador |
+|---|---|---|
+| Código | se edita acá | llega por `git pull` |
+| Tareas programadas | **pausadas** | activas |
+| `supercheck.db` | copia para probar, **descartable** | **la buena** (acumula el historial) |
+| `data/ean_cache.json` | vía git | vía git |
+
+El **historial de precios sólo acumula donde corre el pipeline**. Por eso la base del
+actualizador es la autoritativa y la de acá es una foto para desarrollar.
+
+### ⚠️ La dirección de la copia importa
+
+Copiar la base **actualizador → trabajo**: bien, cuando quieras probar con datos frescos.
+
+Copiar **trabajo → actualizador**: **NUNCA**. Pisarías la base buena con una vieja y
+**borrarías los días de historial** acumulados. La historia no se puede re-scrapear.
+
+### Flujo del día a día
+
+```powershell
+# Acá (trabajo): programar como siempre
+git add . ; git commit ; git push
+.\pausar-actualizacion-productos.ps1     # una sola vez, para no scrapear en paralelo
+
+# En el actualizador: tomar los cambios de codigo
+git pull
+
+# Cuando quieras probar acá con datos frescos: traer la base del actualizador
+#   copiar supercheck.db  (actualizador -> este equipo)
+```
+
+**No corras el pipeline en los dos equipos**: golpearían a los mismos retailers en paralelo,
+duplicando el riesgo de bloqueo justo cuando Jumbo ya nos throttlea.
+
+Para desarrollar no hacen falta datos frescos: una base de hace días alcanza. Traé la del
+actualizador sólo cuando quieras ver precios reales del día.
+
 ## Chequeo de que no se perdió nada
 
 ```powershell
