@@ -119,9 +119,14 @@ Plan de datos (orden de palanca):
    TAMBIÉN encontrado 17-07-2026**: `GET bff-unimarc-ecommerce.unimarc.cl/catalog/product/search/by-slug/<slug>`
    con headers `channel:UNIMARC/source:web/version:1.0.0` (sin auth) → `products[0].item.ean`.
    Contrato en [ean-unimarc.md](ean-unimarc.md). **Las 3 cadenas tienen fuente de EAN** (Líder de
-   la URL, Jumbo y Unimarc del BFF por slug). **Falta**: escribir la captura/backfill de EAN en
-   los scrapers de Jumbo y Unimarc (por slug, pausado), re-`reconstruir` → medir con
-   `reporte_cobertura` cuánto sube el % comparable.
+   la URL, Jumbo y Unimarc del BFF por slug). **Módulo de captura hecho 17-07-2026**:
+   `app/ean_fetch.py` (funciones puras + `fetch_ean_jumbo`/`fetch_ean_unimarc` con backoff y
+   headers de navegador — Unimarc bloquea 403 sin User-Agent/Origin) y `app/backfill_ean.py`
+   (backfill resumible por CSV, con checkpoints y anti-bloqueo). Verificado en vivo (4 EAN reales
+   OK) y mini-corrida end-to-end (Jumbo 3/3, Unimarc 2/3; el mismo EAN 7802920777542 salió en
+   Jumbo y Unimarc → prueba del match cross-cadena). 12 tests. **Falta (lo corre Gonzalo por el
+   rate-limit)**: `python -m app.backfill_ean all` pausado sobre los ~31k productos → `combinar`
+   → `reconstruir` → `reporte_cobertura` para medir cuánto sube el % comparable.
 2. ~~Profundizar Líder~~ — **hecho 17-07-2026** (commit `62e883c`), doble fix:
    (a) la paginación confiaba en los links del widget del sitio, que
    muestra solo algunos (3 de ~20 páginas reales) — ahora avanza
