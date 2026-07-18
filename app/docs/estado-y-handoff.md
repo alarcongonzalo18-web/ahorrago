@@ -76,6 +76,21 @@ navegador, interceptar `fetch`/XHR y mirar qué API hidrata el listado.
 `Precio` no tiene fecha ni histórico → sin esto **las alertas por media son imposibles**
 (ver [roadmap-producto.md](roadmap-producto.md)) y no se puede medir deriva de precios.
 
+### 5. Agregar Tottus (4ª cadena)
+Sumar **Tottus** (tottus.falabella.com) al comparador. Cada cadena nueva sube la comparabilidad
+y la credibilidad del "dónde comprar más barato" — hoy solo se comparan 3.
+
+Requiere lo mismo que ya se resolvió para las otras: (a) encontrar de dónde salen los productos
+y precios (abrir el sitio, interceptar `fetch`/XHR y ver qué API hidrata el listado — así se
+resolvieron Jumbo y Unimarc), (b) **encontrar su fuente de EAN**, que es lo que la hace
+comparable de verdad, (c) escribir `app/scraper_tottus.py` siguiendo el patrón de los otros
+(mismas columnas de CSV, `is_valid_row`, backoff y guard anti-regresión), y (d) sumarla a
+`FUENTES` en `combinar_supermercados.py`, a `RAW_FILES`/`STEPS` en `actualizar_productos.py`,
+y al filtro de supermercados del frontend.
+
+Ojo: Tottus es del grupo Falabella, así que su stack probablemente no se parezca ni al de
+Cencosud (Jumbo) ni al de SMU (Unimarc) — hay que investigarlo de cero.
+
 ## Arquitectura: por qué hay BD y no consulta 100% en vivo
 
 Se evaluó consultar las cadenas en vivo por búsqueda (técnicamente posible: sus BFF responden).
