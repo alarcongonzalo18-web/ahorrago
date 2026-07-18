@@ -36,11 +36,19 @@ haga el backfill de EAN de Jumbo/Unimarc.
 
 **Tres tareas programadas de Windows, una por cadena, escalonadas de noche:**
 
-| Tarea | Cadena | Hora |
+| Tarea | Qué hace | Hora |
 |---|---|---|
-| `AhorraGo - Actualizar Unimarc` | Unimarc | **22:30** |
-| `AhorraGo - Actualizar Jumbo` | Jumbo | **00:00** |
-| `AhorraGo - Actualizar Lider` | Líder | **02:00** |
+| `AhorraGo - Actualizar Unimarc` | scrape Unimarc + publicar | **22:30** |
+| `AhorraGo - Actualizar Jumbo` | scrape Jumbo + publicar | **00:00** |
+| `AhorraGo - Actualizar Lider` | scrape Líder + publicar | **02:00** |
+| `AhorraGo - EAN (Jumbo y Unimarc)` | backfill de EAN + publicar | **03:00** |
+
+La tarea de **EAN va última, después de los scrapes**, para trabajar sobre los CSV recién
+actualizados y capturar también los productos nuevos de la noche. Es **incremental**: consulta
+sólo los slugs que falten, drena lo que la cuota de Jumbo permita (~344 por ventana) y retoma
+donde quedó. Así el backlog de Jumbo (~23.800) se agota solo en varias noches y después queda
+como mantenimiento de productos nuevos. Corre `backfill-ean.bat all`, que hace backfill y luego
+publica con `--sin-scrape` (sin pedirle nada extra a los retailers).
 
 Cada una corre `actualizar-productos.bat --solo <cadena>` → scrape de esa cadena + combinar +
 reconstruir, así la base queda publicada después de cada una (no hay que esperar a las tres).
