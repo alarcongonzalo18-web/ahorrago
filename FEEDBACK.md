@@ -3,14 +3,13 @@
 ## Sesión 1 — 15/05/2026, primer beta tester
 
 ### Bugs prioritarios (críticos)
-- [ ] **A. Sin feedback visual al buscar en móvil:** El usuario hace click 
-  en "Buscar" pero los resultados quedan abajo del fold sin scroll automático 
-  ni loader. El usuario cree que el botón no funciona.
-- [ ] **C. Vista tabla sin link a producto:** En modo tabla solo aparece 
-  "agregar al carro", falta "ver producto" como en vista tarjetas.
-- [ ] **D. Estado UI inconsistente:** Los contadores "X productos comparables" 
-  y "Tu ahorro estimado" no se actualizan al agregar/borrar productos del 
-  carro.
+- [x] **A. Sin feedback visual al buscar en móvil** — RESUELTO. `buscar()` muestra
+  "Buscando mejores precios..." y hace `scrollIntoView` a los resultados.
+- [x] **C. Vista tabla sin link a producto** — RESUELTO. `renderFilaTabla` incluye el
+  botón "Ver" cuando el producto tiene URL.
+- [x] **D. Estado UI inconsistente** — RESUELTO 17-07-2026 eliminando la grilla de stats
+  de la home (era la que no se actualizaba). El total y la recomendación ahora salen de
+  la calculadora oficial del backend.
 
 ### Mejoras UX (medio)
 - [ ] **B. Sin autocomplete/sugerencias** al escribir en el buscador
@@ -18,8 +17,9 @@
   con subcategorías: leches, quesos, yogurts, etc.
 
 ### Diseño (baja)
-- [ ] **F. "Estado de datos" visible al usuario final:** Debería ser solo 
-  vista admin
+- [x] **F. "Estado de datos" visible al usuario final** — RESUELTO 18-07-2026. El panel
+  queda oculto y se abre con `?admin=1` (se recuerda en localStorage). Ahí vive también
+  el aviso de salud del pipeline, que es información de operador, no de usuario.
 - [ ] **G. Layout header móvil:** Considerar formato similar a Jumbo (marca 
   + selector menú)
 
@@ -45,3 +45,13 @@ Capturadas en los logs de uvicorn (IP 192.168.100.69)
 - Considerar autocomplete con marcas populares
 - Investigar resultados de "Trencito" — ¿la búsqueda no agrupa bien las galletas Trencito?
 - Confirmar que tildes y caracteres especiales se manejen bien
+
+
+## Estado al 18-07-2026
+
+Resueltos: **A, C, D, F**. Pendientes: **B** (autocomplete de marcas), **E** (agrupar
+categorías en madre/subcategorías) y **G** (layout del header móvil).
+
+Nota: A y C ya estaban arreglados en el código pero seguían figurando como abiertos acá.
+Un archivo de feedback desactualizado hace perder tiempo revisando bugs que no existen;
+conviene marcarlos al resolverlos.

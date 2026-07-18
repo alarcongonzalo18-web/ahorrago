@@ -51,7 +51,7 @@ def get_db():
 
 @app.get("/")
 def inicio():
-    return {"mensaje": "SuperCheck funcionando ðŸš€"}
+    return {"servicio": "AhorraGo", "estado": "ok"}
 
 
 @app.get("/buscar/{texto}")

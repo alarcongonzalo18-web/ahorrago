@@ -351,53 +351,12 @@ body.dark .brand-icon {
     font-weight: 900;
 }
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-    margin: 14px 0 28px;
-}
 
-.summary-card,
-.panel-card,
-.product-card,
-.utility-card {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    box-shadow: var(--shadow);
-}
 
-.summary-card {
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 16px;
-    align-items: center;
-    min-height: 118px;
-    padding: 22px;
-    border-radius: 12px;
-}
 
-.summary-card:first-child { background: linear-gradient(135deg, var(--success-soft), var(--panel)); }
 
-.summary-icon {
-    display: grid;
-    width: 52px;
-    height: 52px;
-    place-items: center;
-    border-radius: 999px;
-    background: var(--brand-soft);
-    color: var(--brand);
-}
 
-.summary-label,
-.summary-foot,
-.text-muted-app { color: var(--muted); }
 
-.summary-value {
-    margin-top: 4px;
-    font-size: 28px;
-    font-weight: 900;
-}
 
 .content-grid {
     display: grid;
@@ -1350,8 +1309,7 @@ body.dark .brand-icon {
 body.dark .icon-btn,
 body.dark .search-input-wrap,
 body.dark .action-chip,
-body.dark .summary-card,
-body.dark .panel-card,
+body.dark body.dark .panel-card,
 body.dark .product-card,
 body.dark .utility-card,
 body.dark .category-card,
@@ -1478,16 +1436,6 @@ body.dark .buy-btn:hover {
 
 .icon-btn,
 .search-input-wrap,
-.summary-card,
-.panel-card,
-.product-card,
-.utility-card,
-.category-card,
-.subcategory-panel,
-.results-context {
-    border-color: var(--line);
-    box-shadow: 0 10px 28px rgba(18, 33, 38, 0.07);
-}
 
 .hero-search {
     max-width: 980px;
@@ -1534,30 +1482,10 @@ body.dark .buy-btn:hover {
     color: var(--brand);
 }
 
-.summary-grid {
-    gap: 16px;
-    margin: 10px 0 22px;
-}
 
-.summary-card {
-    min-height: 96px;
-    padding: 18px;
-    border-radius: 12px;
-}
 
-.summary-icon {
-    width: 44px;
-    height: 44px;
-}
 
-.summary-label,
-.summary-foot {
-    font-size: 14px;
-}
 
-.summary-value {
-    font-size: 24px;
-}
 
 .content-grid {
     grid-template-columns: 230px minmax(0, 1fr) 286px;
@@ -1864,13 +1792,6 @@ body.dark .buy-btn:hover {
 @media (max-width: 1024px) {
     .topbar,
     .home-intro,
-    .summary-grid,
-    .content-grid,
-    .side-panel,
-    .product-card,
-    .utility-grid {
-        grid-template-columns: 1fr;
-    }
 
     .topbar {
         display: grid;
@@ -1904,7 +1825,6 @@ body.dark .buy-btn:hover {
 
     .icon-btn { width: 36px; height: 36px; }
     .home-intro { display: none; }
-    .summary-grid { display: none; }
     .panel-card:has(#estadoDatos),
     .panel-card:has(.reason-list) { display: none; }
     .home-title { font-size: 28px; }
@@ -1917,8 +1837,6 @@ body.dark .buy-btn:hover {
         min-height: 44px;
     }
     .hero-search { grid-template-columns: 1fr; }
-    .summary-card { min-height: 96px; padding: 18px; }
-    .summary-value { font-size: 24px; }
     .prices-table { border-left: 0; border-top: 1px solid var(--line); }
     .categories-hero,
     .category-grid,
@@ -1975,17 +1893,6 @@ body.dark .buy-btn:hover {
     }
     .action-chip {
         flex-basis: 100%;
-    }
-    .summary-grid {
-        gap: 10px;
-    }
-    .summary-card {
-        grid-template-columns: 42px 1fr;
-        gap: 12px;
-    }
-    .summary-icon {
-        width: 42px;
-        height: 42px;
     }
     .start-action {
         min-height: 140px;
@@ -2307,7 +2214,7 @@ body.dark .buy-btn:hover {
                     <p id="historialTexto" class="text-muted-app mb-0">Busca un producto para comenzar</p>
                 </article>
 
-                <article class="panel-card">
+                <article id="panelEstadoDatos" class="panel-card" hidden>
                     <h2 class="panel-title"><i data-lucide="database"></i> Estado de datos</h2>
                     <div id="estadoDatos" class="data-status">
                         <div class="text-muted-app">Cargando estado...</div>
@@ -3767,8 +3674,24 @@ async function cargarEstadoDatos() {
         // cualquier edición o git. Sin log de actualización, no inventamos frescura.
         renderFrescura(estado.ultimo_log ? estado.ultimo_log.fecha : null);
         renderSaludPipeline(estado.pipeline);
+        const panel = document.getElementById("panelEstadoDatos");
+        if (panel) panel.hidden = !esAdmin();
     } catch (error) {
         contenedor.innerHTML = "<div class='text-muted-app'>No se pudo cargar el estado.</div>";
+    }
+}
+
+// El panel "Estado de datos" es vista de ADMIN: muestra conteos, rutas y la salud
+// del pipeline, que no le sirven al usuario final (lo reporto el beta tester).
+// Se abre con ?admin=1 y queda recordado, asi no hay que ponerlo cada vez.
+function esAdmin() {
+    try {
+        if (new URLSearchParams(location.search).get("admin") === "1") {
+            localStorage.setItem("ahorrago-admin", "1");
+        }
+        return localStorage.getItem("ahorrago-admin") === "1";
+    } catch (error) {
+        return false;
     }
 }
 
