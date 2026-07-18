@@ -47,6 +47,33 @@ automática si falla**, y log con timestamp (que alimenta el badge de frescura d
 .\actualizar-productos.bat                # correr a mano ahora
 ```
 
+### ⚠️ Dependencia del equipo encendido
+
+La tarea programada **sólo corre si el PC está prendido**. Mitigaciones ya configuradas:
+
+- **`WakeToRun`**: despierta el equipo si está **suspendido o hibernando** (el equipo soporta
+  S3 e hibernación). Requiere que el plan de energía permita *temporizadores de reactivación*:
+  Panel de control → Opciones de energía → Cambiar la configuración del plan → Cambiar la
+  configuración avanzada → Suspender → **Permitir temporizadores de reactivación → Habilitar**.
+- **`StartWhenAvailable`**: si el equipo estaba **apagado del todo**, la corrida se ejecuta
+  apenas se prende, para no quedarse un día entero sin actualizar.
+
+**Lo que NO resuelve**: nada puede despertar un equipo apagado por completo. Y si se prende
+a las 10:00, el scrape de ~1.5 h corre en horario de alto tráfico — justo lo que se quiso evitar
+al mover la tarea a las 03:00.
+
+**Solución real (pendiente de decidir): mover el pipeline a algo siempre encendido.**
+
+| Opción | Costo | Pros / contras |
+|---|---|---|
+| **Mini PC / Raspberry Pi / notebook viejo en casa** | ~$50-100 una vez, ~5 W | ✅ **Mantiene la IP residencial**, que es lo crítico. Es la solución clásica para este problema. El pipeline es Python portable; Selenium corre con chromium |
+| **VPS / nube** | ~$5/mes | ❌ **IP de datacenter**: los retailers bloquean mucho más fácil (Jumbo ya nos throttleó desde IP residencial). Necesitaría proxies residenciales = más costo y fragilidad |
+| **Dejar el PC suspendido** | $0 | Funciona con lo ya configurado, pero depende del hábito de no apagarlo |
+
+**Cuando se despliegue la app**, el patrón correcto es el split: la **app** (backend + frontend)
+en la nube, y el **scraper en casa** desde IP residencial, subiendo los datos. No mover el
+scraping a la nube.
+
 ## 🔴 Lo más importante pendiente
 
 ### ~~1. Caché de EAN~~ — HECHO 17-07-2026

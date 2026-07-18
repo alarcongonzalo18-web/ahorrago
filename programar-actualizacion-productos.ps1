@@ -24,11 +24,16 @@ $Action = New-ScheduledTaskAction -Execute $Bat -WorkingDirectory $Root
 $Triggers = @(
     New-ScheduledTaskTrigger -Daily -At 03:00
 )
+# WakeToRun: despierta el equipo si esta suspendido (no sirve si esta apagado del
+#   todo; ver la nota de "equipo apagado" en app/docs/estado-y-handoff.md).
+# StartWhenAvailable: si igual se salto el horario (equipo apagado), corre apenas
+#   se pueda al prenderlo, para no quedarse un dia entero sin actualizar.
 $Settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries `
     -DontStopIfGoingOnBatteries `
     -MultipleInstances IgnoreNew `
     -StartWhenAvailable `
+    -WakeToRun `
     -ExecutionTimeLimit (New-TimeSpan -Hours 4)
 
 Register-ScheduledTask `
