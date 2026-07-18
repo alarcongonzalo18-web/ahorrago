@@ -36,17 +36,27 @@ FUENTES = {
         "path": Path("data/jumbo_real.csv"),
         "slug": slug_jumbo,
         "fetch": fetch_ean_jumbo,
+        # Jumbo tiene una cuota dura: con pausa 0.3 s corta a los ~344 requests.
+        "pausa": 1.5,
     },
     "unimarc": {
         "cadena": "Unimarc",
         "path": Path("data/unimarc_real.csv"),
         "slug": slug_unimarc,
         "fetch": fetch_ean_unimarc,
+        # Unimarc aguanto 6.400 seguidos sin quejarse.
+        "pausa": 0.3,
     },
 }
 
 CHECKPOINT_CADA = 100
-MAX_BLOQUEOS_SEGUIDOS = 5
+
+# Un bloqueo casi siempre es una ventana de cuota, no un ban: conviene esperar
+# de verdad y seguir, no abortar a los 30 s. Se escala hasta 15 min; si tras
+# todos esos reintentos sigue bloqueando, ahi si se aborta (y como la cache es
+# incremental, la proxima corrida retoma donde quedo).
+ESPERAS_BLOQUEO = [60, 120, 300, 600, 900]
+MAX_BLOQUEOS_SEGUIDOS = len(ESPERAS_BLOQUEO) + 1
 
 
 def slugs_del_csv(path, extraer_slug):
@@ -63,9 +73,12 @@ def slugs_del_csv(path, extraer_slug):
     return slugs
 
 
-def backfill(clave, pausa=0.5, limite=None, cache=None, cache_path=ean_cache.RUTA):
+def backfill(clave, pausa=None, limite=None, cache=None, cache_path=ean_cache.RUTA):
     cfg = FUENTES[clave]
     cadena = cfg["cadena"]
+    # cada cadena tolera un ritmo distinto; --pausa lo puede sobrescribir
+    if pausa is None:
+        pausa = cfg.get("pausa", 0.5)
     propia = cache is None
     if propia:
         cache = ean_cache.cargar(cache_path)
@@ -89,11 +102,23 @@ def backfill(clave, pausa=0.5, limite=None, cache=None, cache_path=ean_cache.RUT
             ean = cfg["fetch"](slug)
         except BloqueoError as exc:
             bloqueos_seguidos += 1
-            print(f"  bloqueo ({bloqueos_seguidos}/{MAX_BLOQUEOS_SEGUIDOS}): {exc}")
             if bloqueos_seguidos >= MAX_BLOQUEOS_SEGUIDOS:
-                print("  demasiados bloqueos seguidos: guardo y aborto. Reintentá más tarde.")
+                ean_cache.guardar(cache, cache_path)
+                print(
+                    f"  sigue bloqueando tras {bloqueos_seguidos} esperas: guardo y corto. "
+                    "La próxima corrida retoma acá.",
+                    flush=True,
+                )
                 break
-            time.sleep(30)
+            espera = ESPERAS_BLOQUEO[bloqueos_seguidos - 1]
+            # guardar antes de la espera larga: si matan el proceso, no se pierde
+            ean_cache.guardar(cache, cache_path)
+            print(
+                f"  bloqueo ({bloqueos_seguidos}/{MAX_BLOQUEOS_SEGUIDOS}) tras {procesados} ok. "
+                f"Esperando {espera}s (cuota del retailer): {str(exc)[:60]}",
+                flush=True,
+            )
+            time.sleep(espera)
             continue
 
         bloqueos_seguidos = 0
