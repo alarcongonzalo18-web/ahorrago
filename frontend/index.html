@@ -2593,6 +2593,46 @@ function cambiarVista(nombre) {
     if (nombre === "alertas") renderAlertas();
     if (nombre === "categorias") renderCategorias();
     renderIcons();
+    sincronizarHash(nombre);
+}
+
+// --- Estado en la URL -------------------------------------------------------
+// Sin esto, F5 devolvia siempre a la portada y se perdian la vista y la busqueda.
+// Reflejarlo en el hash arregla el refresh, hace andar atras/adelante del
+// navegador, y de paso deja las busquedas compartibles por link.
+
+let _restaurando = false;   // evita que restaurar dispare otro cambio de hash
+
+function sincronizarHash(vista) {
+    if (_restaurando) return;
+    const texto = (document.getElementById("busqueda")?.value || "").trim();
+    const hash = "#" + vista + (vista === "inicio" && texto ? "?q=" + encodeURIComponent(texto) : "");
+    if (location.hash !== hash) history.replaceState(null, "", hash);
+}
+
+function vistasValidas() {
+    return [...document.querySelectorAll(".view")].map(v => v.id.replace("view-", ""));
+}
+
+function restaurarDesdeHash() {
+    const crudo = (location.hash || "").replace(/^#/, "");
+    if (!crudo) return false;
+
+    const [vista, query = ""] = crudo.split("?");
+    if (!vistasValidas().includes(vista)) return false;   // hash raro: portada
+
+    _restaurando = true;
+    try {
+        cambiarVista(vista);
+        const m = /(?:^|&)q=([^&]*)/.exec(query);
+        if (vista === "inicio" && m && m[1]) {
+            document.getElementById("busqueda").value = decodeURIComponent(m[1]);
+            buscar();          // async: repuebla los resultados solo
+        }
+    } finally {
+        _restaurando = false;
+    }
+    return true;
 }
 
 function volverInicio() {
@@ -3623,6 +3663,8 @@ function limpiarBusqueda() {
     actualizarDashboard(carritoCompra, 0);
     renderCompraOptima();
     actualizarEstadoCarrito();
+    // el input ya quedo vacio: sacar el ?q= viejo de la URL
+    sincronizarHash("inicio");
 }
 
 function limpiarFiltros(render = true) {
@@ -3813,6 +3855,15 @@ window.addEventListener("load", () => {
     document.getElementById("resultados").innerHTML = renderEstadoInicial();
     renderIcons();
     document.getElementById("contadorTexto").textContent = "0 resultados";
+
+    // Si la URL trae vista/busqueda (F5, link compartido), se restaura eso en
+    // vez de mandar siempre a la portada.
+    restaurarDesdeHash();
+});
+
+// Atras/adelante del navegador entre vistas.
+window.addEventListener("hashchange", () => {
+    if (!restaurarDesdeHash()) cambiarVista("landing");
 });
 </script>
 </body>
