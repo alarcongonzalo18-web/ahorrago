@@ -121,3 +121,17 @@ def test_resumen_compra_matchea_por_ean_aunque_el_texto_difiera():
         assert data["productos_sin_comparacion"] == []
     finally:
         app.dependency_overrides.clear()
+
+
+def test_url_producto_especifica_cubre_las_4_cadenas():
+    """Una cadena nueva sin su patron aca queda 'Sin link' en la app (paso con Tottus)."""
+    from app.main import es_url_producto_especifica
+
+    assert es_url_producto_especifica("https://www.jumbo.cl/leche-colun/p")
+    assert es_url_producto_especifica("https://www.unimarc.cl/product/leche-colun")
+    assert es_url_producto_especifica("https://super.lider.cl/ip/leche/x/00780292000963")
+    assert es_url_producto_especifica("https://www.tottus.cl/tottus-cl/articulo/113152870/leche-tottus")
+    # las de busqueda no sirven como link al producto
+    assert not es_url_producto_especifica("https://www.tottus.cl/tottus-cl/buscar?Ntt=leche")
+    assert not es_url_producto_especifica("https://www.unimarc.cl/search?q=leche")
+    assert not es_url_producto_especifica("")

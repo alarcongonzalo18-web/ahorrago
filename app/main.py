@@ -205,15 +205,23 @@ def es_url_generica(url):
     return "/busqueda" in url or "/search" in url
 
 
+# Patrones de URL de ficha de producto, por cadena. Es lista blanca a proposito
+# (una URL de busqueda no sirve como link al producto), pero OJO: al sumar una
+# cadena hay que agregar su patron aca o sus productos quedan "Sin link" en la
+# app aunque la URL este bien guardada. Paso con Tottus.
+PATRONES_URL_PRODUCTO = (
+    "/p",                   # Jumbo:   /<slug>/p
+    "/product/",            # Unimarc: /product/<slug>
+    "super.lider.cl/ip/",   # Lider:   /ip/<categoria>/<slug>/<gtin>
+    "/articulo/",           # Tottus:  /tottus-cl/articulo/<id>/<slug>
+)
+
+
 def es_url_producto_especifica(url):
     if es_url_generica(url):
         return False
 
-    return (
-        "/p" in url or
-        "/product/" in url or
-        "super.lider.cl/ip/" in url
-    )
+    return any(patron in url for patron in PATRONES_URL_PRODUCTO)
 
 
 def valor_precio_por_nombre(nombre_producto, precio_normal, precio_oferta):
