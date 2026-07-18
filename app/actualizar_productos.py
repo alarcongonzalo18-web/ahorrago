@@ -1,3 +1,24 @@
+"""Orquestador de la actualizacion de productos.
+
+Corre los scrapers, combina los CSV y reconstruye la base, con toda la
+maquinaria de seguridad: lock anti-concurrencia, backups previos, validaciones
+por cadena y de la base, y restauracion automatica si algo falla.
+
+Uso:
+    python -m app.actualizar_productos                    # todo (lo que corre la tarea programada)
+    python -m app.actualizar_productos --solo lider       # una sola cadena
+    python -m app.actualizar_productos --solo jumbo,unimarc
+    python -m app.actualizar_productos --sin-scrape       # solo combinar + reconstruir
+
+`--solo` sirve cuando una cadena fallo o cambio su sitio y no hace falta
+re-scrapear las otras (una corrida completa tarda ~1.5 h).
+`--sin-scrape` es para publicar a la base datos que ya estan en disco, por
+ejemplo despues de correr `app.backfill_ean` (que solo toca la cache de EAN).
+
+En todos los casos combinar y reconstruir corren igual: son rapidos y son los
+que publican el cambio.
+"""
+
 import csv
 import os
 import shutil
@@ -31,6 +52,9 @@ STEPS = [
     ("Combinar CSV", [sys.executable, "-m", "app.combinar_supermercados"]),
     ("Reconstruir base", [sys.executable, "-m", "app.reconstruir_base"]),
 ]
+
+# Nombre de cadena -> indice de su scraper en STEPS, para las corridas parciales.
+SCRAPERS = {"lider": 0, "jumbo": 1, "unimarc": 2}
 
 
 class Logger:
@@ -144,7 +168,35 @@ def restaurar_db(backup_db, logger):
         logger.write(f"Base restaurada desde backup: {backup_db}")
 
 
-def main():
+def parsear_args(argv):
+    """--solo <cadenas>  |  --sin-scrape  |  sin flags = todo.
+
+    Devuelve la lista de scrapers a correr (puede ser vacia). El combinar y el
+    reconstruir corren SIEMPRE: son rapidos y son los que publican el cambio a
+    la base, sirva el dato de un scrape nuevo o de la cache de EAN.
+    """
+    argv = list(argv or [])
+    if "--sin-scrape" in argv:
+        return []
+
+    if "--solo" in argv:
+        i = argv.index("--solo")
+        if i + 1 >= len(argv):
+            raise SystemExit(f"--solo necesita una cadena: {', '.join(SCRAPERS)}")
+        pedidas = [c.strip().lower() for c in argv[i + 1].split(",") if c.strip()]
+        desconocidas = [c for c in pedidas if c not in SCRAPERS]
+        if desconocidas:
+            raise SystemExit(
+                f"Cadena(s) desconocida(s): {', '.join(desconocidas)}. "
+                f"Validas: {', '.join(SCRAPERS)}"
+            )
+        return [SCRAPERS[c] for c in pedidas]
+
+    return list(SCRAPERS.values())
+
+
+def main(argv=None):
+    indices_scrapers = parsear_args(argv if argv is not None else sys.argv[1:])
     LOGS.mkdir(exist_ok=True)
     BACKUPS.mkdir(exist_ok=True)
     run_id = timestamp()
@@ -162,14 +214,19 @@ def main():
             raise RuntimeError("Ya hay una actualización de productos en curso. Se cancela esta ejecución.")
 
         logger.write(f"Inicio actualización: {datetime.now().isoformat(timespec='seconds')}")
+        if indices_scrapers:
+            nombres = ", ".join(STEPS[i][0] for i in indices_scrapers)
+            logger.write(f"Scrapers a correr: {nombres}")
+        else:
+            logger.write("Sin scrape: solo combinar + reconstruir (datos ya en disco).")
 
         backup_db = respaldar_archivo(DB, backup_dir, logger)
         respaldar_archivo(CSV_FINAL, backup_dir, logger)
         for path in RAW_FILES.values():
             respaldar_archivo(path, backup_dir, logger)
 
-        for nombre, comando in STEPS[:3]:
-            ejecutar(nombre, comando, logger)
+        for indice in indices_scrapers:
+            ejecutar(*STEPS[indice], logger)
 
         validar_raw(logger)
         ejecutar(*STEPS[3], logger)

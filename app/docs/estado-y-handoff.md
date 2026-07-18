@@ -44,8 +44,32 @@ automática si falla**, y log con timestamp (que alimenta el badge de frescura d
 ```powershell
 .\programar-actualizacion-productos.ps1   # activar / reprogramar
 .\pausar-actualizacion-productos.ps1      # pausar
-.\actualizar-productos.bat                # correr a mano ahora
+.\actualizar-productos.bat                # correr a mano ahora (todo)
 ```
+
+### Actualizaciones individuales
+
+No hace falta re-scrapear las 3 cadenas (~1.5 h) para arreglar una. El orquestador
+acepta corridas parciales **conservando toda la maquinaria de seguridad** (lock,
+backups, validaciones, restauración automática):
+
+```bash
+python -m app.actualizar_productos                     # todo (lo que corre la tarea)
+python -m app.actualizar_productos --solo lider        # una sola cadena
+python -m app.actualizar_productos --solo jumbo,unimarc
+python -m app.actualizar_productos --sin-scrape        # solo combinar + reconstruir
+```
+
+- **`--solo <cadena>`**: cuando una cadena falló, cambió su sitio, o se le tocó el scraper.
+  Las otras conservan sus datos en disco (la validación igual exige que las 3 tengan datos).
+- **`--sin-scrape`**: publica a la base datos que ya están en disco, sin pedirle nada a los
+  retailers. Es el caso después de `app.backfill_ean` (que solo toca la caché de EAN) o tras
+  editar un CSV a mano.
+
+Combinar y reconstruir corren **siempre**: son rápidos y son los que publican el cambio.
+
+> No usar los scrapers sueltos (`python -m app.scraper_lider`) salvo para depurar: saltean el
+> lock, los backups y las validaciones, y dejan la base sin actualizar.
 
 ### ⚠️ Dependencia del equipo encendido
 
