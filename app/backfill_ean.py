@@ -78,7 +78,8 @@ def backfill(clave, pausa=0.5, limite=None, cache=None, cache_path=ean_cache.RUT
     pendientes = [s for s in slugs if not ean_cache.tiene(cache, cadena, s)]
     print(
         f"[{cadena}] {len(slugs)} slugs en el CSV, {len(slugs) - len(pendientes)} ya en caché. "
-        f"Pendientes: {len(pendientes)}"
+        f"Pendientes: {len(pendientes)}",
+        flush=True,
     )
 
     procesados = con_ean = bloqueos_seguidos = 0
@@ -104,7 +105,7 @@ def backfill(clave, pausa=0.5, limite=None, cache=None, cache_path=ean_cache.RUT
 
         if procesados % CHECKPOINT_CADA == 0:
             ean_cache.guardar(cache, cache_path)
-            print(f"  checkpoint: {procesados}/{len(pendientes)}, {con_ean} con EAN")
+            print(f"  checkpoint: {procesados}/{len(pendientes)}, {con_ean} con EAN", flush=True)
 
         if limite and procesados >= limite:
             print(f"  límite {limite} alcanzado.")
@@ -116,7 +117,8 @@ def backfill(clave, pausa=0.5, limite=None, cache=None, cache_path=ean_cache.RUT
     entradas, total_con_ean = ean_cache.total(cache)
     print(
         f"[{cadena}] listo. Esta corrida: {procesados} consultados, {con_ean} con EAN. "
-        f"Caché total: {entradas} slugs, {total_con_ean} con EAN."
+        f"Caché total: {entradas} slugs, {total_con_ean} con EAN.",
+        flush=True,
     )
     return cache
 
