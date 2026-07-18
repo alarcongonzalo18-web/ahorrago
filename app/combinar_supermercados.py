@@ -2,11 +2,20 @@ import csv
 import re
 from pathlib import Path
 
+from app import ean_cache
 from app.category_validator import is_valid_row
+from app.ean_fetch import slug_jumbo, slug_unimarc
 from app.url_utils import extraer_ean_lider
 
 
 OUTPUT = Path("data/productos_supermercados.csv")
+
+# Cadenas cuyo EAN vive en la cache (poblada por app.backfill_ean). Lider no
+# esta aca porque su EAN se reconstruye de la URL, sin consultar nada.
+SLUG_POR_CADENA = {
+    "Jumbo": slug_jumbo,
+    "Unimarc": slug_unimarc,
+}
 
 FUENTES = [
     ("data/lider_real.csv", "Líder"),
@@ -99,11 +108,12 @@ def detectar_tipo(nombre):
     return "general"
 
 
-def leer_filas(path, supermercado):
+def leer_filas(path, supermercado, cache=None):
     if not path.exists():
         print(f"No existe {path}, se omite.")
         return []
 
+    cache = cache if cache is not None else {}
     filas = []
 
     with open(path, newline="", encoding="utf-8-sig") as archivo:
@@ -131,10 +141,17 @@ def leer_filas(path, supermercado):
                 "producto_base": "",
                 "ean": (fila.get("ean") or "").strip(),
             }
-            if not fila_normalizada["ean"] and supermercado == "Líder":
-                # retroactivo: las URLs de Lider traen el GTIN aunque el CSV
-                # crudo venga de una corrida anterior sin columna ean
-                fila_normalizada["ean"] = extraer_ean_lider(fila_normalizada["url"])
+            if not fila_normalizada["ean"]:
+                if supermercado == "Líder":
+                    # retroactivo: las URLs de Lider traen el GTIN aunque el CSV
+                    # crudo venga de una corrida anterior sin columna ean
+                    fila_normalizada["ean"] = extraer_ean_lider(fila_normalizada["url"])
+                elif supermercado in SLUG_POR_CADENA:
+                    # Jumbo/Unimarc: el EAN sale de la cache (app.backfill_ean),
+                    # que sobrevive a los re-scrapes que reescriben el CSV.
+                    slug = SLUG_POR_CADENA[supermercado](fila_normalizada["url"])
+                    if slug:
+                        fila_normalizada["ean"] = ean_cache.obtener(cache, supermercado, slug)
             if not is_valid_row(fila_normalizada, f"combinar_supermercados:{supermercado}", Path("reports") / "pipeline_category_rejections.csv"):
                 continue
             filas.append(fila_normalizada)
@@ -146,9 +163,10 @@ def combinar():
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     filas = []
     vistos = set()
+    cache = ean_cache.cargar()
 
     for archivo, supermercado in FUENTES:
-        for fila in leer_filas(Path(archivo), supermercado):
+        for fila in leer_filas(Path(archivo), supermercado, cache):
             key = (
                 fila["supermercado"],
                 fila["categoria"],
@@ -187,7 +205,8 @@ def combinar():
         writer.writeheader()
         writer.writerows(filas)
 
-    print(f"CSV combinado actualizado: {len(filas)} productos")
+    con_ean = sum(1 for f in filas if f["ean"])
+    print(f"CSV combinado actualizado: {len(filas)} productos ({con_ean} con EAN)")
 
 
 if __name__ == "__main__":

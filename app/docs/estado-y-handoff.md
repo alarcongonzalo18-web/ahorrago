@@ -49,21 +49,25 @@ automática si falla**, y log con timestamp (que alimenta el badge de frescura d
 
 ## 🔴 Lo más importante pendiente
 
-### 1. Caché de EAN antes del backfill (BLOQUEANTE)
-`app/backfill_ean.py` escribe el `ean` en los CSV por-cadena, **pero los scrapers los reescriben
-con `ean=""` en cada corrida** → la automatización destruiría el backfill (33k requests tirados).
+### ~~1. Caché de EAN~~ — HECHO 17-07-2026
+`app/ean_cache.py` guarda `data/ean_cache.json` (`{cadena: {slug: ean}}`), que **sobrevive a los
+re-scrapes**. `app/backfill_ean.py` la puebla consultando sólo slugs nuevos (incremental), y
+`combinar_supermercados` enriquece cada fila desde ahí. Un valor `""` significa "ya se consultó y
+no tiene EAN", para no volver a pedirlo nunca.
 
-**Antes de correr el backfill hay que**: persistir una caché `slug -> ean` (ej. `data/ean_cache.json`)
-que sobreviva a los re-scrapes, hacer que el backfill solo consulte slugs nuevos (incremental), y
-enriquecer desde la caché en `combinar_supermercados` (o como paso del pipeline post-scrape).
-El EAN de un producto no cambia nunca → la caché es válida para siempre.
+Verificado end-to-end con datos reales: la misma leche Colun quedó unificada bajo
+`producto_base = 'ean:7802920777542'` en las 3 cadenas, con nombres que el matching textual jamás
+habría unido ("Leche Entera Natural Caja 1 L 1 L Colun" / "Leche Colun Entera 1 L" /
+"Leche entera natural colun sin tapa 1 l").
 
-*(Líder no tiene este problema: su EAN se reconstruye de la URL en cada `combinar`.)*
+### 2. Backfill de EAN de Jumbo + Unimarc ← SIGUIENTE
+Ya está desbloqueado: `python -m app.backfill_ean all` (pausado, resumible, incremental).
+Faltan ~33k slugs (24.139 Jumbo + 9.247 Unimarc); a ~0.5 s cada uno son varias horas, pero se
+puede cortar y retomar cuando sea (la caché se guarda cada 100). Es **lo que hace saltar la
+comparabilidad**. Contratos en [ean-jumbo.md](ean-jumbo.md) y [ean-unimarc.md](ean-unimarc.md).
 
-### 2. Backfill de EAN de Jumbo + Unimarc
-Una vez exista la caché: `python -m app.backfill_ean all` (pausado, resumible, ~33k requests).
-Es lo que hace saltar la comparabilidad. Contratos ya resueltos y verificados en
-[ean-jumbo.md](ean-jumbo.md) y [ean-unimarc.md](ean-unimarc.md).
+> Nota: conviene correrlo cuando la tarea programada no esté por dispararse (06:00 / 18:00),
+> para no competir por ancho de banda ni sumar carga a los retailers al mismo tiempo.
 
 ### 3. Profundidad de Líder en 9 categorías
 `/v/salsas`, `/v/aceites`, `/v/pescados`, `/v/congelados`, `/v/mermeladas`, `/v/detergentes`,
