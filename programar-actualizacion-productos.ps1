@@ -8,13 +8,21 @@ if (-not (Test-Path $Bat)) {
 }
 
 $Action = New-ScheduledTaskAction -Execute $Bat -WorkingDirectory $Root
-# 2 veces al dia. Antes eran 4 (06/12/18/00), pero una corrida completa tarda
-# ~1.5 h: 4 al dia son ~6 h diarias de scraping sobre los retailers, lo que
-# dispara throttling (y el guard anti-regresion termina bloqueando la
-# actualizacion). Los precios de supermercado no cambian tantas veces al dia.
+# UNA corrida diaria a las 03:00, la ventana de menor trafico tanto para nuestra
+# app como para los retailers.
+#
+# Historia de este horario: eran 4 al dia (06/12/18/00) -> se bajo a 2 (06/18)
+# porque una corrida tarda ~1.5 h y 4 eran ~6 h diarias de scraping -> ahora 1 a
+# las 03:00. Motivos:
+#  - 18:00 era hora punta del e-commerce de supermercado: les sumabamos carga
+#    cuando mas ocupados estaban, y es cuando mas probable es que throttleen
+#    (Jumbo ya nos corto a los ~344 requests en un backfill diurno).
+#  - Los precios de supermercado cambian a lo sumo una vez al dia; correr mas
+#    seguido no da frescura real, solo mas riesgo de bloqueo.
+#  - Menos corridas y mas limpias = datos mas completos (menos cortes del guard).
+# Termina ~04:30, asi que el badge de frescura siempre dice "hoy".
 $Triggers = @(
-    New-ScheduledTaskTrigger -Daily -At 06:00
-    New-ScheduledTaskTrigger -Daily -At 18:00
+    New-ScheduledTaskTrigger -Daily -At 03:00
 )
 $Settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries `
@@ -28,10 +36,10 @@ Register-ScheduledTask `
     -Action $Action `
     -Trigger $Triggers `
     -Settings $Settings `
-    -Description "Actualiza productos AhorraGo 2 veces al dia: 06:00 y 18:00." `
+    -Description "Actualiza productos AhorraGo 1 vez al dia a las 03:00 (ventana de menor trafico)." `
     -Force | Out-Null
 
 Write-Host "Tarea programada ACTIVADA: $TaskName"
-Write-Host "Horarios: 06:00 y 18:00"
+Write-Host "Horario: 03:00 diario (ventana de menor trafico)"
 Write-Host "Para desactivar: .\pausar-actualizacion-productos.ps1"
 Write-Host "Para probar ahora: .\actualizar-productos.bat"

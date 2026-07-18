@@ -69,6 +69,16 @@ propio**, no correr su misma carrera.
 4. **Cobertura fuera de la RM.** Carriapp solo opera en Región Metropolitana. Regiones está
    desatendido.
 
+## Decisiones tomadas sobre este research (18-07-2026)
+
+- **Nombre y colores: hay que cambiarlos, pero NO ahora.** Gonzalo lo da por aceptado (el nombre
+  choca con AhorraPo/AhorraMax y la paleta es la genérica del rubro), pero la prioridad actual es
+  **que todo funcione bien y esté controlado**. No abrir el tema de marca hasta que los datos y
+  el pipeline estén sólidos. No renombrar por iniciativa propia.
+- **Horario del pipeline movido a las 03:00** (era 06:00/18:00). 18:00 es hora punta del
+  e-commerce de supermercado: sumaba carga cuando los retailers están más ocupados y es cuando
+  más probable es que throttleen. Ver `programar-actualizacion-productos.ps1`.
+
 ## Consecuencias para el roadmap
 
 - **Tottus deja de ser opcional**: la competencia ya lo tiene. (Ya anotado como pendiente.)
