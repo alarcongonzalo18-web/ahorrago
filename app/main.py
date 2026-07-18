@@ -12,6 +12,7 @@ from .database import Base, engine, SessionLocal
 from . import chat, models, schemas, services
 from .matching import candidato_compatible
 from .matching_diagnostics import resumen_matching
+from .estado_pipeline import diagnostico as diagnostico_pipeline
 from .normalizacion import (
     calcular_precio_referencia,
     clave_comparable,
@@ -191,6 +192,9 @@ def estado_datos(db: Session = Depends(get_db)):
         "base_actualizada": datetime.fromtimestamp(db_path.stat().st_mtime).isoformat(timespec="seconds") if db_path.exists() else None,
         "csv_actualizado": datetime.fromtimestamp(csv_path.stat().st_mtime).isoformat(timespec="seconds") if csv_path.exists() else None,
         "ultimo_log": ultimo_log,
+        # Salud de las corridas automaticas: sin esto un fallo nocturno queda
+        # enterrado en el log y nadie se entera.
+        "pipeline": diagnostico_pipeline(),
     }
     return Response(
         content=json.dumps(estado, ensure_ascii=True),

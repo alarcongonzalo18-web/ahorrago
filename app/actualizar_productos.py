@@ -30,6 +30,8 @@ from pathlib import Path
 
 from filelock import FileLock, Timeout
 
+from app.estado_pipeline import registrar as registrar_estado
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -205,8 +207,19 @@ def parsear_args(argv):
     return list(SCRAPERS)
 
 
+def nombre_tarea(cadenas):
+    """Etiqueta con la que se registra la salud de esta corrida."""
+    if not cadenas:
+        return "publicar"
+    if len(cadenas) == len(SCRAPERS):
+        return "pipeline-completo"
+    return "+".join(cadenas)
+
+
 def main(argv=None):
     cadenas = parsear_args(argv if argv is not None else sys.argv[1:])
+    tarea = nombre_tarea(cadenas)
+    inicio_corrida = datetime.now()
     LOGS.mkdir(exist_ok=True)
     BACKUPS.mkdir(exist_ok=True)
     run_id = timestamp()
@@ -246,11 +259,22 @@ def main(argv=None):
         logger.write("")
         logger.write(f"Actualización completa: {datetime.now().isoformat(timespec='seconds')}")
         logger.write(f"Log: {log_path}")
+        registrar_estado(
+            tarea, True,
+            detalle=f"OK ({', '.join(cadenas) if cadenas else 'sin scrape'})",
+            duracion_min=(datetime.now() - inicio_corrida).total_seconds() / 60,
+        )
         return 0
     except Exception as exc:
         logger.write("")
         logger.write(f"ERROR: {exc}")
         restaurar_db(backup_db, logger)
+        # Se registra el fallo para que se vea en la app y en `python -m
+        # app.estado_pipeline`, en vez de quedar enterrado en el log.
+        registrar_estado(
+            tarea, False, detalle=str(exc),
+            duracion_min=(datetime.now() - inicio_corrida).total_seconds() / 60,
+        )
         return 1
     finally:
         if lock.is_locked:

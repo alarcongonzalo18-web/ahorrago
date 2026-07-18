@@ -22,6 +22,7 @@ import time
 from pathlib import Path
 
 from app import ean_cache
+from app.estado_pipeline import registrar as registrar_estado
 from app.ean_fetch import (
     BloqueoError,
     fetch_ean_jumbo,
@@ -188,8 +189,19 @@ def _parse_args(argv):
 def main(argv=None):
     claves, pausa, limite = _parse_args(argv if argv is not None else sys.argv[1:])
     cache = ean_cache.cargar()
-    for clave in claves:
-        cache = backfill(clave, pausa=pausa, limite=limite, cache=cache)
+    # Se registra la salud: este proceso ya se cayo dos veces en silencio (un
+    # HTTP 500 tumbaba la corrida) y nadie se entero hasta revisar el log.
+    try:
+        for clave in claves:
+            cache = backfill(clave, pausa=pausa, limite=limite, cache=cache)
+    except Exception as exc:
+        registrar_estado("ean-backfill", False, detalle=f"{type(exc).__name__}: {exc}")
+        raise
+    entradas, con_ean = ean_cache.total(cache)
+    registrar_estado(
+        "ean-backfill", True,
+        detalle=f"cache: {entradas} slugs, {con_ean} con EAN",
+    )
 
 
 if __name__ == "__main__":

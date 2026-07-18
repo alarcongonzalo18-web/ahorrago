@@ -243,6 +243,19 @@ body.dark .brand-icon {
     border-radius: 999px;
     background: currentColor;
 }
+.pipeline-alerta {
+    margin-top: 10px;
+    padding: 9px 11px;
+    border-radius: 10px;
+    background: rgba(154, 77, 53, 0.14);
+    border: 1px solid var(--action);
+    color: var(--action);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+.pipeline-alerta ul { margin: 6px 0 0; padding-left: 16px; font-weight: 600; }
+
 .frescura.vieja {
     background: rgba(154, 77, 53, 0.14);
     color: var(--action);
@@ -3753,9 +3766,23 @@ async function cargarEstadoDatos() {
         // escribe un log con timestamp). El mtime del CSV/DB no sirve: se resetea con
         // cualquier edición o git. Sin log de actualización, no inventamos frescura.
         renderFrescura(estado.ultimo_log ? estado.ultimo_log.fecha : null);
+        renderSaludPipeline(estado.pipeline);
     } catch (error) {
         contenedor.innerHTML = "<div class='text-muted-app'>No se pudo cargar el estado.</div>";
     }
+}
+
+// Salud de las corridas automaticas. Sin esto, un fallo de madrugada queda
+// enterrado en el log: ya paso que el backfill se cayera dos veces sin que
+// nadie se enterara.
+function renderSaludPipeline(pipeline) {
+    const contenedor = document.getElementById("estadoDatos");
+    if (!contenedor || !pipeline || pipeline.ok || !(pipeline.problemas || []).length) return;
+    const aviso = document.createElement("div");
+    aviso.className = "pipeline-alerta";
+    aviso.innerHTML = "Revisar la actualización automática:<ul>" +
+        pipeline.problemas.map(p => `<li>${escapeHtml(p)}</li>`).join("") + "</ul>";
+    contenedor.appendChild(aviso);
 }
 
 // Señal de frescura visible al usuario: cuántos días tienen los datos (fecha real
