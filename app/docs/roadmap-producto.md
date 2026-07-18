@@ -4,6 +4,17 @@
 > **producto con cuentas y monetización freemium**. Ninguna está implementada todavía.
 > Relacionado: [auditoria-2026-07-17.md](auditoria-2026-07-17.md) · [ahorrago-contexto.md](ahorrago-contexto.md)
 
+## ⚠️ Regla de orden (decisión de Gonzalo, 17-07-2026)
+
+**La membresía es lo ÚLTIMO. Primero que todo funcione bien.**
+
+No se construye monetización hasta que el producto entregue valor real: hoy solo ~4% del
+catálogo es comparable entre cadenas (1.645 grupos). Cobrar antes de arreglar eso es
+quemar usuarios — el que paga y no encuentra sus productos comparables no renueva.
+
+**Antes de cualquier feature de este doc**: caché de EAN → backfill Jumbo/Unimarc →
+comparabilidad arriba → precios confiables. Ver [estado-y-handoff.md](estado-y-handoff.md).
+
 ## 1. Cuentas y monetización (freemium)
 
 La base de todo lo demás: sin usuarios no hay alertas, plan de compra ni membresía.
