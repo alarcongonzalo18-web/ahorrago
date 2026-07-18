@@ -24,13 +24,16 @@
 
 | Cadena | Productos | Precios | EAN |
 |---|---|---|---|
-| Jumbo | 23.726 | frescos ✅ | 0% ⏳ |
+| Jumbo | 23.726 | frescos ✅ | 1% ⏳ (backlog ~23.800) |
 | Líder | 8.260 | frescos ✅ | 100% ✅ |
-| Unimarc | 9.231 | frescos ✅ | 0% ⏳ |
-| **Total** | **41.201** productos / 41.245 precios | | |
+| Unimarc | 9.231 | frescos ✅ | 98% ✅ |
+| Tottus | 8.768 | frescos ✅ | 0% ⏳ (recién sumado) |
+| **Total** | **49.833** productos / 50.058 precios | | |
 
-**Grupos comparables (≥2 cadenas): 1.645** ← *la métrica del negocio*. Sube fuerte cuando se
-haga el backfill de EAN de Jumbo/Unimarc.
+**Grupos comparables (≥2 cadenas): 4.968** ← *la métrica del negocio*.
+Evolución: 1.562 (matching por texto) → 1.645 (fix EAN Líder) → 4.333 (EAN Unimarc) →
+**4.968** (Tottus sumado). Sigue subiendo a medida que la tarea nocturna de EAN drena el
+backlog de Jumbo y llena Tottus.
 
 ## Automatización (ACTIVA)
 
@@ -38,10 +41,11 @@ haga el backfill de EAN de Jumbo/Unimarc.
 
 | Tarea | Qué hace | Hora |
 |---|---|---|
+| `AhorraGo - Actualizar Tottus` | scrape Tottus + publicar | **21:00** |
 | `AhorraGo - Actualizar Unimarc` | scrape Unimarc + publicar | **22:30** |
 | `AhorraGo - Actualizar Jumbo` | scrape Jumbo + publicar | **00:00** |
 | `AhorraGo - Actualizar Lider` | scrape Líder + publicar | **02:00** |
-| `AhorraGo - EAN (Jumbo y Unimarc)` | backfill de EAN + publicar | **03:00** |
+| `AhorraGo - EAN` | backfill de EAN (las 3 cadenas con caché) + publicar | **03:00** |
 
 La tarea de **EAN va última, después de los scrapes**, para trabajar sobre los CSV recién
 actualizados y capturar también los productos nuevos de la noche. Es **incremental**: consulta
@@ -156,9 +160,11 @@ navegador, interceptar `fetch`/XHR y mirar qué API hidrata el listado.
 `Precio` no tiene fecha ni histórico → sin esto **las alertas por media son imposibles**
 (ver [roadmap-producto.md](roadmap-producto.md)) y no se puede medir deriva de precios.
 
-### 5. Agregar Tottus (4ª cadena)
-Sumar **Tottus** (tottus.falabella.com) al comparador. Cada cadena nueva sube la comparabilidad
-y la credibilidad del "dónde comprar más barato" — hoy solo se comparan 3.
+### ~~5. Agregar Tottus~~ — HECHO 18-07-2026
+Integrado: `app/scraper_tottus.py` (urllib puro, sin navegador ni API key), EAN vía
+`okayToShopBarcodes`, y enganchado a backfill, combinar, pipeline (`--solo tottus`) y a la
+agenda nocturna (21:00). Contrato en [tottus.md](tottus.md). **Falta**: sumarlo al filtro de
+supermercados del frontend, y que la tarea de EAN llene su caché (arranca sola a las 03:00).
 
 Requiere lo mismo que ya se resolvió para las otras: (a) encontrar de dónde salen los productos
 y precios (abrir el sitio, interceptar `fetch`/XHR y ver qué API hidrata el listado — así se
