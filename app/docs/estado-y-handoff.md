@@ -1,7 +1,9 @@
 # Estado del proyecto y handoff — AhorraGo
 
 > Corte al 17-07-2026 (fin de sesión larga). Este doc es el punto de entrada para retomar.
-> Índice: [auditoria-2026-07-17.md](auditoria-2026-07-17.md) (qué está mal y el plan por fases) ·
+> Índice: [migracion-equipo.md](migracion-equipo.md) (pasar a otro equipo) ·
+> [camino-a-produccion.md](camino-a-produccion.md) (qué falta para salir) ·
+> [auditoria-2026-07-17.md](auditoria-2026-07-17.md) (qué está mal y el plan por fases) ·
 > [roadmap-producto.md](roadmap-producto.md) (features nuevas) ·
 > [ean-jumbo.md](ean-jumbo.md) / [ean-unimarc.md](ean-unimarc.md) (contratos de EAN) ·
 > [ahorrago-contexto.md](ahorrago-contexto.md) (histórico detallado).
