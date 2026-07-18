@@ -2094,7 +2094,7 @@ body.dark .buy-btn:hover {
                 <div class="vertical-card" onclick="entrarVertical('supermercados')">
                     <div class="vertical-icon"><i data-lucide="shopping-basket" style="width: 48px; height: 48px;"></i></div>
                     <div class="vertical-name">Supermercados</div>
-                    <div class="vertical-desc">Líder, Jumbo, Unimarc y más.</div>
+                    <div class="vertical-desc">Líder, Jumbo, Unimarc y Tottus.</div>
                 </div>
                 
                 <div class="vertical-card disabled" onclick="mostrarToast('Próximamente: Tecnología')">
@@ -2127,7 +2127,7 @@ body.dark .buy-btn:hover {
             <div>
                 <p class="home-kicker">Comparador inteligente</p>
                 <h2 class="home-title">Busca, compara y arma tu compra óptima</h2>
-                <p class="home-subtitle">Precios actualizados de Líder, Jumbo y Unimarc en un solo lugar.</p>
+                <p class="home-subtitle">Precios actualizados de Líder, Jumbo, Unimarc y Tottus en un solo lugar.</p>
                 <p id="frescuraDatos" class="frescura" hidden></p>
             </div>
             <div class="home-actions" aria-label="Acciones principales">
@@ -2230,6 +2230,10 @@ body.dark .buy-btn:hover {
                     <div class="form-check">
                         <input class="form-check-input market-filter" type="checkbox" value="Unimarc" id="unimarc" checked>
                         <label class="form-check-label" for="unimarc">Unimarc</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input market-filter" type="checkbox" value="Tottus" id="tottus" checked>
+                        <label class="form-check-label" for="tottus">Tottus</label>
                     </div>
                 </div>
 
@@ -3394,7 +3398,12 @@ function actualizarEstadoCarrito() {
 }
 
 function calcularTotalesSupermercado(productos) {
-    const mercados = ["Líder", "Jumbo", "Unimarc"];
+    // Las cadenas se derivan de los propios datos. Estaban hardcodeadas y al sumar
+    // Tottus habria quedado fuera del calculo en silencio; asi la proxima cadena
+    // entra sola.
+    const mercados = [...new Set(
+        productos.flatMap(producto => (producto.precios || []).map(p => p.proveedor))
+    )];
 
     return mercados.map(mercado => {
         const items = productos.map(producto => ({

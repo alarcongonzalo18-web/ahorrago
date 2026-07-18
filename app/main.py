@@ -34,6 +34,12 @@ app.add_middleware(
 )
 
 
+# Techo de productos crudos a considerar antes de agrupar. Tiene que ser holgado
+# respecto del limit por pagina: si se corta antes de agrupar, cadenas enteras
+# quedan fuera (paso con Tottus, cuyos ids son los mas altos).
+CANDIDATOS_MAX = 600
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -346,9 +352,14 @@ def buscar_productos(
         return []
     familia_buscada = detectar_familia_busqueda(texto)
 
-    # Filtrar en la BD usando los Ã­ndices (en vez de cargar los 23k productos)
+    # Filtrar en la BD usando los indices (en vez de cargar los 50k productos).
+    #
+    # OJO: el limit/offset NO va aca. Antes se cortaban las filas crudas ordenadas
+    # por id y, como cada cadena se importa en bloque, la ultima quedaba fuera del
+    # corte: al sumar Tottus (ids mas altos) desaparecio entera de los resultados.
+    # Se toma un techo de candidatos, se agrupa, y recien ahi se pagina por GRUPO.
     condiciones = [models.Producto.nombre.ilike(f"%{p}%") for p in palabras]
-    productos = db.query(models.Producto).filter(*condiciones).offset(offset).limit(limit).all()
+    productos = db.query(models.Producto).filter(*condiciones).limit(CANDIDATOS_MAX).all()
     if familia_buscada:
         productos = [p for p in productos
                      if detectar_familia(normalizar_texto(p.nombre)) == familia_buscada]
@@ -459,7 +470,9 @@ def buscar_productos(
             "precios": lista_precios
         })
 
-    return resultado
+    # La paginacion se aplica sobre los grupos ya armados, no sobre las filas
+    # crudas: asi todas las cadenas compiten por aparecer.
+    return resultado[offset:offset + limit]
 
 
 def equivalentes_por_item(db, items):
