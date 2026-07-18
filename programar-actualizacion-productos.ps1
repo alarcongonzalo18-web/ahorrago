@@ -20,9 +20,12 @@ $Action = New-ScheduledTaskAction -Execute $Bat -WorkingDirectory $Root
 #  - Los precios de supermercado cambian a lo sumo una vez al dia; correr mas
 #    seguido no da frescura real, solo mas riesgo de bloqueo.
 #  - Menos corridas y mas limpias = datos mas completos (menos cortes del guard).
-# Termina ~04:30, asi que el badge de frescura siempre dice "hoy".
+# Horario actual: 01:00 (se movio desde 03:00 el 18-07-2026 para poder verificar
+# la primera corrida automatica antes). Ambos estan en la ventana de bajo trafico;
+# si mas adelante conviene, mover de vuelta a 03:00 cambiando esta linea.
+# Termina ~02:30, asi que el badge de frescura siempre dice "hoy".
 $Triggers = @(
-    New-ScheduledTaskTrigger -Daily -At 03:00
+    New-ScheduledTaskTrigger -Daily -At 01:00
 )
 # WakeToRun: despierta el equipo si esta suspendido (no sirve si esta apagado del
 #   todo; ver la nota de "equipo apagado" en app/docs/estado-y-handoff.md).
@@ -41,10 +44,10 @@ Register-ScheduledTask `
     -Action $Action `
     -Trigger $Triggers `
     -Settings $Settings `
-    -Description "Actualiza productos AhorraGo 1 vez al dia a las 03:00 (ventana de menor trafico)." `
+    -Description "Actualiza productos AhorraGo 1 vez al dia a las 01:00 (ventana de menor trafico)." `
     -Force | Out-Null
 
 Write-Host "Tarea programada ACTIVADA: $TaskName"
-Write-Host "Horario: 03:00 diario (ventana de menor trafico)"
+Write-Host "Horario: 01:00 diario (ventana de menor trafico)"
 Write-Host "Para desactivar: .\pausar-actualizacion-productos.ps1"
 Write-Host "Para probar ahora: .\actualizar-productos.bat"
