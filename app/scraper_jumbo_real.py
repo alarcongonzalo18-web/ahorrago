@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import urlencode, quote
 
 from app.category_validator import is_valid_row
+from app.config import cargar_env
 
 BASE_URL = "https://www.jumbo.cl"
 API_URL = "https://ac.cnstrc.com/search/{query}"
@@ -93,11 +94,14 @@ HEADERS = {
 
 
 def obtener_api_key():
+    # En la tarea programada no hay shell que exporte variables: se completa
+    # desde .env (ver app/config.py). Lo ya definido en el entorno tiene prioridad.
+    cargar_env()
     api_key = os.environ.get("JUMBO_API_KEY")
     if not api_key:
         raise RuntimeError(
-            "Falta la variable de entorno JUMBO_API_KEY. "
-            "Configúrala en el entorno antes de ejecutar el scraper Jumbo."
+            "Falta JUMBO_API_KEY. Definila en el entorno o en el archivo .env "
+            "de la raíz del proyecto (ver .env.example)."
         )
     return api_key
 
