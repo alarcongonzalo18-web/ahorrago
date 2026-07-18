@@ -95,6 +95,10 @@ def ejecutar(nombre, comando, logger):
     logger.write(f"== {nombre} ==")
     logger.write(" ".join(str(parte) for parte in comando))
 
+    # Se mide la duracion de cada paso para poder escalonar los horarios de las
+    # cadenas sin que se pisen (ver programar-actualizacion-productos.ps1).
+    inicio = datetime.now()
+
     env = os.environ.copy()
     env["PYTHONUTF8"] = "1"
 
@@ -112,6 +116,9 @@ def ejecutar(nombre, comando, logger):
     salida = proceso.stdout.strip()
     if salida:
         logger.write(salida)
+
+    minutos = (datetime.now() - inicio).total_seconds() / 60
+    logger.write(f"-- {nombre}: {minutos:.1f} min --")
 
     if proceso.returncode != 0:
         raise RuntimeError(f"{nombre} terminó con código {proceso.returncode}")

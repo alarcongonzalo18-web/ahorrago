@@ -16,5 +16,7 @@ if not exist "%PY%" (
 )
 
 cd /d "%ROOT%"
-"%PY%" -m app.actualizar_productos
+rem %* reenvia los argumentos, para poder correr cadenas sueltas:
+rem   actualizar-productos.bat --solo lider
+"%PY%" -m app.actualizar_productos %*
 exit /b %ERRORLEVEL%

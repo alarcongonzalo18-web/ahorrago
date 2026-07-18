@@ -1,12 +1,23 @@
-$TaskName = "AhorraGo - Actualizar productos"
+$Tareas = @(
+    "AhorraGo - Actualizar Unimarc",
+    "AhorraGo - Actualizar Jumbo",
+    "AhorraGo - Actualizar Lider",
+    "AhorraGo - Actualizar productos"   # tarea unica antigua, por si quedo dando vueltas
+)
 
-$tarea = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
-
-if (-not $tarea) {
-    Write-Host "La tarea no existe o ya fue eliminada."
-    exit 0
+$encontradas = 0
+foreach ($nombre in $Tareas) {
+    $tarea = Get-ScheduledTask -TaskName $nombre -ErrorAction SilentlyContinue
+    if ($tarea) {
+        Disable-ScheduledTask -TaskName $nombre | Out-Null
+        Write-Host "Tarea PAUSADA: $nombre"
+        $encontradas++
+    }
 }
 
-Disable-ScheduledTask -TaskName $TaskName | Out-Null
-Write-Host "Tarea PAUSADA: $TaskName"
-Write-Host "Para reactivar: .\programar-actualizacion-productos.ps1"
+if ($encontradas -eq 0) {
+    Write-Host "No hay tareas de AhorraGo registradas."
+} else {
+    Write-Host ""
+    Write-Host "Para reactivar: .\programar-actualizacion-productos.ps1"
+}

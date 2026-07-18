@@ -1,53 +1,67 @@
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Bat = Join-Path $Root "actualizar-productos.bat"
-$TaskName = "AhorraGo - Actualizar productos"
 
 if (-not (Test-Path $Bat)) {
     Write-Error "No existe $Bat"
     exit 1
 }
 
-$Action = New-ScheduledTaskAction -Execute $Bat -WorkingDirectory $Root
-# UNA corrida diaria a las 03:00, la ventana de menor trafico tanto para nuestra
-# app como para los retailers.
+# Horarios ESCALONADOS: una tarea por cadena, en vez de una corrida unica de ~1.5 h.
 #
-# Historia de este horario: eran 4 al dia (06/12/18/00) -> se bajo a 2 (06/18)
-# porque una corrida tarda ~1.5 h y 4 eran ~6 h diarias de scraping -> ahora 1 a
-# las 03:00. Motivos:
-#  - 18:00 era hora punta del e-commerce de supermercado: les sumabamos carga
-#    cuando mas ocupados estaban, y es cuando mas probable es que throttleen
-#    (Jumbo ya nos corto a los ~344 requests en un backfill diurno).
-#  - Los precios de supermercado cambian a lo sumo una vez al dia; correr mas
-#    seguido no da frescura real, solo mas riesgo de bloqueo.
-#  - Menos corridas y mas limpias = datos mas completos (menos cortes del guard).
-# Horario actual: 01:00 (se movio desde 03:00 el 18-07-2026 para poder verificar
-# la primera corrida automatica antes). Ambos estan en la ventana de bajo trafico;
-# si mas adelante conviene, mover de vuelta a 03:00 cambiando esta linea.
-# Termina ~02:30, asi que el badge de frescura siempre dice "hoy".
-$Triggers = @(
-    New-ScheduledTaskTrigger -Daily -At 01:00
+# Por que escalonado:
+#  - Reparte la carga sobre los retailers en vez de 1.5 h de golpe.
+#  - Si una cadena falla, no arrastra a las otras (antes un scraper caido cortaba todo).
+#  - Corridas mas cortas = menos chance de topar la cuota (Jumbo corta a los ~344 requests).
+#
+# Por que estos horarios:
+#  - Lider y Jumbo son los de mas publico -> van en la ventana mas profunda de bajo trafico.
+#  - Unimarc tiene menos publico -> tolera el horario mas temprano.
+#  - Cada tarea corre su scraper + combinar + reconstruir, asi la base queda publicada
+#    despues de cada cadena (no hay que esperar a que terminen las tres).
+#
+# El espaciado (1.5 h) es CONSERVADOR hasta tener duraciones reales: el log ahora
+# mide cada paso ("-- Scraper X: N min --"). Con esos numeros se puede ajustar.
+# Ojo: si una corrida se pasa de su ventana, la siguiente se saltea por el lock
+# (MultipleInstances IgnoreNew) y se recupera con StartWhenAvailable.
+$Tareas = @(
+    @{ Nombre = "AhorraGo - Actualizar Unimarc"; Cadena = "unimarc"; Hora = "22:30" }
+    @{ Nombre = "AhorraGo - Actualizar Jumbo";   Cadena = "jumbo";   Hora = "00:00" }
+    @{ Nombre = "AhorraGo - Actualizar Lider";   Cadena = "lider";   Hora = "02:00" }
 )
+
 # WakeToRun: despierta el equipo si esta suspendido (no sirve si esta apagado del
 #   todo; ver la nota de "equipo apagado" en app/docs/estado-y-handoff.md).
-# StartWhenAvailable: si igual se salto el horario (equipo apagado), corre apenas
-#   se pueda al prenderlo, para no quedarse un dia entero sin actualizar.
+# StartWhenAvailable: si igual se salto el horario, corre apenas se pueda.
 $Settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries `
     -DontStopIfGoingOnBatteries `
     -MultipleInstances IgnoreNew `
     -StartWhenAvailable `
     -WakeToRun `
-    -ExecutionTimeLimit (New-TimeSpan -Hours 4)
+    -ExecutionTimeLimit (New-TimeSpan -Hours 3)
 
-Register-ScheduledTask `
-    -TaskName $TaskName `
-    -Action $Action `
-    -Trigger $Triggers `
-    -Settings $Settings `
-    -Description "Actualiza productos AhorraGo 1 vez al dia a las 01:00 (ventana de menor trafico)." `
-    -Force | Out-Null
+foreach ($t in $Tareas) {
+    $Action = New-ScheduledTaskAction -Execute $Bat -Argument "--solo $($t.Cadena)" -WorkingDirectory $Root
+    $Trigger = New-ScheduledTaskTrigger -Daily -At $t.Hora
 
-Write-Host "Tarea programada ACTIVADA: $TaskName"
-Write-Host "Horario: 01:00 diario (ventana de menor trafico)"
-Write-Host "Para desactivar: .\pausar-actualizacion-productos.ps1"
-Write-Host "Para probar ahora: .\actualizar-productos.bat"
+    Register-ScheduledTask `
+        -TaskName $t.Nombre `
+        -Action $Action `
+        -Trigger $Trigger `
+        -Settings $Settings `
+        -Description "Actualiza $($t.Cadena) en AhorraGo, diario a las $($t.Hora)." `
+        -Force | Out-Null
+
+    Write-Host "Tarea ACTIVADA: $($t.Nombre)  ->  $($t.Hora)  (--solo $($t.Cadena))"
+}
+
+# La tarea unica anterior ya no aplica: se elimina para que no corra en paralelo.
+$vieja = Get-ScheduledTask -TaskName "AhorraGo - Actualizar productos" -ErrorAction SilentlyContinue
+if ($vieja) {
+    Unregister-ScheduledTask -TaskName "AhorraGo - Actualizar productos" -Confirm:$false
+    Write-Host "Tarea antigua unificada eliminada (quedaba duplicando el trabajo)."
+}
+
+Write-Host ""
+Write-Host "Para pausar todas: .\pausar-actualizacion-productos.ps1"
+Write-Host "Para probar una a mano: .\actualizar-productos.bat --solo unimarc"

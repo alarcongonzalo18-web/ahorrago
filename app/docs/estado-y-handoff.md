@@ -34,12 +34,29 @@ haga el backfill de EAN de Jumbo/Unimarc.
 
 ## Automatización (ACTIVA)
 
-Tarea programada de Windows **"AhorraGo - Actualizar productos"**, 2×/día a las **06:00 y 18:00**.
-Corre `actualizar-productos.bat` → `python -m app.actualizar_productos`, que hace:
-scrape Líder+Jumbo+Unimarc → validar → combinar → reconstruir base → validar.
+**Tres tareas programadas de Windows, una por cadena, escalonadas de noche:**
 
-Trae de fábrica: lock anti-concurrencia, backups previos, validaciones por cadena, **restauración
-automática si falla**, y log con timestamp (que alimenta el badge de frescura de la app).
+| Tarea | Cadena | Hora |
+|---|---|---|
+| `AhorraGo - Actualizar Unimarc` | Unimarc | **22:30** |
+| `AhorraGo - Actualizar Jumbo` | Jumbo | **00:00** |
+| `AhorraGo - Actualizar Lider` | Líder | **02:00** |
+
+Cada una corre `actualizar-productos.bat --solo <cadena>` → scrape de esa cadena + combinar +
+reconstruir, así la base queda publicada después de cada una (no hay que esperar a las tres).
+
+**Por qué escalonado** (antes era una corrida única de ~1.5 h): reparte la carga sobre los
+retailers, evita que una cadena caída arrastre a las otras, y con corridas más cortas se topa
+menos la cuota (Jumbo corta a los ~344 requests). **Por qué estos horarios**: Líder y Jumbo son
+los de más público, así que van en la ventana más profunda de bajo tráfico; Unimarc tiene menos
+público y tolera el horario más temprano.
+
+> El espaciado de 1.5 h es **conservador** hasta tener duraciones reales. El log ahora mide cada
+> paso (`-- Scraper X: N min --`); con esos números se puede ajustar. Si una corrida se pasa de
+> su ventana, la siguiente se saltea por el lock y se recupera con `StartWhenAvailable`.
+
+Cada corrida trae de fábrica: lock anti-concurrencia, backups previos, validaciones por cadena,
+**restauración automática si falla**, y log con timestamp (que alimenta el badge de frescura).
 
 ```powershell
 .\programar-actualizacion-productos.ps1   # activar / reprogramar
