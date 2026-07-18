@@ -60,8 +60,9 @@ Hoy la base pesa **26 MB** (CSV combinado 21 MB). Opciones:
   alto.
 - Bugs de UX de [FEEDBACK.md](../../FEEDBACK.md): búsqueda en móvil sin feedback, vista tabla sin
   "ver producto", sin autocomplete.
-- **Historial de precios**: `Precio` no tiene fecha → sin esto no hay alertas ni "bajó de precio",
-  que es lo que trae a la gente de vuelta.
+- ~~**Historial de precios**~~ — **HECHO 18-07-2026**: tabla `historial_precios` acumulando desde
+  hoy (49.925 puntos en el primer snapshot). Ya se puede calcular media y "bajó de precio";
+  falta que pasen días para tener serie, y construir las alertas encima.
 
 ## ⚪ Operación
 
@@ -81,8 +82,7 @@ una decisión consciente a tomar.**
 ## Orden sugerido
 
 1. **Terminar los datos** (nocturno drenando EAN de Jumbo y Tottus) → comparabilidad arriba.
-2. **Historial de precios** (fecha en `Precio`) → habilita alertas, y cuanto antes empiece a
-   acumular, antes sirve.
+2. ~~**Historial de precios**~~ — hecho 18-07-2026, ya acumula todas las noches.
 3. **Decidir el "siempre encendido"** (mini PC) → resuelve scraping y sincronización.
 4. **Construir la sincronización casa → nube** ← el bloqueante.
 5. **Desplegar** app + dominio + HTTPS, con CORS al dominio y los endpoints internos cerrados.

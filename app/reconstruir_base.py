@@ -2,9 +2,13 @@ from .database import SessionLocal, Base, engine
 from .models import Precio, Producto, Subcategoria, Categoria, Proveedor, Vertical
 from .importar_csv import importar_productos
 from .fase5b_apply import seleccionar_cambios, aplicar_cambios
+from .historial_precios import registrar_snapshot, resumen
 
 
 def limpiar_base(db):
+    # OJO: historial_precios NO se limpia. Es la unica tabla que acumula entre
+    # corridas; borrarla destruiria la historia de precios (y con ella la media
+    # y las alertas). Ver app/historial_precios.py.
     db.query(Precio).delete()
     db.query(Producto).delete()
     db.query(Subcategoria).delete()
@@ -35,6 +39,19 @@ def reconstruir():
             print(f"Emparejamiento avanzado completado. {aplicados} productos actualizados.")
         else:
             print("No se encontraron mejoras de emparejamiento seguras.")
+    finally:
+        db.close()
+
+    # Snapshot del dia: se corre al final, con los productos ya emparejados, para
+    # que el historial quede con los EAN definitivos.
+    db = SessionLocal()
+    try:
+        nuevos, actualizados = registrar_snapshot(db)
+        dias, puntos = resumen(db)
+        print(
+            f"Historial de precios: +{nuevos} puntos nuevos, {actualizados} actualizados. "
+            f"Acumulado: {puntos} puntos en {dias} dia(s)."
+        )
     finally:
         db.close()
 

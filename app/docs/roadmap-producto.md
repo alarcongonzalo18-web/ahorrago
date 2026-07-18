@@ -63,10 +63,11 @@ carro**, no en un umbral que el usuario tenga que adivinar.
 - Avisar cuando el precio actual cae bajo esa media (buen momento para comprar).
 - Priorizar los productos que el usuario efectivamente compra/agrega al carro.
 
-**Implica** (dependencia dura): **historial de precios**. Hoy `Precio` no tiene fecha ni se
-guarda el histórico, así que no existe la media. Ver Fase D de la auditoría: agregar timestamp
-a `Precio` + tabla de historial poblada en cada corrida del pipeline. Sin eso, esta feature
-no se puede construir.
+**Dependencia dura RESUELTA (18-07-2026)**: ya existe `historial_precios`, poblada en cada
+corrida del pipeline (`app/historial_precios.py`). Acumula un punto por producto/proveedor/día
+usando el EAN como clave estable, y sobrevive a la reconstrucción nocturna de la base. Primer
+snapshot: 49.925 puntos. **Ya se puede construir la media y las alertas**; sólo hace falta dejar
+pasar días para que haya serie.
 
 ---
 

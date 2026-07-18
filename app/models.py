@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Date, Integer, String, Float, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -78,3 +78,39 @@ class Precio(Base):
 
     producto = relationship("Producto")
     proveedor = relationship("Proveedor")
+
+
+class HistorialPrecio(Base):
+    """Un punto de precio por producto, proveedor y dia.
+
+    OJO con el diseno: `reconstruir_base` borra y recrea productos/precios en
+    cada corrida, asi que los ids CAMBIAN todas las noches. Por eso el historial
+    no referencia producto_id ni proveedor_id, sino identificadores estables:
+    el EAN (o el nombre normalizado si no hay) y el nombre del proveedor.
+
+    Esta tabla NO se limpia en `limpiar_base`: es la unica que acumula. Sin ella
+    no hay media historica y por lo tanto no hay alertas de "bajo de precio"
+    (ver docs/roadmap-producto.md).
+    """
+
+    __tablename__ = "historial_precios"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # clave estable: "ean:<codigo>" o "nombre:<normalizado>" si el producto no tiene EAN
+    clave = Column(String, nullable=False, index=True)
+    ean = Column(String, nullable=True, index=True)
+    producto_nombre = Column(String, nullable=True)
+    proveedor = Column(String, nullable=False, index=True)
+    precio = Column(Float, nullable=False)
+    fecha = Column(Date, nullable=False, index=True)
+
+
+# Un solo punto por clave/proveedor/dia: si el pipeline corre dos veces el mismo
+# dia, el segundo snapshot actualiza en vez de duplicar.
+Index(
+    "ix_historial_unico",
+    HistorialPrecio.clave,
+    HistorialPrecio.proveedor,
+    HistorialPrecio.fecha,
+    unique=True,
+)
