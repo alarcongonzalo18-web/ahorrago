@@ -16,3 +16,11 @@ backups/
 .claude/
 actualizacion_productos.lock
 reports/
+
+# Datos generados por el pipeline (se regeneran con actualizar_productos y
+# quedan respaldados en backups/). Versionarlos infla el repo: con la tarea
+# programada 2 veces al dia serian ~20 MB de diff por corrida.
+data/*_real.csv
+data/*_real.csv.bak
+data/*_real.csv.nuevo
+data/productos_supermercados.csv
