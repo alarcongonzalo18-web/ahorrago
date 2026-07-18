@@ -24,3 +24,9 @@ data/*_real.csv
 data/*_real.csv.bak
 data/*_real.csv.nuevo
 data/productos_supermercados.csv
+
+# EXCEPCION a lo de arriba: data/ean_cache.json SI se versiona. Los CSV se
+# regeneran en ~35 min por cadena, pero la cache de EAN cuesta decenas de miles
+# de requests contra cuotas de los retailers (horas, con throttling). Pesa medio
+# MB, crece de a poco y el EAN de un producto no cambia nunca: versionarla es el
+# unico respaldo fuera del disco local.
