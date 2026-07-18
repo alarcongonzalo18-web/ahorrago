@@ -224,6 +224,30 @@ body.dark .brand-icon {
     font-size: 16px;
 }
 
+.frescura {
+    margin: 10px 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--success-soft);
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 700;
+}
+.frescura::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: currentColor;
+}
+.frescura.vieja {
+    background: rgba(154, 77, 53, 0.14);
+    color: var(--action);
+}
+
 .home-actions {
     display: flex;
     flex-wrap: wrap;
@@ -2104,6 +2128,7 @@ body.dark .buy-btn:hover {
                 <p class="home-kicker">Comparador inteligente</p>
                 <h2 class="home-title">Busca, compara y arma tu compra óptima</h2>
                 <p class="home-subtitle">Precios actualizados de Líder, Jumbo y Unimarc en un solo lugar.</p>
+                <p id="frescuraDatos" class="frescura" hidden></p>
             </div>
             <div class="home-actions" aria-label="Acciones principales">
                 <button class="action-chip primary" type="button" onclick="enfocarBusqueda()"><i data-lucide="search"></i> Buscar producto</button>
@@ -3673,9 +3698,27 @@ async function cargarEstadoDatos() {
                 <span class="data-status-value">${supermercados || "-"}</span>
             </div>
         `;
+        // Fuente de frescura = el último run real del pipeline (actualizar_productos
+        // escribe un log con timestamp). El mtime del CSV/DB no sirve: se resetea con
+        // cualquier edición o git. Sin log de actualización, no inventamos frescura.
+        renderFrescura(estado.ultimo_log ? estado.ultimo_log.fecha : null);
     } catch (error) {
         contenedor.innerHTML = "<div class='text-muted-app'>No se pudo cargar el estado.</div>";
     }
+}
+
+// Señal de frescura visible al usuario: cuántos días tienen los datos (fecha real
+// del CSV combinado). Evita mostrar precios viejos como si fueran de hoy.
+function renderFrescura(fechaDatos) {
+    const badge = document.getElementById("frescuraDatos");
+    if (!badge) return;
+    if (!fechaDatos) { badge.hidden = true; return; }
+    const dias = Math.floor((Date.now() - new Date(fechaDatos).getTime()) / 86400000);
+    badge.classList.toggle("vieja", dias > 3);
+    badge.textContent = dias <= 0
+        ? "Precios actualizados hoy"
+        : `Precios actualizados hace ${dias} ${dias === 1 ? "día" : "días"}`;
+    badge.hidden = false;
 }
 
 function mostrarToast(texto) {
