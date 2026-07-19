@@ -22,20 +22,27 @@
 | Logs del pipeline | `logs/actualizacion_productos_<timestamp>.log` |
 | Secretos | `.env` (gitignoreado) — hoy solo `JUMBO_API_KEY` |
 
-## Estado de los datos (17-07-2026, tras la actualización)
+## Estado de los datos (18-07-2026, tras el fix de matching)
 
-| Cadena | Productos | Precios | EAN |
+| Cadena | Precios | Frescura | EAN |
 |---|---|---|---|
-| Jumbo | 23.726 | frescos ✅ | 1% ⏳ (backlog ~23.800) |
-| Líder | 8.260 | frescos ✅ | 100% ✅ |
+| Jumbo | 23.734 | frescos ✅ | 1% ⏳ (backlog ~23.800, drena a las 03:00) |
 | Unimarc | 9.231 | frescos ✅ | 98% ✅ |
-| Tottus | 8.768 | frescos ✅ | 0% ⏳ (recién sumado) |
-| **Total** | **49.833** productos / 50.058 precios | | |
+| Tottus | 8.818 | frescos ✅ | 0% ⏳ (backfill arranca solo 03:00) |
+| Líder | 8.280 | frescos ✅ | 100% ✅ |
+| **Total** | **49.850** productos / 50.063 precios | | |
 
-**Grupos comparables (≥2 cadenas): 4.968** ← *la métrica del negocio*.
-Evolución: 1.562 (matching por texto) → 1.645 (fix EAN Líder) → 4.333 (EAN Unimarc) →
-**4.968** (Tottus sumado). Sigue subiendo a medida que la tarea nocturna de EAN drena el
-backlog de Jumbo y llena Tottus.
+**Grupos comparables (≥2 cadenas): 4.345** ← *la métrica del negocio*.
+De esos, **3.528 por EAN** (identidad exacta, confiables) y 817 difusos.
+
+Evolución: 1.562 (texto) → 1.645 (fix EAN Líder) → 4.333 (EAN Unimarc) → 4.968 (Tottus) →
+**4.345 (18-07: limpieza de matching)**. La baja fue deliberada: los grupos "en 4 cadenas"
+eran falsos positivos (Whiskas agrupado con Cat Chow; vino de 750 cc con el de 375; café
+descafeinado con el normal). Se endureció el matching difuso — exigir marca en ambos lados,
+no recortar el tamaño de la clave, marcadores de variante simétricos, cerrar el escape
+`or score >= 82` — y cayeron 623 comparaciones incorrectas. **Los grupos por EAN no se
+tocaron**: 3.528 antes y después. El grupo difuso más grande pasó de 35 productos a 5.
+Sigue subiendo a medida que la tarea nocturna de EAN drena Jumbo y llena Tottus.
 
 ## Automatización (ACTIVA)
 
@@ -158,9 +165,19 @@ comparabilidad**. Contratos en [ean-jumbo.md](ean-jumbo.md) y [ean-unimarc.md](e
 paginado real de Líder — misma técnica que se usó con Jumbo/Unimarc: abrir el sitio en el
 navegador, interceptar `fetch`/XHR y mirar qué API hidrata el listado.
 
-### 4. Historial de precios
-`Precio` no tiene fecha ni histórico → sin esto **las alertas por media son imposibles**
-(ver [roadmap-producto.md](roadmap-producto.md)) y no se puede medir deriva de precios.
+### ~~4. Historial de precios~~ — HECHO 17-07-2026
+`app/historial_precios.py` + tabla `historial_precios` con `clave` estable (EAN o nombre
+normalizado, NO ids que cambian en cada reconstrucción). Snapshot diario idempotente desde el
+pipeline. Al 18-07: 50.050 puntos, 1 día — la serie crece sola cada noche.
+
+### 6. Matching difuso: packs vs unidad (menor, anotado 18-07-2026)
+Tras las dos rondas de endurecimiento del 18-07 (exigir marca, no recortar tamaño, marcadores
+de variante simétricos, cerrar el escape `or score >= 82`, tokens propios por lado), el caso
+que queda: `Pack Coca-Cola 3L + Fanta` se agrupa con `Coca-Cola 3L` sola, porque `pack` está
+en `RELLENO` (`app/matching.py`) — se puso ahí para que "Pack 6 un" vs "6 un" no separara
+productos iguales. Fix propuesto: tratar `pack` como marcador de variante **solo cuando el
+nombre trae un `+`** (combo de productos distintos), no cuando es multipack del mismo.
+Bajo volumen; los grupos difusos hoy topan en 5 productos.
 
 ### ~~5. Agregar Tottus~~ — HECHO 18-07-2026
 Integrado: `app/scraper_tottus.py` (urllib puro, sin navegador ni API key), EAN vía
