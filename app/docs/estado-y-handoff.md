@@ -200,7 +200,7 @@ navegador, interceptar `fetch`/XHR y mirar qué API hidrata el listado.
 normalizado, NO ids que cambian en cada reconstrucción). Snapshot diario idempotente desde el
 pipeline. Al 18-07: 50.050 puntos, 1 día — la serie crece sola cada noche.
 
-### 6. Matching difuso: packs vs unidad (menor, anotado 18-07-2026)
+### ~~6. Matching difuso: packs vs unidad~~ — HECHO 19-07-2026
 Tras las dos rondas de endurecimiento del 18-07 (exigir marca, no recortar tamaño, marcadores
 de variante simétricos, cerrar el escape `or score >= 82`, tokens propios por lado), el caso
 que queda: `Pack Coca-Cola 3L + Fanta` se agrupa con `Coca-Cola 3L` sola, porque `pack` está

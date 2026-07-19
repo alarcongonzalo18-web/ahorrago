@@ -584,8 +584,13 @@ def aparece(palabra, texto):
 
 
 def detectar_marcadores(texto):
-    texto = normalizar_texto(texto)
-    return {m.replace(" ", "_") for m in MARCADORES_VARIANTE if aparece(m, texto)}
+    marcadores = {m.replace(" ", "_") for m in MARCADORES_VARIANTE
+                  if aparece(m, normalizar_texto(texto))}
+    # "Pack 6 un" es un multipack del mismo producto (comparable contra "6 un"),
+    # pero "Coca-Cola 3L + Fanta 1.5L" es un combo de productos distintos.
+    if "+" in (texto or ""):
+        marcadores.add("combo")
+    return marcadores
 
 
 def generar_producto_base(nombre, marca, tipo, formato):

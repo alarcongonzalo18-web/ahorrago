@@ -123,3 +123,20 @@ def test_plurales_y_relleno_no_bloquean_un_match_real():
     a = producto("Alimento Gato Adulto Cat Chow Carne 8 kg", marca="Cat Chow")
     b = producto("Alimento para Gatos Adulto Cat Chow Sabor Carne 8 kg", marca="Cat Chow")
     assert candidato_compatible(a, b)
+
+
+def test_combo_con_mas_no_se_compara_con_el_producto_solo():
+    """"Coca-Cola 3L + Fanta" es un combo, no la Coca-Cola 3L."""
+    from app.matching import candidato_compatible
+
+    sola = producto("Bebida Coca-Cola Original 3 L", marca="Coca-Cola")
+    combo = producto("Bebida Coca-Cola Original 3 L + Fanta 1.5 L", marca="Coca-Cola")
+    assert not candidato_compatible(sola, combo)
+
+
+def test_multipack_sin_mas_sigue_siendo_comparable():
+    """"Pack 6 un" vs "6 un": mismo producto escrito distinto."""
+    from app.normalizacion import detectar_marcadores
+
+    assert detectar_marcadores("Bebida Zero Lata Pack 6 un 350 ml") == \
+           detectar_marcadores("Bebida Zero Lata 6 un 350 ml")
