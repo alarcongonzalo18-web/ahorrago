@@ -13,6 +13,7 @@ rapidfuzz>=3.9.0
 
 # Scraping con navegador (Jumbo y Unimarc)
 selenium>=4.18.0
+beautifulsoup4>=4.12.0  # parseo HTML del scraper de Unimarc (app.doctor lo exige)
 
 # Testing
 pytest>=8.0.0
