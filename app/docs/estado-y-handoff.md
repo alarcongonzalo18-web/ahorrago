@@ -8,6 +8,36 @@
 > [ean-jumbo.md](ean-jumbo.md) / [ean-unimarc.md](ean-unimarc.md) (contratos de EAN) ·
 > [ahorrago-contexto.md](ahorrago-contexto.md) (histórico detallado).
 
+## Migración de equipo — COMPLETADA 19-07-2026
+
+**Este equipo es el dueño oficial de los datos desde hoy.** Se migró el pipeline siguiendo
+[migracion-equipo.md](migracion-equipo.md) y quedó verificado:
+
+- `supercheck.db`, `.env` y los `data/*_real.csv` se copiaron del paquete de migración a la
+  raíz; el `supercheck.db` se validó por SHA256 contra el origen (idéntico). El historial
+  llegó intacto: **101.573 puntos en 2 días** al momento de migrar.
+- `python -m app.doctor`: todo verde salvo el aviso de Unimarc (ver abajo).
+- Prueba corta real `--solo tottus`: OK (12.917 productos, historial +87 puntos).
+- Las **5 tareas nocturnas** quedaron programadas y en `Ready` (Tottus 21:00, Unimarc 22:30,
+  Jumbo 00:00, Líder 02:00, EAN 03:00).
+- **El equipo viejo quedó con sus tareas deshabilitadas** (`pausar-actualizacion-productos.ps1`),
+  para no scrapear los dos en paralelo. Nunca copiar su `supercheck.db` sobre la de este equipo.
+
+### ⚠️ Hallazgo: Unimarc EAN (urllib) bloqueado desde este equipo (403)
+
+El chequeo de conectividad de `app.doctor` marca **`[AVISO] Unimarc (EAN) — BloqueoError`**: el
+BFF (`bff-unimarc-ecommerce.unimarc.cl`) responde **403 Access Denied** al cliente `urllib` de
+`app.ean_fetch.fetch_ean_unimarc`. Desde un navegador real el mismo endpoint responde 200 (con
+headers `source: WEB` + `version`), o sea **el contrato no cambió**: es un bloqueo de borde
+(Akamai) contra el fingerprint/IP del cliente Python, no un bug de código.
+
+- **Precios de Unimarc: OK** — el scraper usa Selenium (Chrome real), que el WAF no bloquea. La
+  tarea nocturna de Unimarc (22:30) no se ve afectada por esto.
+- **EAN de Unimarc por urllib: bloqueado** — sólo afecta el backfill incremental de EAN. Impacto
+  **menor**: la caché de Unimarc ya está al **98%**, así que casi no quedan slugs por consultar.
+- Si en algún momento hace falta recuperar ese 2% restante: verificar IP residencial del equipo,
+  o migrar `fetch_ean_unimarc` a Selenium como los precios.
+
 ## Dónde está todo
 
 | Qué | Dónde |
