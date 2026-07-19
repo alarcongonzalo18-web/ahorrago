@@ -472,7 +472,7 @@ def detectar_atributos(texto):
     return [
         atributo.replace(" ", "_")
         for atributo in atributos
-        if atributo in texto
+        if aparece(atributo, texto)
     ]
 
 
@@ -535,7 +535,7 @@ def detectar_calificadores(texto):
     return [
         calificador.replace(" ", "_")
         for calificador in calificadores
-        if calificador in texto
+        if aparece(calificador, texto)
     ]
 
 
@@ -554,6 +554,38 @@ def detectar_metros_papel(texto):
 
 
 MAX_TOKENS_DESCRIPTIVOS = 8
+
+# Palabras que cambian de que producto se trata, no como lo escribe cada cadena.
+# Si una aparece en un lado y no en el otro, no son el mismo producto: un cafe
+# descafeinado no se compara contra uno normal, ni el papel humedo contra el seco.
+# Se exige coincidencia exacta, a diferencia de los calificadores, donde alcanza
+# con que se crucen.
+MARCADORES_VARIANTE = [
+    # cafe / infusiones
+    "descafeinado", "instantaneo", "molido", "grano", "dark roast", "intenso",
+    "suave", "fuerte", "tostado",
+    # dieteticos y restricciones
+    "integral", "light", "zero", "diet", "sin azucar", "sin sal", "sin gluten",
+    "sin lactosa", "descremada", "semidescremada", "entera",
+    # papel / limpieza
+    "humedo", "doble hoja", "triple hoja", "antibacterial", "concentrado",
+    # cabello
+    "rulos", "liso", "graso", "seco", "anticaspa", "teñido", "tenido",
+]
+
+
+def aparece(palabra, texto):
+    """Busca la palabra completa, no como subcadena.
+
+    Sin los limites "aloe" daba positivo dentro de "naturaloe" y "sal" dentro
+    de "salsa".
+    """
+    return re.search(rf"\b{re.escape(palabra)}\b", texto) is not None
+
+
+def detectar_marcadores(texto):
+    texto = normalizar_texto(texto)
+    return {m.replace(" ", "_") for m in MARCADORES_VARIANTE if aparece(m, texto)}
 
 
 def generar_producto_base(nombre, marca, tipo, formato):

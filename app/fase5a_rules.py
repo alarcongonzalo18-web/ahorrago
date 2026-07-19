@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from app.matching import candidato_compatible, matching_score
+from app.matching import candidato_compatible
 from app.normalizacion import extraer_atributos, normalizar_marca, normalizar_texto, tokens_utiles
 
 
@@ -177,4 +177,7 @@ def compatible_fase5a(producto, candidato, categoria: str) -> bool:
     for campo in ["medida", "cantidad", "familia", "animal", "etapa", "talla", "genero", "variante", "retornable", "sabor", "aroma", "variedad"]:
         if attrs_a.get(campo) and attrs_b.get(campo) and attrs_a[campo] != attrs_b[campo]:
             return False
-    return candidato_compatible(producto, candidato) or matching_score(producto, candidato) >= 82
+    # El score alto no puede saltearse las reglas de compatibilidad: dos quesos
+    # de la misma marca y gramaje puntuan por encima de 82 aunque uno sea Edam y
+    # el otro Gruyere. Sirve como exigencia adicional, no como alternativa.
+    return candidato_compatible(producto, candidato)

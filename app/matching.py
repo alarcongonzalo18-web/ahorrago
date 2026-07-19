@@ -1,6 +1,7 @@
 from rapidfuzz import fuzz
 
 from .normalizacion import (
+    detectar_marcadores,
     detectar_calificadores,
     detectar_familia,
     detectar_metros_papel,
@@ -33,6 +34,24 @@ def _atributos_producto(producto):
 
 def _mismo_valor_si_existe(valor_a, valor_b):
     return valor_a is None or valor_b is None or valor_a == valor_b
+
+
+# Palabras de relleno: cambian de cadena en cadena sin cambiar el producto, asi
+# que no sirven para distinguir ("Alimento Gato" vs "Alimento para Gatos Sabor").
+RELLENO = {"sabor", "envasado", "bolsa", "pack", "unidad", "formato", "producto"}
+
+
+def _singular(token):
+    if len(token) > 4 and token.endswith("es"):
+        return token[:-2]
+    if len(token) > 3 and token.endswith("s"):
+        return token[:-1]
+    return token
+
+
+def _singulares(tokens):
+    """Normaliza para comparar: "gato" y "gatos" son la misma palabra."""
+    return {_singular(t) for t in tokens if t not in RELLENO}
 
 
 def _sabores_compatibles(attrs_producto, attrs_candidato):
@@ -155,6 +174,13 @@ def candidato_compatible(producto, candidato):
     if metros_papel and metros_papel_candidato and metros_papel != metros_papel_candidato:
         return False
 
+    # Los marcadores se comparan de forma simetrica: que uno los tenga y el otro
+    # no ya los separa. Con los calificadores alcanza con que se crucen, y por eso
+    # se colaba el cafe descafeinado contra el normal (el otro lado no traia
+    # ningun calificador, asi que la regla ni se aplicaba).
+    if detectar_marcadores(texto_producto) != detectar_marcadores(texto_candidato):
+        return False
+
     calificadores_producto = set(detectar_calificadores(texto_producto))
     calificadores_candidato = set(detectar_calificadores(texto_candidato))
     if calificadores_producto and calificadores_candidato:
@@ -168,6 +194,16 @@ def candidato_compatible(producto, candidato):
         coincidencias = firma_producto.intersection(firma_candidato)
         minimo = 2 if min(len(firma_producto), len(firma_candidato)) >= 2 else 1
         if len(coincidencias) < minimo:
+            return False
+
+        # Pedir dos tokens en comun no alcanza: "Queso Gruyere Trozo" y "Queso
+        # Edam Trozo" comparten queso+trozo y el que los distingue es el que
+        # difiere. Si cada lado tiene un token propio hay una bifurcacion real
+        # (gruyere vs edam, original vs cheddar). Que uno tenga tokens de mas y
+        # el otro ninguno es solo una cadena describiendo mas: eso se permite.
+        propios_producto = _singulares(firma_producto) - _singulares(firma_candidato)
+        propios_candidato = _singulares(firma_candidato) - _singulares(firma_producto)
+        if propios_producto and propios_candidato:
             return False
 
     return matching_score(producto, candidato) >= 68
