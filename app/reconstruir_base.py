@@ -2,6 +2,7 @@ from .database import SessionLocal, Base, engine
 from .models import Precio, Producto, Subcategoria, Categoria, Proveedor, Vertical
 from .importar_csv import importar_productos
 from .fase5b_apply import seleccionar_cambios, aplicar_cambios
+from .heredar_formato import heredar_formato_por_ean
 from .historial_precios import registrar_snapshot, resumen
 
 
@@ -29,7 +30,17 @@ def reconstruir():
 
     importar_productos()
     print("Base reconstruida desde data/productos_supermercados.csv")
-    
+
+    # Formato via EAN: el mismo codigo de barras en otra cadena suele traer el
+    # tamaño que a esta le falta (Lider a veces publica sin gramaje).
+    db = SessionLocal()
+    try:
+        heredados = heredar_formato_por_ean(db)
+        if heredados:
+            print(f"Formato heredado via EAN en {heredados} productos.")
+    finally:
+        db.close()
+
     print("Aplicando emparejamiento avanzado (fase 5b)...")
     db = SessionLocal()
     try:

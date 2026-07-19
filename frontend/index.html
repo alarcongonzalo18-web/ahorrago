@@ -2839,6 +2839,18 @@ function aplicarFiltros(productos) {
     return filtrados;
 }
 
+// Solo datos que le dicen algo al comprador: el formato si existe y el tipo si
+// es una variante real. "Sin formato" y "general" eran relleno interno de la
+// base que hacia ver la ficha incompleta.
+function renderMetaProducto(producto) {
+    const partes = [];
+    if (producto.formato) partes.push(`<div>${escapeHtml(producto.formato)}</div>`);
+    if (producto.tipo && producto.tipo !== "general") {
+        partes.push(`<div>${escapeHtml(producto.tipo)}</div>`);
+    }
+    return partes.join("");
+}
+
 function renderProducto(producto) {
     const min = precioMinimo(producto);
     const estaAgregado = carritoCompra.some(item => item.id === producto.id);
@@ -2849,10 +2861,7 @@ function renderProducto(producto) {
                 <div class="product-image-box">${renderImagenProducto(producto)}</div>
                 <div>
                     <h3 class="product-name">${escapeHtml(producto.nombre)}</h3>
-                    <div class="product-meta">
-                        <div>${escapeHtml(producto.formato || "Sin formato")}</div>
-                        <div>${escapeHtml(producto.tipo || "Producto")}</div>
-                    </div>
+                    <div class="product-meta">${renderMetaProducto(producto)}</div>
                     <div class="product-actions">
                         <button
                             class="details-btn primary ${estaAgregado ? "added" : ""}"
@@ -3228,7 +3237,7 @@ function renderFilaTabla(producto) {
                     ${producto.imagen_url ? `<img src="${escapeHtml(producto.imagen_url)}" alt="${escapeHtml(producto.nombre)}" loading="lazy">` : "<i data-lucide='package'></i>"}
                     <div>
                         <div class="table-product-name">${escapeHtml(producto.nombre)}</div>
-                        <div class="text-muted-app">${escapeHtml(producto.formato || "Sin formato")}</div>
+                        ${producto.formato ? `<div class="text-muted-app">${escapeHtml(producto.formato)}</div>` : ""}
                     </div>
                 </div>
             </td>
