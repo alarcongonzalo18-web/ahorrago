@@ -151,7 +151,9 @@ body.dark .brand-icon {
     font-weight: 700;
 }
 
-.mobile-nav-select { display: none; }
+/* .icon-btn.mobile-menu-toggle: la doble clase gana la especificidad contra
+   el display de .icon-btn, que se declara mas abajo. */
+.mobile-menu, .icon-btn.mobile-menu-toggle { display: none; }
 
 .nav-tabs-app button {
     border: 0;
@@ -326,6 +328,54 @@ body.dark .brand-icon {
     background: transparent;
     color: var(--ink);
     font-size: 18px;
+}
+
+/* Desplegable de sugerencias propio: el <datalist> nativo lo dibuja el
+   navegador donde quiere (en Brave salia pegado al borde derecho, tapando
+   media pagina) y no se puede estilar. */
+.search-input-wrap { position: relative; }
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.search-suggestions button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.search-suggestions button:hover,
+.search-suggestions button.resaltada {
+    background: var(--brand-soft);
+}
+
+.search-suggestions .sug-conteo {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
 }
 
 .clear-btn {
@@ -1004,6 +1054,20 @@ body.dark .product-info {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
+}
+
+.category-group-title {
+    grid-column: 1 / -1;
+    margin: 10px 0 -6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--brand, #0f766e);
+}
+
+.category-group-title:first-child {
+    margin-top: 0;
 }
 
 .category-card {
@@ -1807,16 +1871,35 @@ body.dark .buy-btn:hover {
     .brand-subtitle { display: none; }
 
     .nav-tabs-app { display: none; }
-    .mobile-nav-select {
-        display: block;
+
+    /* FEEDBACK G: una sola fila (marca + acciones + hamburguesa) y el menu
+       como dropdown, en vez del <select> que sumaba una fila al header. */
+    .icon-btn.mobile-menu-toggle { display: inline-flex; }
+    .mobile-menu {
+        display: grid;
         grid-column: 1 / -1;
-        min-height: 38px;
+        gap: 2px;
+        padding: 6px;
         border: 1px solid var(--line);
-        border-radius: 10px;
+        border-radius: 12px;
         background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+    .mobile-menu[hidden] { display: none; }
+    .mobile-menu button {
+        min-height: 44px;
+        padding: 0 14px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
         color: var(--ink);
-        padding: 0 12px;
-        font-weight: 900;
+        font: inherit;
+        font-weight: 700;
+        text-align: left;
+    }
+    .mobile-menu button.active {
+        background: var(--brand-soft);
+        color: var(--brand);
     }
 
     .top-actions {
@@ -1925,19 +2008,23 @@ body.dark .buy-btn:hover {
             <button type="button" data-view="alertas" onclick="cambiarVista('alertas')">Alertas</button>
         </nav>
 
-        <select id="mobileNav" class="mobile-nav-select" aria-label="Navegación">
-            <option value="landing">Rubros</option>
-            <option value="inicio">Buscador</option>
-            <option value="categorias">Categorías</option>
-            <option value="historial">Historial</option>
-            <option value="listas">Listas</option>
-            <option value="alertas">Alertas</option>
-        </select>
-
         <div class="top-actions">
             <button id="themeToggle" class="icon-btn" type="button" aria-label="Modo nocturno"><i data-lucide="moon"></i></button>
             <button class="icon-btn" type="button" aria-label="Perfil" onclick="mostrarToast('Perfil local listo')"><i data-lucide="user"></i></button>
+            <button id="menuToggle" class="icon-btn mobile-menu-toggle" type="button" aria-label="Menú"
+                aria-expanded="false" onclick="toggleMenuMovil()"><i data-lucide="menu"></i></button>
         </div>
+
+        <!-- FEEDBACK G: menu movil estilo "marca + menu" (patron Jumbo).
+             Reemplaza al <select> que ocupaba una fila entera del header. -->
+        <nav id="mobileMenu" class="mobile-menu" hidden>
+            <button type="button" data-view="landing" onclick="navegarMovil('landing')">Rubros</button>
+            <button type="button" data-view="inicio" onclick="navegarMovil('inicio')">Buscador</button>
+            <button type="button" data-view="categorias" onclick="navegarMovil('categorias')">Categorías</button>
+            <button type="button" data-view="historial" onclick="navegarMovil('historial')">Historial</button>
+            <button type="button" data-view="listas" onclick="navegarMovil('listas')">Listas</button>
+            <button type="button" data-view="alertas" onclick="navegarMovil('alertas')">Alertas</button>
+        </nav>
     </header>
 
     
@@ -2060,8 +2147,9 @@ body.dark .buy-btn:hover {
         <section class="hero-search">
             <div class="search-input-wrap">
                 <i data-lucide="search"></i>
-                <input id="busqueda" type="text" placeholder="Buscar producto..." aria-label="Buscar producto" list="sugerenciasBusqueda" autocomplete="off">
-                <datalist id="sugerenciasBusqueda"></datalist>
+                <input id="busqueda" type="text" placeholder="Buscar producto..." aria-label="Buscar producto" autocomplete="off"
+                    oninput="mostrarSugerencias()" onkeydown="teclaSugerencias(event)">
+                <div id="sugerenciasBusqueda" class="search-suggestions" hidden></div>
                 <button class="clear-btn" type="button" onclick="limpiarBusqueda()" aria-label="Limpiar búsqueda">
                     <i data-lucide="x"></i>
                 </button>
@@ -2401,20 +2489,23 @@ const subcategoriasPorCategoria = {
     ]
 };
 
+// FEEDBACK E: las categorias se muestran agrupadas por rubro madre
+// ("Lácteos" agrupa leche/huevos/yogurt/quesos, etc.). El orden de los grupos
+// es el de compra tipica: frescos -> despensa -> bebidas -> pan -> limpieza.
 const categoriasVista = [
-    { valor: "leche", nombre: "Leche", descripcion: "Productos lácteos comparables.", icono: "milk" },
-    { valor: "huevo", nombre: "Huevos", descripcion: "Formatos y bandejas comparables.", icono: "egg" },
-    { valor: "yogurt", nombre: "Yogurt", descripcion: "Bebibles, batidos y packs.", icono: "cup-soda" },
-    { valor: "queso", nombre: "Quesos", descripcion: "Laminados, trozos y rallados.", icono: "circle-dot" },
-    { valor: "arroz", nombre: "Arroz", descripcion: "Despensa básica para comparar.", icono: "wheat" },
-    { valor: "aceite", nombre: "Aceite", descripcion: "Formatos y marcas del día.", icono: "droplet" },
-    { valor: "cafe", nombre: "Café", descripcion: "Instantáneo, molido y cápsulas.", icono: "coffee" },
-    { valor: "azucar", nombre: "Azúcar", descripcion: "Blanca, rubia y formatos familiares.", icono: "package" },
-    { valor: "fideo", nombre: "Fideos", descripcion: "Pastas y formatos de despensa.", icono: "utensils" },
-    { valor: "bebida", nombre: "Bebidas", descripcion: "Gaseosas, jugos, aguas y packs.", icono: "bottle-wine" },
-    { valor: "pan", nombre: "Pan", descripcion: "Panadería y pan envasado.", icono: "croissant" },
-    { valor: "detergente", nombre: "Detergentes", descripcion: "Limpieza y ahorro por formato.", icono: "sparkles" },
-    { valor: "papel higienico", nombre: "Papel higiénico", descripcion: "Rollos, hojas y packs familiares.", icono: "scroll" }
+    { valor: "leche", nombre: "Leche", grupo: "Lácteos y frescos", descripcion: "Productos lácteos comparables.", icono: "milk" },
+    { valor: "huevo", nombre: "Huevos", grupo: "Lácteos y frescos", descripcion: "Formatos y bandejas comparables.", icono: "egg" },
+    { valor: "yogurt", nombre: "Yogurt", grupo: "Lácteos y frescos", descripcion: "Bebibles, batidos y packs.", icono: "cup-soda" },
+    { valor: "queso", nombre: "Quesos", grupo: "Lácteos y frescos", descripcion: "Laminados, trozos y rallados.", icono: "circle-dot" },
+    { valor: "arroz", nombre: "Arroz", grupo: "Despensa", descripcion: "Despensa básica para comparar.", icono: "wheat" },
+    { valor: "aceite", nombre: "Aceite", grupo: "Despensa", descripcion: "Formatos y marcas del día.", icono: "droplet" },
+    { valor: "cafe", nombre: "Café", grupo: "Despensa", descripcion: "Instantáneo, molido y cápsulas.", icono: "coffee" },
+    { valor: "azucar", nombre: "Azúcar", grupo: "Despensa", descripcion: "Blanca, rubia y formatos familiares.", icono: "package" },
+    { valor: "fideo", nombre: "Fideos", grupo: "Despensa", descripcion: "Pastas y formatos de despensa.", icono: "utensils" },
+    { valor: "bebida", nombre: "Bebidas", grupo: "Bebidas", descripcion: "Gaseosas, jugos, aguas y packs.", icono: "bottle-wine" },
+    { valor: "pan", nombre: "Pan", grupo: "Panadería", descripcion: "Panadería y pan envasado.", icono: "croissant" },
+    { valor: "detergente", nombre: "Detergentes", grupo: "Limpieza y hogar", descripcion: "Limpieza y ahorro por formato.", icono: "sparkles" },
+    { valor: "papel higienico", nombre: "Papel higiénico", grupo: "Limpieza y hogar", descripcion: "Rollos, hojas y packs familiares.", icono: "scroll" }
 ];
 
 const exclusionesPorCategoria = {
@@ -2507,7 +2598,9 @@ function cambiarVista(nombre) {
     document.querySelectorAll(".nav-tabs-app button").forEach(button => {
         button.classList.toggle("active", button.dataset.view === nombre);
     });
-    document.getElementById("mobileNav").value = nombre;
+    document.querySelectorAll("#mobileMenu button").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === nombre);
+    });
 
     if (nombre === "historial") renderHistorial();
     if (nombre === "listas") renderListas();
@@ -3016,7 +3109,7 @@ function renderCategorias(categoriaActiva = "") {
     const grid = document.getElementById("categoryGrid");
     if (!grid) return;
 
-    grid.innerHTML = categoriasVista.map(categoria => {
+    const renderTarjeta = categoria => {
         const subcategorias = subcategoriasPorCategoria[categoria.valor] || [];
         const chips = subcategorias.slice(0, 4).map(item =>
             `<button class="category-chip" type="button" onclick="buscarSubcategoria('${escapeAttribute(categoria.valor)}', '${escapeAttribute(item.valor)}')">${escapeHtml(item.nombre)}</button>`
@@ -3039,7 +3132,23 @@ function renderCategorias(categoriaActiva = "") {
                 </button>
             </article>
         `;
-    }).join("");
+    };
+
+    // Grupos en orden de aparicion de categoriasVista, cada uno con su titulo.
+    const grupos = [];
+    for (const categoria of categoriasVista) {
+        let grupo = grupos.find(g => g.nombre === categoria.grupo);
+        if (!grupo) {
+            grupo = { nombre: categoria.grupo, categorias: [] };
+            grupos.push(grupo);
+        }
+        grupo.categorias.push(categoria);
+    }
+
+    grid.innerHTML = grupos.map(grupo => `
+        <h3 class="category-group-title">${escapeHtml(grupo.nombre)}</h3>
+        ${grupo.categorias.map(renderTarjeta).join("")}
+    `).join("");
 
     renderIcons();
 }
@@ -3752,8 +3861,31 @@ document.querySelectorAll(".nav-tabs-app button").forEach(button => {
     button.addEventListener("click", () => cambiarVista(button.dataset.view));
 });
 
-document.getElementById("mobileNav").addEventListener("change", event => {
-    cambiarVista(event.target.value);
+function toggleMenuMovil(forzarCerrado = false) {
+    const menu = document.getElementById("mobileMenu");
+    const boton = document.getElementById("menuToggle");
+    const abrir = forzarCerrado ? false : menu.hidden;
+    menu.hidden = !abrir;
+    boton.setAttribute("aria-expanded", String(abrir));
+    boton.innerHTML = abrir ? "<i data-lucide='x'></i>" : "<i data-lucide='menu'></i>";
+    renderIcons();
+}
+
+function navegarMovil(nombre) {
+    toggleMenuMovil(true);
+    cambiarVista(nombre);
+}
+
+// Tocar fuera del menu lo cierra (comportamiento esperado de un dropdown).
+// event.target.isConnected: al abrir, renderIcons() reemplaza el icono del
+// boton y el nodo clickeado queda suelto; sin este chequeo, closest() da null
+// y el mismo clic que abre tambien cierra.
+document.addEventListener("click", event => {
+    const menu = document.getElementById("mobileMenu");
+    if (!menu.hidden && event.target.isConnected
+        && !event.target.closest("#mobileMenu, #menuToggle")) {
+        toggleMenuMovil(true);
+    }
 });
 
 document.getElementById("themeToggle").addEventListener("click", () => {
@@ -3816,19 +3948,87 @@ window.addEventListener("load", () => {
 
 // Marcas y terminos reales del catalogo para el autocomplete del buscador
 // (feedback del beta tester: busco "Trencito" dos veces sin ayuda del input).
+let terminosSugerencias = [];
+let sugerenciaResaltada = -1;
+
 async function cargarSugerenciasBusqueda() {
     try {
         const respuesta = await fetch(`${API}/sugerencias`);
         if (!respuesta.ok) return;
         const datos = await respuesta.json();
-        const lista = document.getElementById("sugerenciasBusqueda");
-        lista.innerHTML = (datos.terminos || [])
-            .map(item => `<option value="${item.t}"></option>`)
-            .join("");
+        terminosSugerencias = datos.terminos || [];
     } catch (error) {
         // sin sugerencias se busca igual; no es motivo para romper el arranque
     }
 }
+
+function cerrarSugerencias() {
+    document.getElementById("sugerenciasBusqueda").hidden = true;
+    sugerenciaResaltada = -1;
+}
+
+function mostrarSugerencias() {
+    const texto = document.getElementById("busqueda").value.trim().toLowerCase();
+    const panel = document.getElementById("sugerenciasBusqueda");
+    if (texto.length < 2 || !terminosSugerencias.length) {
+        cerrarSugerencias();
+        return;
+    }
+
+    // primero los que empiezan con lo tecleado, despues los que lo contienen
+    const empiezan = terminosSugerencias.filter(s => s.t.startsWith(texto));
+    const contienen = terminosSugerencias.filter(s => !s.t.startsWith(texto) && s.t.includes(texto));
+    const visibles = empiezan.concat(contienen).slice(0, 8);
+
+    if (!visibles.length || (visibles.length === 1 && visibles[0].t === texto)) {
+        cerrarSugerencias();
+        return;
+    }
+
+    sugerenciaResaltada = -1;
+    panel.innerHTML = visibles.map(s => `
+        <button type="button" onmousedown="event.preventDefault(); elegirSugerencia('${escapeAttribute(s.t)}')">
+            <span>${escapeHtml(s.t)}</span>
+            <span class="sug-conteo">${s.n} productos</span>
+        </button>
+    `).join("");
+    panel.hidden = false;
+}
+
+function elegirSugerencia(termino) {
+    document.getElementById("busqueda").value = termino;
+    cerrarSugerencias();
+    buscarManual();
+}
+
+function teclaSugerencias(evento) {
+    const panel = document.getElementById("sugerenciasBusqueda");
+    if (panel.hidden) return;
+    const opciones = panel.querySelectorAll("button");
+
+    if (evento.key === "ArrowDown" || evento.key === "ArrowUp") {
+        evento.preventDefault();
+        const paso = evento.key === "ArrowDown" ? 1 : -1;
+        sugerenciaResaltada = (sugerenciaResaltada + paso + opciones.length) % opciones.length;
+        opciones.forEach((opcion, i) => opcion.classList.toggle("resaltada", i === sugerenciaResaltada));
+        opciones[sugerenciaResaltada].scrollIntoView({ block: "nearest" });
+    } else if (evento.key === "Enter") {
+        if (sugerenciaResaltada >= 0) {
+            evento.preventDefault();
+            // corta el otro listener de Enter del input, que ya dispara la busqueda
+            evento.stopImmediatePropagation();
+            opciones[sugerenciaResaltada].dispatchEvent(new MouseEvent("mousedown"));
+        } else {
+            cerrarSugerencias();   // busca el listener existente; solo se cierra el panel
+        }
+    } else if (evento.key === "Escape") {
+        cerrarSugerencias();
+    }
+}
+
+document.addEventListener("click", evento => {
+    if (!evento.target.closest(".search-input-wrap")) cerrarSugerencias();
+});
 
 // Atras/adelante del navegador entre vistas.
 window.addEventListener("hashchange", () => {

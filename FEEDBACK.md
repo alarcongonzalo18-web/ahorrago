@@ -13,15 +13,17 @@
 
 ### Mejoras UX (medio)
 - [x] **B. Sin autocomplete/sugerencias** — RESUELTO 19-07-2026. Endpoint `/sugerencias` (2.214 términos minados del catálogo: marcas y palabras frecuentes, "trencito" incluido) + `datalist` nativo en el input. Verificado en navegador.
-- [ ] **E. Categorías sin agrupar:** Lácteos debería ser categoría madre 
-  con subcategorías: leches, quesos, yogurts, etc.
+- [x] **E. Categorías sin agrupar** — RESUELTO 19-07-2026. La vista Categorías agrupa
+  las 13 tarjetas bajo 5 rubros madre (Lácteos y frescos / Despensa / Bebidas /
+  Panadería / Limpieza y hogar). Verificado en navegador.
 
 ### Diseño (baja)
 - [x] **F. "Estado de datos" visible al usuario final** — RESUELTO 18-07-2026. El panel
   queda oculto y se abre con `?admin=1` (se recuerda en localStorage). Ahí vive también
   el aviso de salud del pipeline, que es información de operador, no de usuario.
-- [ ] **G. Layout header móvil:** Considerar formato similar a Jumbo (marca 
-  + selector menú)
+- [x] **G. Layout header móvil** — RESUELTO 19-07-2026. Patrón Jumbo: una sola fila
+  (marca + acciones + hamburguesa) con menú desplegable, en vez del `<select>` que
+  sumaba una fila al header. Verificado en 390px y en desktop.
 
 ### Cosas que SÍ funcionaron bien
 - Cálculo de "Tu ahorro estimado" muestra valores reales ($7.810)
@@ -49,8 +51,8 @@ Capturadas en los logs de uvicorn (IP 192.168.100.69)
 
 ## Estado al 18-07-2026
 
-Resueltos: **A, C, D, F**. Pendientes: **B** (autocomplete de marcas), **E** (agrupar
-categorías en madre/subcategorías) y **G** (layout del header móvil).
+**Todo el feedback de la sesión 1 está resuelto** (A-G, 19-07-2026). El autocomplete
+además usa desplegable propio (el nativo del navegador se dibujaba donde quería).
 
 Nota: A y C ya estaban arreglados en el código pero seguían figurando como abiertos acá.
 Un archivo de feedback desactualizado hace perder tiempo revisando bugs que no existen;
