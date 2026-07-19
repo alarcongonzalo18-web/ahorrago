@@ -90,6 +90,38 @@ if (Test-Path $BatEan) {
     Write-Host "Tarea ACTIVADA: $($TareaEan.Nombre)  ->  $($TareaEan.Hora)  (backfill $($TareaEan.Args) + publicar)"
 }
 
+# Vigilante de suspension: arranca ANTES del primer scrape (20:55) y se queda
+# esperando a que termine todo el proceso (los 4 scrapes + el EAN) para suspender
+# el equipo. Se suspende, no se apaga, para que WakeToRun pueda despertarlo la
+# noche siguiente. Ver suspender-tras-scrape.ps1.
+$ScriptSuspender = Join-Path $Root "suspender-tras-scrape.ps1"
+if (Test-Path $ScriptSuspender) {
+    $AccionSuspender = New-ScheduledTaskAction `
+        -Execute "powershell.exe" `
+        -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$ScriptSuspender`"" `
+        -WorkingDirectory $Root
+    $TriggerSuspender = New-ScheduledTaskTrigger -Daily -At "20:55"
+    # Ventana larga: tiene que sobrevivir toda la noche hasta que termine el EAN
+    # (que topa a las 5 h). WakeToRun para despertar el equipo a las 20:55.
+    $SettingsSuspender = New-ScheduledTaskSettingsSet `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -MultipleInstances IgnoreNew `
+        -StartWhenAvailable `
+        -WakeToRun `
+        -ExecutionTimeLimit (New-TimeSpan -Hours 9)
+
+    Register-ScheduledTask `
+        -TaskName "AhorraGo - Suspender" `
+        -Action $AccionSuspender `
+        -Trigger $TriggerSuspender `
+        -Settings $SettingsSuspender `
+        -Description "Espera a que termine todo el proceso nocturno y suspende el equipo. Diario 20:55." `
+        -Force | Out-Null
+
+    Write-Host "Tarea ACTIVADA: AhorraGo - Suspender  ->  20:55  (suspende al terminar todo el proceso)"
+}
+
 # La tarea unica anterior ya no aplica: se elimina para que no corra en paralelo.
 foreach ($obsoleta in @("AhorraGo - Actualizar productos", "AhorraGo - EAN (Jumbo y Unimarc)")) {
     if (Get-ScheduledTask -TaskName $obsoleta -ErrorAction SilentlyContinue) {

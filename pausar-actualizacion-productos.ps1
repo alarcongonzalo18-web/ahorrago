@@ -4,6 +4,7 @@ $Tareas = @(
     "AhorraGo - Actualizar Jumbo",
     "AhorraGo - Actualizar Lider",
     "AhorraGo - EAN",
+    "AhorraGo - Suspender",
     "AhorraGo - EAN (Jumbo y Unimarc)",
     "AhorraGo - Actualizar productos"   # tarea unica antigua, por si quedo dando vueltas
 )
