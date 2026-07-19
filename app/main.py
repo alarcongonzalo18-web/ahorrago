@@ -9,7 +9,7 @@ import json
 from fastapi import Response
 from sqlalchemy import func
 from .database import Base, engine, SessionLocal
-from . import chat, models, schemas, services
+from . import chat, models, schemas, services, sugerencias
 from .matching import candidato_compatible
 from .matching_diagnostics import resumen_matching
 from .estado_pipeline import diagnostico as diagnostico_pipeline
@@ -68,6 +68,12 @@ def buscar(
 def comparar(request: schemas.ComparacionRequest, db: Session = Depends(get_db)):
     resultado = services.comparar_lista(db, request.productos)
     return resultado
+
+@app.get("/sugerencias")
+def obtener_sugerencias(db: Session = Depends(get_db)):
+    """Terminos del catalogo (marcas y palabras frecuentes) para el autocomplete."""
+    return {"terminos": sugerencias.obtener(db)}
+
 
 @app.get("/categorias")
 def obtener_categorias(db: Session = Depends(get_db)):

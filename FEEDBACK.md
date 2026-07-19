@@ -12,7 +12,7 @@
   la calculadora oficial del backend.
 
 ### Mejoras UX (medio)
-- [ ] **B. Sin autocomplete/sugerencias** al escribir en el buscador
+- [x] **B. Sin autocomplete/sugerencias** — RESUELTO 19-07-2026. Endpoint `/sugerencias` (2.214 términos minados del catálogo: marcas y palabras frecuentes, "trencito" incluido) + `datalist` nativo en el input. Verificado en navegador.
 - [ ] **E. Categorías sin agrupar:** Lácteos debería ser categoría madre 
   con subcategorías: leches, quesos, yogurts, etc.
 

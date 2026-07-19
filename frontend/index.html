@@ -2060,7 +2060,8 @@ body.dark .buy-btn:hover {
         <section class="hero-search">
             <div class="search-input-wrap">
                 <i data-lucide="search"></i>
-                <input id="busqueda" type="text" placeholder="Buscar producto..." aria-label="Buscar producto">
+                <input id="busqueda" type="text" placeholder="Buscar producto..." aria-label="Buscar producto" list="sugerenciasBusqueda" autocomplete="off">
+                <datalist id="sugerenciasBusqueda"></datalist>
                 <button class="clear-btn" type="button" onclick="limpiarBusqueda()" aria-label="Limpiar búsqueda">
                     <i data-lucide="x"></i>
                 </button>
@@ -3809,7 +3810,25 @@ window.addEventListener("load", () => {
     // Si la URL trae vista/busqueda (F5, link compartido), se restaura eso en
     // vez de mandar siempre a la portada.
     restaurarDesdeHash();
+
+    cargarSugerenciasBusqueda();
 });
+
+// Marcas y terminos reales del catalogo para el autocomplete del buscador
+// (feedback del beta tester: busco "Trencito" dos veces sin ayuda del input).
+async function cargarSugerenciasBusqueda() {
+    try {
+        const respuesta = await fetch(`${API}/sugerencias`);
+        if (!respuesta.ok) return;
+        const datos = await respuesta.json();
+        const lista = document.getElementById("sugerenciasBusqueda");
+        lista.innerHTML = (datos.terminos || [])
+            .map(item => `<option value="${item.t}"></option>`)
+            .join("");
+    } catch (error) {
+        // sin sugerencias se busca igual; no es motivo para romper el arranque
+    }
+}
 
 // Atras/adelante del navegador entre vistas.
 window.addEventListener("hashchange", () => {
