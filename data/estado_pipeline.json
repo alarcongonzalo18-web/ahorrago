@@ -1,0 +1,16 @@
+{
+ "publicar": {
+  "detalle": "OK (sin scrape)",
+  "duracion_min": 4.7,
+  "fecha": "2026-07-18T18:20:51",
+  "ok": true,
+  "ultimo_ok": "2026-07-18T18:20:51"
+ },
+ "tottus": {
+  "detalle": "OK (tottus)",
+  "duracion_min": 15.0,
+  "fecha": "2026-07-18T21:15:01",
+  "ok": true,
+  "ultimo_ok": "2026-07-18T21:15:01"
+ }
+}

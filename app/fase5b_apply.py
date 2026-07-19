@@ -80,7 +80,17 @@ def _productos_por_categoria(db: Session, categorias: set[str]):
     ).all()
 
 
+MAX_PRODUCTOS_POR_GRUPO = 12
+
+
 def _grupo_seguro(grupo: list[models.Producto], categoria: str) -> tuple[bool, float]:
+    # Un grupo es "el mismo producto en varias cadenas": con 4 cadenas y algunas
+    # presentaciones deberia quedar chico. Si tiene 35 productos la clave es
+    # demasiado laxa, no hay un hallazgo. Antes se validaban solo los primeros
+    # 12 y los restantes entraban sin revisar.
+    if len(grupo) > MAX_PRODUCTOS_POR_GRUPO:
+        return False, 0
+
     scores = []
     for index, producto in enumerate(grupo):
         for candidato in grupo[index + 1:]:
@@ -149,6 +159,8 @@ def seleccionar_cambios(db: Session, riesgos: set[tuple[str, str]] | None = None
         if (producto.producto_base or "").startswith("ean:"):
             continue
         key = key_fase5a(producto, categoria)
+        if not key:  # sin marca no se puede identificar: queda sin agrupar
+            continue
         if (categoria, key) in riesgos:
             continue
         grupos[(categoria, key)].append(producto)
@@ -157,7 +169,7 @@ def seleccionar_cambios(db: Session, riesgos: set[tuple[str, str]] | None = None
     for (categoria, key), grupo in sorted(grupos.items()):
         if len(grupo) <= 1:
             continue
-        seguro, score = _grupo_seguro(grupo[:12], categoria)
+        seguro, score = _grupo_seguro(grupo, categoria)
         if not seguro:
             continue
         bases_actuales = {producto.producto_base or "" for producto in grupo}

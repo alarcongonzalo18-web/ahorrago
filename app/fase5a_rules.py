@@ -131,7 +131,17 @@ def atributos_fase5a(producto, categoria: str) -> dict:
 
 
 def key_fase5a(producto, categoria: str) -> str:
+    """Clave de agrupacion, o "" si el producto no se puede identificar.
+
+    Devolver "" es deliberado: sin marca la clave queda "mascotas_mascota_gato_
+    adulto_carne_8000g", que mete Whiskas, Cat Chow y Champion Cat en el mismo
+    grupo y muestra al usuario una diferencia de precio entre productos que no
+    son el mismo. Es preferible no agrupar a agrupar mal.
+    """
     attrs = atributos_fase5a(producto, categoria)
+    if not attrs.get("marca"):
+        return ""
+
     partes = [
         attrs.get("categoria"),
         attrs.get("familia"),
@@ -155,7 +165,16 @@ def key_fase5a(producto, categoria: str) -> str:
 def compatible_fase5a(producto, candidato, categoria: str) -> bool:
     attrs_a = atributos_fase5a(producto, categoria)
     attrs_b = atributos_fase5a(candidato, categoria)
-    for campo in ["marca", "medida", "cantidad", "familia", "animal", "etapa", "talla", "genero", "variante", "retornable", "sabor", "aroma", "variedad"]:
+
+    # La marca se exige en ambos lados. El resto de los campos solo se comparan
+    # cuando estan presentes, pero con la marca esa tolerancia es peligrosa: si
+    # no se detecta, nada impide unir productos de marcas distintas.
+    if not attrs_a.get("marca") or not attrs_b.get("marca"):
+        return False
+    if attrs_a["marca"] != attrs_b["marca"]:
+        return False
+
+    for campo in ["medida", "cantidad", "familia", "animal", "etapa", "talla", "genero", "variante", "retornable", "sabor", "aroma", "variedad"]:
         if attrs_a.get(campo) and attrs_b.get(campo) and attrs_a[campo] != attrs_b[campo]:
             return False
     return candidato_compatible(producto, candidato) or matching_score(producto, candidato) >= 82

@@ -553,6 +553,9 @@ def detectar_metros_papel(texto):
     return f"{numero}m"
 
 
+MAX_TOKENS_DESCRIPTIVOS = 8
+
+
 def generar_producto_base(nombre, marca, tipo, formato):
     def normalizar_base(valor):
         texto = normalizar_texto(valor)
@@ -609,7 +612,14 @@ def generar_producto_base(nombre, marca, tipo, formato):
         if palabra not in resultado:
             resultado.append(palabra)
 
-    return "_".join(resultado[:6])
+    # El tamaño nunca se recorta. Antes se cortaba a 6 tokens con el formato al
+    # final, asi que era lo primero en perderse: "Vino Santa Ema Select Terroir
+    # Reserva Carmenere 750 cc" quedaba en "vino_santa_ema_select_terroir_reserva"
+    # y caia en el mismo grupo que el Merlot y que la botella de 375.
+    medidas = [p for p in resultado if any(c.isdigit() for c in p)]
+    descriptivos = [p for p in resultado if p not in medidas]
+
+    return "_".join(descriptivos[:MAX_TOKENS_DESCRIPTIVOS] + medidas)
 
 
 def tokens_firma(producto, texto, marca):
