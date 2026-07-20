@@ -101,15 +101,18 @@ if (Test-Path $ScriptSuspender) {
         -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$ScriptSuspender`"" `
         -WorkingDirectory $Root
     $TriggerSuspender = New-ScheduledTaskTrigger -Daily -At "20:55"
-    # Ventana larga: tiene que sobrevivir toda la noche hasta que termine el EAN
-    # (que topa a las 5 h). WakeToRun para despertar el equipo a las 20:55.
+    # Ventana larga: tiene que sobrevivir hasta DESPUES de que termine el EAN.
+    # El EAN dispara a las 03:00 y topa a las 5 h -> peor caso 08:00. El vigilante
+    # arranca 20:55, asi que 12 h lo llevan hasta las 08:55, con margen. (Con 9 h
+    # se cortaba 05:55 y las noches en que el EAN se pasaba de ahi no suspendia.)
+    # WakeToRun para despertar el equipo a las 20:55.
     $SettingsSuspender = New-ScheduledTaskSettingsSet `
         -AllowStartIfOnBatteries `
         -DontStopIfGoingOnBatteries `
         -MultipleInstances IgnoreNew `
         -StartWhenAvailable `
         -WakeToRun `
-        -ExecutionTimeLimit (New-TimeSpan -Hours 9)
+        -ExecutionTimeLimit (New-TimeSpan -Hours 12)
 
     Register-ScheduledTask `
         -TaskName "AhorraGo - Suspender" `
