@@ -188,6 +188,14 @@ def descargar_html(url, intentos=5):
             print(f"Descarga fallida ({intento}/{intentos}) para {url}: {exc}. Reintentando en {espera}s...")
             time.sleep(espera)
 
+    # Distinguir throttling de error duro para que el llamador pueda ser paciente
+    # SOLO con el throttling (esperar largo y reintentar), sin insistir sobre un
+    # 404/DNS/etc. que no se va a recuperar.
+    es_throttle = isinstance(ultimo_error, BloqueoError) or (
+        isinstance(ultimo_error, urllib.error.HTTPError) and ultimo_error.code in (429, 403, 503)
+    )
+    if es_throttle:
+        raise BloqueoError(f"throttling persistente en {url} tras {intentos} intentos: {ultimo_error}")
     raise RuntimeError(f"No se pudo descargar {url} tras {intentos} intentos: {ultimo_error}")
 
 
@@ -250,9 +258,36 @@ def extraer_productos_desde_html(categoria, subcategoria, url, html):
 MAX_PAGINAS = 60
 
 
+# Pausas largas cuando el sitio nos bloquea de verdad (429 sostenido). Van
+# ENCIMA del backoff corto de descargar_html: dejan que la ventana de throttling
+# del sitio se reponga antes de reintentar la misma pagina. Aprovechan el runway
+# nocturno (Lider corre 01:00, ~2.5h hasta el EAN de las 03:30) para recuperar
+# categorias que antes se truncaban al primer bloqueo.
+COOLDOWNS_THROTTLE = [60, 120, 180]
+
+
 def _descargar_pagina(categoria, subcategoria, pagina_url):
     html_pagina = descargar_html(pagina_url)
     return extraer_productos_desde_html(categoria, subcategoria, pagina_url, html_pagina)
+
+
+def _descargar_pagina_paciente(categoria, subcategoria, pagina_url):
+    """Como _descargar_pagina pero, ante throttling persistente (BloqueoError),
+    espera pausas largas y reintenta en vez de rendirse.
+
+    Un RuntimeError (error duro: 404, DNS, timeout no transitorio) NO se reintenta
+    aqui: se propaga de inmediato. Solo el throttling justifica esperar.
+    """
+    ultimo = None
+    for espera in [0, *COOLDOWNS_THROTTLE]:
+        if espera:
+            print(f"  bloqueo persistente en {pagina_url}; enfriando {espera}s antes de reintentar...")
+            time.sleep(espera)
+        try:
+            return _descargar_pagina(categoria, subcategoria, pagina_url)
+        except BloqueoError as exc:
+            ultimo = exc
+    raise ultimo
 
 
 def extraer_productos(categoria, subcategoria, url):
@@ -276,21 +311,24 @@ def extraer_productos(categoria, subcategoria, url):
     for pagina in range(1, MAX_PAGINAS + 1):
         pagina_url = url if pagina == 1 else f"{url}?pagenumber={pagina}"
         try:
-            productos_pagina = _descargar_pagina(categoria, subcategoria, pagina_url)
-        except RuntimeError as exc:
+            productos_pagina = _descargar_pagina_paciente(categoria, subcategoria, pagina_url)
+        except (BloqueoError, RuntimeError) as exc:
             if pagina == 1:
-                # la categoria entera no cargo: propagar (posible throttle).
+                # la categoria entera no cargo: propagar para que main la marque
+                # como ERROR (0 productos -> dispara la guardia anti-regresion),
+                # nunca como categoria vacia valida (que corromperia el guardado).
                 raise
-            print(f"{pagina_url} -> error tras reintentos, se corta la categoria: {exc}")
+            print(f"{pagina_url} -> no se pudo recuperar tras enfriamientos, se corta: {exc}")
             break
 
         if not productos_pagina:
-            # reverificar: un throttle transitorio se recupera tras la pausa;
-            # un fin real sigue vacio.
+            # Pagina con el chrome completo pero sin items: probable fin real de
+            # categoria. El throttling llega como BloqueoError (arriba), no como
+            # pagina vacia, asi que aqui basta una reverificacion corta.
             time.sleep(5)
             try:
-                productos_pagina = _descargar_pagina(categoria, subcategoria, pagina_url)
-            except RuntimeError as exc:
+                productos_pagina = _descargar_pagina_paciente(categoria, subcategoria, pagina_url)
+            except (BloqueoError, RuntimeError) as exc:
                 if pagina == 1:
                     raise
                 print(f"{pagina_url} -> vacia y error al reverificar: {exc}")

@@ -24,11 +24,17 @@ if (-not (Test-Path $Bat)) {
 # mide cada paso ("-- Scraper X: N min --"). Con esos numeros se puede ajustar.
 # Ojo: si una corrida se pasa de su ventana, la siguiente se saltea por el lock
 # (MultipleInstances IgnoreNew) y se recupera con StartWhenAvailable.
+# Orden y horarios: cada cadena corre sola (lock global -> un scraper a la vez).
+# Lider va a la 01:00 (no a las 02:00) para tener ~2.5h de runway antes del EAN
+# (03:30) y poder ser paciente con el throttling 429 de super.lider.cl sin
+# truncar categorias ni pasarse de su ventana. Jumbo NO se mueve de las 00:00:
+# su colchon hasta el backfill EAN (00:00 -> 03:30 = 3.5h) es lo que protege su
+# cuota de API (~344 req/ventana); achicarlo reintroduciria el problema de cuota.
 $Tareas = @(
     @{ Nombre = "AhorraGo - Actualizar Tottus";  Cadena = "tottus";  Hora = "21:00" }
     @{ Nombre = "AhorraGo - Actualizar Unimarc"; Cadena = "unimarc"; Hora = "22:30" }
     @{ Nombre = "AhorraGo - Actualizar Jumbo";   Cadena = "jumbo";   Hora = "00:00" }
-    @{ Nombre = "AhorraGo - Actualizar Lider";   Cadena = "lider";   Hora = "02:00" }
+    @{ Nombre = "AhorraGo - Actualizar Lider";   Cadena = "lider";   Hora = "01:00" }
 )
 
 # Tarea de EAN, DESPUES de los scrapes (03:00): asi trabaja sobre los CSV recien
@@ -39,7 +45,9 @@ $Tareas = @(
 # Corre backfill + publica a la base (--sin-scrape), sin pedirle nada extra a los
 # retailers en el segundo paso.
 $BatEan = Join-Path $Root "backfill-ean.bat"
-$TareaEan = @{ Nombre = "AhorraGo - EAN"; Args = "all"; Hora = "03:00" }
+# 03:30 (antes 03:00): media hora mas para que Lider (ahora 01:00) tenga runway
+# de sobra sin chocar el lock con el EAN. Mantiene 3.5h de colchon tras Jumbo.
+$TareaEan = @{ Nombre = "AhorraGo - EAN"; Args = "all"; Hora = "03:30" }
 
 # WakeToRun: despierta el equipo si esta suspendido (no sirve si esta apagado del
 #   todo; ver la nota de "equipo apagado" en app/docs/estado-y-handoff.md).

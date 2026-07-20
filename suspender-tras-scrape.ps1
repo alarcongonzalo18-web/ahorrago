@@ -15,7 +15,11 @@ $log = Join-Path $LogDir "suspension_$(Get-Date -Format 'yyyyMMdd').log"
 function Anotar($msg) { "$(Get-Date -Format 'HH:mm:ss')  $msg" | Out-File $log -Append -Encoding utf8 }
 
 Anotar "vigilante de suspension iniciado"
-$inicioEsperado = (Get-Date).Date.AddHours(3)   # el EAN dispara a las 03:00
+# Umbral "ya corrio el ciclo de hoy". Se deja en 03:00 a proposito como cota
+# INFERIOR aunque el EAN ahora dispare 03:30: cualquier LastRunTime de hoy (>=03:30)
+# lo supera, y evita falsos negativos por jitter del scheduler. No suspende entre
+# 03:00 y 03:30 porque el EAN de hoy aun no marco su LastRunTime.
+$inicioEsperado = (Get-Date).Date.AddHours(3)
 
 while ($true) {
     Start-Sleep -Seconds 300
@@ -33,7 +37,7 @@ while ($true) {
         continue
     }
     if (-not $eanYaCorrio) {
-        Anotar "esperando a que dispare el EAN de las 03:00"
+        Anotar "esperando a que dispare el EAN de las 03:30"
         continue
     }
 
