@@ -314,7 +314,7 @@ def extraer_productos(categoria, subcategoria, url):
         if nuevos == 0:
             break
 
-        time.sleep(1.0)
+        time.sleep(PAUSA_ENTRE_PAGINAS)
 
     return productos
 
@@ -379,6 +379,14 @@ def validar_anti_regresion(nuevos, previos, umbral=0.5):
     return caidas
 
 
+# Pacing de Lider: darle mas tiempo para no estresar la actualizacion y evitar el
+# throttling (que suele acumularse hacia el final del recorrido). Antes: 1s entre
+# paginas y CERO entre categorias, lo que gatillaba caidas >50% en las ultimas
+# subcategorias (ej. Limpiadores, Jabon). Son knobs: subir si el throttling vuelve.
+PAUSA_ENTRE_PAGINAS = 2.0     # segundos entre paginas de una misma categoria (antes 1.0)
+PAUSA_ENTRE_CATEGORIAS = 3.0  # segundos de respiro al pasar de una categoria a la siguiente (antes 0)
+
+
 def main():
     productos = []
     vistos = set()
@@ -400,6 +408,9 @@ def main():
                 productos.append(producto)
         except Exception as e:
             print(f"Error en {subcategoria} ({url}): {e}. Continuando...")
+
+        # respiro entre categorias para no encadenar demasiadas requests seguidas
+        time.sleep(PAUSA_ENTRE_CATEGORIAS)
 
     # guardia anti-regresion: nunca pisar el CSV bueno con una corrida que
     # perdio categorias por throttling. Si alguna subcategoria conocida cae
