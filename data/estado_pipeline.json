@@ -1,37 +1,43 @@
 {
+ "ean-backfill": {
+  "detalle": "cache: 19203 slugs, 18827 con EAN",
+  "fecha": "2026-07-22T04:16:47",
+  "ok": true,
+  "ultimo_ok": "2026-07-22T04:16:47"
+ },
  "jumbo": {
   "detalle": "OK (jumbo)",
-  "duracion_min": 12.3,
-  "fecha": "2026-07-19T00:12:20",
+  "duracion_min": 12.2,
+  "fecha": "2026-07-22T00:12:12",
   "ok": true,
-  "ultimo_ok": "2026-07-19T00:12:20"
+  "ultimo_ok": "2026-07-22T00:12:12"
  },
  "lider": {
   "detalle": "OK (lider)",
-  "duracion_min": 19.3,
-  "fecha": "2026-07-19T02:19:22",
+  "duracion_min": 53.8,
+  "fecha": "2026-07-22T07:30:01",
   "ok": true,
-  "ultimo_ok": "2026-07-19T02:19:22"
+  "ultimo_ok": "2026-07-22T07:30:01"
  },
  "publicar": {
   "detalle": "OK (sin scrape)",
-  "duracion_min": 2.6,
-  "fecha": "2026-07-19T12:55:22",
+  "duracion_min": 10.5,
+  "fecha": "2026-07-22T04:27:18",
   "ok": true,
-  "ultimo_ok": "2026-07-19T12:55:22"
+  "ultimo_ok": "2026-07-22T04:27:18"
  },
  "tottus": {
   "detalle": "OK (tottus)",
-  "duracion_min": 15.0,
-  "fecha": "2026-07-18T21:15:01",
+  "duracion_min": 19.2,
+  "fecha": "2026-07-21T21:19:16",
   "ok": true,
-  "ultimo_ok": "2026-07-18T21:15:01"
+  "ultimo_ok": "2026-07-21T21:19:16"
  },
  "unimarc": {
   "detalle": "OK (unimarc)",
-  "duracion_min": 65.0,
-  "fecha": "2026-07-18T23:35:01",
+  "duracion_min": 74.9,
+  "fecha": "2026-07-21T23:44:56",
   "ok": true,
-  "ultimo_ok": "2026-07-18T23:35:01"
+  "ultimo_ok": "2026-07-21T23:44:56"
  }
 }
