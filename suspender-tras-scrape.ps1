@@ -15,11 +15,19 @@ $log = Join-Path $LogDir "suspension_$(Get-Date -Format 'yyyyMMdd').log"
 function Anotar($msg) { "$(Get-Date -Format 'HH:mm:ss')  $msg" | Out-File $log -Append -Encoding utf8 }
 
 Anotar "vigilante de suspension iniciado"
-# Umbral "ya corrio el ciclo de hoy". Se deja en 03:00 a proposito como cota
-# INFERIOR aunque el EAN ahora dispare 03:30: cualquier LastRunTime de hoy (>=03:30)
-# lo supera, y evita falsos negativos por jitter del scheduler. No suspende entre
-# 03:00 y 03:30 porque el EAN de hoy aun no marco su LastRunTime.
-$inicioEsperado = (Get-Date).Date.AddHours(3)
+
+# Baseline del EAN: cuando arranca el vigilante (20:55) el EAN de ESTA noche
+# todavia no corrio, asi que su LastRunTime es el de la noche ANTERIOR. Lo
+# guardamos y esperamos a que AVANCE.
+#
+# BUG que esto corrige (20-07-2026): antes se comparaba contra "hoy 03:00"
+# ((Get-Date).Date.AddHours(3)), que a las 20:55 ya esta en el PASADO: el EAN de
+# esa misma madrugada lo satisfacia, el vigilante creia que ya habia terminado
+# todo y suspendia el equipo apenas terminaba el primer scrape (Tottus, 21:30).
+# Resultado: Unimarc, Jumbo, Lider y el EAN no corrieron esa noche.
+$eanBaseline = (Get-ScheduledTaskInfo -TaskName "AhorraGo - EAN").LastRunTime
+if (-not $eanBaseline) { $eanBaseline = [datetime]::MinValue }
+Anotar "baseline EAN: $eanBaseline (espero a que avance)"
 
 while ($true) {
     Start-Sleep -Seconds 300
@@ -30,7 +38,7 @@ while ($true) {
     $corriendo = @($tareas | Where-Object State -eq "Running")
 
     $ean = Get-ScheduledTaskInfo -TaskName "AhorraGo - EAN"
-    $eanYaCorrio = $ean.LastRunTime -ge $inicioEsperado
+    $eanYaCorrio = $ean.LastRunTime -gt $eanBaseline
 
     if ($corriendo.Count -gt 0) {
         Anotar "corriendo: $($corriendo.TaskName -join ', ')"
