@@ -383,8 +383,8 @@ def validar_anti_regresion(nuevos, previos, umbral=0.5):
 # throttling (que suele acumularse hacia el final del recorrido). Antes: 1s entre
 # paginas y CERO entre categorias, lo que gatillaba caidas >50% en las ultimas
 # subcategorias (ej. Limpiadores, Jabon). Son knobs: subir si el throttling vuelve.
-PAUSA_ENTRE_PAGINAS = 2.0     # segundos entre paginas de una misma categoria (antes 1.0)
-PAUSA_ENTRE_CATEGORIAS = 3.0  # segundos de respiro al pasar de una categoria a la siguiente (antes 0)
+PAUSA_ENTRE_PAGINAS = 4.0     # segundos entre paginas de una misma categoria (1.0 -> 2.0 -> 4.0)
+PAUSA_ENTRE_CATEGORIAS = 6.0  # segundos de respiro al pasar de una categoria a la siguiente (0 -> 3.0 -> 6.0)
 
 
 def main():
