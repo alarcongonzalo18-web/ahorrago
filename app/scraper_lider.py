@@ -362,21 +362,69 @@ def leer_conteo_previo(path=OUTPUT):
         return contar_por_subcategoria(csv.DictReader(f))
 
 
-def validar_anti_regresion(nuevos, previos, umbral=0.5):
+# Subcategorias que en el endpoint viejo (/v/) quedaron DEGRADADAS de forma
+# permanente porque Lider migro su catalogo real al SPA de Walmart (/browse). No
+# son throttling: por mas que se re-scrapee, /v/ ya no las sirve completas (ej.
+# Jabon cayo de ~54 a ~10 y no vuelve). Se EXIMEN del guard para que una categoria
+# muerta no bloquee toda la corrida. Ver app/docs/lider-endpoint-nuevo.md.
+SUBCATEGORIAS_DEGRADADAS = frozenset({"Jabon"})
+
+
+def validar_anti_regresion(nuevos, previos, umbral=0.5, exentas=SUBCATEGORIAS_DEGRADADAS):
     """Subcategorias conocidas que cayeron mas de `umbral` vs la corrida previa.
 
     Devuelve lista de (subcategoria, antes, ahora). Una caida a 0 o por debajo
     del `umbral` (ej: >50%) se considera regresion, senal de throttling. No
-    marca subidas ni subcategorias nuevas (no estaban antes).
+    marca subidas, subcategorias nuevas (no estaban antes) ni las `exentas`
+    (degradadas de forma permanente en el endpoint viejo).
     """
     caidas = []
     for sub, antes in previos.items():
-        if antes == 0:
+        if antes == 0 or sub in exentas:
             continue
         ahora = nuevos.get(sub, 0)
         if ahora < antes * (1 - umbral):
             caidas.append((sub, antes, ahora))
     return caidas
+
+
+def leer_productos_previos(path=OUTPUT):
+    """Filas del CSV previo como lista de dicts. [] si no existe."""
+    path = Path(path)
+    if not path.exists():
+        return []
+    with open(path, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def fusionar_preservando(nuevos, previos, umbral=0.5, exentas=SUBCATEGORIAS_DEGRADADAS):
+    """Merge por subcategoria que nunca deja que una categoria retroceda.
+
+    Para cada subcategoria que en `nuevos` cayo mas de `umbral` respecto de
+    `previos` (y no esta en `exentas`), se descartan sus filas nuevas y se
+    conservan las previas (carry-forward): la corrida sospechosa de throttling
+    no pisa la buena SOLO en esa categoria, pero el resto se publica fresco.
+
+    Devuelve (filas_fusionadas, preservadas) donde `preservadas` es la lista de
+    (subcategoria, antes, ahora) que se dejaron con la data previa.
+    """
+    conteo_nuevos = contar_por_subcategoria(nuevos)
+    conteo_previos = contar_por_subcategoria(previos)
+
+    preservadas = []
+    for sub, antes in conteo_previos.items():
+        if antes == 0 or sub in exentas:
+            continue
+        if conteo_nuevos.get(sub, 0) < antes * (1 - umbral):
+            preservadas.append((sub, antes, conteo_nuevos.get(sub, 0)))
+
+    if not preservadas:
+        return list(nuevos), []
+
+    a_preservar = {sub for sub, _, _ in preservadas}
+    fusion = [p for p in nuevos if p.get("subcategoria") not in a_preservar]
+    fusion += [p for p in previos if p.get("subcategoria") in a_preservar]
+    return fusion, preservadas
 
 
 # Pacing de Lider: darle mas tiempo para no estresar la actualizacion y evitar el
@@ -387,48 +435,81 @@ PAUSA_ENTRE_PAGINAS = 4.0     # segundos entre paginas de una misma categoria (1
 PAUSA_ENTRE_CATEGORIAS = 6.0  # segundos de respiro al pasar de una categoria a la siguiente (0 -> 3.0 -> 6.0)
 
 
+# Cooldown antes de re-scrapear una categoria sospechosa de throttling: mas
+# largo que la pausa normal, para darle tiempo al sitio a des-throttlear.
+PAUSA_REINTENTO_CATEGORIA = 30.0
+
+
+def _acumular(categoria, subcategoria, url, productos, vistos):
+    """Scrapea una categoria y agrega a `productos` los que no esten en `vistos`.
+
+    Devuelve cuantos productos nuevos sumo. Deduplica cross-categoria por la
+    misma clave (categoria, subcategoria, nombre, precio, url) que usaba main().
+    """
+    sumados = 0
+    for producto in extraer_productos(categoria, subcategoria, url):
+        key = (
+            producto["categoria"],
+            producto["subcategoria"],
+            producto["nombre"],
+            producto["precio"],
+            producto["url"],
+        )
+        if key in vistos:
+            continue
+        vistos.add(key)
+        productos.append(producto)
+        sumados += 1
+    return sumados
+
+
 def main():
     productos = []
     vistos = set()
 
     for categoria, subcategoria, url in CATEGORIAS:
         try:
-            for producto in extraer_productos(categoria, subcategoria, url):
-                key = (
-                    producto["categoria"],
-                    producto["subcategoria"],
-                    producto["nombre"],
-                    producto["precio"],
-                    producto["url"]
-                )
-                if key in vistos:
-                    continue
-
-                vistos.add(key)
-                productos.append(producto)
+            _acumular(categoria, subcategoria, url, productos, vistos)
         except Exception as e:
             print(f"Error en {subcategoria} ({url}): {e}. Continuando...")
 
         # respiro entre categorias para no encadenar demasiadas requests seguidas
         time.sleep(PAUSA_ENTRE_CATEGORIAS)
 
-    # guardia anti-regresion: nunca pisar el CSV bueno con una corrida que
-    # perdio categorias por throttling. Si alguna subcategoria conocida cae
-    # >50% (o a 0), guardar aparte en .nuevo para inspeccion y avisar.
-    previos = leer_conteo_previo(OUTPUT)
-    nuevos_conteo = contar_por_subcategoria(productos)
-    caidas = validar_anti_regresion(nuevos_conteo, previos)
+    previos_conteo = leer_conteo_previo(OUTPUT)
 
-    if caidas:
-        destino = OUTPUT.with_suffix(OUTPUT.suffix + ".nuevo")
-        guardar_productos(productos, destino)
-        print("\n*** REGRESION DETECTADA: no se piso", OUTPUT, "***")
-        print(f"La corrida nueva ({len(productos)} productos) quedo en {destino}")
-        print("Subcategorias que cayeron >50% (probable throttling):")
-        for sub, antes, ahora in sorted(caidas, key=lambda c: c[1] - c[2], reverse=True):
-            print(f"  - {sub}: {antes} -> {ahora}")
-        print("Revisa el .nuevo o re-scrapea en una sola pasada pausada antes de reemplazar.")
-        return
+    # 1) Reintento de throttling: las categorias (no degradadas) que quedaron
+    #    >50% por debajo de la corrida previa se re-scrapean UNA vez, tras un
+    #    cooldown largo. Recupera las que cayeron por rate-limiting (ej. Cecinas).
+    if previos_conteo:
+        conteo = contar_por_subcategoria(productos)
+        sospechosas = [
+            (cat, sub, url) for cat, sub, url in CATEGORIAS
+            if previos_conteo.get(sub, 0) > 0
+            and sub not in SUBCATEGORIAS_DEGRADADAS
+            and conteo.get(sub, 0) < previos_conteo[sub] * 0.5
+        ]
+        for categoria, subcategoria, url in sospechosas:
+            print(f"Reintentando {subcategoria} (quedo {conteo.get(subcategoria, 0)} vs "
+                  f"{previos_conteo.get(subcategoria)} previos) tras {PAUSA_REINTENTO_CATEGORIA:.0f}s...")
+            time.sleep(PAUSA_REINTENTO_CATEGORIA)
+            try:
+                _acumular(categoria, subcategoria, url, productos, vistos)
+            except Exception as e:
+                print(f"Reintento de {subcategoria} fallo: {e}. Continuando...")
+
+    # 2) Carry-forward por categoria: si tras el reintento alguna categoria (no
+    #    degradada) sigue >50% abajo, se conservan sus filas PREVIAS y se publica
+    #    el resto fresco. Asi Lider siempre publica y ninguna categoria retrocede,
+    #    en vez del viejo todo-o-nada que dejaba la base congelada por una sola.
+    previos_prod = leer_productos_previos(OUTPUT)
+    productos, preservadas = fusionar_preservando(productos, previos_prod)
+
+    if preservadas:
+        print("\nCategorias con throttling persistente: se conservo la data previa "
+              "(el resto se publica fresco):")
+        for sub, antes, ahora in sorted(preservadas, key=lambda c: c[1] - c[2], reverse=True):
+            print(f"  - {sub}: nuevo {ahora} < previo {antes}  -> se mantiene {antes}")
 
     guardar_productos(productos, OUTPUT)
     print(f"{len(productos)} productos Lider guardados")
