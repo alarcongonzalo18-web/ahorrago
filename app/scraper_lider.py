@@ -397,6 +397,21 @@ def leer_productos_previos(path=OUTPUT):
         return list(csv.DictReader(f))
 
 
+def solo_subcategorias(items, subcategorias):
+    """Filtra un conteo (dict) o una lista de filas a `subcategorias`.
+
+    Necesario al migrar la taxonomia de una cadena (keyword -> categoria real):
+    el CSV previo trae las subcategorias VIEJAS, que ya no existen en el mapeo
+    nuevo. Sin este filtro, el guard las veria caer a 0 y bloquearia (o
+    carry-forwardearia data vieja) en la primera corrida migrada. En corridas
+    normales (misma taxonomia) es un no-op. Ver validar_anti_regresion.
+    """
+    subcategorias = set(subcategorias)
+    if isinstance(items, dict):
+        return {s: c for s, c in items.items() if s in subcategorias}
+    return [p for p in items if p.get("subcategoria") in subcategorias]
+
+
 def fusionar_preservando(nuevos, previos, umbral=0.5, exentas=SUBCATEGORIAS_DEGRADADAS):
     """Merge por subcategoria que nunca deja que una categoria retroceda.
 

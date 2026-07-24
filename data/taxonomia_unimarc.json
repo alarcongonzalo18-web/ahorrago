@@ -1,0 +1,423 @@
+[
+  {
+    "rubro": "Carnes",
+    "slug": "carnes",
+    "id": 349,
+    "subcategorias": [
+      {
+        "name": "Vacuno",
+        "slug": "carnes/vacuno"
+      },
+      {
+        "name": "Pollo",
+        "slug": "carnes/pollo"
+      },
+      {
+        "name": "Cerdo",
+        "slug": "carnes/cerdo"
+      },
+      {
+        "name": "Pavo",
+        "slug": "carnes/pavo"
+      },
+      {
+        "name": "Cordero y otros",
+        "slug": "carnes/cordero-y-otros"
+      }
+    ]
+  },
+  {
+    "rubro": "Frutas y Verduras",
+    "slug": "frutas-y-verduras",
+    "id": 350,
+    "subcategorias": [
+      {
+        "name": "Frutas",
+        "slug": "frutas-y-verduras/frutas"
+      },
+      {
+        "name": "Verduras",
+        "slug": "frutas-y-verduras/verduras"
+      },
+      {
+        "name": "Frutos secos",
+        "slug": "frutas-y-verduras/frutos-secos"
+      }
+    ]
+  },
+  {
+    "rubro": "Lácteos, Huevos y Refrigerados",
+    "slug": "lacteos-huevos-y-refrigerados",
+    "id": 351,
+    "subcategorias": [
+      {
+        "name": "Leches, cremas y bebidas vegetales",
+        "slug": "lacteos-huevos-y-refrigerados/leches-y-cremas"
+      },
+      {
+        "name": "Yoghurt",
+        "slug": "lacteos-huevos-y-refrigerados/yoghurt"
+      },
+      {
+        "name": "Mantequillas",
+        "slug": "lacteos-huevos-y-refrigerados/mantequillas"
+      },
+      {
+        "name": "Huevos",
+        "slug": "lacteos-huevos-y-refrigerados/huevos"
+      },
+      {
+        "name": "Postres",
+        "slug": "lacteos-huevos-y-refrigerados/postres"
+      },
+      {
+        "name": "Bebidas vegetales",
+        "slug": "lacteos-huevos-y-refrigerados/bebidas-vegetales"
+      }
+    ]
+  },
+  {
+    "rubro": "Quesos y Fiambres",
+    "slug": "quesos-y-fiambres",
+    "id": 352,
+    "subcategorias": [
+      {
+        "name": "Fiambres y embutidos",
+        "slug": "quesos-y-fiambres/fiambres-y-embutidos"
+      },
+      {
+        "name": "Quesos",
+        "slug": "quesos-y-fiambres/quesos"
+      }
+    ]
+  },
+  {
+    "rubro": "Panadería y Pastelería",
+    "slug": "panaderia-y-pasteleria",
+    "id": 353,
+    "subcategorias": [
+      {
+        "name": "Pan",
+        "slug": "panaderia-y-pasteleria/pan"
+      },
+      {
+        "name": "Pan envasado",
+        "slug": "panaderia-y-pasteleria/pan-envasado"
+      },
+      {
+        "name": "Pastelería",
+        "slug": "panaderia-y-pasteleria/pasteleria"
+      },
+      {
+        "name": "Asaduría",
+        "slug": "panaderia-y-pasteleria/asaduria"
+      }
+    ]
+  },
+  {
+    "rubro": "Congelados",
+    "slug": "congelados",
+    "id": 354,
+    "subcategorias": [
+      {
+        "name": "Hielo, helados y postres",
+        "slug": "congelados/hielo-helados-y-postres"
+      },
+      {
+        "name": "Frutas y verduras congeladas",
+        "slug": "congelados/frutas-y-verduras-congeladas"
+      },
+      {
+        "name": "Hamburguesas, apanados y churrascos",
+        "slug": "congelados/hamburguesas-apanados-y-churrascos"
+      },
+      {
+        "name": "Pescados y mariscos",
+        "slug": "congelados/pescados-y-mariscos"
+      },
+      {
+        "name": "Platos congelados",
+        "slug": "congelados/platos-congelados"
+      }
+    ]
+  },
+  {
+    "rubro": "Despensa",
+    "slug": "despensa",
+    "id": 355,
+    "subcategorias": [
+      {
+        "name": "Arroz y legumbres",
+        "slug": "despensa/arroz-y-legumbres"
+      },
+      {
+        "name": "Fideos, pastas y salsas",
+        "slug": "despensa/fideos-pastas-y-salsas"
+      },
+      {
+        "name": "Aceite y aliños",
+        "slug": "despensa/aceite-y-alinos"
+      },
+      {
+        "name": "Azúcar y endulzantes",
+        "slug": "despensa/azucar-y-endulzantes"
+      },
+      {
+        "name": "Condimentos y salsas",
+        "slug": "despensa/condimentos-y-salsas"
+      },
+      {
+        "name": "Harina y repostería",
+        "slug": "despensa/harina-y-reposteria"
+      },
+      {
+        "name": "Conservas",
+        "slug": "despensa/conservas"
+      },
+      {
+        "name": "Cóctel y snacks",
+        "slug": "despensa/coctel-y-snacks"
+      },
+      {
+        "name": "Comida instantánea y preparada",
+        "slug": "despensa/comida-instantanea-y-preparada"
+      },
+      {
+        "name": "Cocina internacional",
+        "slug": "despensa/cocina-internacional"
+      },
+      {
+        "name": "Productos naturales",
+        "slug": "despensa/productos-naturales"
+      }
+    ]
+  },
+  {
+    "rubro": "Desayuno y Dulces",
+    "slug": "desayuno-y-dulces",
+    "id": 356,
+    "subcategorias": [
+      {
+        "name": "Café, té y hierbas",
+        "slug": "desayuno-y-dulces/cafe-te-y-hierbas"
+      },
+      {
+        "name": "Cereales",
+        "slug": "desayuno-y-dulces/cereales"
+      },
+      {
+        "name": "Chocolates y confites",
+        "slug": "desayuno-y-dulces/chocolates-y-confites"
+      },
+      {
+        "name": "Galletas y colaciones dulces",
+        "slug": "desayuno-y-dulces/galletas-y-colaciones-dulces"
+      },
+      {
+        "name": "Mermelada y manjar",
+        "slug": "desayuno-y-dulces/mermelada-y-manjar"
+      },
+      {
+        "name": "Miel y salsas",
+        "slug": "desayuno-y-dulces/miel-y-salsas"
+      }
+    ]
+  },
+  {
+    "rubro": "Bebidas y Licores",
+    "slug": "bebidas-y-licores",
+    "id": 357,
+    "subcategorias": [
+      {
+        "name": "Aguas",
+        "slug": "bebidas-y-licores/aguas"
+      },
+      {
+        "name": "Bebidas",
+        "slug": "bebidas-y-licores/bebidas"
+      },
+      {
+        "name": "Jugos",
+        "slug": "bebidas-y-licores/jugos"
+      },
+      {
+        "name": "Cervezas",
+        "slug": "bebidas-y-licores/cervezas"
+      },
+      {
+        "name": "Vinos y espumantes",
+        "slug": "bebidas-y-licores/vinos-y-espumantes"
+      },
+      {
+        "name": "Destilados y licores",
+        "slug": "bebidas-y-licores/destilados-y-licores"
+      }
+    ]
+  },
+  {
+    "rubro": "Limpieza",
+    "slug": "limpieza",
+    "id": 358,
+    "subcategorias": [
+      {
+        "name": "Detergente",
+        "slug": "limpieza/detergente"
+      },
+      {
+        "name": "Papeles",
+        "slug": "limpieza/papeles"
+      },
+      {
+        "name": "Baño y cocina",
+        "slug": "limpieza/bano-y-cocina"
+      },
+      {
+        "name": "Limpieza hogar",
+        "slug": "limpieza/limpieza-hogar"
+      },
+      {
+        "name": "Pisos y muebles",
+        "slug": "limpieza/pisos-y-muebles"
+      },
+      {
+        "name": "Accesorios aseo",
+        "slug": "limpieza/accesorios-aseo"
+      }
+    ]
+  },
+  {
+    "rubro": "Perfumería",
+    "slug": "perfumeria",
+    "id": 359,
+    "subcategorias": [
+      {
+        "name": "Cuidado capilar",
+        "slug": "perfumeria/cuidado-capilar"
+      },
+      {
+        "name": "Cuidado bucal",
+        "slug": "perfumeria/cuidado-bucal"
+      },
+      {
+        "name": "Cuidado personal",
+        "slug": "perfumeria/cuidado-personal"
+      },
+      {
+        "name": "Cuidado corporal y facial",
+        "slug": "perfumeria/cuidado-corporal-y-facial"
+      },
+      {
+        "name": "Cuidado femenino",
+        "slug": "perfumeria/cuidado-femenino"
+      },
+      {
+        "name": "Cuidado masculino",
+        "slug": "perfumeria/cuidado-masculino"
+      },
+      {
+        "name": "Cuidado adulto",
+        "slug": "perfumeria/cuidado-adulto"
+      },
+      {
+        "name": "Farmacia",
+        "slug": "perfumeria/farmacia"
+      }
+    ]
+  },
+  {
+    "rubro": "Bebés y Niños",
+    "slug": "bebes-y-ninos",
+    "id": 360,
+    "subcategorias": [
+      {
+        "name": "Alimentación",
+        "slug": "bebes-y-ninos/alimentacion"
+      },
+      {
+        "name": "Pañales y toallas húmedas",
+        "slug": "bebes-y-ninos/panales-y-toallas-humedas"
+      },
+      {
+        "name": "Perfumería",
+        "slug": "bebes-y-ninos/perfumeria"
+      }
+    ]
+  },
+  {
+    "rubro": "Mascotas",
+    "slug": "mascotas",
+    "id": 361,
+    "subcategorias": [
+      {
+        "name": "Alimento perro",
+        "slug": "mascotas/alimento-perro"
+      },
+      {
+        "name": "Alimento gato",
+        "slug": "mascotas/alimento-gato"
+      },
+      {
+        "name": "Alimento otras mascotas",
+        "slug": "mascotas/alimento-otras-mascotas"
+      },
+      {
+        "name": "Accesorios mascota",
+        "slug": "mascotas/accesorios-mascota"
+      }
+    ]
+  },
+  {
+    "rubro": "Hogar",
+    "slug": "hogar",
+    "id": 362,
+    "subcategorias": [
+      {
+        "name": "Aire libre",
+        "slug": "hogar/aire-libre"
+      },
+      {
+        "name": "Librería, celebraciones y juguetes",
+        "slug": "hogar/libreria-celebraciones-y-juguetes"
+      },
+      {
+        "name": "Cocina y mesa",
+        "slug": "hogar/cocina-y-mesa"
+      },
+      {
+        "name": "Ferretería y automotriz",
+        "slug": "hogar/ferreteria-y-automotriz"
+      },
+      {
+        "name": "Hogar",
+        "slug": "hogar/hogar"
+      },
+      {
+        "name": "Electrohogar",
+        "slug": "hogar/electrohogar"
+      }
+    ]
+  },
+  {
+    "rubro": "Veganos y vegetarianos",
+    "slug": "veganos-y-vegetarianos",
+    "id": 829,
+    "subcategorias": [
+      {
+        "name": "Bebidas vegetales",
+        "slug": "veganos-y-vegetarianos/bebidas-vegetales"
+      },
+      {
+        "name": "Congelados",
+        "slug": "veganos-y-vegetarianos/congelados"
+      },
+      {
+        "name": "Despensa",
+        "slug": "veganos-y-vegetarianos/despensa"
+      },
+      {
+        "name": "Refrigerados",
+        "slug": "veganos-y-vegetarianos/refrigerados"
+      }
+    ]
+  }
+]

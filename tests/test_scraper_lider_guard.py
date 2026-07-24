@@ -4,6 +4,7 @@ from app.scraper_lider import (
     fusionar_preservando,
     guardar_productos,
     leer_conteo_previo,
+    solo_subcategorias,
     validar_anti_regresion,
 )
 
@@ -19,6 +20,26 @@ def test_contar_por_subcategoria_agrupa():
         _producto("Yogurt", "c"),
     ]
     assert contar_por_subcategoria(productos) == {"Leche": 2, "Yogurt": 1}
+
+
+def test_solo_subcategorias_filtra_conteo_y_filas():
+    # dict (conteo)
+    conteo = {"Leches y cremas": 50, "leche": 30, "yogurt": 20}
+    assert solo_subcategorias(conteo, {"Leches y cremas"}) == {"Leches y cremas": 50}
+    # lista de filas
+    filas = [_producto("Leches y cremas", "a"), _producto("leche", "vieja")]
+    assert solo_subcategorias(filas, {"Leches y cremas"}) == [_producto("Leches y cremas", "a")]
+
+
+def test_guard_no_reporta_caidas_tras_migrar_taxonomia():
+    """El caso real: al migrar keyword->categoria, el CSV previo trae subcats
+    viejas ('leche', 'yogurt'); el mapeo nuevo usa otras ('Leches y cremas').
+    Filtrando el baseline, el guard no ve caidas falsas."""
+    previos = {"leche": 300, "yogurt": 200}          # taxonomia vieja
+    nuevos = {"Leches y cremas": 280, "Yoghurt": 190}  # taxonomia nueva
+    subcats_nuevas = {"Leches y cremas", "Yoghurt"}
+    previos_filtrado = solo_subcategorias(previos, subcats_nuevas)
+    assert validar_anti_regresion(nuevos, previos_filtrado) == []
 
 
 def test_validar_anti_regresion_detecta_caida_fuerte_y_a_cero():
