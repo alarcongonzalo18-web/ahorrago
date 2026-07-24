@@ -8,6 +8,41 @@
 > [ean-jumbo.md](ean-jumbo.md) / [ean-unimarc.md](ean-unimarc.md) (contratos de EAN) ·
 > [ahorrago-contexto.md](ahorrago-contexto.md) (histórico detallado).
 
+## Migración a categorías reales — LAS 3 CADENAS, 23-07-2026
+
+Jumbo, Unimarc y Tottus dejaron de buscar por ~50 keywords y ahora **recorren el árbol de
+categorías real** de cada sitio (de ~150 keywords sueltas a **226 subcategorías nivel-2**,
+solo rubros de consumo). Multiplica el catálogo y, con él, los grupos comparables (el KPI).
+
+| Cadena | Transporte nuevo | Subcats | EAN en listado | Commit |
+|---|---|---|---|---|
+| **Unimarc** | Selenium por `/category/<slug>?page=N`, parsea `__NEXT_DATA__` | 66 | **SÍ, directo** | `e9f9bff` |
+| **Jumbo** | `ac.cnstrc.com/browse/group_id/<id>` (misma key del `.env`) | 89 | no (backfill, igual que antes) | `4b9b147` |
+| **Tottus** | `/tottus-cl/lista/CATG<id>/…?page=N`, urllib sin WAF | 71 | no (backfill) | `9e077a0` |
+
+- **Por qué Unimarc quedó en Selenium** (no BFF, contra el plan inicial): el BFF capa a 50
+  productos/categoría y no pagina; el HTML y `_next/data` dan **403 (WAF Akamai)** desde
+  urllib — el WAF fingerprintea el cliente TLS, no basta la cookie. Selenium (ya dependencia)
+  es la única vía; optimizado con `page_load_strategy=eager` + sin imágenes, ~2.5 s/página.
+  Bonus: el listado trae EAN → los productos de Unimarc **nacen comparables**, sin backfill.
+- **Guards reforzados** en las 3: filtro de baseline (`solo_subcategorias`, para que el
+  renombre de taxonomía no dispare falsas caídas) + carry-forward por subcategoría + red de
+  seguridad de totales (si el total baja tras migrar, deja `.nuevo` y no pisa).
+- **Mapeos curados** a las 12 categorías internas (excluidos Electrohogar/Ferretería/
+  Librería/Farmacia). El árbol de cada cadena se reproduce con
+  `python -m app.descubrir_taxonomia <unimarc|jumbo|tottus>`.
+- **134 tests** (baseline 116 → +18). Cada cadena con smoke real de 2 categorías verificado.
+
+### ⚠️ Pendiente: primera corrida nocturna migrada (la prueba de fuego)
+
+Los smokes fueron de 2 categorías/cadena. **La primera corrida nocturna completa es la
+validación real** — ahí se ve el catálogo multiplicado. Al reactivar el pipeline:
+`git pull` en este equipo (trae las 3 migraciones) y revisar tras la primera noche:
+`python -m app.estado_pipeline`, duraciones por paso, `reports/pipeline_category_rejections.csv`
+(si un nivel-2 concentra rechazos → remapear en la constante `CATEGORIAS` del scraper), y
+**grupos comparables antes/después**. Los guards protegen: una cadena que falle deja `.nuevo`
+sin pisar los datos buenos.
+
 ## Migración de equipo — COMPLETADA 19-07-2026
 
 **Este equipo es el dueño oficial de los datos desde hoy.** Se migró el pipeline siguiendo
