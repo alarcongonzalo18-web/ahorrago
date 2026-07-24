@@ -1,0 +1,549 @@
+[
+  {
+    "rubro": "Lacteos, Huevos y Congelados",
+    "id": 1,
+    "total": 3168,
+    "subcategorias": [
+      {
+        "name": "Verduras Congeladas",
+        "id": "1157",
+        "count": 145
+      },
+      {
+        "name": "Leches",
+        "id": "3",
+        "count": 476
+      },
+      {
+        "name": "Yoghurt",
+        "id": "8",
+        "count": 460
+      },
+      {
+        "name": "Hamburguesas",
+        "id": "1139",
+        "count": 162
+      },
+      {
+        "name": "Comidas Congeladas",
+        "id": "1129",
+        "count": 155
+      },
+      {
+        "name": "Mantequillas y Margarinas",
+        "id": "13",
+        "count": 121
+      },
+      {
+        "name": "Nuggets, Apanados y Embutidos",
+        "id": "1152",
+        "count": 120
+      },
+      {
+        "name": "Postres Refrigerados",
+        "id": "12",
+        "count": 156
+      },
+      {
+        "name": "Huevos",
+        "id": "19",
+        "count": 127
+      },
+      {
+        "name": "Frutas y Pulpas Congeladas",
+        "id": "1135",
+        "count": 101
+      },
+      {
+        "name": "Helados y Postres",
+        "id": "1143",
+        "count": 755
+      },
+      {
+        "name": "Churrascos, Lomitos y Otros",
+        "id": "1126",
+        "count": 23
+      },
+      {
+        "name": "Leches Cultivadas y Bebidas Lácteas",
+        "id": "691",
+        "count": 154
+      },
+      {
+        "name": "Bebidas Vegetales",
+        "id": "690",
+        "count": 133
+      },
+      {
+        "name": "Manjar y Dulce de Leche",
+        "id": "1106",
+        "count": 73
+      },
+      {
+        "name": "Hielo",
+        "id": "1151",
+        "count": 40
+      }
+    ]
+  },
+  {
+    "rubro": "Frutas y Verduras",
+    "id": 20,
+    "total": 1078,
+    "subcategorias": [
+      {
+        "name": "Frutas",
+        "id": "783",
+        "count": 224
+      },
+      {
+        "name": "Verduras",
+        "id": "786",
+        "count": 502
+      },
+      {
+        "name": "Frutos Secos y Semillas",
+        "id": "788",
+        "count": 224
+      },
+      {
+        "name": "Frutas y verduras orgánicas",
+        "id": "23",
+        "count": 137
+      }
+    ]
+  },
+  {
+    "rubro": "Despensa",
+    "id": 27,
+    "total": 5426,
+    "subcategorias": [
+      {
+        "name": "Conservas",
+        "id": "42",
+        "count": 540
+      },
+      {
+        "name": "Fideos, Pastas y Salsas",
+        "id": "33",
+        "count": 456
+      },
+      {
+        "name": "Café y Cafeteras",
+        "id": "1046",
+        "count": 441
+      },
+      {
+        "name": "Arroz, Quinoa, Cuscús",
+        "id": "30",
+        "count": 140
+      },
+      {
+        "name": "Harinas, Postres y Repostería",
+        "id": "62",
+        "count": 535
+      },
+      {
+        "name": "Aderezos y Salsas",
+        "id": "54",
+        "count": 577
+      },
+      {
+        "name": "Aceites, Sal y Condimentos",
+        "id": "299",
+        "count": 723
+      },
+      {
+        "name": "Azúcar y Endulzantes",
+        "id": "1083",
+        "count": 167
+      },
+      {
+        "name": "Sopas, Cremas e Instantáneos",
+        "id": "313",
+        "count": 311
+      },
+      {
+        "name": "Mermeladas, Miel y Otros",
+        "id": "1100",
+        "count": 344
+      },
+      {
+        "name": "Legumbres",
+        "id": "1043",
+        "count": 87
+      },
+      {
+        "name": "Cereales, Avenas y Barras",
+        "id": "1095",
+        "count": 567
+      },
+      {
+        "name": "Té, Infusiones y Mate",
+        "id": "1089",
+        "count": 456
+      }
+    ]
+  },
+  {
+    "rubro": "Chocolates, Galletas y Snacks",
+    "id": 47,
+    "total": 3561,
+    "subcategorias": [
+      {
+        "name": "Chocolates",
+        "id": "74",
+        "count": 986
+      },
+      {
+        "name": "Galletas Dulces",
+        "id": "1041",
+        "count": 718
+      },
+      {
+        "name": "Galletas Saladas",
+        "id": "1042",
+        "count": 228
+      },
+      {
+        "name": "Dulces",
+        "id": "825",
+        "count": 640
+      },
+      {
+        "name": "Snacks",
+        "id": "1044",
+        "count": 756
+      },
+      {
+        "name": "Pastas para Cóctel y Untables",
+        "id": "1045",
+        "count": 141
+      }
+    ]
+  },
+  {
+    "rubro": "Carnes y Pescados",
+    "id": 75,
+    "total": 1330,
+    "subcategorias": [
+      {
+        "name": "Pollo",
+        "id": "108",
+        "count": 168
+      },
+      {
+        "name": "Vacuno",
+        "id": "76",
+        "count": 608
+      },
+      {
+        "name": "Pescados",
+        "id": "994",
+        "count": 111
+      },
+      {
+        "name": "Cerdo y Cordero",
+        "id": "82",
+        "count": 191
+      },
+      {
+        "name": "Gourmet del Mar",
+        "id": "989",
+        "count": 71
+      },
+      {
+        "name": "Camarones",
+        "id": "983",
+        "count": 45
+      },
+      {
+        "name": "Mariscos",
+        "id": "990",
+        "count": 75
+      },
+      {
+        "name": "Pavo",
+        "id": "109",
+        "count": 61
+      }
+    ]
+  },
+  {
+    "rubro": "Quesos y Fiambres",
+    "id": 86,
+    "total": 1952,
+    "subcategorias": [
+      {
+        "name": "Fiambres",
+        "id": "88",
+        "count": 550
+      },
+      {
+        "name": "Salchichas y Parrilleros",
+        "id": "98",
+        "count": 310
+      },
+      {
+        "name": "Quesos",
+        "id": "1109",
+        "count": 880
+      },
+      {
+        "name": "Aceitunas, Pepinillos y Otros",
+        "id": "91",
+        "count": 212
+      }
+    ]
+  },
+  {
+    "rubro": "Panaderia y Pasteleria",
+    "id": 157,
+    "total": 1249,
+    "subcategorias": [
+      {
+        "name": "Panadería granel",
+        "id": "161",
+        "count": 82
+      },
+      {
+        "name": "Panadería envasada",
+        "id": "573",
+        "count": 352
+      },
+      {
+        "name": "Pastelería",
+        "id": "159",
+        "count": 712
+      },
+      {
+        "name": "Masas y Tortillas",
+        "id": "162",
+        "count": 103
+      }
+    ]
+  },
+  {
+    "rubro": "Licores, Bebidas y Aguas",
+    "id": 204,
+    "total": 5865,
+    "subcategorias": [
+      {
+        "name": "Bebidas Gaseosas",
+        "id": "958",
+        "count": 421
+      },
+      {
+        "name": "Jugos",
+        "id": "969",
+        "count": 784
+      },
+      {
+        "name": "Cócteles",
+        "id": "206",
+        "count": 208
+      },
+      {
+        "name": "Aguas",
+        "id": "953",
+        "count": 320
+      },
+      {
+        "name": "Cervezas",
+        "id": "205",
+        "count": 911
+      },
+      {
+        "name": "Vinos",
+        "id": "207",
+        "count": 1700
+      },
+      {
+        "name": "Licores y Spritz",
+        "id": "977",
+        "count": 154
+      },
+      {
+        "name": "Espumantes y Sidras",
+        "id": "221",
+        "count": 290
+      },
+      {
+        "name": "Bebidas Isotónicas y Sueros",
+        "id": "963",
+        "count": 122
+      },
+      {
+        "name": "Destilados",
+        "id": "699",
+        "count": 597
+      },
+      {
+        "name": "Infusiones Frías",
+        "id": "966",
+        "count": 124
+      },
+      {
+        "name": "Sin Alcohol",
+        "id": "794",
+        "count": 82
+      },
+      {
+        "name": "Bebidas Energéticas",
+        "id": "957",
+        "count": 86
+      },
+      {
+        "name": "Agua Tónica y Ginger Beer",
+        "id": "950",
+        "count": 137
+      },
+      {
+        "name": "Packs de Regalo",
+        "id": "210",
+        "count": 40
+      }
+    ]
+  },
+  {
+    "rubro": "Cuidado Personal y Bebe",
+    "id": 230,
+    "total": 8375,
+    "subcategorias": [
+      {
+        "name": "Cuidado Capilar",
+        "id": "233",
+        "count": 2281
+      },
+      {
+        "name": "Bebé",
+        "id": "235",
+        "count": 1085
+      },
+      {
+        "name": "Jabones",
+        "id": "231",
+        "count": 489
+      },
+      {
+        "name": "Cuidado Facial",
+        "id": "255",
+        "count": 607
+      },
+      {
+        "name": "Cuidado Corporal",
+        "id": "256",
+        "count": 672
+      },
+      {
+        "name": "Higiene Bucal",
+        "id": "232",
+        "count": 533
+      },
+      {
+        "name": "Protección Femenina",
+        "id": "234",
+        "count": 312
+      },
+      {
+        "name": "Packs de Cuidado y Belleza",
+        "id": "285",
+        "count": 351
+      },
+      {
+        "name": "Desodorantes",
+        "id": "636",
+        "count": 604
+      },
+      {
+        "name": "Cuidado Masculino",
+        "id": "236",
+        "count": 471
+      },
+      {
+        "name": "Incontinencia y Pañales Adulto",
+        "id": "224",
+        "count": 136
+      },
+      {
+        "name": "Maquillaje",
+        "id": "602",
+        "count": 690
+      },
+      {
+        "name": "Depilación",
+        "id": "470",
+        "count": 144
+      },
+      {
+        "name": "Solares y Autobronceantes",
+        "id": "524",
+        "count": 256
+      }
+    ]
+  },
+  {
+    "rubro": "Limpieza",
+    "id": 261,
+    "total": 2599,
+    "subcategorias": [
+      {
+        "name": "Papeles Hogar",
+        "id": "262",
+        "count": 305
+      },
+      {
+        "name": "Limpieza de Ropa",
+        "id": "263",
+        "count": 512
+      },
+      {
+        "name": "Pisos y Muebles",
+        "id": "265",
+        "count": 322
+      },
+      {
+        "name": "Baño",
+        "id": "942",
+        "count": 307
+      },
+      {
+        "name": "Accesorios de Limpieza",
+        "id": "267",
+        "count": 495
+      },
+      {
+        "name": "Cocina",
+        "id": "943",
+        "count": 282
+      },
+      {
+        "name": "Aerosoles y Aromatizantes",
+        "id": "266",
+        "count": 380
+      }
+    ]
+  },
+  {
+    "rubro": "Mascotas",
+    "id": 400,
+    "total": 1809,
+    "subcategorias": [
+      {
+        "name": "Perros",
+        "id": "401",
+        "count": 1208
+      },
+      {
+        "name": "Gatos",
+        "id": "402",
+        "count": 582
+      },
+      {
+        "name": "Otras Mascotas",
+        "id": "403",
+        "count": 17
+      }
+    ]
+  }
+]

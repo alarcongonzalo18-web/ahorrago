@@ -10,76 +10,135 @@ from urllib.parse import urlencode, quote
 
 from app.category_validator import is_valid_row
 from app.config import cargar_env
+# Guard anti-regresion generico, ya testeado en scraper_lider (no duplicar).
+from app.scraper_lider import (
+    fusionar_preservando,
+    leer_conteo_previo,
+    leer_productos_previos,
+    solo_subcategorias,
+)
 
 BASE_URL = "https://www.jumbo.cl"
-API_URL = "https://ac.cnstrc.com/search/{query}"
+API_URL = "https://ac.cnstrc.com/browse/group_id/{group_id}"
 OUTPUT = Path("data/jumbo_real.csv")
 PAGE_SIZE = 100
+PAUSA_ENTRE_PAGINAS = 1.0
+PAUSA_ENTRE_CATEGORIAS = 3.0
 
+# Mapeo curado del arbol real de Jumbo (Constructor.io) a las 12 categorias
+# internas de AhorraGo. Formato: (categoria_interna, subcategoria_visible,
+# group_id). Solo rubros de consumo; los group_id salen de
+# `python -m app.descubrir_taxonomia jumbo`.
+#
+# Excluidos: rubros Hogar/Jugueteria/Libreria (335), Experiencias Jumbo (831),
+# Catering (1025), Farmacia (1165), y Mi bebe (393, vestuario/rodados).
+# Jumbo mete los congelados dentro del rubro "Lacteos, Huevos y Congelados": se
+# rutean a la categoria interna "Congelados". La perfumeria de bebe va a
+# "Higiene Personal" (el validador rechaza higiene bajo "Bebe").
 CATEGORIAS = [
-    # Lácteos y refrigerados
-    ("Lacteos, Huevos y Congelados", "Leche",           "leche"),
-    ("Lacteos, Huevos y Congelados", "Huevos",          "huevos"),
-    ("Lacteos, Huevos y Congelados", "Yogurt",          "yogurt"),
-    ("Lacteos, Huevos y Congelados", "Quesos",          "queso"),
-    ("Lacteos, Huevos y Congelados", "Mantequilla",     "mantequilla"),
-    ("Lacteos, Huevos y Congelados", "Crema",           "crema"),
-    # Frutas y verduras
-    ("Frutas y Verduras",            "Frutas",          "fruta"),
-    ("Frutas y Verduras",            "Verduras",        "verdura"),
-    # Carnes y pescados
-    ("Carnes y Pescados",            "Carnes",          "carne"),
-    ("Carnes y Pescados",            "Aves",            "pollo"),
-    ("Carnes y Pescados",            "Cecinas",         "cecinas"),
-    ("Carnes y Pescados",            "Pescados",        "pescado"),
-    ("Carnes y Pescados",            "Mariscos",        "mariscos"),
-    # Congelados
-    ("Congelados",                   "Congelados",      "congelado"),
-    # Despensa
-    ("Despensa", "Arroz y Legumbres", "arroz"),
-    ("Despensa", "Aceites",           "aceite"),
-    ("Despensa", "Cafe",              "cafe"),
-    ("Despensa", "Azucar",            "azucar"),
-    ("Despensa", "Fideos",            "fideos"),
-    ("Despensa", "Conservas",         "conservas"),
-    ("Despensa", "Salsas",            "salsa"),
-    ("Despensa", "Condimentos",       "condimento"),
-    ("Despensa", "Legumbres",         "legumbres"),
-    # Desayuno y snacks
-    ("Desayuno y Snacks", "Cereales",    "cereal"),
-    ("Desayuno y Snacks", "Galletas",    "galleta"),
-    ("Desayuno y Snacks", "Chocolates",  "chocolate"),
-    ("Desayuno y Snacks", "Snacks",      "snack"),
-    ("Desayuno y Snacks", "Mermeladas",  "mermelada"),
-    # Bebidas
-    ("Bebidas", "Bebidas",             "bebida gaseosa"),
-    ("Bebidas", "Jugos",               "jugo"),
-    ("Bebidas", "Aguas",               "agua mineral"),
-    ("Bebidas", "Cervezas",            "cerveza"),
-    ("Bebidas", "Vinos",               "vino"),
-    ("Bebidas", "Bebidas Energeticas", "bebida energetica"),
-    # Panadería
-    ("Panaderia", "Pan",               "pan"),
-    # Limpieza del hogar
-    ("Limpieza", "Detergentes",        "detergente"),
-    ("Limpieza", "Papel higienico",    "papel higienico"),
-    ("Limpieza", "Limpiadores",        "limpiador"),
-    ("Limpieza", "Lavavajillas",       "lavavajillas"),
-    ("Limpieza", "Suavizantes",        "suavizante"),
-    ("Limpieza", "Blanqueadores",      "blanqueador"),
-    # Higiene personal
-    ("Higiene Personal", "Shampoo",        "shampoo"),
-    ("Higiene Personal", "Acondicionador", "acondicionador"),
-    ("Higiene Personal", "Jabon",          "jabon"),
-    ("Higiene Personal", "Desodorantes",   "desodorante"),
-    ("Higiene Personal", "Cuidado Bucal",  "pasta dental"),
-    ("Higiene Personal", "Cuidado Facial", "crema facial"),
-    # Bebé
-    ("Bebe", "Panales",                "panales"),
-    ("Bebe", "Alimentos Bebe",         "alimento bebe"),
-    # Mascotas
-    ("Mascotas", "Alimento Perros",    "alimento perro"),
-    ("Mascotas", "Alimento Gatos",     "alimento gato"),
+    # Rubro [1] Lacteos, Huevos y Congelados -> lacteos + congelados
+    ("Lacteos, Huevos y Congelados", "Leches", "3"),
+    ("Lacteos, Huevos y Congelados", "Yoghurt", "8"),
+    ("Lacteos, Huevos y Congelados", "Mantequillas y Margarinas", "13"),
+    ("Lacteos, Huevos y Congelados", "Postres Refrigerados", "12"),
+    ("Lacteos, Huevos y Congelados", "Huevos", "19"),
+    ("Lacteos, Huevos y Congelados", "Leches Cultivadas y Bebidas Lacteas", "691"),
+    ("Lacteos, Huevos y Congelados", "Bebidas Vegetales", "690"),
+    ("Congelados", "Verduras Congeladas", "1157"),
+    ("Congelados", "Hamburguesas", "1139"),
+    ("Congelados", "Comidas Congeladas", "1129"),
+    ("Congelados", "Nuggets, Apanados y Embutidos", "1152"),
+    ("Congelados", "Frutas y Pulpas Congeladas", "1135"),
+    ("Congelados", "Helados y Postres", "1143"),
+    ("Congelados", "Churrascos, Lomitos y Otros", "1126"),
+    ("Congelados", "Hielo", "1151"),
+    # Rubro [20] Frutas y Verduras
+    ("Frutas y Verduras", "Frutas", "783"),
+    ("Frutas y Verduras", "Verduras", "786"),
+    ("Frutas y Verduras", "Frutos Secos y Semillas", "788"),
+    ("Frutas y Verduras", "Frutas y verduras organicas", "23"),
+    # Rubro [27] Despensa
+    ("Despensa", "Conservas", "42"),
+    ("Despensa", "Fideos, Pastas y Salsas", "33"),
+    ("Despensa", "Arroz, Quinoa, Cuscus", "30"),
+    ("Despensa", "Harinas, Postres y Reposteria", "62"),
+    ("Despensa", "Aderezos y Salsas", "54"),
+    ("Despensa", "Aceites, Sal y Condimentos", "299"),
+    ("Despensa", "Azucar y Endulzantes", "1083"),
+    ("Despensa", "Sopas, Cremas e Instantaneos", "313"),
+    ("Despensa", "Legumbres", "1043"),
+    # Cafe/te/cereales/mermelada/manjar -> Desayuno y Snacks
+    ("Desayuno y Snacks", "Cafe y Cafeteras", "1046"),
+    ("Desayuno y Snacks", "Te, Infusiones y Mate", "1089"),
+    ("Desayuno y Snacks", "Cereales, Avenas y Barras", "1095"),
+    ("Desayuno y Snacks", "Mermeladas, Miel y Otros", "1100"),
+    ("Desayuno y Snacks", "Manjar y Dulce de Leche", "1106"),
+    # Rubro [47] Chocolates, Galletas y Snacks -> Desayuno y Snacks
+    ("Desayuno y Snacks", "Chocolates", "74"),
+    ("Desayuno y Snacks", "Galletas Dulces", "1041"),
+    ("Desayuno y Snacks", "Galletas Saladas", "1042"),
+    ("Desayuno y Snacks", "Dulces", "825"),
+    ("Desayuno y Snacks", "Snacks", "1044"),
+    ("Desayuno y Snacks", "Pastas para Coctel y Untables", "1045"),
+    # Rubro [75] Carnes y Pescados
+    ("Carnes y Pescados", "Pollo", "108"),
+    ("Carnes y Pescados", "Vacuno", "76"),
+    ("Carnes y Pescados", "Pescados", "994"),
+    ("Carnes y Pescados", "Cerdo y Cordero", "82"),
+    ("Carnes y Pescados", "Gourmet del Mar", "989"),
+    ("Carnes y Pescados", "Camarones", "983"),
+    ("Carnes y Pescados", "Mariscos", "990"),
+    ("Carnes y Pescados", "Pavo", "109"),
+    # Rubro [86] Quesos y Fiambres -> split
+    ("Carnes y Pescados", "Fiambres", "88"),
+    ("Carnes y Pescados", "Salchichas y Parrilleros", "98"),
+    ("Lacteos, Huevos y Congelados", "Quesos", "1109"),
+    ("Despensa", "Aceitunas, Pepinillos y Otros", "91"),
+    # Rubro [157] Panaderia
+    ("Panaderia", "Panaderia granel", "161"),
+    ("Panaderia", "Panaderia envasada", "573"),
+    ("Panaderia", "Pasteleria", "159"),
+    ("Panaderia", "Masas y Tortillas", "162"),
+    # Rubro [204] Licores, Bebidas y Aguas -> Bebidas
+    ("Bebidas", "Bebidas Gaseosas", "958"),
+    ("Bebidas", "Jugos", "969"),
+    ("Bebidas", "Cocteles", "206"),
+    ("Bebidas", "Aguas", "953"),
+    ("Bebidas", "Cervezas", "205"),
+    ("Bebidas", "Vinos", "207"),
+    ("Bebidas", "Licores y Spritz", "977"),
+    ("Bebidas", "Espumantes y Sidras", "221"),
+    ("Bebidas", "Bebidas Isotonicas y Sueros", "963"),
+    ("Bebidas", "Destilados", "699"),
+    ("Bebidas", "Infusiones Frias", "966"),
+    ("Bebidas", "Sin Alcohol", "794"),
+    ("Bebidas", "Bebidas Energeticas", "957"),
+    ("Bebidas", "Agua Tonica y Ginger Beer", "950"),
+    # Rubro [230] Cuidado Personal y Bebe -> Higiene Personal
+    ("Higiene Personal", "Cuidado Capilar", "233"),
+    ("Higiene Personal", "Cuidado Bebe", "235"),
+    ("Higiene Personal", "Jabones", "231"),
+    ("Higiene Personal", "Cuidado Facial", "255"),
+    ("Higiene Personal", "Cuidado Corporal", "256"),
+    ("Higiene Personal", "Higiene Bucal", "232"),
+    ("Higiene Personal", "Proteccion Femenina", "234"),
+    ("Higiene Personal", "Desodorantes", "636"),
+    ("Higiene Personal", "Cuidado Masculino", "236"),
+    ("Higiene Personal", "Incontinencia y Panales Adulto", "224"),
+    ("Higiene Personal", "Depilacion", "470"),
+    ("Higiene Personal", "Solares y Autobronceantes", "524"),
+    # Rubro [261] Limpieza
+    ("Limpieza", "Papeles Hogar", "262"),
+    ("Limpieza", "Limpieza de Ropa", "263"),
+    ("Limpieza", "Pisos y Muebles", "265"),
+    ("Limpieza", "Bano", "942"),
+    ("Limpieza", "Accesorios de Limpieza", "267"),
+    ("Limpieza", "Cocina", "943"),
+    ("Limpieza", "Aerosoles y Aromatizantes", "266"),
+    # Rubro [400] Mascotas
+    ("Mascotas", "Perros", "401"),
+    ("Mascotas", "Gatos", "402"),
+    ("Mascotas", "Otras Mascotas", "403"),
 ]
 
 HEADERS = {
@@ -106,13 +165,13 @@ def obtener_api_key():
     return api_key
 
 
-def construir_url(termino, pagina):
+def construir_url(group_id, pagina):
     params = urlencode({
         "key": obtener_api_key(),
         "num_results_per_page": PAGE_SIZE,
         "page": pagina,
     })
-    return API_URL.format(query=quote(termino)) + "?" + params
+    return API_URL.format(group_id=quote(str(group_id))) + "?" + params
 
 
 def descargar(url, intentos=4):
@@ -213,16 +272,16 @@ def extraer_producto(resultado, categoria, subcategoria):
     }
 
 
-def scrape_categoria(categoria, subcategoria, termino):
+def scrape_categoria(categoria, subcategoria, group_id):
     productos = []
     vistos = set()
     pagina = 1
     total = None
 
-    print(f"Scrapeando Jumbo (API) {subcategoria}...")
+    print(f"Scrapeando Jumbo {subcategoria}...")
 
     while True:
-        url = construir_url(termino, pagina)
+        url = construir_url(group_id, pagina)
         try:
             data = descargar(url)
         except RuntimeError as e:
@@ -258,7 +317,7 @@ def scrape_categoria(categoria, subcategoria, termino):
             break
 
         pagina += 1
-        time.sleep(0.3)
+        time.sleep(PAUSA_ENTRE_PAGINAS)
 
     return productos
 
@@ -280,11 +339,11 @@ def main(categorias=None):
     obtener_api_key()
     todos = []
     vistos_global = set()
-    cats = categorias or CATEGORIAS
+    cats = categorias if categorias is not None else CATEGORIAS
 
-    for categoria, subcategoria, termino in cats:
+    for categoria, subcategoria, group_id in cats:
         try:
-            for prod in scrape_categoria(categoria, subcategoria, termino):
+            for prod in scrape_categoria(categoria, subcategoria, group_id):
                 key = (prod["nombre"], prod["precio"], prod["url"])
                 if key in vistos_global:
                     continue
@@ -292,10 +351,39 @@ def main(categorias=None):
                 todos.append(prod)
         except Exception as e:
             print(f"Error en {subcategoria}: {e}. Continuando...")
+        time.sleep(PAUSA_ENTRE_CATEGORIAS)
 
-    guardar_productos(todos)
-    print(f"\n{len(todos)} productos Jumbo guardados en {OUTPUT}")
+    _publicar_con_guard(todos, {sub for _, sub, _ in cats})
     return todos
+
+
+def _publicar_con_guard(productos, subcats_actuales):
+    """Guard anti-regresion + red de seguridad de totales.
+
+    - Filtra el baseline a las subcategorias vigentes: al migrar keyword->
+      categoria, las subcats viejas del CSV no deben verse como caidas a 0.
+    - Carry-forward por subcategoria: una categoria que retrocede por throttling
+      conserva sus filas previas; el resto se publica fresco.
+    - Total: la migracion multiplica el catalogo; si el total nuevo es MENOR que
+      el previo, algo se rompio -> no pisar, dejar .nuevo y avisar.
+    """
+    previos_conteo = solo_subcategorias(leer_conteo_previo(OUTPUT), subcats_actuales)
+    previos_filas = solo_subcategorias(leer_productos_previos(OUTPUT), subcats_actuales)
+
+    fusion, preservadas = fusionar_preservando(productos, previos_filas)
+    for sub, antes, ahora in sorted(preservadas, key=lambda c: c[1] - c[2], reverse=True):
+        print(f"  carry-forward {sub}: {antes} -> {ahora} (se conservan las filas previas)")
+
+    total_previo = sum(previos_conteo.values())
+    if total_previo and len(fusion) < total_previo:
+        destino = OUTPUT.with_suffix(OUTPUT.suffix + ".nuevo")
+        guardar_productos(fusion, destino)
+        print(f"\n*** TOTAL A LA BAJA: {total_previo} -> {len(fusion)}. No se piso {OUTPUT} ***")
+        print(f"La corrida nueva quedo en {destino} para inspeccion")
+        return
+
+    guardar_productos(fusion)
+    print(f"\n{len(fusion)} productos Jumbo guardados en {OUTPUT}")
 
 
 if __name__ == "__main__":

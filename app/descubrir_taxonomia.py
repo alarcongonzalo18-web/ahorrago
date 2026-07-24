@@ -56,8 +56,46 @@ def descubrir_unimarc():
     return salida
 
 
+JUMBO_BROWSE = "https://ac.cnstrc.com/browse/group_id/{gid}?key={key}&num_results_per_page=1"
+# Rubros top de consumo de Jumbo (Constructor.io). Los ids son estables; se
+# descubrieron unionando los `groups` de varias busquedas amplias. Excluidos:
+# Hogar/Jugueteria (335), Experiencias Jumbo (831), Catering (1025),
+# Farmacia (1165), Mi bebe (393).
+JUMBO_RUBROS = {
+    1: "Lacteos, Huevos y Congelados", 20: "Frutas y Verduras", 27: "Despensa",
+    47: "Chocolates, Galletas y Snacks", 75: "Carnes y Pescados",
+    86: "Quesos y Fiambres", 157: "Panaderia y Pasteleria",
+    204: "Licores, Bebidas y Aguas", 230: "Cuidado Personal y Bebe",
+    261: "Limpieza", 400: "Mascotas",
+}
+
+
+def descubrir_jumbo():
+    """Devuelve [{rubro, id, subcategorias:[{name, id, count}]}] via Constructor.io."""
+    from app.scraper_jumbo_real import obtener_api_key
+
+    key = obtener_api_key()
+    salida = []
+    for gid, nombre in JUMBO_RUBROS.items():
+        resp = _get_json(JUMBO_BROWSE.format(gid=gid, key=key), {"User-Agent": USER_AGENT})
+        response = resp.get("response", {})
+        grupos = response.get("groups", [])
+        hijos = grupos[0].get("children", []) if grupos else []
+        salida.append({
+            "rubro": nombre,
+            "id": gid,
+            "total": response.get("total_num_results"),
+            "subcategorias": [
+                {"name": c.get("display_name"), "id": c.get("group_id"), "count": c.get("count")}
+                for c in hijos
+            ],
+        })
+    return salida
+
+
 DESCUBRIDORES = {
     "unimarc": descubrir_unimarc,
+    "jumbo": descubrir_jumbo,
 }
 
 
@@ -76,9 +114,11 @@ def main(argv=None):
     total_subs = sum(len(c["subcategorias"]) for c in arbol)
     print(f"{cadena}: {len(arbol)} rubros, {total_subs} subcategorias nivel-2")
     for cat in arbol:
-        print(f"\n## {cat['rubro']}  (slug={cat['slug']})")
+        ident = cat.get("slug", cat.get("id"))
+        print(f"\n## {cat['rubro']}  ({ident})")
         for s in cat["subcategorias"]:
-            print(f"   - {s['name']}  ->  {s['slug']}")
+            ref = s.get("slug", s.get("id"))
+            print(f"   - {s['name']}  ->  {ref}")
     print(f"\nVolcado en {destino}")
     return 0
 

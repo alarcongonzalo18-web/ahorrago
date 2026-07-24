@@ -1,0 +1,2086 @@
+{
+ "total_num_results": 121,
+ "results": [
+  {
+   "matched_terms": [],
+   "labels": {},
+   "data": {
+    "id": "6885",
+    "url": "https://www.jumbo.cl/mantequilla-con-sal-soprole-250-g/p",
+    "RefId": "302978",
+    "Evento": [
+     "Prime Week"
+    ],
+    "brands": [
+     "Soprole"
+    ],
+    "Envase": [
+     "Paquete"
+    ],
+    "Origen": [
+     "Nacional"
+    ],
+    "images": [
+     "https://jumbocl.vteximg.com.br/arquivos/ids/348628/Mantequilla-con-Sal-250-g.jpg?v=638776486720600000"
+    ],
+    "Regalos": [
+     ""
+    ],
+    "SkuData": [
+     "{\"6885\":{\"ref_id\":\"302978\",\"cart_limit\":\"24\",\"allow_notes\":false,\"allow_substitute\":false,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"promotions\":[],\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"release_data\":{\"date_release\":\"06-12-2016 00:00\",\"date_release_end\":\"05-01-2017 00:00\",\"is_new\":false},\"promotionData\":{\"promotionName\":\"\",\"promotionShortDescription\":\"\",\"promotionDescription\":\"\",\"promotionFeature\":\"\"}}}"
+    ],
+    "BrandId": "2000000",
+    "KeyWords": "",
+    "Id Grupo": [
+     "030301001"
+    ],
+    "SellerVSS": [
+     "jumboclj619",
+     "jumboclj695",
+     "jumboclj591",
+     "jumboclj414",
+     "jumboclj760",
+     "jumboclj501",
+     "jumboclj507",
+     "jumboclj656",
+     "jumboclj502",
+     "jumboclj796",
+     "jumboclj633",
+     "jumboclj989",
+     "jumboclj521",
+     "jumboclj614",
+     "jumboclj624",
+     "jumboclj508",
+     "jumboclj506",
+     "jumboclj408",
+     "jumboclj513",
+     "jumboclj511",
+     "jumboclj660",
+     "jumboclj781",
+     "jumboclj955",
+     "jumboclj403",
+     "jumboclj748",
+     "jumboclj762",
+     "jumboclj843",
+     "jumboclj411",
+     "jumboclj775",
+     "jumboclj504",
+     "jumboclj410",
+     "jumboclj659",
+     "jumboclj519",
+     "jumboclj512",
+     "jumboclj534",
+     "jumboclj532",
+     "jumboclj592",
+     "jumboclj780"
+    ],
+    "productId": 6797,
+    "BrandName": "Soprole",
+    "DetailUrl": "/mantequilla-con-sal-soprole-250-g/p",
+    "image_url": "https://jumbocl.vteximg.com.br/arquivos/ids/348628/Mantequilla-con-Sal-250-g.jpg?v=638776486720600000",
+    "ProductId": 6797,
+    "Id Subrubro": [
+     "030301"
+    ],
+    "ProductData": [
+     "{\"allow_notes\":false,\"allow_substitute\":false,\"cart_limit\":\"24\",\"brandName\":\"Soprole\",\"brandEcomId\":2000000,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"cart_limit_express_delivery\":\"24\"}"
+    ],
+    "ProductName": "Mantequilla Soprole con Sal 250 g",
+    "Vendido por": [
+     "Jumbo"
+    ],
+    "ProductRefId": "302978",
+    "collectionsIds": [
+     "21575",
+     "22523",
+     "25354",
+     "25400",
+     "25988",
+     "28992",
+     "29125",
+     "29135",
+     "30107",
+     "30509",
+     "30547",
+     "30548",
+     "30558",
+     "30632",
+     "30671",
+     "30762",
+     "30774"
+    ],
+    "Producto Nuevo": [
+     "Producto Antiguo"
+    ],
+    "UnitMultiplier": 1,
+    "País de Origen": [
+     "Chile"
+    ],
+    "MeasurementUnit": "un",
+    "Tipo de Producto": [
+     "Mantequilla"
+    ],
+    "ProductCategories": "{\"1\":\"Lácteos, Huevos y Congelados\",\"13\":\"Mantequillas y Margarinas\",\"15\":\"Mantequillas\"}",
+    "ProductCategoryIds": "/1/13/15/",
+    "ProductClustersIds": "21575,22523,25354,25400,25988,28992,29125,29135,30107,30509,30547,30548,30558,30632,30671,30762,30774",
+    "price": 3190,
+    "storeId": "1",
+    "listPrice": 3190,
+    "stockLevel": "in-stock",
+    "outOfStock": false,
+    "sellingPrice": 3190,
+    "variation_id": "6885-1",
+    "originalPrice": 3190
+   },
+   "value": "Mantequilla Soprole con Sal 250 g",
+   "is_slotted": false,
+   "variations": [
+    {
+     "data": {
+      "price": 3190,
+      "storeId": "1",
+      "listPrice": 3190,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 3190,
+      "variation_id": "6885-1",
+      "originalPrice": 3190
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj512",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj512",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj403",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj403",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj414",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj414",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj410",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj410",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj513",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj513",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj408",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj408",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj633",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj633",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj660",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj660",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj659",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj659",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj534",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj534",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj519",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj519",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj760",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj760",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj506",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj506",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj775",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj775",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj614",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj614",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj989",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj989",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj695",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj695",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj619",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj619",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj502",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj502",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj532",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj532",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj504",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj504",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj624",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj624",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj955",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj955",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj843",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj843",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj591",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj591",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj592",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj592",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj748",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj748",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj501",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj501",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj762",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj762",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj780",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj780",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj507",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj507",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj521",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj521",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumbocl",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumbocl",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj511",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj511",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj656",
+      "listPrice": 3210,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6885-jumboclj656",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj508",
+      "listPrice": 3210,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "variation_id": "6885-jumboclj508",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3190,
+      "storeId": "jumboclj520",
+      "listPrice": 3190,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "variation_id": "6885-jumboclj520",
+      "sellingPrice": 3190,
+      "originalPrice": 3190
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3190,
+      "storeId": "jumboclj502rincon",
+      "listPrice": 3190,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 3190,
+      "variation_id": "6885-jumboclj502rincon",
+      "originalPrice": 3190
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj514rincon",
+      "listPrice": 3210,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj514rincon",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj781",
+      "listPrice": 3210,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "variation_id": "6885-jumboclj781",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj796",
+      "listPrice": 3210,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2790,
+      "variation_id": "6885-jumboclj796",
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3210,
+      "storeId": "jumboclj411",
+      "listPrice": 3210,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6885-jumboclj411",
+      "sellingPrice": 2790,
+      "originalPrice": 3210
+     },
+     "value": "Mantequilla Soprole con Sal 250 g"
+    }
+   ]
+  },
+  {
+   "matched_terms": [],
+   "labels": {},
+   "data": {
+    "id": "6870",
+    "url": "https://www.jumbo.cl/mantequilla-con-sal-colun-250-g/p",
+    "RefId": "302949",
+    "Evento": [
+     ""
+    ],
+    "brands": [
+     "Colun"
+    ],
+    "Envase": [
+     "Paquete"
+    ],
+    "images": [
+     "https://jumbocl.vteximg.com.br/arquivos/ids/348618/Mantequilla-con-sal-250-g.jpg?v=638776486573930000",
+     "https://jumbocl.vteximg.com.br/arquivos/ids/348619/Mantequilla-con-sal-250-g.jpg?v=638776486580970000"
+    ],
+    "Origen": [
+     "Nacional"
+    ],
+    "BrandId": "2000001",
+    "Regalos": [
+     ""
+    ],
+    "SkuData": [
+     "{\"6870\":{\"ref_id\":\"302949\",\"cart_limit\":\"24\",\"allow_notes\":false,\"allow_substitute\":false,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"promotions\":[],\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"release_data\":{\"date_release\":\"06-12-2016 00:00\",\"date_release_end\":\"05-01-2017 00:00\",\"is_new\":false},\"promotionData\":{\"promotionName\":\"\",\"promotionShortDescription\":\"\",\"promotionDescription\":\"\",\"promotionFeature\":\"\"}}}"
+    ],
+    "KeyWords": "",
+    "Id Grupo": [
+     "030301001"
+    ],
+    "DetailUrl": "/mantequilla-con-sal-colun-250-g/p",
+    "BrandName": "Colun",
+    "productId": 6782,
+    "ProductId": 6782,
+    "image_url": "https://jumbocl.vteximg.com.br/arquivos/ids/348618/Mantequilla-con-sal-250-g.jpg?v=638776486573930000",
+    "SellerVSS": [
+     "jumboclj614",
+     "jumboclj762",
+     "jumboclj414",
+     "jumboclj502",
+     "jumboclj591",
+     "jumboclj695",
+     "jumboclj508",
+     "jumboclj659",
+     "jumboclj511",
+     "jumboclj507",
+     "jumboclj656",
+     "jumboclj775",
+     "jumboclj403",
+     "jumboclj780",
+     "jumboclj796",
+     "jumboclj619",
+     "jumboclj411",
+     "jumboclj781",
+     "jumboclj512",
+     "jumboclj843",
+     "jumboclj501",
+     "jumboclj660",
+     "jumboclj748",
+     "jumboclj506",
+     "jumboclj592",
+     "jumboclj408",
+     "jumboclj955",
+     "jumboclj534",
+     "jumboclj989",
+     "jumboclj513",
+     "jumboclj760",
+     "jumboclj633",
+     "jumboclj504",
+     "jumboclj410",
+     "jumboclj521",
+     "jumboclj624",
+     "jumboclj519",
+     "jumboclj532"
+    ],
+    "ProductData": [
+     "{\"allow_notes\":false,\"allow_substitute\":false,\"cart_limit\":\"24\",\"brandName\":\"Colun\",\"brandEcomId\":2000001,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"cart_limit_express_delivery\":\"24\"}"
+    ],
+    "ProductName": "Mantequilla Colun con Sal 250 g",
+    "Vendido por": [
+     "Jumbo"
+    ],
+    "Id Subrubro": [
+     "030301"
+    ],
+    "ProductRefId": "302949",
+    "País de Origen": [
+     "Chile"
+    ],
+    "UnitMultiplier": 1,
+    "collectionsIds": [
+     "19270",
+     "21575",
+     "23175",
+     "25333",
+     "25334",
+     "25422",
+     "25695",
+     "26919",
+     "28992",
+     "30632",
+     "30643",
+     "30645",
+     "30762",
+     "30774"
+    ],
+    "Producto Nuevo": [
+     "Producto Antiguo"
+    ],
+    "MeasurementUnit": "un",
+    "Tipo de Producto": [
+     "Mantequilla"
+    ],
+    "ProductCategories": "{\"1\":\"Lácteos, Huevos y Congelados\",\"13\":\"Mantequillas y Margarinas\",\"15\":\"Mantequillas\"}",
+    "ProductCategoryIds": "/1/13/15/",
+    "ProductClustersIds": "19270,21575,23175,25333,25334,25422,25695,26919,28992,30632,30643,30645,30762,30774",
+    "price": 3350,
+    "storeId": "1",
+    "listPrice": 3350,
+    "stockLevel": "in-stock",
+    "outOfStock": false,
+    "variation_id": "6870-1",
+    "sellingPrice": 2890,
+    "originalPrice": 3350
+   },
+   "value": "Mantequilla Colun con Sal 250 g",
+   "is_slotted": false,
+   "variations": [
+    {
+     "data": {
+      "price": 3350,
+      "storeId": "1",
+      "listPrice": 3350,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-1",
+      "sellingPrice": 2890,
+      "originalPrice": 3350
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj414",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj414",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj411",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj411",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj843",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj843",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj403",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj403",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj408",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj408",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj519",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj519",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj512",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj512",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj633",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj633",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj989",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj989",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj501",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj501",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj659",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj659",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj695",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj695",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj513",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj513",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj506",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj506",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj521",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj521",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj660",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj660",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj775",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj775",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj410",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj410",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj532",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj532",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj955",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj955",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj619",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj619",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj502",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj502",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj760",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj760",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj748",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj748",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj534",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj534",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj507",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj507",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj504",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj504",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj624",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj624",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj780",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj780",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj592",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj592",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj591",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj591",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj614",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "6870-jumboclj614",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumbocl",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumbocl",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj511",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj511",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj762",
+      "listPrice": 3420,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj762",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj656",
+      "listPrice": 3420,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "6870-jumboclj656",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj508",
+      "listPrice": 3420,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "variation_id": "6870-jumboclj508",
+      "sellingPrice": 2990,
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3350,
+      "storeId": "jumboclj520",
+      "listPrice": 3350,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "sellingPrice": 2890,
+      "variation_id": "6870-jumboclj520",
+      "originalPrice": 3350
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3350,
+      "storeId": "jumboclj502rincon",
+      "listPrice": 3350,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "variation_id": "6870-jumboclj502rincon",
+      "sellingPrice": 2890,
+      "originalPrice": 3350
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj514rincon",
+      "listPrice": 3420,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj514rincon",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj781",
+      "listPrice": 3420,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj781",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    },
+    {
+     "data": {
+      "price": 3420,
+      "storeId": "jumboclj796",
+      "listPrice": 3420,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2990,
+      "variation_id": "6870-jumboclj796",
+      "originalPrice": 3420
+     },
+     "value": "Mantequilla Colun con Sal 250 g"
+    }
+   ]
+  },
+  {
+   "matched_terms": [],
+   "labels": {},
+   "data": {
+    "id": "83518",
+    "url": "https://www.jumbo.cl/manteq-soprole-receta-de-campo-pan-250g/p",
+    "RefId": "1812254",
+    "Evento": [
+     "Prime Week"
+    ],
+    "brands": [
+     "Soprole"
+    ],
+    "images": [
+     "https://jumbocl.vteximg.com.br/arquivos/ids/630342/Mantequilla-Soprole-Quilque-250-g.jpg?v=639129791287530000"
+    ],
+    "Envase": [
+     "Paquete"
+    ],
+    "Origen": [
+     "Nacional"
+    ],
+    "Regalos": [
+     ""
+    ],
+    "BrandId": "2000000",
+    "SkuData": [
+     "{\"83518\":{\"ref_id\":\"1812254\",\"cart_limit\":\"24\",\"allow_notes\":false,\"allow_substitute\":false,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"promotions\":[],\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"release_data\":{\"date_release\":\"06-12-2016 00:00\",\"date_release_end\":\"05-01-2017 00:00\",\"is_new\":false},\"promotionData\":{\"promotionName\":\"\",\"promotionShortDescription\":\"\",\"promotionDescription\":\"\",\"promotionFeature\":\"\"}}}"
+    ],
+    "Id Grupo": [
+     "030304001"
+    ],
+    "KeyWords": "",
+    "productId": 83252,
+    "BrandName": "Soprole",
+    "DetailUrl": "/manteq-soprole-receta-de-campo-pan-250g/p",
+    "SellerVSS": [
+     "jumboclj521",
+     "jumboclj534",
+     "jumboclj775",
+     "jumboclj410",
+     "jumboclj506",
+     "jumboclj660",
+     "jumboclj624",
+     "jumboclj504",
+     "jumboclj591",
+     "jumboclj511",
+     "jumboclj780",
+     "jumboclj507",
+     "jumboclj502",
+     "jumboclj781",
+     "jumboclj989",
+     "jumboclj760",
+     "jumboclj762",
+     "jumboclj614",
+     "jumboclj633",
+     "jumboclj408",
+     "jumboclj748",
+     "jumboclj659",
+     "jumboclj403",
+     "jumboclj955",
+     "jumboclj513",
+     "jumboclj592",
+     "jumboclj414",
+     "jumboclj843",
+     "jumboclj619",
+     "jumboclj695",
+     "jumboclj501",
+     "jumboclj532",
+     "jumboclj508",
+     "jumboclj411",
+     "jumboclj519",
+     "jumboclj512",
+     "jumboclj796"
+    ],
+    "image_url": "https://jumbocl.vteximg.com.br/arquivos/ids/630342/Mantequilla-Soprole-Quilque-250-g.jpg?v=639129791287530000",
+    "ProductId": 83252,
+    "ProductData": [
+     "{\"allow_notes\":false,\"allow_substitute\":false,\"cart_limit\":\"24\",\"brandName\":\"Soprole\",\"brandEcomId\":2000000,\"measurement_unit\":\"un\",\"unit_multiplier\":1,\"measurement_unit_un\":\"kg\",\"unit_multiplier_un\":0.25,\"measurement_unit_selector\":false,\"cart_limit_express_delivery\":\"24\"}"
+    ],
+    "Vendido por": [
+     "Jumbo"
+    ],
+    "ProductName": "Mantequilla Soprole Quilque 250 g",
+    "Id Subrubro": [
+     "030304"
+    ],
+    "ProductRefId": "1812254",
+    "UnitMultiplier": 1,
+    "Producto Nuevo": [
+     "Producto Antiguo"
+    ],
+    "País de Origen": [
+     "Chile"
+    ],
+    "collectionsIds": [
+     "28992",
+     "30107",
+     "30181",
+     "30427",
+     "30428",
+     "30483",
+     "30484",
+     "30509",
+     "30547",
+     "30548",
+     "30557",
+     "30558",
+     "30632",
+     "30671",
+     "30694",
+     "30820"
+    ],
+    "MeasurementUnit": "un",
+    "Tipo de Producto": [
+     "Mantequilla"
+    ],
+    "ProductCategories": "{\"1\":\"Lácteos, Huevos y Congelados\",\"13\":\"Mantequillas y Margarinas\",\"15\":\"Mantequillas\"}",
+    "ProductClustersIds": "28992,30107,30181,30427,30428,30483,30484,30509,30547,30548,30557,30558,30632,30671,30694,30820",
+    "ProductCategoryIds": "/1/13/15/",
+    "price": 3390,
+    "storeId": "1",
+    "listPrice": 3390,
+    "stockLevel": "in-stock",
+    "outOfStock": false,
+    "sellingPrice": 3390,
+    "variation_id": "83518-1",
+    "originalPrice": 3390
+   },
+   "value": "Mantequilla Soprole Quilque 250 g",
+   "is_slotted": false,
+   "variations": [
+    {
+     "data": {
+      "price": 3390,
+      "storeId": "1",
+      "listPrice": 3390,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 3390,
+      "variation_id": "83518-1",
+      "originalPrice": 3390
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj511",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj511",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumbocl",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumbocl",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj619",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj619",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj624",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj624",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj506",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj506",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj502",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj502",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj762",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj762",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj519",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj519",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj403",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj403",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj504",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj504",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj659",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj659",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj614",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj614",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj748",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj748",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj633",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj633",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj660",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj660",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj760",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj760",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj775",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj775",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj780",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj780",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj532",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj532",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj592",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj592",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj534",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj534",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj521",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj521",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj410",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj410",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj507",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj507",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj591",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj591",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj955",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj955",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj508",
+      "listPrice": 3620,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj508",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3390,
+      "storeId": "jumboclj520",
+      "listPrice": 3390,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "variation_id": "83518-jumboclj520",
+      "sellingPrice": 3390,
+      "originalPrice": 3390
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3390,
+      "storeId": "jumboclj502rincon",
+      "listPrice": 3390,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "variation_id": "83518-jumboclj502rincon",
+      "sellingPrice": 3390,
+      "originalPrice": 3390
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj514rincon",
+      "listPrice": 3620,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "variation_id": "83518-jumboclj514rincon",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj796",
+      "listPrice": 3620,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "variation_id": "83518-jumboclj796",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj781",
+      "listPrice": 3620,
+      "outOfStock": true,
+      "stockLevel": "out-of-stock",
+      "variation_id": "83518-jumboclj781",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj656",
+      "listPrice": 3620,
+      "stockLevel": "out-of-stock",
+      "outOfStock": true,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj656",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj843",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj843",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj408",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj408",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj501",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj501",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj411",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj411",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj512",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj512",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj513",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "variation_id": "83518-jumboclj513",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj414",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj414",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj695",
+      "listPrice": 3620,
+      "outOfStock": false,
+      "stockLevel": "in-stock",
+      "sellingPrice": 2790,
+      "variation_id": "83518-jumboclj695",
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    },
+    {
+     "data": {
+      "price": 3620,
+      "storeId": "jumboclj989",
+      "listPrice": 3620,
+      "stockLevel": "in-stock",
+      "outOfStock": false,
+      "variation_id": "83518-jumboclj989",
+      "sellingPrice": 2790,
+      "originalPrice": 3620
+     },
+     "value": "Mantequilla Soprole Quilque 250 g"
+    }
+   ]
+  }
+ ]
+}
