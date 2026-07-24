@@ -1,15 +1,18 @@
-"""Scraper de Tottus (grupo Falabella).
+"""Scraper de Tottus (grupo Falabella) por categoria real.
 
-Tottus corre Next.js: cada pagina de busqueda trae sus datos embebidos en
+Tottus corre Next.js: cada pagina de categoria trae sus datos embebidos en
 `<script id="__NEXT_DATA__">`, asi que se scrapea con urllib puro, sin navegador
-ni API key. Contrato completo en `app/docs/tottus.md`.
+ni API key (a diferencia de Unimarc, Tottus NO tiene WAF). Contrato en
+`app/docs/tottus.md`.
 
-    GET /tottus-cl/buscar?Ntt=<termino>&page=<N>
+    GET /tottus-cl/lista/CATG<id>/<slug>?page=<N>
       -> props.pageProps.results     (48 productos por pagina)
       -> props.pageProps.pagination  {count, perPage, currentPage}
 
-`pagination.count` da el total real de resultados, asi que se sabe de antemano
-cuantas paginas pedir (a diferencia de Lider, donde hay que avanzar a ciegas).
+`pagination.count` da el total real de la categoria, asi que se sabe de antemano
+cuantas paginas pedir. El arbol de categorias se descubre con
+`python -m app.descubrir_taxonomia tottus`; el mapeo curado (subcategoria real
+-> categoria interna) vive en CATEGORIAS.
 
 El EAN NO viene en el listado: sale de la ficha de cada producto y lo puebla
 `app.backfill_ean` en la cache (ver `app/ean_cache.py`).
@@ -28,14 +31,15 @@ from app.category_validator import is_valid_row
 # El guard anti-regresion es generico y ya esta testeado en scraper_lider:
 # se reutiliza en vez de duplicarlo.
 from app.scraper_lider import (
-    contar_por_subcategoria,
+    fusionar_preservando,
     leer_conteo_previo,
-    validar_anti_regresion,
+    leer_productos_previos,
+    solo_subcategorias,
 )
 
 
 OUTPUT = Path("data/tottus_real.csv")
-BASE = "https://www.tottus.cl/tottus-cl/buscar"
+TOTTUS_HOST = "https://www.tottus.cl"
 POR_PAGINA = 48
 MAX_PAGINAS = 40          # techo de seguridad (~1.900 productos por categoria)
 MIN_HTML_BYTES = 5000     # por debajo, es pagina de bloqueo y no un listado
@@ -50,56 +54,86 @@ CAMPOS = [
     "precio_oferta", "precio_referencia", "promocion", "url", "imagen_url", "ean",
 ]
 
+# Mapeo curado del arbol real de Tottus a las 12 categorias internas de
+# AhorraGo. Formato: (categoria_interna, subcategoria_visible, path_categoria).
+# Solo rubros de consumo; los paths salen de
+# `python -m app.descubrir_taxonomia tottus` (item_url de second_level_categories).
+#
+# Excluidos: rubros Ofertas (duplican), Electrohogar y Tv, Aire Libre, Hogar y
+# Libreria, Otras Categorias, y las subs "Productos Nuevos" / "Marcas Propias"
+# (landings/filtros que duplican). La perfumeria de bebe va a "Higiene Personal".
 CATEGORIAS = [
-    ("Lacteos, Huevos y Congelados", "Leche",        "leche"),
-    ("Lacteos, Huevos y Congelados", "Huevos",       "huevos"),
-    ("Lacteos, Huevos y Congelados", "Yogurt",       "yogurt"),
-    ("Lacteos, Huevos y Congelados", "Quesos",       "queso"),
-    ("Lacteos, Huevos y Congelados", "Mantequilla",  "mantequilla"),
-    ("Lacteos, Huevos y Congelados", "Crema",        "crema"),
-    ("Frutas y Verduras",            "Frutas",       "fruta"),
-    ("Frutas y Verduras",            "Verduras",     "verdura"),
-    ("Carnes y Pescados",            "Carnes",       "carne"),
-    ("Carnes y Pescados",            "Aves",         "pollo"),
-    ("Carnes y Pescados",            "Cecinas",      "cecinas"),
-    ("Carnes y Pescados",            "Pescados",     "pescado"),
-    ("Carnes y Pescados",            "Mariscos",     "mariscos"),
-    ("Congelados",                   "Congelados",   "congelado"),
-    ("Despensa", "Arroz",            "arroz"),
-    ("Despensa", "Aceite",           "aceite"),
-    ("Despensa", "Cafe",             "cafe"),
-    ("Despensa", "Azucar",           "azucar"),
-    ("Despensa", "Fideos",           "fideos"),
-    ("Despensa", "Conservas",        "conservas"),
-    ("Despensa", "Salsas",           "salsa"),
-    ("Despensa", "Condimentos",      "condimento"),
-    ("Despensa", "Legumbres",        "legumbres"),
-    ("Desayuno y Snacks", "Cereales",   "cereal"),
-    ("Desayuno y Snacks", "Galletas",   "galleta"),
-    ("Desayuno y Snacks", "Chocolates", "chocolate"),
-    ("Desayuno y Snacks", "Snacks",     "snack"),
-    ("Desayuno y Snacks", "Mermeladas", "mermelada"),
-    ("Bebidas", "Bebidas",             "bebida"),
-    ("Bebidas", "Jugos",               "jugo"),
-    ("Bebidas", "Aguas",               "agua mineral"),
-    ("Bebidas", "Cervezas",            "cerveza"),
-    ("Bebidas", "Vinos",               "vino"),
-    ("Bebidas", "Bebidas Energeticas", "bebida energetica"),
-    ("Panaderia", "Pan",               "pan"),
-    ("Limpieza", "Detergentes",        "detergente"),
-    ("Limpieza", "Papel higienico",    "papel higienico"),
-    ("Limpieza", "Limpiadores",        "limpiador"),
-    ("Limpieza", "Lavavajillas",       "lavavajillas"),
-    ("Limpieza", "Suavizantes",        "suavizante"),
-    ("Higiene Personal", "Shampoo",        "shampoo"),
-    ("Higiene Personal", "Acondicionador", "acondicionador"),
-    ("Higiene Personal", "Jabon",          "jabon"),
-    ("Higiene Personal", "Desodorantes",   "desodorante"),
-    ("Higiene Personal", "Cuidado Bucal",  "pasta dental"),
-    ("Bebe", "Panales",                "panales"),
-    ("Bebe", "Alimentos Bebe",         "alimento bebe"),
-    ("Mascotas", "Alimento Perros",    "alimento perro"),
-    ("Mascotas", "Alimento Gatos",     "alimento gato"),
+    ("Bebe", "Pañales y Toallas Húmedas", "/tottus-cl/lista/CATG27222/Panales-y-Toallas-Humedas"),
+    ("Bebe", "Alimentación y Lactancia", "/tottus-cl/lista/CATG27224/Alimentacion-y-Lactancia"),
+    ("Bebidas", "Bebidas", "/tottus-cl/lista/CATG27217/Bebidas"),
+    ("Bebidas", "Jugos y Néctar", "/tottus-cl/lista/CATG27216/Jugos-y-Nectar"),
+    ("Bebidas", "Aguas", "/tottus-cl/lista/CATG27215/Aguas"),
+    ("Bebidas", "Isotónicas y Energéticas", "/tottus-cl/lista/CATG27218/Isotonicas-y-Energeticas"),
+    ("Bebidas", "Té Líquido y Limonadas", "/tottus-cl/lista/CATG27219/Te-Liquido-y-Limonadas"),
+    ("Bebidas", "Cervezas", "/tottus-cl/lista/CATG27083/Cervezas"),
+    ("Bebidas", "Vinos", "/tottus-cl/lista/CATG29203/Vinos"),
+    ("Bebidas", "Licores", "/tottus-cl/lista/CATG29204/Licores"),
+    ("Carnes y Pescados", "Vacuno", "/tottus-cl/lista/CATG27090/Vacuno"),
+    ("Carnes y Pescados", "Pollo", "/tottus-cl/lista/CATG27092/Pollo"),
+    ("Carnes y Pescados", "Cerdo", "/tottus-cl/lista/CATG27091/Cerdo"),
+    ("Carnes y Pescados", "Pavo", "/tottus-cl/lista/CATG27093/Pavo"),
+    ("Carnes y Pescados", "Carnes Molidas y Trozadas", "/tottus-cl/lista/CATG27094/Carnes-Molidas-y-Trozadas"),
+    ("Carnes y Pescados", "Jamón", "/tottus-cl/lista/CATG27203/Jamon"),
+    ("Carnes y Pescados", "Chorizos y Longanizas", "/tottus-cl/lista/CATG27267/Chorizos-y-Longanizas"),
+    ("Carnes y Pescados", "Salchichas y Vienesas", "/tottus-cl/lista/CATG27268/Salchichas-y-Vienesas"),
+    ("Carnes y Pescados", "Salame y Cocktail", "/tottus-cl/lista/CATG27269/Salame-y-Cocktail"),
+    ("Carnes y Pescados", "Pates", "/tottus-cl/lista/CATG27270/Pates"),
+    ("Carnes y Pescados", "Jamonadas y Otros", "/tottus-cl/lista/CATG27271/Jamonadas-y-Otros"),
+    ("Congelados", "Hielo", "/tottus-cl/lista/CATG27131/Hielo"),
+    ("Congelados", "Verduras Congeladas", "/tottus-cl/lista/CATG27123/Verduras-Congeladas"),
+    ("Congelados", "Hamburguesas y Churrascos", "/tottus-cl/lista/CATG27125/Hamburguesas-y-Churrascos"),
+    ("Congelados", "Helados", "/tottus-cl/lista/CATG27129/Helados"),
+    ("Congelados", "Pollo Congelado", "/tottus-cl/lista/CATG27126/Pollo-Congelado"),
+    ("Congelados", "Frutas Congeladas", "/tottus-cl/lista/CATG27124/Frutas-Congeladas"),
+    ("Congelados", "Pescados y Mariscos", "/tottus-cl/lista/CATG27127/Pescados-y-Mariscos"),
+    ("Congelados", "Comida Congelada", "/tottus-cl/lista/CATG27132/Comida-Congelada"),
+    ("Congelados", "Vegetariano y Vegano", "/tottus-cl/lista/CATG27130/Vegetariano-y-Vegano"),
+    ("Desayuno y Snacks", "Cocktail y Snack", "/tottus-cl/lista/CATG27669/Cocktail-y-Snack"),
+    ("Desayuno y Snacks", "Desayunos", "/tottus-cl/lista/CATG27072/Desayuno-y-Dulces"),
+    ("Despensa", "Aceites", "/tottus-cl/lista/CATG27056/Aceites"),
+    ("Despensa", "Arroz, Legumbres y Semillas", "/tottus-cl/lista/CATG27060/Arroz--Legumbres-y-Semillas"),
+    ("Despensa", "Conservas y Enlatados", "/tottus-cl/lista/CATG27059/Conservas-y-Enlatados"),
+    ("Despensa", "Pastas y Salsas", "/tottus-cl/lista/CATG27062/Pastas-y-Salsas"),
+    ("Despensa", "Harinas", "/tottus-cl/lista/CATG27063/Harinas"),
+    ("Despensa", "Condimentos y Vinagres", "/tottus-cl/lista/CATG27067/Condimentos-y-Vinagres"),
+    ("Despensa", "Aderezos", "/tottus-cl/lista/CATG27066/Aderezos"),
+    ("Despensa", "Sopas e Instantáneos", "/tottus-cl/lista/CATG27064/Sopas-e-Instantaneos"),
+    ("Despensa", "Postres y Repostería", "/tottus-cl/lista/CATG27065/Postres-y-Reposteria"),
+    ("Frutas y Verduras", "Verduras", "/tottus-cl/lista/CATG27098/Verduras"),
+    ("Frutas y Verduras", "Frutas", "/tottus-cl/lista/CATG27099/Frutas"),
+    ("Frutas y Verduras", "Frutos Secos y Deshidratados", "/tottus-cl/lista/CATG27100/Frutos-Secos-y-Deshidratados"),
+    ("Frutas y Verduras", "Colaciones Saludables", "/tottus-cl/lista/CATG27101/Colaciones-Saludables"),
+    ("Frutas y Verduras", "Detox", "/tottus-cl/lista/CATG27102/Detox"),
+    ("Frutas y Verduras", "Orgánicos", "/tottus-cl/lista/CATG27103/Organicos"),
+    ("Higiene Personal", "Belleza", "/tottus-cl/lista/CATG27076/Belleza"),
+    ("Higiene Personal", "Cuidado Personal", "/tottus-cl/lista/CATG27696/Cuidado-Personal"),
+    ("Higiene Personal", "Perfumería Bebé", "/tottus-cl/lista/CATG27223/Perfumeria-Bebe"),
+    ("Lacteos, Huevos y Congelados", "Quesos", "/tottus-cl/lista/CATG27180/Quesos"),
+    ("Lacteos, Huevos y Congelados", "Leches", "/tottus-cl/lista/CATG27179/Leches"),
+    ("Lacteos, Huevos y Congelados", "Mantequillas y Margarinas", "/tottus-cl/lista/CATG27185/Mantequillas-y-Mantecas"),
+    ("Lacteos, Huevos y Congelados", "Yoghurt", "/tottus-cl/lista/CATG27182/Yoghurt"),
+    ("Lacteos, Huevos y Congelados", "Postres Listos", "/tottus-cl/lista/CATG27189/Postres-Listos"),
+    ("Lacteos, Huevos y Congelados", "Cremas", "/tottus-cl/lista/CATG27192/Cremas"),
+    ("Lacteos, Huevos y Congelados", "Huevos", "/tottus-cl/lista/CATG27266/Huevos"),
+    ("Limpieza", "Detergente y Cuidado para la Ropa", "/tottus-cl/lista/CATG27133/Detergente-y-Cuidado-para-la-Ropa"),
+    ("Limpieza", "Papeles para el Hogar", "/tottus-cl/lista/CATG27134/Papeles-para-el-Hogar"),
+    ("Limpieza", "Baño y Cocina", "/tottus-cl/lista/CATG27135/Bano-y-Cocina"),
+    ("Limpieza", "Pisos y Muebles", "/tottus-cl/lista/CATG27136/Pisos-y-Muebles"),
+    ("Limpieza", "Aerosoles y Desinfectantes", "/tottus-cl/lista/CATG27137/Aerosoles-y-Desinfectantes"),
+    ("Limpieza", "Accesorios de Aseo y Cocina", "/tottus-cl/lista/CATG27138/Accesorios-de-Aseo-y-Cocina"),
+    ("Mascotas", "Perros", "/tottus-cl/lista/CATG27166/Perros"),
+    ("Mascotas", "Gatos", "/tottus-cl/lista/CATG27167/Gatos"),
+    ("Mascotas", "Snack y Huesos", "/tottus-cl/lista/CATG27756/Snack-y-Huesos"),
+    ("Mascotas", "Higiene y Cuidados", "/tottus-cl/lista/CATG27168/Higiene-y-Cuidados"),
+    ("Mascotas", "Accesorios y Juguetes", "/tottus-cl/lista/CATG27752/Accesorios-y-Juguetes"),
+    ("Panaderia", "Panadería", "/tottus-cl/lista/CATG27140/Panaderia"),
+    ("Panaderia", "Masas y Tortillas", "/tottus-cl/lista/CATG27144/Masas-y-Tortillas"),
+    ("Panaderia", "Pastelería", "/tottus-cl/lista/CATG27142/Pasteleria"),
 ]
 
 
@@ -207,14 +241,14 @@ def extraer_producto(item, categoria, subcategoria):
     return producto
 
 
-def extraer_productos(categoria, subcategoria, termino):
+def extraer_productos(categoria, subcategoria, path):
     """Recorre las paginas de una categoria usando pagination.count."""
     print(f"Scrapeando Tottus {subcategoria}...", flush=True)
     productos, vistos = [], set()
     total_paginas = None
 
     for pagina in range(1, MAX_PAGINAS + 1):
-        url = f"{BASE}?Ntt={urllib.request.quote(termino)}&page={pagina}"
+        url = f"{TOTTUS_HOST}{path}?page={pagina}"
         try:
             datos = extraer_next_data(descargar_html(url))
         except RuntimeError as exc:
@@ -268,35 +302,51 @@ def guardar_productos(productos, destino=OUTPUT):
         writer.writerows(productos)
 
 
-def main():
+def main(categorias=None):
+    categorias = categorias if categorias is not None else CATEGORIAS
     productos, vistos = [], set()
 
-    for categoria, subcategoria, termino in CATEGORIAS:
+    for categoria, subcategoria, path in categorias:
         try:
-            for producto in extraer_productos(categoria, subcategoria, termino):
+            for producto in extraer_productos(categoria, subcategoria, path):
                 clave = (categoria, subcategoria, producto["nombre"], producto["url"])
                 if clave in vistos:
                     continue
                 vistos.add(clave)
                 productos.append(producto)
         except Exception as exc:
-            print(f"Error en {subcategoria} ({termino}): {exc}. Continuando...", flush=True)
+            print(f"Error en {subcategoria} ({path}): {exc}. Continuando...", flush=True)
 
-    # Mismo guard que Lider: nunca pisar datos buenos con una corrida degradada.
-    previos = leer_conteo_previo(OUTPUT)
-    caidas = validar_anti_regresion(contar_por_subcategoria(productos), previos)
+    _publicar_con_guard(productos, {sub for _, sub, _ in categorias})
 
-    if caidas:
+
+def _publicar_con_guard(productos, subcats_actuales):
+    """Guard anti-regresion + red de seguridad de totales.
+
+    - Filtra el baseline a las subcategorias vigentes: al migrar keyword->
+      categoria, las subcats viejas del CSV no deben verse como caidas a 0.
+    - Carry-forward por subcategoria: una categoria que retrocede por throttling
+      conserva sus filas previas; el resto se publica fresco (antes: todo-o-nada).
+    - Total: la migracion multiplica el catalogo; si el total nuevo es MENOR que
+      el previo, algo se rompio -> no pisar, dejar .nuevo y avisar.
+    """
+    previos_conteo = solo_subcategorias(leer_conteo_previo(OUTPUT), subcats_actuales)
+    previos_filas = solo_subcategorias(leer_productos_previos(OUTPUT), subcats_actuales)
+
+    fusion, preservadas = fusionar_preservando(productos, previos_filas)
+    for sub, antes, ahora in sorted(preservadas, key=lambda c: c[1] - c[2], reverse=True):
+        print(f"  carry-forward {sub}: {antes} -> {ahora} (se conservan las filas previas)", flush=True)
+
+    total_previo = sum(previos_conteo.values())
+    if total_previo and len(fusion) < total_previo:
         destino = OUTPUT.with_suffix(OUTPUT.suffix + ".nuevo")
-        guardar_productos(productos, destino)
-        print(f"\n*** REGRESION DETECTADA: no se piso {OUTPUT} ***", flush=True)
-        print(f"La corrida nueva ({len(productos)} productos) quedo en {destino}", flush=True)
-        for sub, antes, ahora in sorted(caidas, key=lambda c: c[1] - c[2], reverse=True):
-            print(f"  - {sub}: {antes} -> {ahora}", flush=True)
+        guardar_productos(fusion, destino)
+        print(f"\n*** TOTAL A LA BAJA: {total_previo} -> {len(fusion)}. No se piso {OUTPUT} ***", flush=True)
+        print(f"La corrida nueva quedo en {destino} para inspeccion", flush=True)
         return
 
-    guardar_productos(productos)
-    print(f"{len(productos)} productos Tottus guardados", flush=True)
+    guardar_productos(fusion)
+    print(f"{len(fusion)} productos Tottus guardados", flush=True)
 
 
 if __name__ == "__main__":

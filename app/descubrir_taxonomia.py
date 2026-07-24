@@ -93,9 +93,28 @@ def descubrir_jumbo():
     return salida
 
 
+def descubrir_tottus():
+    """Devuelve [{rubro, subcategorias:[{name, path}]}] desde el __NEXT_DATA__."""
+    from app.scraper_tottus import descargar_html, extraer_next_data
+
+    nd = extraer_next_data(descargar_html("https://www.tottus.cl/tottus-cl"))
+    tax = (nd["props"]["pageProps"]["serverData"]["headerData"]
+           ["taxonomy"]["entry"]["all_accesses"]["categories"])
+    import re
+    salida = []
+    for rubro in tax:
+        subs = []
+        for s in (rubro.get("second_level_categories") or []):
+            m = re.search(r"(/tottus-cl/lista/CATG\d+/[^?#]*)", s.get("item_url", ""))
+            subs.append({"name": s.get("item_name"), "path": m.group(1) if m else None})
+        salida.append({"rubro": rubro.get("item_name"), "subcategorias": subs})
+    return salida
+
+
 DESCUBRIDORES = {
     "unimarc": descubrir_unimarc,
     "jumbo": descubrir_jumbo,
+    "tottus": descubrir_tottus,
 }
 
 
@@ -114,10 +133,10 @@ def main(argv=None):
     total_subs = sum(len(c["subcategorias"]) for c in arbol)
     print(f"{cadena}: {len(arbol)} rubros, {total_subs} subcategorias nivel-2")
     for cat in arbol:
-        ident = cat.get("slug", cat.get("id"))
+        ident = cat.get("slug") or cat.get("id") or ""
         print(f"\n## {cat['rubro']}  ({ident})")
         for s in cat["subcategorias"]:
-            ref = s.get("slug", s.get("id"))
+            ref = s.get("slug") or s.get("id") or s.get("path") or ""
             print(f"   - {s['name']}  ->  {ref}")
     print(f"\nVolcado en {destino}")
     return 0

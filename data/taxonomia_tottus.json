@@ -1,0 +1,560 @@
+[
+  {
+    "rubro": "Ofertas",
+    "subcategorias": [
+      {
+        "name": "Precios Increíbles",
+        "path": "/tottus-cl/lista/CATG24750/Precios-Increibles"
+      },
+      {
+        "name": "Carnes y Líquidos",
+        "path": "/tottus-cl/lista/CATG25570/Carnes-y-Liquidos"
+      },
+      {
+        "name": "Día del Niño",
+        "path": "/tottus-cl/lista/CATG27077/Jugueteria"
+      },
+      {
+        "name": "Productos en Grande",
+        "path": "/tottus-cl/lista/CATG29351/Productos-en-Grande"
+      },
+      {
+        "name": "Especial Proteín",
+        "path": "/tottus-cl/lista/CATG29026/Especial-Protein"
+      },
+      {
+        "name": "Ver todo Ofertas",
+        "path": null
+      }
+    ]
+  },
+  {
+    "rubro": "Ofertas",
+    "subcategorias": [
+      {
+        "name": "Precios Increíbles",
+        "path": "/tottus-cl/lista/CATG24750/Precios-Increibles"
+      },
+      {
+        "name": "Carnes y Líquidos",
+        "path": "/tottus-cl/lista/CATG25570/Carnes-y-Liquidos"
+      },
+      {
+        "name": "Día del Niño",
+        "path": "/tottus-cl/lista/CATG27077/Jugueteria"
+      },
+      {
+        "name": "Productos en Grande",
+        "path": "/tottus-cl/lista/CATG29351/Productos-en-Grande"
+      },
+      {
+        "name": "Especial Proteín",
+        "path": "/tottus-cl/lista/CATG29026/Especial-Protein"
+      }
+    ]
+  },
+  {
+    "rubro": "Despensa",
+    "subcategorias": [
+      {
+        "name": "Aceites",
+        "path": "/tottus-cl/lista/CATG27056/Aceites"
+      },
+      {
+        "name": "Arroz, Legumbres y Semillas",
+        "path": "/tottus-cl/lista/CATG27060/Arroz--Legumbres-y-Semillas"
+      },
+      {
+        "name": "Conservas y Enlatados",
+        "path": "/tottus-cl/lista/CATG27059/Conservas-y-Enlatados"
+      },
+      {
+        "name": "Pastas y Salsas",
+        "path": "/tottus-cl/lista/CATG27062/Pastas-y-Salsas"
+      },
+      {
+        "name": "Harinas",
+        "path": "/tottus-cl/lista/CATG27063/Harinas"
+      },
+      {
+        "name": "Condimentos y Vinagres",
+        "path": "/tottus-cl/lista/CATG27067/Condimentos-y-Vinagres"
+      },
+      {
+        "name": "Aderezos",
+        "path": "/tottus-cl/lista/CATG27066/Aderezos"
+      },
+      {
+        "name": "Sopas e Instantáneos",
+        "path": "/tottus-cl/lista/CATG27064/Sopas-e-Instantaneos"
+      },
+      {
+        "name": "Postres y Repostería",
+        "path": "/tottus-cl/lista/CATG27065/Postres-y-Reposteria"
+      },
+      {
+        "name": "Cocktail y Snack",
+        "path": "/tottus-cl/lista/CATG27669/Cocktail-y-Snack"
+      },
+      {
+        "name": "Desayunos",
+        "path": "/tottus-cl/lista/CATG27072/Desayuno-y-Dulces"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29419/Abarrotes"
+      }
+    ]
+  },
+  {
+    "rubro": "Carnes",
+    "subcategorias": []
+  },
+  {
+    "rubro": "Carnes",
+    "subcategorias": [
+      {
+        "name": "Vacuno",
+        "path": "/tottus-cl/lista/CATG27090/Vacuno"
+      },
+      {
+        "name": "Pollo",
+        "path": "/tottus-cl/lista/CATG27092/Pollo"
+      },
+      {
+        "name": "Cerdo",
+        "path": "/tottus-cl/lista/CATG27091/Cerdo"
+      },
+      {
+        "name": "Pavo",
+        "path": "/tottus-cl/lista/CATG27093/Pavo"
+      },
+      {
+        "name": "Carnes Molidas y Trozadas",
+        "path": "/tottus-cl/lista/CATG27094/Carnes-Molidas-y-Trozadas"
+      },
+      {
+        "name": "Carnes para Toda la Ocasión",
+        "path": "/tottus-cl/lista/CATG27069/Carnes"
+      },
+      {
+        "name": "Carbón",
+        "path": "/tottus-cl/lista/CATG27285/Carbon"
+      }
+    ]
+  },
+  {
+    "rubro": "Frutas y Verduras",
+    "subcategorias": [
+      {
+        "name": "Verduras",
+        "path": "/tottus-cl/lista/CATG27098/Verduras"
+      },
+      {
+        "name": "Frutas",
+        "path": "/tottus-cl/lista/CATG27099/Frutas"
+      },
+      {
+        "name": "Frutos Secos y Deshidratados",
+        "path": "/tottus-cl/lista/CATG27100/Frutos-Secos-y-Deshidratados"
+      },
+      {
+        "name": "Colaciones Saludables",
+        "path": "/tottus-cl/lista/CATG27101/Colaciones-Saludables"
+      },
+      {
+        "name": "Detox",
+        "path": "/tottus-cl/lista/CATG27102/Detox"
+      },
+      {
+        "name": "Orgánicos",
+        "path": "/tottus-cl/lista/CATG27103/Organicos"
+      },
+      {
+        "name": "Verduras Congeladas",
+        "path": "/tottus-cl/lista/CATG27123/Verduras-Congeladas"
+      },
+      {
+        "name": "Frutas Congeladas",
+        "path": "/tottus-cl/lista/CATG27124/Frutas-Congeladas"
+      }
+    ]
+  },
+  {
+    "rubro": "Lácteos y Quesos",
+    "subcategorias": [
+      {
+        "name": "Quesos",
+        "path": "/tottus-cl/lista/CATG27180/Quesos"
+      },
+      {
+        "name": "Leches",
+        "path": "/tottus-cl/lista/CATG27179/Leches"
+      },
+      {
+        "name": "Mantequillas y Margarinas",
+        "path": "/tottus-cl/lista/CATG27185/Mantequillas-y-Mantecas"
+      },
+      {
+        "name": "Yoghurt",
+        "path": "/tottus-cl/lista/CATG27182/Yoghurt"
+      },
+      {
+        "name": "Postres Listos",
+        "path": "/tottus-cl/lista/CATG27189/Postres-Listos"
+      },
+      {
+        "name": "Cremas",
+        "path": "/tottus-cl/lista/CATG27192/Cremas"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27139/Lacteos-y-Quesos"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29421/Lacteos"
+      }
+    ]
+  },
+  {
+    "rubro": "Fiambres y Huevos",
+    "subcategorias": [
+      {
+        "name": "Jamón",
+        "path": "/tottus-cl/lista/CATG27203/Jamon"
+      },
+      {
+        "name": "Huevos",
+        "path": "/tottus-cl/lista/CATG27266/Huevos"
+      },
+      {
+        "name": "Chorizos y Longanizas",
+        "path": "/tottus-cl/lista/CATG27267/Chorizos-y-Longanizas"
+      },
+      {
+        "name": "Salchichas y Vienesas",
+        "path": "/tottus-cl/lista/CATG27268/Salchichas-y-Vienesas"
+      },
+      {
+        "name": "Salame y Cocktail",
+        "path": "/tottus-cl/lista/CATG27269/Salame-y-Cocktail"
+      },
+      {
+        "name": "Pates",
+        "path": "/tottus-cl/lista/CATG27270/Pates"
+      },
+      {
+        "name": "Jamonadas y Otros",
+        "path": "/tottus-cl/lista/CATG27271/Jamonadas-y-Otros"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27109/Fiambres-y-Huevos"
+      }
+    ]
+  },
+  {
+    "rubro": "Bebestibles",
+    "subcategorias": [
+      {
+        "name": "Bebidas",
+        "path": "/tottus-cl/lista/CATG27217/Bebidas"
+      },
+      {
+        "name": "Jugos y Néctar",
+        "path": "/tottus-cl/lista/CATG27216/Jugos-y-Nectar"
+      },
+      {
+        "name": "Aguas",
+        "path": "/tottus-cl/lista/CATG27215/Aguas"
+      },
+      {
+        "name": "Isotónicas y Energéticas",
+        "path": "/tottus-cl/lista/CATG27218/Isotonicas-y-Energeticas"
+      },
+      {
+        "name": "Té Líquido y Limonadas",
+        "path": "/tottus-cl/lista/CATG27219/Te-Liquido-y-Limonadas"
+      },
+      {
+        "name": "Cervezas",
+        "path": "/tottus-cl/lista/CATG27083/Cervezas"
+      },
+      {
+        "name": "Vinos",
+        "path": "/tottus-cl/lista/CATG29203/Vinos"
+      },
+      {
+        "name": "Licores",
+        "path": "/tottus-cl/lista/CATG29204/Licores"
+      },
+      {
+        "name": "Hielo",
+        "path": "/tottus-cl/lista/CATG27131/Hielo"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29423/Liquidos"
+      }
+    ]
+  },
+  {
+    "rubro": "Panadería y Pastelería",
+    "subcategorias": [
+      {
+        "name": "Panadería",
+        "path": "/tottus-cl/lista/CATG27140/Panaderia"
+      },
+      {
+        "name": "Masas y Tortillas",
+        "path": "/tottus-cl/lista/CATG27144/Masas-y-Tortillas"
+      },
+      {
+        "name": "Pastelería",
+        "path": "/tottus-cl/lista/CATG27142/Pasteleria"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27075/Panaderia-y-Pasteleria"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29425/Panaderia-y-Pasteleria"
+      }
+    ]
+  },
+  {
+    "rubro": "Congelados",
+    "subcategorias": [
+      {
+        "name": "Verduras Congeladas",
+        "path": "/tottus-cl/lista/CATG27123/Verduras-Congeladas"
+      },
+      {
+        "name": "Hamburguesas y Churrascos",
+        "path": "/tottus-cl/lista/CATG27125/Hamburguesas-y-Churrascos"
+      },
+      {
+        "name": "Helados",
+        "path": "/tottus-cl/lista/CATG27129/Helados"
+      },
+      {
+        "name": "Pollo Congelado",
+        "path": "/tottus-cl/lista/CATG27126/Pollo-Congelado"
+      },
+      {
+        "name": "Frutas Congeladas",
+        "path": "/tottus-cl/lista/CATG27124/Frutas-Congeladas"
+      },
+      {
+        "name": "Pescados y Mariscos",
+        "path": "/tottus-cl/lista/CATG27127/Pescados-y-Mariscos"
+      },
+      {
+        "name": "Comida Congelada",
+        "path": "/tottus-cl/lista/CATG27132/Comida-Congelada"
+      },
+      {
+        "name": "Vegetariano y Vegano",
+        "path": "/tottus-cl/lista/CATG27130/Vegetariano-y-Vegano"
+      },
+      {
+        "name": "Hielo",
+        "path": "/tottus-cl/lista/CATG27131/Hielo"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27073/Congelados"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29420/Congelados"
+      }
+    ]
+  },
+  {
+    "rubro": "Aseo y Limpieza",
+    "subcategorias": [
+      {
+        "name": "Detergente y Cuidado para la Ropa",
+        "path": "/tottus-cl/lista/CATG27133/Detergente-y-Cuidado-para-la-Ropa"
+      },
+      {
+        "name": "Papeles para el Hogar",
+        "path": "/tottus-cl/lista/CATG27134/Papeles-para-el-Hogar"
+      },
+      {
+        "name": "Baño y Cocina",
+        "path": "/tottus-cl/lista/CATG27135/Bano-y-Cocina"
+      },
+      {
+        "name": "Pisos y Muebles",
+        "path": "/tottus-cl/lista/CATG27136/Pisos-y-Muebles"
+      },
+      {
+        "name": "Aerosoles y Desinfectantes",
+        "path": "/tottus-cl/lista/CATG27137/Aerosoles-y-Desinfectantes"
+      },
+      {
+        "name": "Accesorios de Aseo y Cocina",
+        "path": "/tottus-cl/lista/CATG27138/Accesorios-de-Aseo-y-Cocina"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27074/Aseo-y-Limpieza"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29422/Lavado-y-Aseo-Hogar"
+      }
+    ]
+  },
+  {
+    "rubro": "Cuidado Personal",
+    "subcategorias": [
+      {
+        "name": "Belleza",
+        "path": "/tottus-cl/lista/CATG27076/Belleza"
+      },
+      {
+        "name": "Cuidado Personal",
+        "path": "/tottus-cl/lista/CATG27696/Cuidado-Personal"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29426/Perfumeria"
+      }
+    ]
+  },
+  {
+    "rubro": "Mundo Bebé",
+    "subcategorias": [
+      {
+        "name": "Pañales y Toallas Húmedas",
+        "path": "/tottus-cl/lista/CATG27222/Panales-y-Toallas-Humedas"
+      },
+      {
+        "name": "Perfumería Bebé",
+        "path": "/tottus-cl/lista/CATG27223/Perfumeria-Bebe"
+      },
+      {
+        "name": "Alimentación y Lactancia",
+        "path": "/tottus-cl/lista/CATG27224/Alimentacion-y-Lactancia"
+      }
+    ]
+  },
+  {
+    "rubro": "Mascotas",
+    "subcategorias": [
+      {
+        "name": "Perros",
+        "path": "/tottus-cl/lista/CATG27166/Perros"
+      },
+      {
+        "name": "Gatos",
+        "path": "/tottus-cl/lista/CATG27167/Gatos"
+      },
+      {
+        "name": "Snack y Huesos",
+        "path": "/tottus-cl/lista/CATG27756/Snack-y-Huesos"
+      },
+      {
+        "name": "Higiene y Cuidados",
+        "path": "/tottus-cl/lista/CATG27168/Higiene-y-Cuidados"
+      },
+      {
+        "name": "Accesorios y Juguetes",
+        "path": "/tottus-cl/lista/CATG27752/Accesorios-y-Juguetes"
+      },
+      {
+        "name": "Marcas Propias",
+        "path": "/tottus-cl/lista/CATG27078/Mascotas"
+      },
+      {
+        "name": "Productos Nuevos",
+        "path": "/tottus-cl/lista/CATG29424/Mascotas"
+      }
+    ]
+  },
+  {
+    "rubro": "Electrohogar y Tv",
+    "subcategorias": [
+      {
+        "name": "Electrodomésticos",
+        "path": "/tottus-cl/lista/CATG27227/Electrodomesticos"
+      },
+      {
+        "name": "Climatización",
+        "path": "/tottus-cl/lista/CATG28801/Climatizacion"
+      },
+      {
+        "name": "Línea Blanca",
+        "path": "/tottus-cl/lista/CATG28803/Linea-Blanca"
+      },
+      {
+        "name": "Aspiradoras",
+        "path": "/tottus-cl/lista/CATG27231/Aspiradoras"
+      },
+      {
+        "name": "Impresoras y Tintas",
+        "path": "/tottus-cl/lista/CATG27234/Impresoras-y-Tintas"
+      },
+      {
+        "name": "Audio",
+        "path": "/tottus-cl/lista/CATG27230/Audio"
+      },
+      {
+        "name": "Smart TV",
+        "path": "/tottus-cl/lista/CATG27228/Smart-TV"
+      },
+      {
+        "name": "Accesorios Tecnológicos",
+        "path": "/tottus-cl/lista/CATG27236/Accesorios-Tecnologicos"
+      }
+    ]
+  },
+  {
+    "rubro": "Aire Libre y Entretención",
+    "subcategorias": [
+      {
+        "name": "Juguetería",
+        "path": "/tottus-cl/lista/CATG27077/Jugueteria"
+      },
+      {
+        "name": "Aire Libre",
+        "path": "/tottus-cl/lista/CATG27080/Aire-Libre"
+      }
+    ]
+  },
+  {
+    "rubro": "Hogar y Librería",
+    "subcategorias": [
+      {
+        "name": "Hogar",
+        "path": "/tottus-cl/lista/CATG27079/Hogar"
+      },
+      {
+        "name": "Librería",
+        "path": "/tottus-cl/lista/CATG27082/Libreria"
+      }
+    ]
+  },
+  {
+    "rubro": "Otras Categorías",
+    "subcategorias": [
+      {
+        "name": "Platos Preparados",
+        "path": "/tottus-cl/lista/CATG27178/Platos-Preparados"
+      },
+      {
+        "name": "Celebraciones",
+        "path": "/tottus-cl/lista/CATG27086/Celebraciones"
+      },
+      {
+        "name": "Auto y Ferretería",
+        "path": "/tottus-cl/lista/CATG27081/Auto-y-Ferreteria"
+      }
+    ]
+  }
+]

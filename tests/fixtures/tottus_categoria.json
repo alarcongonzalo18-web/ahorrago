@@ -1,0 +1,242 @@
+{
+ "pagination": {
+  "count": 289,
+  "perPage": 48,
+  "totalPerPage": 48,
+  "currentPage": 1
+ },
+ "results": [
+  {
+   "productId": "113076279",
+   "skuId": "113076280",
+   "topSpecifications": [],
+   "merchantCategoryId": "J0502010202",
+   "displayName": "Leche Semidescremada Sin Lactosa Zerolacto Soprole 1 lt",
+   "productType": "REGULAR",
+   "viewTemplate": "NORMAL",
+   "url": "https://www.tottus.cl/tottus-cl/articulo/113076279/leche-semidescremada-sin-lactosa-soprole-1-lt",
+   "brand": "SOPROLE",
+   "media": {
+    "id": "113076280",
+    "type": "PRODUCT",
+    "onImageHover": "FETCH_SECOND_IMAGE"
+   },
+   "mediaUrls": [
+    "https://media.tottus.cl/tottusCL/20042835_1/public"
+   ],
+   "measurements": {
+    "format": "1 LT",
+    "unit": "UN",
+    "minUnits": 1,
+    "maxUnits": 12,
+    "limit": "Máximo 12 Un."
+   },
+   "badges": [],
+   "multipurposeBadges": [],
+   "meatStickers": [],
+   "prices": [
+    {
+     "label": "",
+     "icons": "",
+     "symbol": "$ ",
+     "type": "internetPrice",
+     "crossed": false,
+     "price": [
+      "1.390"
+     ],
+     "pum": {
+      "label": "LT",
+      "type": "pum",
+      "symbol": "$ ",
+      "price": [
+       "1.390"
+      ]
+     }
+    }
+   ],
+   "availability": {
+    "homeDeliveryShipping": "",
+    "pickUpFromStoreShipping": "",
+    "internationalShipping": "",
+    "primeShipping": "",
+    "expressShipping": "Envío <b style='font-weight:700'>rápido</b>"
+   },
+   "expressDeliveryLimit": 0,
+   "variants": [
+    {
+     "type": "COLOR",
+     "options": []
+    },
+    {
+     "type": "SIZES",
+     "options": []
+    }
+   ],
+   "sellerId": "TOTTUS_CHILE",
+   "sellerName": "TOTTUS",
+   "offeringId": "113076280",
+   "isBestSeller": false,
+   "isSponsored": true,
+   "providerName": "topsort",
+   "mabaya_ad_info": "EbqMFwoQBqYr1ZQadPmiBDRoxWuJbBIQAZ8am6bxd0KHl6inYJWX3BoQAZ4819J3elKImOWybrKv3SINCgkxMTMwNzYyNzkQATD6wZgBSAFQu8nOjfkzYNsCchAAAAAAAAAAAAAAAAAAAAAAeAKFAQAAoEA",
+   "adIdentifier": "EbqMFwoQBqYr1ZQadPmiBDRoxWuJbBIQAZ8am6bxd0KHl6inYJWX3BoQAZ4819J3elKImOWybrKv3SINCgkxMTMwNzYyNzkQATD6wZgBSAFQu8nOjfkzYNsCchAAAAAAAAAAAAAAAAAAAAAAeAKFAQAAoEA",
+   "GSCCategoryId": "",
+   "promotions": [],
+   "installmentsWithoutInterest": []
+  },
+  {
+   "productId": "119606474",
+   "skuId": "119606475",
+   "topSpecifications": [],
+   "merchantCategoryId": "J0502010202",
+   "displayName": "Leche Entera Natural Sin Lactosa Zerolacto Soprole 1 lt",
+   "productType": "REGULAR",
+   "viewTemplate": "NORMAL",
+   "url": "https://www.tottus.cl/tottus-cl/articulo/119606474/leche-entera-zerolacto-soprole-1-lt",
+   "brand": "SOPROLE",
+   "media": {
+    "id": "119606475",
+    "type": "PRODUCT",
+    "onImageHover": "FETCH_SECOND_IMAGE"
+   },
+   "mediaUrls": [
+    "https://media.tottus.cl/tottusCL/21265856_1/public"
+   ],
+   "measurements": {
+    "format": "1 LT",
+    "unit": "UN",
+    "minUnits": 1,
+    "maxUnits": 12,
+    "limit": "Máximo 12 Un."
+   },
+   "badges": [],
+   "multipurposeBadges": [],
+   "meatStickers": [],
+   "prices": [
+    {
+     "label": "",
+     "icons": "",
+     "symbol": "$ ",
+     "type": "internetPrice",
+     "crossed": false,
+     "price": [
+      "1.390"
+     ],
+     "pum": {
+      "label": "LT",
+      "type": "pum",
+      "symbol": "$ ",
+      "price": [
+       "1.390"
+      ]
+     }
+    }
+   ],
+   "availability": {
+    "homeDeliveryShipping": "",
+    "pickUpFromStoreShipping": "",
+    "internationalShipping": "",
+    "primeShipping": "",
+    "expressShipping": "Envío <b style='font-weight:700'>rápido</b>"
+   },
+   "expressDeliveryLimit": 0,
+   "variants": [
+    {
+     "type": "COLOR",
+     "options": []
+    },
+    {
+     "type": "SIZES",
+     "options": []
+    }
+   ],
+   "sellerId": "TOTTUS_CHILE",
+   "sellerName": "TOTTUS",
+   "offeringId": "119606475",
+   "isBestSeller": false,
+   "isSponsored": true,
+   "providerName": "topsort",
+   "mabaya_ad_info": "WYkLDwoQBqYr1ZQadPmiBDRoxWuJbBIQAZ8am6bxd0KHl6inYJWX3BoQAZ4819J3elKImOWybrKv3SINCgkxMTk2MDY0NzQQATD6wZgBSAFQu8nOjfkzYLMCchAAAAAAAAAAAAAAAAAAAAAAeAKFAQAAoEA",
+   "adIdentifier": "WYkLDwoQBqYr1ZQadPmiBDRoxWuJbBIQAZ8am6bxd0KHl6inYJWX3BoQAZ4819J3elKImOWybrKv3SINCgkxMTk2MDY0NzQQATD6wZgBSAFQu8nOjfkzYLMCchAAAAAAAAAAAAAAAAAAAAAAeAKFAQAAoEA",
+   "GSCCategoryId": "",
+   "promotions": [],
+   "installmentsWithoutInterest": []
+  },
+  {
+   "productId": "113152870",
+   "skuId": "113152872",
+   "topSpecifications": [],
+   "merchantCategoryId": "J0502010302",
+   "displayName": "Leche Entera Natural",
+   "productType": "REGULAR",
+   "viewTemplate": "NORMAL",
+   "url": "https://www.tottus.cl/tottus-cl/articulo/113152870/leche-tottus-entera-1lt",
+   "brand": "TOTTUS",
+   "media": {
+    "id": "113152872",
+    "type": "PRODUCT",
+    "onImageHover": "FETCH_SECOND_IMAGE"
+   },
+   "mediaUrls": [
+    "https://media.tottus.cl/tottusCL/20099192_1/public",
+    "https://media.tottus.cl/tottusCL/20099192_2/public"
+   ],
+   "measurements": {
+    "format": "1 LT",
+    "unit": "UN",
+    "minUnits": 1,
+    "maxUnits": 24,
+    "limit": "Máximo 24 Un."
+   },
+   "badges": [],
+   "multipurposeBadges": [],
+   "meatStickers": [],
+   "prices": [
+    {
+     "label": "",
+     "icons": "",
+     "symbol": "$ ",
+     "type": "internetPrice",
+     "crossed": false,
+     "price": [
+      "1.090"
+     ],
+     "pum": {
+      "label": "LT",
+      "type": "pum",
+      "symbol": "$ ",
+      "price": [
+       "1.090"
+      ]
+     }
+    }
+   ],
+   "availability": {
+    "homeDeliveryShipping": "",
+    "pickUpFromStoreShipping": "",
+    "internationalShipping": "",
+    "primeShipping": "",
+    "expressShipping": "Envío <b style='font-weight:700'>rápido</b>"
+   },
+   "expressDeliveryLimit": 0,
+   "variants": [
+    {
+     "type": "COLOR",
+     "options": []
+    },
+    {
+     "type": "SIZES",
+     "options": []
+    }
+   ],
+   "sellerId": "TOTTUS_CHILE",
+   "sellerName": "TOTTUS",
+   "offeringId": "113152872",
+   "isBestSeller": false,
+   "isSponsored": false,
+   "GSCCategoryId": "",
+   "promotions": [],
+   "installmentsWithoutInterest": []
+  }
+ ]
+}
