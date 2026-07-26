@@ -1,9 +1,9 @@
 {
  "ean-backfill": {
-  "detalle": "cache: 19340 slugs, 18950 con EAN",
-  "fecha": "2026-07-23T04:20:46",
+  "detalle": "cache: 21743 slugs, 21307 con EAN",
+  "fecha": "2026-07-26T11:25:41",
   "ok": true,
-  "ultimo_ok": "2026-07-23T04:20:46"
+  "ultimo_ok": "2026-07-26T11:25:41"
  },
  "jumbo": {
   "detalle": "OK (jumbo)",
@@ -21,17 +21,17 @@
  },
  "publicar": {
   "detalle": "OK (sin scrape)",
-  "duracion_min": 12.5,
-  "fecha": "2026-07-23T04:33:19",
+  "duracion_min": 2.0,
+  "fecha": "2026-07-26T11:27:52",
   "ok": true,
-  "ultimo_ok": "2026-07-23T04:33:19"
+  "ultimo_ok": "2026-07-26T11:27:52"
  },
  "tottus": {
   "detalle": "OK (tottus)",
-  "duracion_min": 15.1,
-  "fecha": "2026-07-22T21:15:09",
+  "duracion_min": 15.4,
+  "fecha": "2026-07-25T23:57:56",
   "ok": true,
-  "ultimo_ok": "2026-07-22T21:15:09"
+  "ultimo_ok": "2026-07-25T23:57:56"
  },
  "unimarc": {
   "detalle": "OK (unimarc)",
