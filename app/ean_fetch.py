@@ -37,6 +37,15 @@ JUMBO_APIKEY = os.environ.get(
 )
 JUMBO_CLIENT_VERSION = os.environ.get("JUMBO_CLIENT_VERSION", "3.3.98")
 
+# Catalogo publico de VTEX (Jumbo corre sobre VTEX). Acepta lotes y devuelve EAN;
+# el dominio de la tienda (www.jumbo.cl/api/...) sirve HTML, hay que pegarle al
+# host interno. Ver fetch_eans_jumbo_por_id.
+JUMBO_VTEX_URL = (
+    "https://jumbochile.vtexcommercestable.com.br"
+    "/api/catalog_system/pub/products/search"
+)
+VTEX_LOTE = 50
+
 # --- Unimarc ---
 UNIMARC_BYSLUG_URL = (
     "https://bff-unimarc-ecommerce.unimarc.cl/catalog/product/search/by-slug/{slug}"
@@ -199,6 +208,44 @@ def fetch_ean_jumbo(slug):
         },
     )
     return ean_desde_respuesta_jumbo(_pedir_json(req))
+
+
+def eans_desde_respuesta_vtex(data):
+    """{productId: ean} de una respuesta del catalog_system de VTEX."""
+    salida = {}
+    for producto in data or []:
+        pid = str(producto.get("productId") or "")
+        items = producto.get("items") or []
+        ean = normalizar_ean(items[0].get("ean") if items else "")
+        if pid and ean:
+            salida[pid] = ean
+    return salida
+
+
+def fetch_eans_jumbo_por_id(product_ids):
+    """EAN de varios productos de Jumbo en UNA request. Devuelve {productId: ean}.
+
+    El BFF de `fetch_ean_jumbo` es de a uno y bloquea a las pocas consultas (se
+    midio el 26-07: corta en la 3a), o sea inviable para las ~34.000 fichas que
+    trae el catalogo por categorias. Pero Jumbo corre sobre VTEX, cuyo
+    catalog_system publico acepta hasta 50 productos por request, responde en
+    ~2 s y no mostro cuota. El `ProductId` ya viene en el listado de
+    Constructor.io, asi que el scraper puede resolver el EAN mientras scrapea,
+    sin backfill posterior.
+    """
+    ids = [str(i) for i in product_ids if i]
+    if not ids:
+        return {}
+    consulta = "&".join(f"fq=productId:{i}" for i in ids[:VTEX_LOTE])
+    req = urllib.request.Request(
+        f"{JUMBO_VTEX_URL}?{consulta}&_from=0&_to={VTEX_LOTE - 1}",
+        headers={
+            "Accept": "application/json",
+            "User-Agent": USER_AGENT,
+            "Referer": "https://www.jumbo.cl/",
+        },
+    )
+    return eans_desde_respuesta_vtex(_pedir_json(req))
 
 
 def _pedir_texto(req, intentos=5):

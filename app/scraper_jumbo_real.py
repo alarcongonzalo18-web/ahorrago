@@ -10,6 +10,7 @@ from urllib.parse import urlencode, quote
 
 from app.category_validator import is_valid_row
 from app.config import cargar_env
+from app.ean_fetch import VTEX_LOTE, fetch_eans_jumbo_por_id
 # Guard anti-regresion generico, ya testeado en scraper_lider (no duplicar).
 from app.scraper_lider import (
     es_migracion_de_taxonomia,
@@ -267,9 +268,11 @@ def extraer_producto(resultado, categoria, subcategoria):
         "promocion":        promocion,
         "url":              url,
         "imagen_url":       imagen,
-        # La API de busqueda de Jumbo (Constructor.io) no expone EAN; RefId es
-        # un codigo interno de Cencosud. Pendiente: API interna del PDP.
+        # El listado de Constructor.io no trae EAN (RefId es interno de
+        # Cencosud), pero si el ProductId: con el se resuelve por lotes contra
+        # el catalogo VTEX en _resolver_eans, antes de guardar el CSV.
         "ean":              "",
+        "_product_id":      str(d.get("ProductId") or d.get("productId") or ""),
     }
 
 
@@ -323,6 +326,42 @@ def scrape_categoria(categoria, subcategoria, group_id):
     return productos
 
 
+def _resolver_eans(productos, pausa=0.3):
+    """Completa el EAN de los productos consultando VTEX por lotes de 50.
+
+    Antes Jumbo salia sin EAN y lo llenaba backfill_ean de a uno contra el BFF,
+    que bloquea a las pocas consultas: con 34.000 fichas nunca iba a terminar.
+    Aca se resuelve en ~700 requests mientras corre el scrape.
+    """
+    pendientes = {}
+    for producto in productos:
+        pid = producto.get("_product_id")
+        if pid and not producto.get("ean"):
+            pendientes.setdefault(pid, []).append(producto)
+
+    if not pendientes:
+        return 0
+
+    ids = list(pendientes)
+    resueltos = 0
+    print(f"Resolviendo EAN de {len(ids)} productos ({-(-len(ids) // VTEX_LOTE)} lotes)...")
+    for inicio in range(0, len(ids), VTEX_LOTE):
+        lote = ids[inicio:inicio + VTEX_LOTE]
+        try:
+            encontrados = fetch_eans_jumbo_por_id(lote)
+        except Exception as exc:   # una tanda perdida no puede matar la corrida
+            print(f"  lote {inicio // VTEX_LOTE + 1}: {type(exc).__name__}, se continua")
+            continue
+        for pid, ean in encontrados.items():
+            for producto in pendientes.get(pid, []):
+                producto["ean"] = ean
+                resueltos += 1
+        time.sleep(pausa)
+
+    print(f"  EAN resuelto en {resueltos} de {len(productos)} productos")
+    return resueltos
+
+
 def guardar_productos(productos, path=OUTPUT):
     path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = [
@@ -331,7 +370,9 @@ def guardar_productos(productos, path=OUTPUT):
         "promocion", "url", "imagen_url", "ean",
     ]
     with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        # extrasaction="ignore": los productos llevan _product_id para resolver
+        # el EAN por lotes (ver _resolver_eans); no es parte del contrato del CSV.
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(productos)
 
@@ -354,6 +395,7 @@ def main(categorias=None):
             print(f"Error en {subcategoria}: {e}. Continuando...")
         time.sleep(PAUSA_ENTRE_CATEGORIAS)
 
+    _resolver_eans(todos)
     _publicar_con_guard(todos, {sub for _, sub, _ in cats})
     return todos
 
