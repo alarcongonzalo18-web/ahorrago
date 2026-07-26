@@ -33,6 +33,38 @@ solo rubros de consumo). Multiplica el catálogo y, con él, los grupos comparab
   `python -m app.descubrir_taxonomia <unimarc|jumbo|tottus>`.
 - **134 tests** (baseline 116 → +18). Cada cadena con smoke real de 2 categorías verificado.
 
+### Validación real de Tottus (25/26-07-2026) — LA MIGRACIÓN FUNCIONA
+
+Corrida completa de Tottus con las 71 categorías reales, hecha **desde el equipo de
+trabajo** (el actualizador estaba apagado; se trajo la base autoritativa por pendrive).
+
+| | Baseline | Post-migración |
+|---|---:|---:|
+| **Comparables (KPI)** | 6.967 | **7.119 (+152)** |
+| Precios Tottus | 8.904 | 10.046 (+13%) |
+| Subcategorías Tottus | 49 | 71 |
+| Cobertura EAN | 52% | 53% |
+
+**El KPI baja antes de subir**: los productos nuevos llegan sin EAN (el catálogo llega
+antes que su identidad) y recién al drenar el backfill se vuelven comparables. Secuencia
+medida: 6.967 → 6.589 (tras el scrape) → **7.119** (tras backfill de 2.403 slugs).
+Al planificar las otras cadenas, contar esa fase intermedia como normal.
+
+### 🐛 Bug encontrado por la corrida real: el guard confundía migración con regresión
+
+`solo_subcategorias` filtra por NOMBRE, y eso no alcanzaba. 8 de las 49 subcategorías
+viejas de Tottus sobrevivieron con el mismo nombre pero **otro significado**: la vieja
+"Bebidas" eran los 826 resultados de buscar la keyword `bebida` (de cualquier rubro) y la
+nueva son los 180 de la categoría real. El guard leyó `826 → 180` como regresión, hizo
+carry-forward de las filas viejas y dejó **1.674 productos duplicados y mal categorizados**
+(papilla de bebé archivada dentro de "Verduras").
+
+**Fix** (commit `52cf575`): `es_migracion_de_taxonomia()` — si menos de la mitad de las
+subcategorías previas sobrevive (acá: 8/49 = 16%), la corrida es una migración, no hay
+contra qué comparar y el guard se aparta; vuelve solo en la corrida siguiente. Aplicado a
+las 3 cadenas. Tras el fix: 10.931 filas limpias, duplicados 1.674 → 420 (y esos 420 son
+legítimos: el sitio lista el mismo pañal de adulto en dos categorías).
+
 ### ⚠️ Pendiente: primera corrida nocturna migrada (la prueba de fuego)
 
 Los smokes fueron de 2 categorías/cadena. **La primera corrida nocturna completa es la
