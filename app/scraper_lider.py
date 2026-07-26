@@ -412,6 +412,25 @@ def solo_subcategorias(items, subcategorias):
     return [p for p in items if p.get("subcategoria") in subcategorias]
 
 
+def es_migracion_de_taxonomia(previas, actuales, umbral=0.5):
+    """True si la corrida cambia la taxonomia de la cadena, no sus datos.
+
+    `solo_subcategorias` filtra por NOMBRE, y eso no alcanza: al pasar de
+    busqueda-por-keyword a categoria real, algunas subcategorias sobreviven con
+    el mismo nombre pero otro significado. En Tottus la vieja "Bebidas" eran los
+    826 resultados de buscar "bebida" (de cualquier rubro) y la nueva son los
+    180 de la categoria real; el guard leyo 826->180 como regresion, preservo
+    las viejas y termino metiendo papilla de bebe dentro de "Verduras".
+
+    Si la mayoria de las subcategorias previas ya no existe, la corrida es una
+    migracion: no hay contra que comparar y el guard debe apartarse.
+    """
+    previas, actuales = set(previas), set(actuales)
+    if not previas:
+        return False
+    return len(previas & actuales) < len(previas) * umbral
+
+
 def fusionar_preservando(nuevos, previos, umbral=0.5, exentas=SUBCATEGORIAS_DEGRADADAS):
     """Merge por subcategoria que nunca deja que una categoria retroceda.
 

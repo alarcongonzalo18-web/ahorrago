@@ -119,3 +119,36 @@ def test_leer_conteo_previo_roundtrip_y_archivo_inexistente(tmp_path):
     ]
     guardar_productos(productos, destino)
     assert leer_conteo_previo(destino) == {"Leche": 2, "Quesos": 1}
+
+
+def test_migracion_de_taxonomia_se_detecta():
+    """Caso real Tottus 25-07: al migrar keyword->categoria, 4 subcategorias
+    sobrevivieron por nombre ("Bebidas", "Frutas", "Vinos", "Verduras") pero
+    con otro significado; el guard las leyo como regresion y preservo filas
+    viejas mal categorizadas (papilla de bebe dentro de "Verduras")."""
+    from app.scraper_lider import es_migracion_de_taxonomia
+
+    # proporciones reales medidas en Tottus: 8 de 49 subcategorias sobrevivieron (16%)
+    viejas = {"Leche", "Huevos", "Yogurt", "Quesos", "Mantequilla", "Crema", "Frutas",
+              "Verduras", "Carnes", "Aves", "Cecinas", "Pescados", "Bebidas", "Jugos",
+              "Aguas", "Cervezas", "Vinos", "Pan", "Shampoo", "Jabon"}
+    nuevas = {"Leches", "Yoghurt", "Quesos", "Huevos", "Frutas", "Verduras", "Bebidas",
+              "Aguas", "Cervezas", "Vinos", "Jugos y Nectar", "Panaderia", "Pasteleria",
+              "Belleza", "Cuidado Personal", "Helados", "Vacuno", "Pollo"}
+    assert es_migracion_de_taxonomia(viejas, nuevas)
+
+
+def test_corrida_normal_no_es_migracion():
+    """Misma taxonomia (aunque una categoria desaparezca): el guard debe actuar."""
+    from app.scraper_lider import es_migracion_de_taxonomia
+
+    previas = {"Leches", "Yoghurt", "Quesos", "Huevos", "Aguas", "Vinos"}
+    assert not es_migracion_de_taxonomia(previas, previas)
+    assert not es_migracion_de_taxonomia(previas, previas - {"Vinos"})
+
+
+def test_sin_baseline_no_es_migracion():
+    """Primera corrida absoluta: no hay nada previo, el guard no aplica igual."""
+    from app.scraper_lider import es_migracion_de_taxonomia
+
+    assert not es_migracion_de_taxonomia(set(), {"Leches", "Aguas"})

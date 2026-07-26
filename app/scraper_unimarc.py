@@ -33,6 +33,7 @@ from selenium.webdriver.chrome.options import Options
 from app.category_validator import is_valid_row
 # Guard anti-regresion generico, ya testeado en scraper_lider (no duplicar).
 from app.scraper_lider import (
+    es_migracion_de_taxonomia,
     fusionar_preservando,
     leer_conteo_previo,
     leer_productos_previos,
@@ -310,7 +311,15 @@ def _publicar_con_guard(productos, subcats_actuales):
     - Total: la migracion multiplica el catalogo, asi que si el total nuevo es
       MENOR que el previo, algo se rompio -> no pisar, dejar .nuevo y avisar.
     """
-    previos_conteo = solo_subcategorias(leer_conteo_previo(OUTPUT), subcats_actuales)
+    conteo_previo_crudo = leer_conteo_previo(OUTPUT)
+    if es_migracion_de_taxonomia(conteo_previo_crudo, subcats_actuales):
+        # Corrida de migracion: el CSV previo usa otra taxonomia, no hay contra
+        # que comparar. Publicar directo (el guard vuelve solo la corrida siguiente).
+        guardar_productos(productos)
+        print(f"{len(productos)} productos Unimarc guardados (migracion de taxonomia: guard omitido)", flush=True)
+        return
+
+    previos_conteo = solo_subcategorias(conteo_previo_crudo, subcats_actuales)
     previos_filas = solo_subcategorias(leer_productos_previos(OUTPUT), subcats_actuales)
 
     fusion, preservadas = fusionar_preservando(productos, previos_filas)
