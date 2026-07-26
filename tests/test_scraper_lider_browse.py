@@ -51,8 +51,10 @@ def test_productos_desde_next_data_ignora_banners_y_mapea_campos():
     primero = prods[0]
     assert primero["ean"] == "773021902133"          # EAN sin ceros a la izquierda
     assert primero["subcategoria"] == "Jabon"
-    assert primero["precio"] == "$1.000"             # linePrice (oferta) tiene prioridad
-    assert primero["precio_normal"] == "$1.450"      # wasPrice
+    # Los precios se guardan como ENTEROS, igual que en las otras 3 cadenas: el
+    # SPA los entrega formateados ("$1.000") y el CSV del pipeline usa numeros.
+    assert primero["precio"] == 1000                 # linePrice (lo que se paga)
+    assert primero["precio_normal"] == 1450          # wasPrice (lista)
     assert primero["url"] == "/ip/jabones/00773021902133"
 
 
@@ -60,4 +62,33 @@ def test_productos_toma_itemprice_si_no_hay_oferta():
     # El tercer item no tiene wasPrice ni itemPrice, solo linePrice.
     prods = productos_desde_next_data(_next_data(), "Higiene", "Jabon")
     tercero = prods[2]
-    assert tercero["precio"] == "$2.150"
+    assert tercero["precio"] == 2150
+
+
+def test_precios_formateados_pasan_a_enteros():
+    """El SPA nuevo da "$14.690" (string), no numeros. Caso real de Jabones."""
+    from app.scraper_lider_browse import productos_desde_next_data
+
+    next_data = {"props": {"pageProps": {"initialData": {"searchResult": {"itemStacks": [{"items": [{
+        "usItemId": "00780500031555",
+        "name": "Jabon Corporal Dove Revitalizante",
+        "priceInfo": {"itemPrice": "$14.690", "linePrice": "$11.690",
+                      "wasPrice": "$14.690", "savings": "Ahorra $3.000"},
+    }]}]}}}}}
+    p = productos_desde_next_data(next_data, "Higiene Personal", "Jabones")[0]
+    assert p["precio"] == 11690          # el que se paga
+    assert p["precio_normal"] == 14690   # el de lista
+    assert p["precio_oferta"] == 11690   # hay descuento
+    assert p["ean"] == "780500031555"    # usItemId sin ceros a la izquierda
+
+
+def test_sin_descuento_no_marca_oferta():
+    from app.scraper_lider_browse import productos_desde_next_data
+
+    next_data = {"props": {"pageProps": {"initialData": {"searchResult": {"itemStacks": [{"items": [{
+        "usItemId": "00780500031555", "name": "X",
+        "priceInfo": {"itemPrice": "$3.690", "linePrice": "$3.690"},
+    }]}]}}}}}
+    p = productos_desde_next_data(next_data, "C", "S")[0]
+    assert p["precio"] == 3690 and p["precio_normal"] == 3690
+    assert p["precio_oferta"] == ""

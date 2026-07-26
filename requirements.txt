@@ -18,3 +18,6 @@ beautifulsoup4>=4.12.0  # parseo HTML del scraper de Unimarc (app.doctor lo exig
 # Testing
 pytest>=8.0.0
 httpx>=0.27.0
+
+undetected-chromedriver  # Lider /browse: pasa Akamai (ver app/docs/lider-endpoint-nuevo.md)
+setuptools<81           # undetected-chromedriver importa distutils, removido en Py3.12+

@@ -43,10 +43,54 @@ El endpoint nuevo está protegido y **bloquea la automatización**. Probado el 2
 El viejo `/v/` **sí** pasa desde urllib (por eso el scraper actual funciona). O sea el
 problema para migrar no es encontrar el endpoint —está acá— sino **vencer el anti-bot**.
 
-## Caminos para migrar (pendiente de decidir)
+## ✅ AKAMAI VENCIDO (26-07-2026): undetected-chromedriver
 
-1. **undetected-chromedriver** — Selenium parcheado para evadir la detección de Akamai.
-   Es la vía más directa; nueva dependencia; cat-and-mouse (puede romperse en updates).
+El camino 1 de la lista de abajo **funciona**. `pip install undetected-chromedriver`
+(+ `setuptools<81`: uc importa `distutils`, que Python 3.14 ya no trae) y:
+
+```python
+driver = uc.Chrome(options=opts, use_subprocess=True, version_main=150)
+```
+
+- **`version_main` es obligatorio**: uc baja el driver de la última versión de Chrome y
+  si no coincide con el instalado tira `SessionNotCreatedException`.
+- **No usar headless**: es una de las señales que mira el anti-bot.
+- Verificado contra `/browse/higiene-y-cuidado-personal/jabones`: **`count=143`,
+  `maxPage=4`, sin challenge** — contra los ~10 que devuelve `/v/jabones`.
+
+Transporte en `app/scraper_lider_browse.py` (`crear_driver` / `bajar_categoria`).
+
+### Formato de precios del SPA (distinto al endpoint viejo)
+
+`priceInfo` los entrega **formateados como string**, no numéricos:
+
+```json
+{"itemPrice": "$14.690", "linePrice": "$11.690", "wasPrice": "$14.690",
+ "savings": "Ahorra $3.000", "savingsAmt": 3000}
+```
+
+`itemPrice`/`wasPrice` = precio de lista · `linePrice` = **lo que se paga**.
+`_a_entero()` los normaliza a int, como en las otras 3 cadenas.
+
+### ⛔ Lo que FALTA para cablearlo: el árbol de categorías
+
+El sitio **no expone los paths `/browse/<rubro>/<sub>/<ids>`** por ninguna vía accesible:
+
+| Intento | Resultado |
+|---|---|
+| Links `/browse` en el HTML del home | **0** |
+| `sitemap.xml` / `sitemap_index.xml` | vacíos |
+| Clic en el botón "Categorías" y releer el DOM | **0** links nuevos |
+| `emptyCartNavMenuLinks` del `bootstrapData` | trajo el menú **una vez**, vacío en la corrida siguiente (A/B) |
+
+Los ids existen (Jabones es `72387472_38253071`) pero el menú se hidrata por estado
+interno de JS sin dejar `href`. **Próximo intento**: capturar el tráfico de red del SPA
+(performance log de Chrome / CDP) al abrir el menú, para ver qué endpoint devuelve la
+taxonomía. Alternativa: navegar el menú a mano una vez y anotar los ~90 paths.
+
+## Caminos para migrar (el 1 ya está resuelto)
+
+1. ~~**undetected-chromedriver**~~ — **FUNCIONA**, ver arriba.
 2. **Perfil de Chrome real persistente** — resolver el challenge una vez a mano, guardar
    el `user-data-dir` con la cookie `_abck` válida y reusarlo; refrescarla cuando caduque.
 3. **Proxy residencial** — ataca el lado IP, no el fingerprint; suma costo y complejidad.
