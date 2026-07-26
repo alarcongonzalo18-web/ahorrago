@@ -1,5 +1,36 @@
 # EAN de Jumbo — fuente encontrada (2ª cadena)
 
+> ## ⚠️ ACTUALIZACIÓN 26-07-2026: usar el catálogo VTEX, no el BFF
+>
+> El BFF descrito abajo **ya no sirve para volumen**: hoy bloquea en la **3ª consulta**
+> seguida (el texto original hablaba de ~344/noche; eso ya no se sostiene). Con el catálogo
+> por categorías reales Jumbo trae ~34.000 fichas, así que de a una nunca terminaría.
+>
+> **La fuente buena es el catalog_system público de VTEX**:
+>
+> ```
+> GET https://jumbochile.vtexcommercestable.com.br/api/catalog_system/pub/products/search
+>     ?fq=productId:6797&fq=productId:6782&...&_from=0&_to=49
+> ```
+>
+> - Devuelve `items[0].ean` (EAN-13 real, verificado).
+> - **Acepta 50 productos por request**, responde en ~2 s, sin cuota observada
+>   (3 ráfagas seguidas: 0.0-1.9 s).
+> - El `ProductId` ya viene en el listado de Constructor.io → el EAN se resuelve
+>   **durante el scrape** (`_resolver_eans` en `app/scraper_jumbo_real.py`), sin backfill.
+> - **El truco que costó encontrar**: `www.jumbo.cl/api/catalog_system/...` devuelve **HTML**
+>   (por eso el intento previo se leyó como "410 / no es VTEX"). Hay que pegarle al host
+>   interno `jumbochile.vtexcommercestable.com.br`. `jumbo.vtexcommercestable...` también
+>   responde; `cencosud` devuelve `[]` y `cencosudjumbo` da 404.
+>
+> **Rendimiento real** (corrida del 26-07): 682 lotes, **17.051 de 34.085 productos con EAN
+> (50%)**, contra los 349 que tenía la caché. En categorías populares el hit rate es ~90%;
+> las de nicho tienen productos que VTEX no indexa (el fallback por `alternateIds_RefId`
+> devuelve vacío, no hay ganancia ahí). Impacto: KPI de comparables **6.967 → 10.302**.
+>
+> El BFF de abajo sigue siendo útil para consultas sueltas (`fetch_ean_jumbo`), y la
+> documentación se conserva porque describe bien el contrato del PDP.
+
 > Hallazgo 17-07-2026 explorando jumbo.cl con el navegador + devtools. Destraba la Fase A
 > (comparabilidad): Líder ya expone EAN; con Jumbo por EAN el matching exacto entre cadenas
 > deja de depender del texto. Ver [auditoria-2026-07-17.md](auditoria-2026-07-17.md) y
