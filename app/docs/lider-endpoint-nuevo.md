@@ -72,7 +72,32 @@ Transporte en `app/scraper_lider_browse.py` (`crear_driver` / `bajar_categoria`)
 `itemPrice`/`wasPrice` = precio de lista · `linePrice` = **lo que se paga**.
 `_a_entero()` los normaliza a int, como en las otras 3 cadenas.
 
-### ⛔ Lo que FALTA para cablearlo: el árbol de categorías
+### ⛔ EL TECHO: `maxPage=4` → 192 productos por categoría (26-07-2026)
+
+Medido corriendo las 92 subcategorías nivel-2: **`paginationV2.maxPage` es 4 en todas**,
+o sea 48 × 4 = **192 productos como máximo por categoría**, sin importar su `count` real.
+
+Eso invierte el resultado según el tamaño de la categoría:
+
+| Categoría | Productos reales | Endpoint viejo `/v/` | `/browse` nivel-2 |
+|---|---:|---:|---:|
+| Jabones | 143 | 10 | **136** ✅ |
+| Leche | 318+ | **318** | 171 🔴 |
+| Verduras | ~400 | 350+ | 199 🔴 |
+| Quesos | 400+ | — | 244 🔴 |
+
+Por eso la corrida completa dio **+220% en higiene/limpieza/mascotas** (categorías chicas,
+que el endpoint viejo servía mal) y **−60% en alimentos** (categorías grandes, que topan).
+El total sube (8.646 → 11.880 únicos, 100% EAN) pero el catálogo queda deformado: para un
+comparador de supermercados, perder dos tercios de lácteos y carnes es peor que no migrar.
+**Por eso no se publicó** (`data/lider_browse_nuevo.csv` quedó aparte, sin tocar el CSV bueno).
+
+**Solución: bajar a nivel 3 donde el nivel 2 tope.** El árbol tiene sub-subcategorías
+(`/browse/<rubro>/<sub>/<sub-sub>/<id_id_id>`) y cada una tiene su propio techo de 192.
+En vez de pedir "Leche" (318 → se corta), pedir sus hijas por separado. Criterio de corte:
+si una categoría nivel-2 llega a `maxPage=4`, reemplazarla por sus hijas nivel-3.
+
+### El árbol de categorías (resuelto)
 
 El sitio **no expone los paths `/browse/<rubro>/<sub>/<ids>`** por ninguna vía accesible:
 
