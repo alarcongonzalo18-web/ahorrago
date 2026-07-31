@@ -23,10 +23,22 @@ def _next_data():
     return json.loads(FIXTURE.read_text(encoding="utf-8"))
 
 
-def test_normalizar_ean_saca_ceros_a_la_izquierda():
-    assert _normalizar_ean("00780500031555") == "780500031555"
+def test_normalizar_ean_reconstruye_el_digito_verificador():
+    """El usItemId NO trae el verificador: hay que calcularlo.
+
+    Sin esto el EAN queda en 12 digitos, no coincide con el de las otras cadenas
+    (ni con el que el propio Lider daba por el endpoint viejo) y la cadena aporta
+    CERO comparables. Se detecto el 27-07 al ver 0 EAN en comun entre ambos scrapes.
+    """
+    from app.url_utils import extraer_ean_lider
+
+    assert _normalizar_ean("00780500031555") == "7805000315559"
+    assert _normalizar_ean("00773021902133") == "7730219021338"
     assert _normalizar_ean("") == ""
     assert _normalizar_ean(None) == ""
+    # mismo resultado que el normalizador del endpoint viejo, que ya lo hacia bien
+    for us in ("00780500031555", "00789115001956", "00780292000814"):
+        assert _normalizar_ean(us) == extraer_ean_lider(f"https://super.lider.cl/ip/x/{us}")
 
 
 def test_extraer_next_data_devuelve_none_ante_challenge():
@@ -49,7 +61,7 @@ def test_productos_desde_next_data_ignora_banners_y_mapea_campos():
     for p in prods:
         assert set(p) == set(CAMPOS)
     primero = prods[0]
-    assert primero["ean"] == "773021902133"          # EAN sin ceros a la izquierda
+    assert primero["ean"] == "7730219021338"         # EAN-13 con verificador
     assert primero["subcategoria"] == "Jabon"
     # Los precios se guardan como ENTEROS, igual que en las otras 3 cadenas: el
     # SPA los entrega formateados ("$1.000") y el CSV del pipeline usa numeros.
@@ -79,7 +91,7 @@ def test_precios_formateados_pasan_a_enteros():
     assert p["precio"] == 11690          # el que se paga
     assert p["precio_normal"] == 14690   # el de lista
     assert p["precio_oferta"] == 11690   # hay descuento
-    assert p["ean"] == "780500031555"    # usItemId sin ceros a la izquierda
+    assert p["ean"] == "7805000315559"   # usItemId + digito verificador
 
 
 def test_sin_descuento_no_marca_oferta():

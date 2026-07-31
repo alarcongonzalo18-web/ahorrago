@@ -24,6 +24,7 @@ import time
 from pathlib import Path
 
 from app.category_validator import is_valid_row
+from app.url_utils import ean13_check_digit
 from app.scraper_lider import (
     CAMPOS,
     es_migracion_de_taxonomia,
@@ -189,10 +190,25 @@ def _a_entero(precio):
 
 
 def _normalizar_ean(us_item_id):
-    """usItemId (GTIN-14, ej '00780500031555') -> EAN sin ceros a la izquierda."""
+    """usItemId de Walmart -> EAN-13, el mismo formato que usan las otras cadenas.
+
+    OJO: el usItemId NO trae el digito verificador. '00780500031555' son los 12
+    digitos de datos con dos ceros de relleno adelante; el EAN real es
+    '7805000315559'. Hacer solo lstrip('0') devuelve 12 digitos y entonces
+    NINGUN producto de Lider matchea con Jumbo/Tottus/Unimarc: la cadena aporta
+    cero comparables y el KPI se cae sin causa aparente (detectado el 27-07 al
+    ver 0 EAN en comun entre el scrape viejo y el nuevo).
+
+    Misma reconstruccion que `extraer_ean_lider` (app/url_utils.py), que ya lo
+    hacia bien desde la URL del endpoint viejo.
+    """
     if not us_item_id:
         return ""
-    return str(us_item_id).lstrip("0")
+    digitos = re.sub(r"\D", "", str(us_item_id))
+    if len(digitos) < 12:
+        return digitos.lstrip("0")   # codigos cortos (EAN-8 y similares): sin reconstruir
+    datos12 = digitos[-12:]          # el relleno va adelante; los datos son los ultimos 12
+    return (datos12 + ean13_check_digit(datos12)).lstrip("0")
 
 
 def extraer_next_data(html):
@@ -243,7 +259,9 @@ def productos_desde_next_data(next_data, categoria, subcategoria):
     return productos
 
 
-OUTPUT = Path("data/lider_real.csv")
+# Archivo propio: NO pisa el del endpoint viejo. Las dos fuentes de Lider se
+# complementan y combinar_supermercados las fusiona por EAN (ver FUENTES alli).
+OUTPUT = Path("data/lider_browse.csv")
 MAX_PAGINAS = 25
 PAUSA_ENTRE_PAGINAS = 1.5
 

@@ -18,7 +18,13 @@ SLUG_POR_CADENA = {
     "Tottus": slug_tottus,
 }
 
+# Lider tiene DOS fuentes que se complementan y se fusionan por EAN en combinar():
+# el SPA /browse cubre mejor higiene, limpieza, mascotas y bebe; el endpoint viejo
+# /v/ cubre mejor los alimentos. Juntas dan 13.481 productos contra los 8.646 del
+# viejo solo, todos con EAN. El /browse va primero: cuando un producto esta en las
+# dos, gana su version (categoria real del sitio y precio del SPA).
 FUENTES = [
+    ("data/lider_browse.csv", "Líder"),
     ("data/lider_real.csv", "Líder"),
     ("data/jumbo_real.csv", "Jumbo"),
     ("data/unimarc_real.csv", "Unimarc"),
@@ -167,8 +173,21 @@ def combinar():
     vistos = set()
     cache = ean_cache.cargar()
 
+    # Lider llega por dos fuentes complementarias (ver FUENTES). El mismo producto
+    # puede venir en ambas, asi que dentro de una cadena el EAN manda: es identidad
+    # exacta, mientras que (nombre, precio) cambia entre endpoints. Sin esto, los
+    # ~7.000 productos que traen las dos fuentes entrarian duplicados.
+    por_ean = set()
+
     for archivo, supermercado in FUENTES:
         for fila in leer_filas(Path(archivo), supermercado, cache):
+            ean = (fila.get("ean") or "").strip()
+            if ean:
+                clave_ean = (fila["supermercado"], ean)
+                if clave_ean in por_ean:
+                    continue
+                por_ean.add(clave_ean)
+
             key = (
                 fila["supermercado"],
                 fila["categoria"],
