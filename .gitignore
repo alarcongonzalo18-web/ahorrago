@@ -24,6 +24,9 @@ data/*_real.csv
 data/*_real.csv.bak
 data/*_real.csv.nuevo
 data/productos_supermercados.csv
+# Segunda fuente de Lider (SPA): datos, como los *_real.csv
+data/lider_browse.csv
+data/lider_browse.csv.nuevo
 
 # EXCEPCION a lo de arriba: data/ean_cache.json SI se versiona. Los CSV se
 # regeneran en ~35 min por cadena, pero la cache de EAN cuesta decenas de miles

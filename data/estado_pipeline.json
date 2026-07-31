@@ -33,6 +33,13 @@
   "ok": true,
   "ultimo_ok": "2026-07-25T23:57:56"
  },
+ "tottus+jumbo+unimarc": {
+  "detalle": "OK (tottus, jumbo, unimarc)",
+  "duracion_min": 131.0,
+  "fecha": "2026-07-31T00:07:15",
+  "ok": true,
+  "ultimo_ok": "2026-07-31T00:07:15"
+ },
  "unimarc": {
   "detalle": "OK (unimarc)",
   "duracion_min": 21.3,
