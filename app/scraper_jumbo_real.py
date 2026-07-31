@@ -128,6 +128,8 @@ CATEGORIAS = [
     ("Higiene Personal", "Cuidado Masculino", "236"),
     ("Higiene Personal", "Incontinencia y Panales Adulto", "224"),
     ("Higiene Personal", "Depilacion", "470"),
+    ("Higiene Personal", "Maquillaje", "602"),
+    ("Higiene Personal", "Packs de Cuidado y Belleza", "285"),
     ("Higiene Personal", "Solares y Autobronceantes", "524"),
     # Rubro [261] Limpieza
     ("Limpieza", "Papeles Hogar", "262"),

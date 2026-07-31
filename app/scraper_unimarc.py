@@ -60,8 +60,8 @@ CAMPOS = [
 # Excluidos a proposito (no-consumo o duplicados):
 #   - Rubro "Hogar" completo (electrohogar, ferreteria, libreria, cocina y mesa).
 #   - "perfumeria/farmacia" (farmacia, no alimentacion ni aseo).
-#   - Rubro "Veganos y vegetarianos": sus productos ya se scrapean en su
-#     categoria normal; incluirlo duplicaria el recorrido.
+# El rubro "Veganos y vegetarianos" SI se incluye (27-07): se creia que duplicaba
+# los rubros normales, pero trae sustitutos que no estan en ningun otro lado.
 # Regla especial: la perfumeria de bebe va a "Higiene Personal" (no "Bebe"),
 # porque el validador rechaza higiene bajo la categoria "Bebe".
 CATEGORIAS = [
@@ -146,6 +146,13 @@ CATEGORIAS = [
     ("Mascotas", "Alimento gato", "mascotas/alimento-gato"),
     ("Mascotas", "Alimento otras mascotas", "mascotas/alimento-otras-mascotas"),
     ("Mascotas", "Accesorios mascota", "mascotas/accesorios-mascota"),
+    # Rubro "Veganos y vegetarianos": trae sustitutos que NO aparecen en los
+    # rubros normales (hamburguesas vegetales, quesos veganos). Los nombres
+    # llevan sufijo para no chocar con sus equivalentes convencionales.
+    ("Lacteos, Huevos y Congelados", "Bebidas vegetales (veganos)", "veganos-y-vegetarianos/bebidas-vegetales"),
+    ("Lacteos, Huevos y Congelados", "Refrigerados veganos", "veganos-y-vegetarianos/refrigerados"),
+    ("Congelados", "Congelados veganos", "veganos-y-vegetarianos/congelados"),
+    ("Despensa", "Despensa vegana", "veganos-y-vegetarianos/despensa"),
 ]
 
 

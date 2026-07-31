@@ -30,8 +30,18 @@ def test_mapeo_sin_slugs_ni_subcategorias_duplicadas():
 
 def test_mapeo_excluye_rubros_no_consumo():
     slugs = " ".join(slug for _c, _s, slug in CATEGORIAS)
-    for excluido in ("hogar/", "perfumeria/farmacia", "veganos-y-vegetarianos"):
+    for excluido in ("hogar/", "perfumeria/farmacia"):
         assert excluido not in slugs, f"no deberia mapear {excluido}"
+
+
+def test_mapeo_incluye_los_veganos():
+    """Se excluia por creer que duplicaba los rubros normales; no es asi.
+
+    Trae sustitutos (hamburguesas vegetales, quesos veganos) que no aparecen en
+    ninguna otra categoria. Se sumo el 27-07 al auditar la cobertura real.
+    """
+    veganos = [s for _c, _s, s in CATEGORIAS if s.startswith("veganos-y-vegetarianos/")]
+    assert len(veganos) == 4, f"faltan subcategorias veganas: {veganos}"
 
 
 def test_datos_listado_lee_productos_y_total():

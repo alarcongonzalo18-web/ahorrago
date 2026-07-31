@@ -129,6 +129,7 @@ CATEGORIAS_BROWSE = [
     ("Lacteos, Huevos y Congelados", "Mantequillas Y Margarinas", "/browse/frescos-y-lacteos/mantequillas-y-margarinas/45669105_15064481"),
     ("Lacteos, Huevos y Congelados", "Postres Refrigerados", "/browse/frescos-y-lacteos/postres-refrigerados/45669105_15349134"),
     ("Lacteos, Huevos y Congelados", "Quesos", "/browse/frescos-y-lacteos/quesos/45669105_72564080"),
+    ("Lacteos, Huevos y Congelados", "Yoghurt Frescos", "/browse/frescos-y-lacteos/yoghurt/45669105_59066660"),
     # -> Limpieza
     ("Limpieza", "Accesorios Aseo", "/browse/limpieza-y-aseo/accesorios-aseo/43390617_61764352"),
     ("Limpieza", "Ambientadores", "/browse/limpieza-y-aseo/ambientadores/43390617_32024397"),

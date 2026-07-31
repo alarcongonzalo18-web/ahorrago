@@ -105,6 +105,7 @@ CATEGORIAS = [
     ("Despensa", "Aderezos", "/tottus-cl/lista/CATG27066/Aderezos"),
     ("Despensa", "Sopas e Instantáneos", "/tottus-cl/lista/CATG27064/Sopas-e-Instantaneos"),
     ("Despensa", "Postres y Repostería", "/tottus-cl/lista/CATG27065/Postres-y-Reposteria"),
+    ("Despensa", "Platos Preparados", "/tottus-cl/lista/CATG27178/Platos-Preparados"),
     ("Frutas y Verduras", "Verduras", "/tottus-cl/lista/CATG27098/Verduras"),
     ("Frutas y Verduras", "Frutas", "/tottus-cl/lista/CATG27099/Frutas"),
     ("Frutas y Verduras", "Frutos Secos y Deshidratados", "/tottus-cl/lista/CATG27100/Frutos-Secos-y-Deshidratados"),
