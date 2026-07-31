@@ -7,9 +7,10 @@ from datetime import datetime
 from pathlib import Path
 import json
 from fastapi import Response
+from fastapi.responses import JSONResponse
 from sqlalchemy import func
 from .database import Base, engine, SessionLocal
-from . import chat, models, schemas, services, sugerencias
+from . import chat, models, schemas, seguridad, services, sugerencias
 from .matching import candidato_compatible
 from .matching_diagnostics import resumen_matching
 from .estado_pipeline import diagnostico as diagnostico_pipeline
@@ -28,11 +29,26 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+):(5500|3000)",
+    # Red local + los dominios de AHORRAGO_ORIGENES (ver app/seguridad.py).
+    allow_origin_regex=seguridad.origenes_permitidos(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def limitar_peticiones(request: Request, call_next):
+    """Rate limit por IP: sin esto cualquiera raspa la base entera.
+
+    Se apaga con AHORRAGO_LIMITE_MINUTO=0 (util en desarrollo o tests).
+    """
+    if not seguridad.limitador.permitido(seguridad.ip_del_cliente(request)):
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Demasiadas peticiones, probá de nuevo en un minuto"},
+        )
+    return await call_next(request)
 
 
 # Techo de productos crudos a considerar antes de agrupar. Tiene que ser holgado
@@ -87,7 +103,8 @@ def obtener_subcategorias(categoria_id: int, db: Session = Depends(get_db)):
 
 
 @app.get("/diagnostico/calidad")
-def diagnostico_calidad(db: Session = Depends(get_db)):
+def diagnostico_calidad(db: Session = Depends(get_db),
+                        _admin=Depends(seguridad.verificar_admin)):
     por_proveedor = defaultdict(int)
     por_subcategoria = defaultdict(int)
     sin_imagen = 0
@@ -165,12 +182,14 @@ def diagnostico_calidad(db: Session = Depends(get_db)):
 
 
 @app.get("/diagnostico/matching")
-def diagnostico_matching(db: Session = Depends(get_db)):
+def diagnostico_matching(db: Session = Depends(get_db),
+                         _admin=Depends(seguridad.verificar_admin)):
     return resumen_matching(db)
 
 
 @app.get("/estado-datos")
-def estado_datos(db: Session = Depends(get_db)):
+def estado_datos(db: Session = Depends(get_db),
+                 _admin=Depends(seguridad.verificar_admin)):
     root = Path(__file__).resolve().parents[1]
     db_path = root / "supercheck.db"
     csv_path = root / "data" / "productos_supermercados.csv"
