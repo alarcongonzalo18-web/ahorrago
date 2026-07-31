@@ -53,10 +53,20 @@ RAW_FILES = {
 # rompia el pipeline en silencio.
 SCRAPERS = {
     "lider": ("Scraper Líder", [sys.executable, "-m", "app.scraper_lider"]),
+    # Segunda fuente de Lider (SPA de Walmart): cubre higiene, limpieza, mascotas
+    # y bebe, donde el endpoint viejo sirve mal. combinar_supermercados fusiona
+    # ambas por EAN. Queda FUERA de la corrida automatica: necesita Chrome
+    # VISIBLE (headless lo detecta Akamai), o sea sesion interactiva.
+    # Se corre a mano con: actualizar-productos.bat --solo lider-browse
+    "lider-browse": ("Scraper Líder (browse)",
+                     [sys.executable, "-m", "app.scraper_lider_browse"]),
     "jumbo": ("Scraper Jumbo", [sys.executable, "-m", "app.scraper_jumbo_real"]),
     "unimarc": ("Scraper Unimarc", [sys.executable, "-m", "app.scraper_unimarc"]),
     "tottus": ("Scraper Tottus", [sys.executable, "-m", "app.scraper_tottus"]),
 }
+
+# Los que corren desatendidos de noche. lider-browse no esta: pide Chrome visible.
+SCRAPERS_AUTOMATICOS = ("lider", "jumbo", "unimarc", "tottus")
 
 PASO_COMBINAR = ("Combinar CSV", [sys.executable, "-m", "app.combinar_supermercados"])
 PASO_RECONSTRUIR = ("Reconstruir base", [sys.executable, "-m", "app.reconstruir_base"])
@@ -204,14 +214,16 @@ def parsear_args(argv):
             )
         return pedidas
 
-    return list(SCRAPERS)
+    # Sin --solo corren solo los desatendidos: lider-browse necesita Chrome
+    # visible y colgaria la tarea nocturna.
+    return list(SCRAPERS_AUTOMATICOS)
 
 
 def nombre_tarea(cadenas):
     """Etiqueta con la que se registra la salud de esta corrida."""
     if not cadenas:
         return "publicar"
-    if len(cadenas) == len(SCRAPERS):
+    if len(cadenas) == len(SCRAPERS_AUTOMATICOS) and set(cadenas) == set(SCRAPERS_AUTOMATICOS):
         return "pipeline-completo"
     return "+".join(cadenas)
 
