@@ -59,6 +59,16 @@ Aparecieron al trabajar desde este equipo. **Son lo más urgente.**
    levantar Chrome no-headless con la sesión bloqueada. Si no puede, Líder `/browse` queda
    como corrida manual semanal (el `/v/` sigue automático y cubre alimentos).
 
+## 🔵 Pendientes para la próxima sesión (31-07)
+
+1. **Correr `/security-review`** sobre el endurecimiento de la API (commit `ba6a182`).
+   Viene de fábrica en Claude Code, no hay nada que instalar. Ver
+   [recursos-externos.md](recursos-externos.md).
+2. **Líder `/browse`** (~1 h, necesita Chrome visible): la cadena con 100% de EAN, la que
+   más puede mover el KPI.
+3. **Re-correr Tottus**: el 30-07 nos throttleó (9 bloqueos, 74 min) y el guard preservó los
+   datos buenos sin publicar. Espaciar las corridas o subir las pausas antes de reintentar.
+
 ## Fase 2 — Salir a internet (el proyecto grande)
 
 Hoy AhorraGo solo existe en dos máquinas. Es lo único que separa "proyecto" de "producto".
