@@ -1,5 +1,5 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends, Query, Request
+from fastapi import FastAPI, Depends, HTTPException, Query, Request
 from xml.sax.saxutils import escape as xml_escape
 from sqlalchemy.orm import Session, joinedload
 from collections import defaultdict
@@ -706,6 +706,16 @@ async def webhook_whatsapp(request: Request, db: Session = Depends(get_db)):
     app.chat (independiente del canal); esto solo traduce el transporte.
     """
     form = await request.form()
+    # Verifica que el POST venga de Twilio (X-Twilio-Signature). Sin
+    # TWILIO_AUTH_TOKEN definido no exige nada (desarrollo). Sin esto, cualquiera
+    # que sepa la URL puede invocar el bot sin limite (spam, carga de DB, costo).
+    if not seguridad.firma_twilio_valida(
+        seguridad.token_twilio(),
+        seguridad.url_webhook(request),
+        {k: str(v) for k, v in form.items()},
+        request.headers.get("x-twilio-signature", ""),
+    ):
+        raise HTTPException(status_code=403, detail="Firma invalida")
     respuesta = chat.responder(db, str(form.get("Body", "")))
     twiml = (
         '<?xml version="1.0" encoding="UTF-8"?>'

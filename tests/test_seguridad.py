@@ -9,6 +9,9 @@ import pytest
 from app.seguridad import (
     LimitadorMemoria,
     ORIGENES_LOCALES,
+    firma_twilio_esperada,
+    firma_twilio_valida,
+    ip_del_cliente,
     origenes_permitidos,
     verificar_admin,
 )
@@ -58,7 +61,6 @@ def test_con_token_configurado_exige_el_header(monkeypatch):
     assert exc.value.status_code == 404
 
     assert verificar_admin(_Request(headers={"x-admin-token": "secreto"})) is True
-    assert verificar_admin(_Request(query={"token": "secreto"})) is True
 
 
 def test_token_equivocado_no_pasa(monkeypatch):
@@ -67,6 +69,66 @@ def test_token_equivocado_no_pasa(monkeypatch):
 
     with pytest.raises(HTTPException):
         verificar_admin(_Request(headers={"x-admin-token": "otro"}))
+
+
+def test_el_token_por_query_string_ya_no_se_acepta(monkeypatch):
+    """Fix de seguridad: el token va solo por header, no por ?token= (fuga en logs)."""
+    monkeypatch.setenv("AHORRAGO_ADMIN_TOKEN", "secreto")
+    from fastapi import HTTPException
+
+    with pytest.raises(HTTPException) as exc:
+        verificar_admin(_Request(query={"token": "secreto"}))
+    assert exc.value.status_code == 404
+
+
+# --- IP del cliente / anti-spoofing del rate limit --------------------------
+
+def test_ignora_x_forwarded_for_por_defecto(monkeypatch):
+    """Sin proxy confiable, XFF no se usa: no se puede spoofear la IP."""
+    monkeypatch.delenv("AHORRAGO_CONFIAR_PROXY", raising=False)
+    req = _Request(headers={"x-forwarded-for": "9.9.9.9"}, ip="1.2.3.4")
+    assert ip_del_cliente(req) == "1.2.3.4"
+
+
+def test_usa_x_forwarded_for_solo_con_proxy_confiable(monkeypatch):
+    monkeypatch.setenv("AHORRAGO_CONFIAR_PROXY", "1")
+    req = _Request(headers={"x-forwarded-for": "9.9.9.9, 10.0.0.1"}, ip="1.2.3.4")
+    assert ip_del_cliente(req) == "9.9.9.9"
+
+
+# --- Firma del webhook de Twilio --------------------------------------------
+
+def test_firma_twilio_sigue_el_algoritmo_documentado():
+    # Recalcula la firma de forma independiente: url + concat(k+v ordenado por k),
+    # HMAC-SHA1 con el auth token, en base64. Prueba el algoritmo sin hardcodear
+    # un hash que no se pueda verificar.
+    import base64
+    import hashlib
+    import hmac
+
+    token = "un-token-secreto"
+    url = "https://mycompany.com/myapp.php?foo=1&bar=2"
+    params = {"To": "+18005551212", "From": "+14158675310", "Body": "Hola"}
+    datos = url + "".join(k + params[k] for k in sorted(params))
+    esperada = base64.b64encode(
+        hmac.new(token.encode(), datos.encode(), hashlib.sha1).digest()
+    ).decode()
+
+    assert firma_twilio_esperada(token, url, params) == esperada
+
+
+def test_firma_twilio_sin_token_no_exige_nada():
+    assert firma_twilio_valida("", "https://x/", {"Body": "hola"}, "") is True
+
+
+def test_firma_twilio_rechaza_firma_invalida():
+    assert firma_twilio_valida("secreto", "https://x/", {"Body": "hola"}, "mala") is False
+
+
+def test_firma_twilio_acepta_la_correcta():
+    url, params = "https://x/webhook", {"Body": "hola", "From": "+569"}
+    buena = firma_twilio_esperada("secreto", url, params)
+    assert firma_twilio_valida("secreto", url, params, buena) is True
 
 
 # --- rate limiting ----------------------------------------------------------

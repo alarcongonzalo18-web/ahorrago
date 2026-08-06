@@ -17,7 +17,24 @@
 Además existe [`anthropics/claude-code-security-review`](https://github.com/anthropics/claude-code-security-review):
 el mismo análisis como GitHub Action sobre cada PR. Útil cuando el repo tenga PRs.
 
-**PENDIENTE 31-07**: correr `/security-review` sobre el endurecimiento de la API.
+### ✅ Revisión de seguridad del endurecimiento de la API — HECHA 06-08-2026
+
+Se revisó `app/seguridad.py` + el webhook (commit `ba6a182`). El comando `/security-review`
+necesita el CWD dentro del repo (esta sesión abrió en otra carpeta), así que se hizo la
+revisión a mano. **6 hallazgos; los 5 accionables corregidos** (todos configurables por
+entorno, coherentes con el módulo):
+
+| Sev | Hallazgo | Fix |
+|---|---|---|
+| 🟠 Media | `LimitadorMemoria.limpiar()` no se llamaba nunca → `_visitas` crecía sin fin | Limpieza oportunista dentro de `permitido()`, 1 vez por ventana |
+| 🟠 Media | `X-Forwarded-For` se confiaba siempre → spoofeable, saltea el rate limit | Solo se lee con `AHORRAGO_CONFIAR_PROXY=1`; por defecto usa la IP de conexión |
+| 🟠 Media | Webhook de WhatsApp sin validar firma → abuso sin auth | Valida `X-Twilio-Signature` si hay `TWILIO_AUTH_TOKEN` |
+| 🟡 Baja | Token admin aceptado por `?token=` → fuga en logs/historial | Solo por header `x-admin-token` |
+| 🟡 Baja | Comparación de token no constant-time → timing | `secrets.compare_digest` |
+| ⚪ Info | CORS `allow_credentials` + `*` methods/headers | OK mientras el regex de orígenes sea estricto; se deja anotado |
+
+Cobertura: `tests/test_seguridad.py` 13 → 19 tests. Suite total 183, verde. Variables nuevas
+documentadas en `.env.example` (`AHORRAGO_CONFIAR_PROXY`, `TWILIO_AUTH_TOKEN`, `AHORRAGO_WEBHOOK_URL`).
 
 ## 🟡 La Trifecta Perfecta (terceros, MIT, autor Hainrixz)
 

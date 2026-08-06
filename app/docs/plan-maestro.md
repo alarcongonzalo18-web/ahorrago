@@ -61,9 +61,10 @@ Aparecieron al trabajar desde este equipo. **Son lo más urgente.**
 
 ## 🔵 Pendientes para la próxima sesión (31-07)
 
-1. **Correr `/security-review`** sobre el endurecimiento de la API (commit `ba6a182`).
-   Viene de fábrica en Claude Code, no hay nada que instalar. Ver
-   [recursos-externos.md](recursos-externos.md).
+1. ✅ **Revisión de seguridad del endurecimiento de la API** (commit `ba6a182`) — HECHA
+   06-08-2026. 6 hallazgos, 5 corregidos (memoria del rate-limiter, spoofing de
+   X-Forwarded-For, firma del webhook de Twilio, token solo por header, compare constant-time).
+   Detalle en [recursos-externos.md](recursos-externos.md).
 2. **Líder `/browse`** (~1 h, necesita Chrome visible): la cadena con 100% de EAN, la que
    más puede mover el KPI.
 3. **Re-correr Tottus**: el 30-07 nos throttleó (9 bloqueos, 74 min) y el guard preservó los
